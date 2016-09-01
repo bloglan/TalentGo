@@ -1,0 +1,25 @@
+﻿@model DateTime
+
+@Html.TextBox("", Model.ToString("yyyy-MM-dd HH:mm"), ViewData["htmlAttributes"])
+
+@using (Html.BeginScriptContext())
+{
+	Html.AddScriptFile("~/bundles/bootstrapDatetimePicker");
+	Html.AddScriptBlock(
+		@<script>
+			$(function () {
+				$.validator.methods.date = function (value, element) {
+
+					return this.optional(element) || !/^\d{4}[\/\-]\d{1,2}[\/\-]\d{1,2}$/.test(new Date(value).toString());
+
+				};
+
+				$("#@Html.NameForModel()").datetimepicker({
+					format: "yyyy-mm-dd hh:ii",
+					minView: "hour",
+					language: "zh-CN"
+				})
+			});
+		</script>
+		);
+}

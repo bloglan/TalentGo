@@ -1,0 +1,200 @@
+﻿@model TalentGoWebApp.Models.RegisterViewModel
+@{
+	ViewBag.Title = "注册";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+<p><span class="text-danger">带*的字段是必须的。</span></p>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+	@Html.AntiForgeryToken()
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+	<div class="form-group">
+		@Html.LabelFor(m => m.RealName, new { @class = "col-md-2 control-label" })
+		<div class="col-md-5">
+			@Html.TextBoxFor(m => m.RealName, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.RealName, "", new { @class = "text-danger" })
+		</div>
+		<div class="col-md-3">
+			<span>* 请准确输入姓名</span>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.IDCardNumber, new { @class = "col-md-2 control-label" })
+		<div class="col-md-5">
+			@Html.TextBoxFor(m => m.IDCardNumber, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.IDCardNumber, "", new { @class = "text-danger" })
+			<span class="text-danger">@Html.ValidationMessage("IDCardErr")</span>
+		</div>
+		<div class="col-md-3">
+			<span>* 若末尾为X，请填入大写字母X。</span>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Mobile, new { @class = "col-md-2 control-label" })
+		<div class="col-md-3">
+			@Html.TextBoxFor(m => m.Mobile, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
+		</div>
+		<div class="col-md-5">
+			<div class="row">
+				<button type="button" id="SendValidateCodeBtn" class="btn btn-default" onclick="return SendValidateCode(this)">发送验证码</button>
+				<button type="button" id="CanNotReciveValidateCodeBtn" class="btn btn-warning" style="display: none;" data-toggle="modal" data-target="#CannotReceiveVCodeDlg" data-remote="false">无法收到验证码？</button>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<span></span>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.ValidateCode, new { @class = "col-md-2 control-label" })
+		<div class="col-md-5">
+			@Html.TextBoxFor(m => m.ValidateCode, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.ValidateCode, "", new { @class = "text-danger" })
+			<span class="text-danger">@Html.ValidationMessage("valID")</span>
+		</div>
+		<div class="col-md-3">
+			<span>* 查看手机短信获取验证码</span>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+		<div class="col-md-5">
+			@Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+		</div>
+		<div class="col-md-3">
+			<span>* 请填写一个有效的电子邮件地址，以便接收相关进展和通知</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		@Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+		<div class="col-md-5">
+			@Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+		</div>
+		<div class="col-md-3">
+			<span>* 密码至少8位，必须至少包含1位大写、小写、数字</span>
+		</div>
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+		<div class="col-md-5">
+			@Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+			@Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
+		</div>
+		<div class="col-md-3">
+			<span>*</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-offset-2 col-md-10">
+			<input type="submit" class="btn btn-default" value="注册" />
+		</div>
+	</div>
+}
+
+<div class="modal fade" id="CannotReceiveVCodeDlg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">无法收到验证码</h4>
+			</div>
+			<div class="modal-body">
+				<p>有诸多原因可能无法收到验证码，我们建议您按下列步骤尝试：</p>
+				<ol>
+					<li>请检查您的手机上是否安装了拦截类软件，可能会误将验证码短信作为垃圾短信拦截或拒收，请检查短信拦截列表或调整手机设置。</li>
+					<li>若您的运营商提供有拦截骚扰服务，也可能被这些服务拦截从而导致收不到验证码，可向您的运营商咨询。</li>
+					<li>我们建议您尽可能使用中国移动的手机号码，不同运营商之间可能存在短信延迟或丢失情况。</li>
+				</ol>
+				<p>若经过上述排查后，您仍无法收到验证码，我们将改用电子邮件来接收验证码，请在下方填写一个有效的电子邮件地址，我们将尝试向此邮箱发送验证码。</p>
+				<div class="form-group">
+					<div class="col-md-4">
+						<input id="EmailForVCode" type="email" class="form-control" />
+					</div>
+					<div class="col-md-2">
+						<button id="SnedVCodeByEmailBtn" type="button" class="btn btn-default" onclick="SendVCodeByEmail()">发送验证码</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<p>请转到您的邮箱中查收您的验证码，然后继续注册流程。</p>
+				<p>若仍无法收到验证码，您可以在5分钟后再换一个有效的邮箱来尝试。</p>
+				<p>如果您换了所有可用的邮箱都无法获得验证码，请保持最后填写的邮箱地址，再次点击发送验证码。我们会将此情况立刻报告工作人员，在随后的6小时内，工作人员会尝试通过手机与您联系，帮助您完成注册流程，请保持手机可用。</p>
+				<p>出于安全性和资料真实性考虑，我们不得不要求您进行验证，对于验证环节故障带来的不便，敬请谅解。</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts
+	{
+	@Scripts.Render("~/bundles/jqueryval")
+
+	<script>
+		$(function () {
+			$.ajaxSetup({ cache: false });
+		});
+
+		var vctimer = null;
+		var dcount = 0;
+		var vcbtn = null;
+		var btnClickCount = 0;
+
+		function SendValidateCode(ele) {
+			var mobile = $("#Mobile").val();
+			vcbtn = ele;
+			$.getJSON("@Url.Action("SendMobileValidateCode", "Account")", { mobile: mobile }, function (data, status, xhr) {
+				if (data.code != 0) {
+					alert(data.msg);
+				}
+				else {
+					btnClickCount++;
+					
+				}
+
+			});
+			ChangeButtonState();
+
+		}
+
+		
+
+		function ChangeButtonState() {
+			$(vcbtn).prop("disabled", "disabled");
+
+			dcount = 60;
+			$(vcbtn).text(dcount + "秒后重新发送");
+			vctimer = setInterval(function () {
+				dcount--;
+				$(vcbtn).text(dcount + "秒后重新发送");
+				if (dcount <= 0) {
+					$(vcbtn).removeAttr("disabled");
+					$(vcbtn).text("发送验证码");
+
+					if (btnClickCount >= 2) {
+						$("#CanNotReciveValidateCodeBtn").css("display", "inline-block");
+					}
+					window.clearInterval(vctimer);
+				}
+			}, 1000);
+		}
+
+		function SendVCodeByEmail()
+		{
+			var email = $("#EmailForVCode").val();
+			var mobile = $("#Mobile").val();
+			$.getJSON("@Url.Action("SendVCodeByEmail")", { Email: email, Mobile: mobile }, function (data, status, xhr) {
+				alert(data.msg);
+			});
+			$("#Email").val(email);
+		}
+	</script>
+
+}

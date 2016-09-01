@@ -1,0 +1,40 @@
+﻿@model IEnumerable<RecruitmentPlan>
+@{
+	ViewBag.Title = "招聘管理首页";
+}
+
+<h2>招聘计划</h2>
+@if (this.User.IsInRole("QJYC\\招聘管理员"))
+{
+	@Html.ActionLink("创建招聘计划", "Create", null, new { @class = "btn btn-default" })
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<table class="table">
+			<thead>
+				<tr>
+					<td>名称</td>
+					<td>是否公开</td>
+					<td>创建时间</td>
+					<td>有效期至</td>
+					<td>状态</td>
+					<td>提交/通过/确认</td>
+					<td>操作</td>
+				</tr>
+			</thead>
+			@foreach (RecruitmentPlan plan in Model)
+			{
+				<tr>
+					<td>@plan.Title</td>
+					<td>@(plan.IsPublic ? "是" : "否")</td>
+					<td><abbr title="@plan.WhenCreated">@plan.WhenCreated.ToShortDateString()</abbr></td>
+					<td><abbr title="@plan.ExpirationDate">@plan.ExpirationDate.ToShortDateString()</abbr></td>
+					<td>@Html.Partial("RecruitmentPlanState", @plan)</td>
+					<td>@Html.Action("SmartStatistics", new { plan = plan })</td>
+					<td>@Html.Partial("RecruitmentPlanOperation", @plan)</td>
+				</tr>
+			}
+		</table>
+	</div>
+</div>

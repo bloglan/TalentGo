@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Article>
+
+<div class="list-group">
+	@foreach (Article art in Model)
+	{
+		@*<li>@Html.ActionLink(art.Title, "Detail", "Article", new { id = art.id }, null)</li>*@
+		<a class="list-group-item" href="@Url.Action("Detail", "Article", new { id = art.id })">
+			<h4 class="list-group-item-heading">@art.Title</h4>
+			<p class="list-group-item-text">@art.Summary</p>
+		</a>
+	}
+</div>

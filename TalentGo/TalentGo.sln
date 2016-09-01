@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoWebApp", "TalentGoWebApp\TalentGoWebApp.csproj", "{8F251122-6433-4670-B49F-6B71ECF0125B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoCore", "TalentGoCore\TalentGoCore.csproj", "{3DBEA3D2-558B-4A4C-9322-A299E3931E71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataProc", "DataProc\DataProc.csproj", "{FC0D61CB-E145-42A9-8E4C-FBA2AEA74D1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoBackendService", "TalentGoBackendService\TalentGoBackendService.csproj", "{372CD951-8635-4EB6-9D33-7F5C0ECFE929}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8F251122-6433-4670-B49F-6B71ECF0125B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F251122-6433-4670-B49F-6B71ECF0125B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F251122-6433-4670-B49F-6B71ECF0125B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F251122-6433-4670-B49F-6B71ECF0125B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DBEA3D2-558B-4A4C-9322-A299E3931E71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DBEA3D2-558B-4A4C-9322-A299E3931E71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DBEA3D2-558B-4A4C-9322-A299E3931E71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DBEA3D2-558B-4A4C-9322-A299E3931E71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0D61CB-E145-42A9-8E4C-FBA2AEA74D1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0D61CB-E145-42A9-8E4C-FBA2AEA74D1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0D61CB-E145-42A9-8E4C-FBA2AEA74D1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0D61CB-E145-42A9-8E4C-FBA2AEA74D1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{372CD951-8635-4EB6-9D33-7F5C0ECFE929}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372CD951-8635-4EB6-9D33-7F5C0ECFE929}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372CD951-8635-4EB6-9D33-7F5C0ECFE929}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372CD951-8635-4EB6-9D33-7F5C0ECFE929}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

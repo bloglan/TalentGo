@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "管理首页";
+}
+
+<h2>管理首页</h2>
+<h3>运行状态</h3>
+<div class="row text-center">
+    <div class="col-md-12">
+        <table class="table table-bordered" style="display: none;">
+            <colgroup>
+                <col style="width: 12.5%;" />
+                <col style="width: 12.5%;" />
+                <col style="width: 12.5%;" />
+                <col style="width: 12.5%;" />
+                <col style="width: 12.5%;" />
+                <col style="width: 12.5%;" />
+                <col style="width: 12.5%;" />
+                <col style="width: 12.5%;" />
+            </colgroup>
+            <tr>
+                <td>当前在线人数</td>
+                <td>已注册用户数</td>
+                <td>本年度计划</td>
+                <td>已注册用户数</td>
+                <td>本年度计划</td>
+                <td>已注册用户数</td>
+                <td>本年度计划</td>
+                <td>已注册用户数</td>
+            </tr>
+            <tr style="font-size: 1.8em; color: #0026ff;">
+                <td>100</td>
+                <td>1300.5</td>
+                <td>222</td>
+                <td>Yes</td>
+                <td>III</td>
+                <td>1300</td>
+                <td>2</td>
+                <td>1300</td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+<hr />
+<h3>管理板块</h3>
+<div class="row text-center">
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4><a href="@Url.Action("Index", "RecruitmentPlan")">招聘报名管理</a></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4><a href="@Url.Action("Index", "Article")">通知公告管理</a></h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4><a href="@Url.Action("Index", "BaseData")">基础数据管理</a></h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4><a href="@Url.Action("Index", "Maintenance")">系统维护</a></h4>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<RecruitmentPlan>
+@{
+	ViewBag.Title = "报名首页";
+}
+
+<h2>招聘报名</h2>
+@if (Model.Any())
+{
+	foreach (RecruitmentPlan plan in Model)
+	{
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3>@plan.Title</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-6">
+						<p>发布日期：@plan.WhenPublished.Value.ToShortDateString() 有效期至：@plan.ExpirationDate.ToShortDateString()</p>
+						<p>报名截止日期：@plan.EnrollExpirationDate.Value.ToString("yyyy-MM-dd HH:mm")（@plan.EnrollExpirationDate.Value.SmartShow()）</p>
+						@if (plan.AnnounceExpirationDate.HasValue)
+						{
+							<p>确认参加考试截止日期：@plan.AnnounceExpirationDate.Value.ToShortDateString()</p>
+							<p>考试时间：@plan.ExamStartTime.Value.ToString("yyyy-MM-dd HH:mm") -- @plan.ExamEndTime.Value.ToString("HH:mm")</p>
+							<p>考试地点：@plan.ExamLocation</p>
+						}
+						@Html.ActionLink("查看招聘简章", "Detail", new { id = plan.id }, new { @class = "btn btn-default" })
+					</div>
+					<div class="col-md-6">
+						@Html.Action("ArticlePart", "Article", new { IsPublic = true, plan = plan, MaxCount = 10 })
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						@Html.Action("RecruitmentPanel", new { plan = plan })
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<p>没有可用的招聘计划。</p>
+}

@@ -1,0 +1,445 @@
+﻿@model EnrollmentListViewModel
+@{
+	Layout = "~/Areas/Mgmt/Views/Shared/_Layout-Fluid.cshtml";
+	ViewBag.Title = "审核" + Model.RecruitmentPlanTitle + "的报名表";
+}
+
+@{
+	//For Paging
+	int StartLen = 2;
+	int EndLen = 2;
+	int BeforeIndexLen = 2;
+	int AfterIndexLen = 4;
+
+	int PageCount = (int)Math.Ceiling((double)Model.AllCount / (double)Model.PageSize);
+
+	int renderBegin = StartLen;
+	int renderEnd = PageCount - EndLen;
+	int renderBefore = 0;
+	int renderAfter = 0;
+	bool renderBeforeInd = false;
+	bool renderAfterInd = false;
+
+	if (Model.PageIndex - BeforeIndexLen <= StartLen)
+	{
+		renderBefore = StartLen;
+	}
+	else
+	{
+		renderBefore = Model.PageIndex - BeforeIndexLen;
+		renderBeforeInd = true;
+	}
+
+	if (Model.PageIndex + AfterIndexLen + 1 >= PageCount - EndLen)
+	{
+		renderAfter = PageCount - EndLen;
+	}
+	else
+	{
+		renderAfter = Model.PageIndex + AfterIndexLen + 1;
+		renderAfterInd = true;
+	}
+	if (renderBegin >= PageCount - 1)
+	{
+		renderBegin = PageCount - 1;
+	}
+	if (renderEnd <= renderBegin)
+	{
+		renderEnd = renderBegin;
+	}
+
+}
+
+<div class="page-header text-center">
+	<h2>@("审核" + Model.RecruitmentPlanTitle + "的报名表")</h2>
+</div>
+
+<div class="row">
+	<div class="col-md-6">
+		@Html.Action("Statistics", new { PlanID = Model.RecruitmentPlanID })
+	</div>
+</div>
+
+
+@using (Html.BeginForm("EnrollmentList", "Enrollment", FormMethod.Get, new { @class = "form-inline" }))
+{
+	<div class="form-inline">
+		<div class="form-group">
+			@Html.LabelFor(m => m.Keywords, new { @class = "content-control" })
+			@Html.TextBoxFor(m => m.Keywords, new { @class = "form-control" })
+		</div>
+		<div class="form-group">
+			@Html.DropDownListFor(m => m.AuditFilter, new List<SelectListItem>()
+				{
+					new SelectListItem()
+					{
+						Text = "所有审核", Value = AuditFilterType.All.ToString()
+					},
+					new SelectListItem()
+					{
+						Text = "通过", Value = AuditFilterType.Approved.ToString()
+					},
+					new SelectListItem()
+					{
+						Text = "未通过", Value = AuditFilterType.Rejective.ToString()
+					},
+					new SelectListItem()
+					{
+						Text = "未设置", Value = AuditFilterType.NotSet.ToString()
+					},
+				}, new { @class = "form-control" })
+		</div>
+		<div class="form-group">
+			@Html.DropDownListFor(m => m.AnnounceFilter, new List<SelectListItem>()
+				{
+					new SelectListItem()
+					{
+						Text = "所有声明", Value = AnnounceFilterType.All.ToString()
+					},
+					new SelectListItem()
+					{
+						Text = "参加考试", Value = AnnounceFilterType.TakeExam.ToString()
+					},
+					new SelectListItem()
+					{
+						Text = "放弃考试", Value = AnnounceFilterType.NotTakeExam.ToString()
+					},
+					new SelectListItem()
+					{
+						Text = "未声明", Value = AnnounceFilterType.NotAnnounced.ToString()
+					},
+				}, new { @class = "form-control" })
+		</div>
+		<div class="form-group">
+			@Html.DropDownListFor(m => m.MajorCategory, (IEnumerable<SelectListItem>)ViewData["MajorCategoryList"], "专业类别", new { @class = "form-control" })
+		</div>
+		@Html.HiddenFor(m => m.OrderColumn)
+		@Html.HiddenFor(m => m.DownDirection)
+		<div class="form-group">
+			<input type="submit" value="确定" class="btn btn-primary" /> @Html.ActionLink("导出Excel", "ExportAuditList", new { id = Model.RecruitmentPlanID, MajorCategory = Model.MajorCategory, AuditFilter = Model.AuditFilter, AnnounceFilter = Model.AnnounceFilter, Keywords = Model.Keywords, OrderColumn = Model.OrderColumn, DownDirection = Model.DownDirection }, new { @class = "btn btn-default" })
+		</div>
+	</div>
+	@Html.HiddenFor(m => m.PageIndex)
+	@Html.HiddenFor(m => m.PageSize)
+}
+
+@if (Model.AllCount != 0)
+{
+	<nav>
+		<ul class="pagination">
+			@if (Model.PageIndex <= 0)
+			{
+				<li class="disabled"><span aria-hidden="true">«</span></li>
+			}
+			else
+			{
+				<li><a aria-label="Previous" href="javascript:GoTo(@(Model.PageIndex - 1),@Model.PageSize);"><span aria-hidden="true">«</span></a></li>
+			}
+			@for (int a = 0; a < renderBegin; a++)
+			{
+				if (Model.PageIndex == a)
+				{
+					<li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+				}
+				else
+				{
+					<li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+				}
+			}
+			@if (renderBeforeInd)
+			{
+				<li><span>...</span></li>
+			}
+			@for (int a = renderBefore; a < renderAfter; a++)
+			{
+				if (Model.PageIndex == a)
+				{
+					<li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+				}
+				else
+				{
+					<li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+				}
+			}
+			@if (renderAfterInd)
+			{
+				<li><span>...</span></li>
+			}
+			@for (int a = renderEnd; a < PageCount; a++)
+			{
+				if (Model.PageIndex == a)
+				{
+					<li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+				}
+				else
+				{
+					<li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+				}
+			}
+			@if (Model.PageIndex >= PageCount - 1)
+			{
+				<li class="disabled"><span aria-hidden="true">»</span></li>
+			}
+			else
+			{
+				<li><a aria-label="Next" href="javascript:GoTo(@(Model.PageIndex + 1),@Model.PageSize);"><span aria-hidden="true">»</span></a></li>
+			}
+		</ul>
+	</nav>
+	<p>共 @Model.AllCount 条数据，每页显示 @Model.PageSize 条。</p>
+	<table class="table">
+		<caption>报名资料</caption>
+		<thead>
+			<tr>
+				<th><span>照片</span></th>
+				<th><a href="javascript:SetOrderColumn('Name');">姓名</a> <a href="javascript:SetOrderColumn('IDCardNumber');">身份证</a> <a href="javascript:SetOrderColumn('Mobile');">手机</a></th>
+				<th><a href="javascript:SetOrderColumn('Sex');">性别</a> <a href="javascript:SetOrderColumn('DateOfBirth');">出生年月</a></th>
+				<th><a href="javascript:SetOrderColumn('PlaceOfBirth');">籍贯</a> <a href="javascript:SetOrderColumn('Source');">现居地</a></th>
+				<th><a href="javascript:SetOrderColumn('School');">毕业院校</a> <a href="javascript:SetOrderColumn('Major');">专业</a></th>
+				<th><a href="javascript:SetOrderColumn('EducationBackground');">学历</a> <a href="javascript:SetOrderColumn('Degree');">学位</a></th>
+				<th><a href="javascript:SetOrderColumn('SelectedMajor');">报考类别</a></th>
+				<th><a href="javascript:SetOrderColumn('WhenCommited');">提交</a> <a href="javascript:SetOrderColumn('IsTakeExam');">考试</a> <span>状态信息</span></th>
+				<th><span>操作</span></th>
+			</tr>
+		</thead>
+		@foreach (EnrollmentData item in Model.EnrollmentList)
+		{
+			<tr>
+				<td><img src="@Url.Action("HeadImage", "ArchiveData", new { planid = item.RecruitPlanID, userid = item.UserID, area = "" })" style="max-width: 100px; max-height: 150px;" class="img-responsive" /></td>
+				<td>
+					<p>
+						@*<a href="@Url.Action("Detail", new { planid = item.RecruitPlanID, userid = item.UserID, retrunParam = this.Request.Url.Query })">@item.Name</a>*@
+						<a href="@Url.Action("Detail", this.Request.QueryString.ToRouteValues(new { UserID = item.UserID, id = item.RecruitPlanID }))">@item.Name</a>
+					</p>
+					<p>@item.IDCardNumber</p>
+					<p>@item.Mobile</p>
+				</td>
+				<td>
+					<p>@item.Sex</p>
+					<p>@item.DateOfBirth.ToShortDateString() @item.DateOfBirth.Age() 岁</p>
+				</td>
+				<td>
+					<p>@item.PlaceOfBirth</p>
+					<p>@item.Source</p>
+				</td>
+				<td>
+					<p>@item.School</p>
+					<p>@item.Major</p>
+				</td>
+				<td>
+					<p>@item.EducationBackground</p>
+					<p>@item.Degree</p>
+				</td>
+				<td>
+					<p>@item.SelectedMajor</p>
+				</td>
+				<td>
+					<p><abbr title="@item.WhenCommited.Value">@item.WhenCommited.Value.ToShortDateString()</abbr></p>
+					@if (item.Users.RegisterationDelegate == "Intranet")
+					{
+						<p>代理人：</p>
+					}
+					@if (item.WhenAnnounced.HasValue)
+					{
+						if (item.IsTakeExam.Value)
+						{
+							<p><span class="label label-success"><abbr title="声明日期 @item.WhenAnnounced.Value">参加考试</abbr></span></p>
+						}
+						else
+						{
+							<p><span class="label label-danger"><abbr title="声明日期 @item.WhenAnnounced.Value">放弃考试</abbr></span></p>
+						}
+					}
+					else
+					{
+						if (Model.IsAudit && item.Approved.Value)
+						{
+							<p><span class="label label-warning">尚未声明</span></p>
+						}
+					}
+				</td>
+				<td>
+					<p>
+						<label>
+							<input type="checkbox" id="chk_@(item.RecruitPlanID)_@(item.UserID)_approved" data-planid="@item.RecruitPlanID" data-usrid="@item.UserID" value="Approved" onclick="SetAuditFlag(this)" @((item.Approved.HasValue && item.Approved.Value) ? "checked=\"checked\"" : string.Empty ) @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />通过
+						</label>
+
+						<label>
+
+							<input type="checkbox" id="chk_@(item.RecruitPlanID)_@(item.UserID)_rejective" data-planid="@item.RecruitPlanID" data-usrid="@item.UserID" value="Rejective" onclick="SetAuditFlag(this)" @((item.Approved.HasValue && !item.Approved.Value) ? "checked=\"checked\"" : string.Empty ) @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />不通过
+						</label>
+					</p>
+					<p>
+						<label>附加消息</label><input type="text" data-planid="@item.RecruitPlanID" value="@item.AuditMessage" data-usrid="@item.UserID" onchange="SetAuditMessage(this)" @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />
+					</p>
+				</td>
+
+			</tr>
+		}
+
+	</table>
+	<p>共 @Model.AllCount 条数据，每页显示 @Model.PageSize 条。</p>
+
+	<nav>
+		<ul class="pagination">
+			@if (Model.PageIndex <= 0)
+			{
+				<li class="disabled"><span aria-hidden="true">«</span></li>
+			}
+			else
+			{
+				<li><a aria-label="Previous" href="javascript:GoTo(@(Model.PageIndex - 1),@Model.PageSize);"><span aria-hidden="true">«</span></a></li>
+			}
+			@for (int a = 0; a < renderBegin; a++)
+			{
+				if (Model.PageIndex == a)
+				{
+					<li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+				}
+				else
+				{
+					<li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+				}
+			}
+			@if (renderBeforeInd)
+			{
+				<li><span>...</span></li>
+			}
+			@for (int a = renderBefore; a < renderAfter; a++)
+			{
+				if (Model.PageIndex == a)
+				{
+					<li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+				}
+				else
+				{
+					<li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+				}
+			}
+			@if (renderAfterInd)
+			{
+				<li><span>...</span></li>
+			}
+			@for (int a = renderEnd; a < PageCount; a++)
+			{
+				if (Model.PageIndex == a)
+				{
+					<li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+				}
+				else
+				{
+					<li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+				}
+			}
+			@if (Model.PageIndex >= PageCount - 1)
+			{
+				<li class="disabled"><span aria-hidden="true">»</span></li>
+			}
+			else
+			{
+				<li><a aria-label="Next" href="javascript:GoTo(@(Model.PageIndex + 1),@Model.PageSize);"><span aria-hidden="true">»</span></a></li>
+			}
+		</ul>
+	</nav>
+
+
+}
+else
+{
+	<p>没有符合条件的数据</p>
+
+}
+
+
+
+
+@Html.ActionLink("返回招聘计划", "Index", "RecruitmentPlan", null, new { @class = "btn btn-default" })
+
+
+@section Scripts
+{
+
+	<script>
+		$(function () {
+			$.ajaxSetup({ cache: false });
+		});
+
+		function GoTo(PageIndex, PageSize) {
+			$("#PageIndex").val(PageIndex);
+			$("#PageSize").val(PageSize);
+
+			$("form").submit();
+		}
+
+		function SetAuditFlag(ele) {
+			//判定状态
+			//如果Approved为选中，则清除Rejective,提交true;为非选中，则提交设null
+			//如果Rejective为选中，则清除Approved，提交false;未非选中，则提交null
+			var planid = $(ele).data("planid");
+			var userid = $(ele).data("usrid");
+			var setflag = null;
+			if ($(ele).prop("checked")) {
+				var auditDisc = $(ele).val()
+				//另一个chk
+				var anothorChkBox
+				if (auditDisc == "Approved") {
+					anothorChkBox = $("#chk_" + planid + "_" + userid + "_rejective");
+					setflag = true;
+				}
+				else {
+					anothorChkBox = $("#chk_" + planid + "_" + userid + "_approved");
+					setflag = false;
+				}
+
+				anothorChkBox.removeAttr("checked");
+
+				//alert(auditDisc);
+			}
+			else {
+				//alert("null");
+				setflag = null;
+			}
+
+			//提交
+			$.getJSON("@Url.Action("SetAuditFlag")", { planid: planid, userid: userid, Audit: setflag }, function (data, status, xhr) {
+				if (data.Code != 0)
+					alert(data.Message);
+				else {
+					$("#CommitedEnrollmentCount").text(data.Statistics.CommitedEnrollmentCount);
+					$("#ApprovedEnrollmentCount").text(data.Statistics.ApprovedEnrollmentCount);
+					$("#RejectiveEnrollmentCount").text(data.Statistics.RejectiveEnrollmentCount);
+					$("#NotAuditEnrollmentCount").text(data.Statistics.NotAuditEnrollmentCount);
+					$("#AnnouncedTakeExam").text(data.Statistics.AnnouncedTakeExam);
+					$("#AnnouncedNotTakeExam").text(data.Statistics.AnnouncedNotTakeExam);
+					$("#NotAnnounced").text(data.Statistics.NotAnnounced);
+				}
+			});
+		}
+
+		function SetAuditMessage(ele) {
+			var planid = $(ele).data("planid");
+			var userid = $(ele).data("usrid");
+			var auditMessage = $(ele).val();
+			$.getJSON("@Url.Action("SetAuditMessage")", { planid: planid, userid: userid, message: auditMessage }, function (data, status, xhr) {
+				if (data.Code != 0)
+					alert(data.Message);
+			})
+		}
+
+		function SetOrderColumn(columnName) {
+			var currentColumn = $("#OrderColumn").val();
+			var downDir = $("#DownDirection").val();
+			if (columnName == currentColumn) {
+				if (downDir.toLowerCase() == "true")
+					$("#DownDirection").val("False");
+				else
+					$("#DownDirection").val("True");
+			}
+			else {
+				$("#OrderColumn").val(columnName);
+				$("#DownDirection").val("False");
+			}
+			$("form").submit();
+		}
+	</script>
+}

@@ -1,0 +1,4 @@
+﻿@model string
+
+@Html.RadioButton("", "男", Model == "男", new { @id = Html.NameForModel() + "male" })男
+@Html.RadioButton("", "女", Model == "女", new { @id = Html.NameForModel() + "female" })女

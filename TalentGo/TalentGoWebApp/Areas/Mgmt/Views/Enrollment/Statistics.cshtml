@@ -1,0 +1,25 @@
+﻿@model EnrollmentStatisticsViewModel
+
+<table class="table table-bordered text-center">
+	<caption>统计信息</caption>
+	<thead>
+		<tr>
+			<th class="info text-center">已提交</th>
+			<th class="success text-center">标记通过</th>
+			<th class="danger text-center">标记未通过</th>
+			<th class="warning text-center">未标记</th>
+			<th class="success text-center">参加考试</th>
+			<th class="danger text-center">放弃考试</th>
+			<th class="warning text-center">未确认</th>
+		</tr>
+	</thead>
+	<tr style="font-size: 1.4em;">
+		<td><span id="CommitedEnrollmentCount">@Model.CommitedEnrollmentCount</span></td>
+		<td><span id="ApprovedEnrollmentCount">@Model.ApprovedEnrollmentCount</span></td>
+		<td><span id="RejectiveEnrollmentCount">@Model.RejectiveEnrollmentCount</span></td>
+		<td><span id="NotAuditEnrollmentCount">@Model.NotAuditEnrollmentCount</span></td>
+		<td><span id="AnnouncedTakeExam">@Model.AnnouncedTakeExamCount</span></td>
+		<td><span id="AnnouncedNotTakeExam">@Model.AnnouncedNotTakeExamCount</span></td>
+		<td><span id="NotAnnounced">@Model.NotAnnouncedCount</span></td>
+	</tr>
+</table>

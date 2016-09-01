@@ -1,0 +1,57 @@
+﻿@model CommitAuditViewModel
+@{
+	ViewBag.Title = "提交审核决定";
+}
+
+<div class="page-header">
+	<h2>提交审核决定</h2>
+</div>
+<p class="text-danger lead">请仔细阅读该须知</p>
+<ol>
+	<li>如果还有未确定（即未勾选审核通过或不通过）报名表，无法结束审核。请返回查看报名表，为所有报名表明确指示一个审核决定。</li>
+	<li>结束审核后，招聘计划将转入接受“确认是否参加考试”状态，您需要明确接受声明的截止时间，考试的时间和地点。</li>
+	<li>点击【结束审核】后，您将不能再修改审核结果，或撤销该操作。请谨慎操作！</li>
+	<li>审核结果（包括通过和不通过的），都将通过短信或电子邮件通知应聘者。</li>
+</ol>
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	<div class="form-horizontal">
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+		<div class="form-group">
+			@Html.LabelFor(m => m.AnnounceExpirationDate, new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(m => m.AnnounceExpirationDate, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(m => m.AnnounceExpirationDate, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.ExamStartTime, new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(m => m.ExamStartTime, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(m => m.ExamStartTime, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.ExamEndTime, new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(m => m.ExamEndTime, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(m => m.ExamEndTime, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			@Html.LabelFor(m => m.ExamLocation, new { @class = "control-label col-md-2" })
+			<div class="col-md-10">
+				@Html.EditorFor(m => m.ExamLocation, new { htmlAttributes = new { @class = "form-control" } })
+				@Html.ValidationMessageFor(m => m.ExamLocation, "", new { @class = "text-danger" })
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-offset-2 col-md-10">
+				<input type="submit" value="结束审核" class="btn btn-primary" />
+				@Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })
+			</div>
+		</div>
+	</div>
+}

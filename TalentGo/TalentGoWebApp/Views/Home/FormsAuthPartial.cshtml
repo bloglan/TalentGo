@@ -1,0 +1,8 @@
+﻿@using TalentGoWebApp.Models
+@model LoginPartialViewModel
+
+<h2>您好，@Model.DisplayName</h2>
+@Html.Action("EnrollmentStatePartial")
+
+<p>@Html.ActionLink("进入报名", "Index", "Recruitment", null, new { @class = "btn btn-default" })</p>
+<a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default">注销</a>

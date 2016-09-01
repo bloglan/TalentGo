@@ -1,0 +1,7 @@
+﻿@model Nullable<bool>
+
+@Html.DropDownListFor(r => r, new SelectListItem[] {
+ new SelectListItem() { Text = "均可", Value = "", Selected = !Model.HasValue },
+ new SelectListItem() { Text = "公开", Value = "true", Selected = (Model.HasValue && Model.Value == true) },
+ new SelectListItem() { Text = "非公开", Value = "false", Selected = (Model.HasValue && Model.Value == false) },
+ })

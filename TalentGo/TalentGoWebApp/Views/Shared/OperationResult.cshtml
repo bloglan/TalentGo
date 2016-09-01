@@ -1,0 +1,48 @@
+﻿@model TalentGo.ViewModels.OperationResult
+@{
+	var decorateClass = string.Empty;
+	switch (Model.Result)
+	{
+		case TalentGo.ViewModels.ResultStatus.Success:
+			ViewBag.Title = "成功";
+			decorateClass = "panel-success";
+			break;
+		case TalentGo.ViewModels.ResultStatus.Warning:
+			ViewBag.Title = "警告";
+			decorateClass = "panel-warning";
+			break;
+		case TalentGo.ViewModels.ResultStatus.Failure:
+			ViewBag.Title = "失败";
+			decorateClass = "panel-danger";
+			break;
+
+	}
+}
+
+<div class="panel @decorateClass" style="margin-top: 5em;">
+	<div class="panel-heading">
+		<h2>@ViewBag.Title</h2>
+	</div>
+	<div class="panel-body">
+		<p>@Model.Message</p>
+	</div>
+	<div class="panel-footer">
+		@if (Model.RedirectInterval >= 0)
+		{
+			<p>将在 @Model.RedirectInterval 秒后跳转。</p>
+        }
+        else
+        {
+            <p><a href="@Model.ReturnUrl">返回</a></p>
+        }
+	</div>
+</div>
+<script>
+	var timeoutInterval = @(Model.RedirectInterval * 1000);
+	if (timeoutInterval > 0)
+	{
+		var tm = setTimeout(function(){
+			window.location.href = "@Model.ReturnUrl";
+		}, timeoutInterval);
+	}
+</script>
