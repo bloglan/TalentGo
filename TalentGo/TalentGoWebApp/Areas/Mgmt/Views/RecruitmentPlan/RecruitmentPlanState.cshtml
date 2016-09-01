@@ -1,0 +1,37 @@
+﻿@using TalentGo.Extension
+@model RecruitmentPlan
+
+@if (!Model.WhenPublished.HasValue)
+{
+	<span class="label label-warning">已创建（未发布）</span>
+}
+else
+{
+	<span class="label label-success"><abbr title="发布时间 @Model.WhenPublished.Value">已发布</abbr></span>
+	if (Model.ExpirationDate < DateTime.Now)
+	{
+		<span class="label label-default">已结束</span>
+		return;
+	}
+	if (Model.EnrollExpirationDate > DateTime.Now)
+	{
+		<span class="label label-primary"><abbr title="截止日期 @Model.EnrollExpirationDate.Value.ToString("yyyy-MM-dd HH:mm")">正在报名（@Model.EnrollExpirationDate.Value.SmartShow() 到期）</abbr></span>
+	}
+
+	if (Model.WhenAuditCommited.HasValue)
+	{
+		<span class="label label-success"><abbr title="结束审核时间 @Model.WhenAuditCommited.Value">审核结束</abbr></span>
+		if (Model.AnnounceExpirationDate.HasValue && Model.AnnounceExpirationDate.Value > DateTime.Now)
+		{
+			<span class="label label-primary"><abbr title="声明截止时间 @Model.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm")">正在接受声明（@Model.AnnounceExpirationDate.Value.SmartShow() 到期）</abbr></span>
+		}
+		else
+		{
+			<span class="label label-success">声明结束</span>
+		}
+	}
+	else
+	{
+		<span class="label label-primary">可审核</span>
+	}
+}

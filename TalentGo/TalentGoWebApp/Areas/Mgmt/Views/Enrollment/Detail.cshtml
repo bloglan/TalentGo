@@ -1,0 +1,68 @@
+﻿@model EnrollmentDetailViewModel
+@{
+	ViewBag.Title = "Detail";
+}
+
+<h2>应聘人员信息</h2>
+
+@Html.Partial("_EnrollmentDataViewer", Model.Enrollment)
+@Html.Partial("_EnrollmentArchiveDataViewer", Model.Enrollment)
+@Html.Partial("_EnrollmentDataPropertiesViewer", Model.Enrollment)
+
+@using (Html.BeginForm())
+{
+	@Html.AntiForgeryToken()
+	<div class="form-horizontal">
+		@if (!Model.Enrollment.RecruitmentPlan.WhenAuditCommited.HasValue && this.User.IsInRole("QJYC\\招聘管理员"))
+		{
+			<div class="form-group">
+				@Html.LabelFor(m => m.Approved, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.Approved, new { onclick = "UpdateCheckBox(this)" })
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.Rejective, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					<div class="checkbox">
+						@Html.CheckBoxFor(m => m.Rejective, new { onclick = "UpdateCheckBox(this)" })
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				@Html.LabelFor(m => m.AuditMessage, new { @class = "control-label col-md-2" })
+				<div class="col-md-10">
+					@Html.TextBoxFor(m => m.AuditMessage, new { @class = "form-control" })
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-md-10 col-md-offset-2">
+					@if (!@Model.Enrollment.RecruitmentPlan.WhenAuditCommited.HasValue)
+					{
+						<input type="submit" class="btn btn-default" value="提交" />
+					}
+				</div>
+			</div>
+		}
+		<a href="@(Url.Action("EnrollmentList", new { id = Model.Enrollment.RecruitPlanID }) + this.Server.UrlDecode(this.Request["retrunParam"]))" class="btn btn-default">返回</a>
+	</div>
+}
+
+@section Scripts
+{
+	<script>
+
+		function UpdateCheckBox(ele) {
+			if ($(ele).prop("checked")) {
+				//当前值为非选中，此方法后，改为选中，则更改另一个为非选中。
+				if ($(ele).eq(0).attr("id") == "Approved")
+					$("#Rejective").removeAttr("checked");
+				else
+					$("#Approved").removeAttr("checked");
+			}
+		}
+
+	</script>
+}

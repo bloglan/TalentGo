@@ -1,0 +1,9 @@
+﻿
+@{
+    ViewBag.Title = "通知公告";
+}
+
+<h2>通知公告</h2>
+<hr />
+
+@Html.Action("ArticlePart", new { IsPublic = !(this.User.Identity is System.Security.Principal.WindowsIdentity), plan = default(RecruitmentPlan), MaxCount = 50 })

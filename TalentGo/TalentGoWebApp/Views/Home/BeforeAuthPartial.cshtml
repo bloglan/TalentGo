@@ -1,0 +1,31 @@
+﻿@using TalentGoWebApp.Models
+@model LoginViewModel
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+{
+	@Html.AntiForgeryToken()
+	<h4>登录</h4>
+	<hr />
+	@*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+	<div class="form-group">
+		@Html.LabelFor(m => m.IDCardNumber, new { @class = "control-label" })
+		@Html.TextBoxFor(m => m.IDCardNumber, new { @class = "form-control" })
+		@Html.ValidationMessageFor(m => m.IDCardNumber, "", new { @class = "text-danger" })
+	</div>
+	<div class="form-group">
+		@Html.LabelFor(m => m.Password, new { @class = "control-label" })
+		@Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+		@Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+	</div>
+	<div class="checkbox">
+		<label>
+			@Html.CheckBoxFor(m => m.RememberMe) <abbr title="请勿在公共计算机上勾选此项，以免信息泄露。">记住我</abbr>
+		</label>
+	</div>
+	<input type="submit" value="登录" class="btn btn-primary" />
+	@Html.ActionLink("注册为新用户", "Register", "Account", null, new { @class = "btn btn-default" })
+	<div class="form-group">
+		@Html.ActionLink("忘记密码?", "ForgotPassword", "Account")
+	</div>
+}
+

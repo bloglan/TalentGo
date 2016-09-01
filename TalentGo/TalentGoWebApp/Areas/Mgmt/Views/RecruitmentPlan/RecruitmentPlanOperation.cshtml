@@ -1,0 +1,22 @@
+﻿@model RecruitmentPlan
+
+@if (!Model.WhenPublished.HasValue && this.User.IsInRole("QJYC\\招聘管理员"))
+{
+	@Html.ActionLink("发布", "Publish", new { id = Model.id }, new { @class = "btn btn-primary" })<span>&nbsp;&nbsp;</span>
+	@Html.ActionLink("编辑", "Edit", new { id = Model.id }, new { @class = "btn btn-default" })<span>&nbsp;&nbsp;</span>
+	@Html.ActionLink("删除", "Delete", new { id = Model.id }, new { @class = "btn btn-warning", onclick = "return confirm('确定删除吗？');" })
+
+}
+else
+{
+	@Html.ActionLink("查看报名表", "EnrollmentList", "Enrollment", new { id = Model.id }, new { @class = "btn btn-default" });
+	//已发布的
+
+	if (!Model.WhenAuditCommited.HasValue && this.User.IsInRole("QJYC\\招聘管理员"))
+	{
+		@Html.ActionLink("结束审核", "CommitAudit", new { id = Model.id }, new { @class = "btn btn-default" + ((Model.EnrollExpirationDate < DateTime.Now) ? "" : " disabled") })
+		<abbr title="报名截止时间后方可结束审核"><span class="glyphicon glyphicon-question-sign"></span></abbr>
+	}
+
+}
+

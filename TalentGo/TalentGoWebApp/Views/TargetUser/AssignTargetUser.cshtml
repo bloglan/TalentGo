@@ -1,0 +1,48 @@
+﻿@model IEnumerable<TargetUser>
+
+@{
+	ViewBag.Title = "添加或选择报名人员";
+}
+
+<h2>添加/选择报名人员</h2>
+<hr />
+<p><h4>曲靖烟草企业用户，您正在为以下人员进行报名，请选择具体报名人员：</h4></p>
+@using (Html.BeginForm("AssignTargetUser", "TargetUser", FormMethod.Post, new { id = "AssignTargetUserForm" }))
+{
+	@Html.AntiForgeryToken()
+	<div class="row">
+		@foreach (var user in Model)
+		{
+			<div class="col-md-3">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<h3>@user.DisplayName</h3>
+						<p>@user.IDCardNumber</p>
+						@{
+							var enrollmentData = user.EnrollmentData.FirstOrDefault();
+							if (enrollmentData != null)
+							{
+								Html.RenderPartial("EnrollmentStatePartial", enrollmentData);
+							}
+
+						}
+						<input type="button" class="btn btn-default" onclick="SelectAndSubmit(@user.Id);" value="报名" />
+					</div>
+				</div>
+
+			</div>
+							}
+		@Html.Hidden("SelectedUserID")
+
+	</div>
+
+							}
+<br />
+<a class="btn btn-default" href="CreateUser" role="button">添加报名人员</a>
+
+<script>
+	function SelectAndSubmit(selected) {
+		$("#SelectedUserID").val(selected);
+		document.getElementById("AssignTargetUserForm").submit();
+	}
+</script>

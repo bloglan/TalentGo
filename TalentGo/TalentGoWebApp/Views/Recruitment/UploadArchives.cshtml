@@ -1,0 +1,209 @@
+﻿@using TalentGo.Recruitment
+@model IEnumerable<ArchiveRequirements>
+@{
+	ViewBag.Title = "管理报名资料";
+}
+<div class="page-header">
+	<h2>管理报名资料</h2>
+</div>
+
+<p>上传要求：</p>
+<ol>
+	<li>只能上传jpg和png格式图片，请使用彩色图片，要求画面字迹清晰可辨；</li>
+	<li>请按每种资料给出的要求提示以及示例（如果有）来准备您的资料；请根据需要自行使用图片编辑软件旋转裁剪以符合阅读要求。</li>
+	<li>推荐通过扫描方式获得，条件不具备时，也可使用拍照方式获得；</li>
+	<li>报名提交前，您可以随时返回此页管理您的资料，当资料数量需求无误后，方可提交报名；</li>
+	<li>上传者对图片真实性负责，严禁涂改、伪造；</li>
+	<li>曲靖烟草保留对照片合格性、真实性的审核权，对资料不合格、弄虚作假者终止应聘审核。</li>
+</ol>
+<hr />
+
+@foreach (ArchiveRequirements req in Model)
+{
+	<div>
+		<h3>@req.ArchiveCategory.Name</h3>
+
+		<p>@req.ArchiveCategory.Requirements</p>
+		<p>
+			@{
+				RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), req.Requirements);
+				switch (reqType)
+				{
+					case RequirementType.One:
+						<span class="label label-default">必须上传一张</span>
+						break;
+					case RequirementType.OneOrMore:
+						<span class="label label-default">必须上传至少一张</span>
+						break;
+					case RequirementType.ZeroOrMore:
+						<span class="label label-default">不是必需，可上传多张</span>
+						break;
+					case RequirementType.ZeroOrOne:
+						<span class="label label-default">不是必需，最多可上传一张</span>
+						break;
+				}
+			}
+			@if (req.ArchiveCategory.MinFileSize.HasValue)
+			{
+				<span class="label label-default">至少 @req.ArchiveCategory.MinFileSize.Value.ToByteSize()</span>
+			}
+			@if (req.ArchiveCategory.MaxFileSize.HasValue)
+			{
+				<span class="label label-default">不超过 @req.ArchiveCategory.MaxFileSize.Value.ToByteSize()</span>
+			}
+			@if (req.ArchiveCategory.MinHeight.HasValue)
+			{
+				<span class="label label-default">高度不小于 @req.ArchiveCategory.MinHeight.Value 像素</span>
+			}
+			@if (req.ArchiveCategory.MinWidth.HasValue)
+			{
+				<span class="label label-default">宽度不小于 @req.ArchiveCategory.MinWidth.Value 像素</span>
+			}
+			@if (req.ArchiveCategory.MaxHeight.HasValue)
+			{
+				<span class="label label-default">高度不大于 @req.ArchiveCategory.MaxHeight.Value 像素</span>
+			}
+			@if (req.ArchiveCategory.MaxWidth.HasValue)
+			{
+				<span class="label label-default">宽度不大于 @req.ArchiveCategory.MaxWidth.Value 像素</span>
+			}
+			
+		</p>
+		@if (!string.IsNullOrEmpty(req.ArchiveCategory.MimeType))
+		{
+			<p><a href="#" class="btn btn-default" data-toggle="modal" data-target="#archiveSampleModel" data-remote="false" data-acid="@req.ArchiveCategoryID">查看示例</a></p>
+		}
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-body">
+			@Html.Action("ArchiveListOfEnrollment", new { requirement = req })
+		</div>
+	</div>
+	<hr />
+			}
+
+
+<div class="row">
+	<div class="col-md-12">
+		@Html.ActionLink("返回招聘首页", "Index", null, new { @class = "btn btn-default" })
+		@Html.ActionLink("返回报名表", "Enroll", null, new { @class = "btn btn-default" })
+		@Html.ActionLink("下一步", "CommitEnrollment", null, new { @class = "btn btn-primary" })
+	</div>
+</div>
+
+
+@*@Html.ActionLink("返回报名首页", "Index", null, new { @class = "btn btn-default" })*@
+
+<!-- Modal -->
+<div class="modal fade" id="archiveSampleModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title">示例</h4>
+			</div>
+			<div class="modal-body">
+				<img id="archiveSampleImg" class="img-responsive center-block" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@section HeadScripts{
+
+	@Styles.Render("~/Content/jqueryfileupload")
+
+}
+
+@section Scripts {
+
+
+	@Scripts.Render("~/bundles/jqueryui")
+	@Scripts.Render("~/bundles/jqueryfileupload")
+	@Scripts.Render("~/bundles/jquerytmpl")
+
+	<script id="ArchiveContainerTmp" type="text/x-jquery-tmpl">
+		<div class="col-md-3 img-thumbnail">
+			<img src="@(Url.Action("GetEnrollmentArchiveData", "ArchiveData") + "?eaid=${id}")" class="img-responsive" />
+			<div class="caption">
+				<h4>${name}</h4>
+				<p><button class="btn btn-default btn-sm" onclick="RemoveFile(this);" data-eaid="${id}">移除</button></p>
+			</div>
+		</div>
+	</script>
+
+	<script>
+		$(function () {
+			$.ajaxSetup({ cache: false });
+
+
+		});
+
+		$("#archiveSampleModel").on("show.bs.modal", function (event) {
+			var ALink = $(event.relatedTarget);
+			var acid = ALink.data("acid");
+			var link = "@Url.Action("GetSampleImage", "ArchiveData")";
+
+			$("#archiveSampleImg").prop("src", link + "?acid=" + acid);
+		});
+
+		$(function () {
+			'use strict';
+			$("input[type='file']").fileupload({
+				//url: url,
+				dataType: 'json',
+				progress: function (e, data) {
+					$(this).prevAll("span").text("正在传送...");
+					//alert("");
+				},
+				done: function (e, data) {
+					//当传送完成时，应如何显示。
+					//alert("FileUpload");
+					$(this).prevAll("span").text("上传文件");
+					var $uploadCtrl = $(this).parents("div").first(); //引发上传文件控件
+
+					if (data.result.id == 0) {
+						alert("传送错误。" + data.result.name);
+						return;
+					}
+
+					$("#ArchiveContainerTmp").tmpl(data.result).insertBefore($uploadCtrl);
+
+					//$($("#ArchiveContainerTmp").html()).insertBefore($uploadCtrl);
+					if ($(this).data("needmore").toString().toLowerCase() == "false")
+						$uploadCtrl.css("display", "none");
+				},
+				fail: function (e, data) {
+					//
+					$(this).prevAll("span").text("上传文件");
+					alert("传送文件出现了错误，可能文件过大，请重新选择尝试。");
+				}
+			}).prop('disabled', !$.support.fileInput)
+						.parent().addClass($.support.fileInput ? undefined : 'disabled');
+		});
+
+		function RemoveFile(ele) {
+			if (confirm("确定要删除这个文档吗？")) {
+				var eaid = $(ele).data("eaid");
+				$.getJSON("/Archives/RemoveFile?eaid=" + eaid, null, function (data, status, xhr) {
+					if (data.code != 0)
+						alert(data.msg);
+					else {
+						//Remove itself
+						var current = $(ele).parents(".img-thumbnail").first();
+						var container = $(current).parents(".panel-body").first();
+						current.remove();
+
+						var uploadCtrl = $(container).find(".uploadCtrl");
+						uploadCtrl.css("display", "block");
+					}
+				});
+			}
+		}
+	</script>
+
+}

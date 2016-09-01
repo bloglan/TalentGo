@@ -1,0 +1,52 @@
+﻿@model EnrollmentData
+<div style="padding: 0.5em;">
+
+
+	@if (Model != null)
+	{
+		if (!Model.WhenCommited.HasValue)
+		{
+			if (Model.RecruitmentPlan.EnrollExpirationDate >= DateTime.Now)
+			{
+				<span class="label label-warning"><abbr title="请在 @Model.RecruitmentPlan.EnrollExpirationDate.Value.ToShortDateString() 前提交报名表。">报名尚未提交</abbr></span>
+			}
+			else
+			{
+				<span class="label label-danger">报名已截止</span>
+			}
+		}
+		else
+		{
+			if (!Model.WhenAudit.HasValue)
+			{
+				<span class="label label-info">报名正在审核中</span>
+			}
+			else
+			{
+				if (Model.Approved.Value)
+				{
+					if (!Model.WhenAnnounced.HasValue)
+					{
+						<span class="label label-success"><abbr title="请在 @Model.RecruitmentPlan.AnnounceExpirationDate.Value.ToShortDateString() 前确认是否参加考试。">报名审核已通过</abbr></span>
+					}
+					else
+					{
+						if (Model.IsTakeExam.Value)
+						{
+							<span class="label label-success">报名已完成</span>
+						}
+						else
+						{
+							<span class="label label-success">报名已完成（放弃考试）</span>
+						}
+					}
+				}
+				else
+				{
+					<span class="label label-danger">报名审核未通过</span>
+				}
+			}
+		}
+	}
+
+</div>

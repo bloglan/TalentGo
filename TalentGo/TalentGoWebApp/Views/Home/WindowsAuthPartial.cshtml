@@ -1,0 +1,16 @@
+﻿@using TalentGoWebApp.Models
+@model LoginPartialViewModel
+
+<h2>您好，@Model.DisplayName</h2>
+@if (Model.TargetUser != null)
+{
+	<p>您正在代表 @Model.TargetUser.DisplayName 报名 @Html.ActionLink("[切换]", "AssignTargetUser", "TargetUser")</p>
+	@Html.Action("EnrollmentStatePartial");
+
+	<p>@Html.ActionLink("进入报名", "Index", "Recruitment", null, new { @class = "btn btn-default" })</p>
+}
+else
+{
+	<p>@Html.ActionLink("进入报名", "AssignTargetUser", "TargetUser", null, new { @class = "btn btn-default" })</p>
+}
+

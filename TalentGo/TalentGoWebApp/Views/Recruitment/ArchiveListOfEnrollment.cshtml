@@ -1,0 +1,29 @@
+﻿@using TalentGo.Recruitment
+@model IEnumerable<EnrollmentArchives>
+
+@foreach (EnrollmentArchives archive in Model)
+{
+	<div class="col-md-3 img-thumbnail">
+		<img src="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = archive.id })" class="img-responsive" />
+		<div class="caption">
+			<h4>@archive.ArchiveCategory.Name</h4>
+		</div>
+		<p><button class="btn btn-default btn-sm" onclick="return RemoveFile(this);" data-eaid="@archive.id">移除</button></p>
+	</div>
+}
+@{ 
+	var requirement = Html.ViewContext.RouteData.Values["requirement"] as ArchiveRequirements;
+	RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements);
+}
+@*如果没有项，或（有项但More不为false），则显示添加新资料按钮*@
+@if (!Model.Any() || (Model.Any() && reqType.IsMultipleEnabled()))
+{
+	<div class="col-md-3 img-thumbnail uploadCtrl">
+		<span class="btn btn-success fileinput-button">
+			<i class="glyphicon glyphicon-plus"></i>
+			<span>上传文件</span>
+			<!-- The file input field used as target for the file upload widget -->
+			<input id="fileupload" type="file" name="files[]" data-url="@Url.Action("UploadFiles", "Archives", new { planid = requirement.RecruitmentPlanID, userid = ((TargetUser)this.ViewData["user"]).Id, acid = requirement.ArchiveCategoryID })" data-needmore="@(((RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements)).IsMultipleEnabled().ToString())">
+		</span>
+	</div>
+}
