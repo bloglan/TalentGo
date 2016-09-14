@@ -2,29 +2,26 @@
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Routing;
-using TalentGo.EntityFramework;
 using TalentGo.Recruitment;
 using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {
-	public class ArticleController : Controller
+    public class ArticleController : Controller
 	{
-		TalentGoDbContext database;
 		ArticleManager articleManager;
+
+        public ArticleController(ArticleManager manager)
+        {
+            this.articleManager = manager;
+        }
+
 		// GET: Article
 		public ActionResult Index()
 		{
 			return View();
 		}
 
-		protected override void Initialize(RequestContext requestContext)
-		{
-			base.Initialize(requestContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-			this.articleManager = new ArticleManager(requestContext.HttpContext);
-		}
 
 		[ChildActionOnly]
 		public async Task<ActionResult> ArticlePart(bool IsPublic, RecruitmentPlan plan, int MaxCount, string ViewName)

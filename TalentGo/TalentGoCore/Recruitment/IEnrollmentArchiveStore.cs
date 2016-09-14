@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 
 namespace TalentGo.Recruitment
 {
-	public interface IEnrollmentArchiveStore : IDataStore<EnrollmentArchives, int>
+    public interface IEnrollmentArchiveStore : IEnrollmentStore
 	{
-		Task<ICollection<EnrollmentArchives>> GetEnrollmentArchives(int PlanID, int UserID);
+        IQueryable<EnrollmentArchives> EnrollmentArchives { get; }
 
+        Task<IQueryable<EnrollmentArchives>> GetEnrollmentArchives(EnrollmentData enrollment);
+
+        Task AddArchiveToEnrollment(EnrollmentData enrollment, EnrollmentArchives archive);
+
+        Task RemoveArchiveFromEnrollment(EnrollmentData enrollment, EnrollmentArchives archive);
 	}
 }

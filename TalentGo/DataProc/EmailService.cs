@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using TalentGo.EntityFramework;
 
 namespace DataProc
 {
-	public class EmailService : IService
+    public class EmailService : IService
 	{
 		TalentGoDbContext database = new TalentGoDbContext();
 		string smsFormatString = "{0}，您好，您所填报的{1}报名资料，经初审通过，请于{2}前登陆网站声明是否参加考试，逾期未声明是否参加考试的将不准予参加考试。谢谢您的合作。\r\n"

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TalentGo.Identity
+﻿namespace TalentGo.Identity
 {
-	public static class ClaimDefinition
+    public static class ClaimDefinition
 	{
 		/// <summary>
 		/// 注册代理

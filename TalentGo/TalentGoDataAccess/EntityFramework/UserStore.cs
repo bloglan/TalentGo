@@ -2,13 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TalentGo.Identity;
 
 namespace TalentGo.EntityFramework
 {
-	public class UserStore :
+
+    public class UserStore :
 		IUserStore<TargetUser, int>,
 		IUserPasswordStore<TargetUser, int>,
 		IUserSecurityStampStore<TargetUser, int>,
@@ -214,13 +214,14 @@ namespace TalentGo.EntityFramework
 		{
 			get
 			{
-				return this.database.Users.AsQueryable();
+                return this.database.Users.AsNoTracking();
 			}
 		}
-		#endregion
 
-		#region IUserPhoneNumberStore<TargetUser, int>
-		public Task SetPhoneNumberAsync(TargetUser user, string phoneNumber)
+        #endregion
+
+        #region IUserPhoneNumberStore<TargetUser, int>
+        public Task SetPhoneNumberAsync(TargetUser user, string phoneNumber)
 		{
 			if (user == null)
 			{

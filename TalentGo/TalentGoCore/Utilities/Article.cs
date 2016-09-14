@@ -1,13 +1,10 @@
 namespace TalentGo.Utilities
 {
-	using Recruitment;
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.ComponentModel.DataAnnotations.Schema;
-	using System.Data.Entity.Spatial;
-	using System.Web.Mvc;
-	[Table("Article")]
+    using Recruitment;
+    using System;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    [Table("Article")]
     public partial class Article
     {
         public int id { get; set; }
@@ -23,7 +20,6 @@ namespace TalentGo.Utilities
 
 		[Display(Name = "正文")]
 		[Required]
-		[AllowHtml]
 		[UIHint("CKEditor")]
         public string MainContent { get; set; }
 
@@ -33,11 +29,9 @@ namespace TalentGo.Utilities
         public string CreatedBy { get; set; }
 
 		[Display(Name = "创建时间")]
-		[HiddenInput]
 		public DateTime WhenCreated { get; set; }
 
 		[Display(Name = "修改时间")]
-		[HiddenInput]
 		public DateTime WhenChanged { get; set; }
 
 		[Display(Name = "显示")]

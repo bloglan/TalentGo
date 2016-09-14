@@ -1,23 +1,23 @@
-﻿using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
-using TalentGo.EntityFramework;
 using TalentGo.Recruitment;
 
 namespace TalentGo.Utilities
 {
-	public class ArticleManager
+    public class ArticleManager
 	{
-		TalentGoDbContext database;
-		public ArticleManager(HttpContextBase httpContext)
+        IArticleStore store;
+
+		public ArticleManager(IArticleStore Store)
 		{
-			this.database = TalentGoDbContext.FromContext(httpContext);
+            this.store = Store;
 		}
+
+        public IQueryable<Article> Articles { get { return this.store.Articles; } }
+
+        
 
 		/// <summary>
 		/// 获取有效的文章列表，该方法返回最多50条数据。并且以修改时间倒序排列。
@@ -29,7 +29,7 @@ namespace TalentGo.Utilities
 		{
 			if (plan == null || plan.id == 0)
 			{
-				var articleSet = from article in this.database.Article
+				var articleSet = from article in this.store.Articles
 								 where (!article.IsPublic.HasValue || article.IsPublic.Value == IsPublic) && article.Visible && !article.RelatedPlan.HasValue
 								 orderby article.WhenChanged descending
 								 select article;
@@ -37,8 +37,8 @@ namespace TalentGo.Utilities
 			}
 			else
 			{
-				var planArticleSet = from article in this.database.Article
-									 where article.RelatedPlan == plan.id && article.Visible
+				var planArticleSet = from article in this.store.Articles
+                                     where article.RelatedPlan == plan.id && article.Visible
 									 orderby article.WhenChanged descending
 									 select article;
 				return planArticleSet.Take(50);
@@ -47,7 +47,7 @@ namespace TalentGo.Utilities
 
 		public Article FindByID(int id)
 		{
-			return this.database.Article.SingleOrDefault(e => e.id == id);
+			return this.store.Articles.SingleOrDefault(e => e.id == id);
 		}
 
 		public async Task CreateArticle(Article article)
@@ -55,31 +55,17 @@ namespace TalentGo.Utilities
 			article.WhenCreated = DateTime.Now;
 			article.WhenChanged = DateTime.Now;
 
-			this.database.Article.Add(article);
-
-			await this.database.SaveChangesAsync();
+			await this.store.CreateAsync(article);
 		}
 
 		public async Task UpdateArticle(Article article)
 		{
-			var selected = this.database.Article.SingleOrDefault(e => e.id == article.id);
-			if (selected != null)
-			{
-				var selectedEntry = this.database.Entry<Article>(selected);
-				selectedEntry.CurrentValues.SetValues(article);
-
-				await this.database.SaveChangesAsync();
-			}
+            await this.store.UpdateAsync(article);
 		}
 
-		public async Task RemoveArticleByID(int id)
+		public async Task RemoveArticle(Article article)
 		{
-			var selected = this.FindByID(id);
-			if (selected != null)
-			{
-				this.database.Article.Remove(selected);
-				await this.database.SaveChangesAsync();
-			}
+            await this.store.RemoveAsync(article);
 		}
 
 		/// <summary>
@@ -94,7 +80,7 @@ namespace TalentGo.Utilities
 		{
 			if (string.IsNullOrEmpty(Keywords))
 				Keywords = string.Empty;
-			var articleSet = from article in this.database.Article
+			var articleSet = from article in this.store.Articles
 							where article.Title.Contains(Keywords)
 							orderby article.WhenChanged descending
 							select article;

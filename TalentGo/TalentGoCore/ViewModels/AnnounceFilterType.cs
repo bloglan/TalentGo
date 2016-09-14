@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TalentGo.ViewModels
+﻿namespace TalentGo.ViewModels
 {
-	public enum AnnounceFilterType
+    public enum AnnounceFilterType
 	{
 		All = 0,
 		TakeExam = 1,

@@ -3,20 +3,35 @@ using System.DirectoryServices;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
-using TalentGo.EntityFramework;
+using TalentGo.Core;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
+using TalentGo.Web;
 using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Controllers
 {
-	public class HomeController : Controller
+    public class HomeController : Controller
 	{
 
         TargetUserManager targetUserManager;
-		TalentGoDbContext database;
+        EnrollmentManager enrollmentManager;
+        RecruitmentContextBase recruitmentContext;
+
+        public HomeController(TargetUserManager targetUserManager, EnrollmentManager enrollmentManager)
+        {
+            this.targetUserManager = targetUserManager;
+            this.enrollmentManager = enrollmentManager;
+        }
+
+        protected override void Initialize(RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+            this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
+        }
 
         public ActionResult Index()
 		{
@@ -32,17 +47,8 @@ namespace TalentGoWebApp.Controllers
 			return View();
 		}
 
-        protected override void Initialize(RequestContext requestContext)
-        {
-            base.Initialize(requestContext);
-            this.targetUserManager = new TargetUserManager(requestContext.HttpContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-        }
-
         public ActionResult About()
 		{
-			ViewBag.Message = "Your application description page.";
-            ViewBag.aaaa = "afdasf";
 
 			return View();
 		}
@@ -50,12 +56,12 @@ namespace TalentGoWebApp.Controllers
 		[ChildActionOnly]
 		public ActionResult EnrollmentStatePartial()
 		{
-			EnrollmentData enrollment = this.database.EnrollmentData.FirstOrDefault(e => e.UserID == this.targetUserManager.TargetUser.Id);
+			EnrollmentData enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.UserID == this.recruitmentContext.TargetUserId.Value);
 			return PartialView("EnrollmentStatePartial", enrollment);
 		}
 
 		[ChildActionOnly]
-        public ActionResult LoginPartial()
+        public async Task<ActionResult> LoginPartial()
         {
             LoginPartialViewModel model = new LoginPartialViewModel();
 
@@ -76,8 +82,9 @@ namespace TalentGoWebApp.Controllers
                     throw new InvalidOperationException("操作错误，不支持的Identity类型。");
 
                 //
-                model.DisplayName = this.targetUserManager.TargetUser.DisplayName;
-                model.TargetUser = this.targetUserManager.TargetUser;
+                var user = await this.targetUserManager.FindByIdAsync(this.recruitmentContext.TargetUserId.Value);
+                model.DisplayName = user.DisplayName;
+                model.TargetUser = user;
 
             }
             else
@@ -94,15 +101,15 @@ namespace TalentGoWebApp.Controllers
                 else
                     model.DisplayName = winidentity.Name;
 
-                if (this.targetUserManager.IsAssignedTargetUser)
-                    model.TargetUser = this.targetUserManager.TargetUser;
+                if (this.recruitmentContext.TargetUserId.HasValue)
+                    model.TargetUser = await this.targetUserManager.FindByIdAsync(this.recruitmentContext.TargetUserId.Value);
             }
 
             return PartialView("_LoginPartial", model);
         }
 
 		[ChildActionOnly]
-		public ActionResult HomeLoginPartial()
+		public async Task<ActionResult> HomeLoginPartial()
 		{
 			LoginPartialViewModel model = new LoginPartialViewModel();
 
@@ -122,9 +129,10 @@ namespace TalentGoWebApp.Controllers
 					if (claimsidentity == null)
 						throw new InvalidOperationException("操作错误，不支持的Identity类型。");
 
-					//
-					model.DisplayName = this.targetUserManager.TargetUser.DisplayName;
-					model.TargetUser = this.targetUserManager.TargetUser;
+                    //
+                    var user = await this.targetUserManager.FindByIdAsync(this.recruitmentContext.TargetUserId.Value);
+					model.DisplayName = user.DisplayName;
+					model.TargetUser = user;
 
 				}
 				else
@@ -141,8 +149,8 @@ namespace TalentGoWebApp.Controllers
 					else
 						model.DisplayName = winidentity.Name;
 
-					if (this.targetUserManager.IsAssignedTargetUser)
-						model.TargetUser = this.targetUserManager.TargetUser;
+					if (this.recruitmentContext.TargetUserId.HasValue)
+						model.TargetUser = await this.targetUserManager.FindByIdAsync(this.recruitmentContext.TargetUserId.Value);
 				}
 
 				if (this.User.Identity is WindowsIdentity)

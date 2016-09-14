@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.DirectoryServices;
-using System.Linq;
 using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TalentGo.ActiveDirectory
 {
-	public class ADFinder : IDisposable
+    public class ADFinder : IDisposable
 	{
 		DirectoryEntry root = new DirectoryEntry("LDAP://DC=qjyc,DC=cn");
 		DirectorySearcher searcher;

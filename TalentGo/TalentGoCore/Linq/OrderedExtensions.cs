@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TalentGo.Linq
 {
+    /// <summary>
+    /// 定义一系列关于排序的扩展方法，这些方法允许使用字符串指示的字段名称作为排序字段，而不是使用lamda表达式。
+    /// </summary>
 	public static class OrderedExtensions
 	{
 		/// <summary>

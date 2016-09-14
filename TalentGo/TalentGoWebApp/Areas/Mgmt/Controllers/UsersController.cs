@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
 using TalentGo.ViewModels;
 using TalentGoWebApp.Areas.Mgmt.Models;
 using TalentGo.Linq;
 using TalentGo.Identity;
-using TalentGo.EntityFramework;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
-	[Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
+    [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class UsersController : Controller
 	{
-		TalentGoDbContext database;
+        TargetUserManager targetUserManager;
 
-		protected override void Initialize(RequestContext requestContext)
-		{
-			base.Initialize(requestContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-		}
+        public UsersController(TargetUserManager targetUserManager)
+        {
+            this.targetUserManager = targetUserManager;
+        }
+
 		// GET: Mgmt/Users
 		public ActionResult Index()
 		{
@@ -46,11 +44,10 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 		public IQueryable<TargetUser> GetSelectedUsers(UserDelegateFilterType DelegateFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
 		{
-			///带分页
-			///
-			//先获得符合初始条件的集合
-			var userSet = from user in this.database.Users
-						  select user;
+            ///带分页
+            ///
+            //先获得符合初始条件的集合
+            var userSet = this.targetUserManager.TargetUsers;
 
 			//if (userSet.Count() <= 0)
 			//{

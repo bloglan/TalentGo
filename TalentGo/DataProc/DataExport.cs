@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataProc
 {
-	public class DataExport : IService
+    public class DataExport : IService
 	{
 		TalentGo.EntityFramework.TalentGoDbContext database = new TalentGo.EntityFramework.TalentGoDbContext();
 		public void Run()

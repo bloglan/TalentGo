@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DataProc</RootNamespace>
     <AssemblyName>DataProc</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <SccProjectName>
@@ -20,6 +20,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -84,6 +85,12 @@
     <None Include="packages.config" />
     <None Include="Properties\DataSources\TalentGo.SMSSvc.ReceivedMessage.datasource" />
     <None Include="Properties\DataSources\TalentGo.SMSSvc.SendMessageResult.datasource" />
+    <None Include="Service References\SMSSvc\DataProc.SMSSvc.ReceivedMessage.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SMSSvc\DataProc.SMSSvc.SendMessageResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\SMSSvc\SMSService.wsdl" />
     <None Include="Service References\SMSSvc\SMSService.xsd">
       <SubType>Designer</SubType>
@@ -103,6 +110,10 @@
     <ProjectReference Include="..\TalentGoCore\TalentGoCore.csproj">
       <Project>{3dbea3d2-558b-4a4c-9322-a299e3931e71}</Project>
       <Name>TalentGoCore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TalentGoDataAccess\TalentGoDataAccess.csproj">
+      <Project>{64782707-ea70-42e4-b2e9-cb716c2ce961}</Project>
+      <Name>TalentGoDataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

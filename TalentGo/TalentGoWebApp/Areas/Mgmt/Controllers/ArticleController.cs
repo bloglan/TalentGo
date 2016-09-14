@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Routing;
-using TalentGo.EntityFramework;
+using TalentGo.Recruitment;
 using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
-	[Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
+    [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class ArticleController : Controller
 	{
-		public TalentGoDbContext database;
+		ArticleManager articleManager;
+        RecruitmentPlanManager recruitmentPlanManager;
 
-		protected override void Initialize(RequestContext requestContext)
+        public ArticleController(ArticleManager articleManager, RecruitmentPlanManager recruitmentPlanManager)
+        {
+            this.articleManager = articleManager;
+            this.recruitmentPlanManager = recruitmentPlanManager;
+        }
+
+        // GET: Mgmt/Article
+        public ActionResult Index()
 		{
-			base.Initialize(requestContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-		}
-		// GET: Mgmt/Article
-		public ActionResult Index()
-		{
-			var articleSet = from article in this.database.Article
+			var articleSet = from article in this.articleManager.Articles
 							 orderby article.WhenChanged descending
 							 select article;
 
@@ -49,7 +51,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 		// POST: Mgmt/Article/Create
 		[HttpPost]
-		public ActionResult Create(Article model)
+		public async Task<ActionResult> Create(Article model)
 		{
 			try
 			{
@@ -59,8 +61,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				model.WhenChanged = DateTime.Now;
 				model.Visible = true;
 
-				this.database.Article.Add(model);
-				this.database.SaveChanges();
+                await this.articleManager.CreateArticle(model);
 				return RedirectToAction("Index");
 			}
 			catch (Exception ex)
@@ -74,7 +75,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		// GET: Mgmt/Article/Edit/5
 		public ActionResult Edit(int id)
 		{
-			var model = this.database.Article.SingleOrDefault(e => e.id == id);
+			var model = this.articleManager.Articles.SingleOrDefault(e => e.id == id);
 			if (model == null)
 				return RedirectToAction("Index");
 
@@ -84,21 +85,11 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 		// POST: Mgmt/Article/Edit/5
 		[HttpPost]
-		public ActionResult Edit(int id, Article model)
+		public async Task<ActionResult> Edit(int id, Article model)
 		{
 			try
 			{
-				// TODO: Add update logic here
-				var current = this.database.Article.SingleOrDefault(e => e.id == id);
-				if (current == null)
-					return RedirectToAction("Index");
-
-				model.WhenChanged = DateTime.Now;
-
-				var currententry = this.database.Entry<Article>(current);
-				currententry.CurrentValues.SetValues(model);
-
-				this.database.SaveChanges();
+                await this.articleManager.UpdateArticle(model);
 
 				return RedirectToAction("Index");
 			}
@@ -111,13 +102,12 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		}
 
 		// GET: Mgmt/Article/Delete/5
-		public ActionResult Delete(int id)
+		public async Task<ActionResult> Delete(int id)
 		{
-			var current = this.database.Article.SingleOrDefault(e => e.id == id);
+			var current = this.articleManager.Articles.SingleOrDefault(e => e.id == id);
 			if (current != null)
 			{
-				this.database.Article.Remove(current);
-				this.database.SaveChanges();
+				await this.articleManager.RemoveArticle(current);
 			}
 			return RedirectToAction("Index");
 		}
@@ -141,7 +131,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		void PrepareViewData()
 		{
 			DateTime now = DateTime.Now;
-			ViewData["RecruitmentPlanList"] = from recruitment in this.database.RecruitmentPlan
+			ViewData["RecruitmentPlanList"] = from recruitment in this.recruitmentPlanManager.AvailableRecruitmentPlans
 											  where recruitment.ExpirationDate > now
 											  select new SelectListItem()
 											  {

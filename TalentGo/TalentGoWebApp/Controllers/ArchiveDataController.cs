@@ -2,38 +2,39 @@
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Routing;
-using TalentGo.EntityFramework;
 using TalentGo.Recruitment;
+using TalentGo.Web;
 
 namespace TalentGoWebApp.Controllers
 {
-	[Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员,QJYC\\招聘监督人")]
+    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class ArchiveDataController : Controller
     {
-		TalentGoDbContext database;
 		EnrollmentManager enrollmentManager;
-		ArchiveManager archiveManager;
+        ArchiveCategoryManager archiveCategoryManager;
 
-		protected override void Initialize(RequestContext requestContext)
-		{
+        public ArchiveDataController(EnrollmentManager enrollmentManager, ArchiveCategoryManager archiveCategoryManager)
+        {
+            this.enrollmentManager = enrollmentManager;
+            this.archiveCategoryManager = archiveCategoryManager;
+        }
 
-			base.Initialize(requestContext);
-			this.enrollmentManager = new EnrollmentManager(requestContext.HttpContext);
-			this.archiveManager = new ArchiveManager(requestContext.HttpContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-		}
 		// GET: ArchiveData
 		public async Task<ActionResult> HeadImage(int planid, int userid)
         {
-			if (this.User.Identity is WindowsIdentity && (this.User.IsInRole("QJYC\\招聘管理员") || this.User.IsInRole("QJYC\\招聘监督人")))
+            var recruitmentContext = this.HttpContext.GetRecruitmentContext();
+            var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.RecruitPlanID == planid && e.UserID == userid);
+
+            if (this.User.IsInRole("QJYC\\招聘管理员") || this.User.IsInRole("QJYC\\招聘监督人"))
 			{
-				var arch = this.database.EnrollmentArchives.FirstOrDefault(e => e.RecruitPlanID == planid && e.UserID == userid && e.ArchiveCategoryID == 5);
+                
+                var arch = (await this.enrollmentManager.GetEnrollmentArchives(enrollment)).FirstOrDefault(a => a.ArchiveCategoryID == 5);
 				if (arch == null)
 					return File("~/Content/WebRes/NoHeadImage.jpg", "image/jpeg");
 				return File(arch.ArchiveData, arch.MimeType);
 			}
-			var enrollarchives = await this.archiveManager.GetEnrollmentArchives();
+
+			var enrollarchives = await this.enrollmentManager.GetEnrollmentArchives(enrollment);
 			EnrollmentArchives data = enrollarchives.SingleOrDefault(e => e.ArchiveCategoryID == 5);
 			if (data == null)
 				return File("~/Content/WebRes/NoHeadImage.jpg", "image/jpeg");
@@ -45,23 +46,22 @@ namespace TalentGoWebApp.Controllers
 		{
 			if (this.User.Identity is WindowsIdentity && (this.User.IsInRole("QJYC\\招聘管理员") || this.User.IsInRole("QJYC\\招聘监督人")))
 			{
-				var arch = this.database.EnrollmentArchives.SingleOrDefault(e => e.id == eaid);
+				var arch = await this.enrollmentManager.FindEnrollmentArchiveByIdAsync(eaid);
 				if (arch == null)
 					return File("~/Content/WebRes/NoHeadImage.jpg", "image/jpeg");
 				return File(arch.ArchiveData, arch.MimeType);
 			}
 
-			var enrollmentArchiveSet = await this.archiveManager.GetEnrollmentArchives();
-			var current = enrollmentArchiveSet.SingleOrDefault(e => e.id == eaid);
-			if (current == null)
+			var enrollmentArchiveSet = await this.enrollmentManager.FindEnrollmentArchiveByIdAsync(eaid);
+			if (enrollmentArchiveSet == null)
 				return HttpNotFound();
 
-			return File(current.ArchiveData, current.MimeType);
+			return File(enrollmentArchiveSet.ArchiveData, enrollmentArchiveSet.MimeType);
 		}
 
 		public async Task<ActionResult> GetSampleImage(int acid)
 		{
-			var current = this.database.ArchiveCategory.Single(e => e.id == acid);
+			var current = this.archiveCategoryManager.ArchiveCategories.Single(e => e.id == acid);
 			if (current == null)
 				return HttpNotFound();
 

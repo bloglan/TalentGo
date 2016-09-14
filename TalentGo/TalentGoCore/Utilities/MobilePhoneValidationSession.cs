@@ -1,10 +1,8 @@
-namespace TalentGo.EntityFramework
+namespace TalentGo.Utilities
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("MobilePhoneValidationSession")]
     public partial class MobilePhoneValidationSession

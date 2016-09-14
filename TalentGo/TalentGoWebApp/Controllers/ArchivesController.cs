@@ -11,24 +11,34 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using TalentGo.Recruitment;
 using TalentGo.Extension;
-using TalentGo.EntityFramework;
+using TalentGo.Core;
+using TalentGo.Web;
 
 namespace TalentGoWebApp.Controllers
 {
-	[Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
+    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
 	public class ArchivesController : Controller
 	{
-		ArchiveManager archiveManager;
-		TalentGoDbContext database;
+		ArchiveCategoryManager archiveManager;
+        EnrollmentManager enrollmentManager;
+        RecruitmentPlanManager recruitmentPlanManager;
+        RecruitmentContextBase recruitmentContext;
 
-		protected override void Initialize(RequestContext requestContext)
-		{
-			base.Initialize(requestContext);
-			this.archiveManager = new ArchiveManager(requestContext.HttpContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-		}
-		// GET: Archives
-		public ActionResult Index()
+        public ArchivesController(ArchiveCategoryManager archiveManager, EnrollmentManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager)
+        {
+            this.archiveManager = archiveManager;
+            this.enrollmentManager = enrollmentManager;
+            this.recruitmentPlanManager = recruitmentPlanManager;
+        }
+
+        protected override void Initialize(RequestContext requestContext)
+        {
+            base.Initialize(requestContext);
+            this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
+        }
+
+        // GET: Archives
+        public ActionResult Index()
 		{
 			return View();
 		}
@@ -43,13 +53,17 @@ namespace TalentGoWebApp.Controllers
 		[HttpPost]
 		public async Task<ActionResult> UploadFiles(int planid, int userid, int acid)
 		{
-			if (Request.Files.Count != 1) throw new HttpRequestValidationException("Attempt to upload chunked file containing more than one fragment per request");
+            if (planid != this.recruitmentContext.SelectedPlanId
+                || userid != this.recruitmentContext.TargetUserId)
+                return Json(new { name = "拒绝执行，参数指示的报名无效。", id = 0 }, "text/plain");
+
+            if (Request.Files.Count != 1) throw new HttpRequestValidationException("Attempt to upload chunked file containing more than one fragment per request");
 
 			var file = this.Request.Files[0];
 
-			
+            var plan = await this.recruitmentPlanManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
 
-			var currentArchReq = this.database.ArchiveRequirements.FirstOrDefault(e => e.ArchiveCategoryID == acid && e.RecruitmentPlanID == planid);
+            var currentArchReq = (await this.recruitmentPlanManager.GetArchiveRequirements(plan)).FirstOrDefault(a => a.ArchiveCategoryID == acid);
 			if (currentArchReq == null)
 			{
 				return Json(new { name = "找不到文档需求。", id = 0 }, "text/plain");
@@ -57,11 +71,12 @@ namespace TalentGoWebApp.Controllers
 			var archiveCategory = currentArchReq.ArchiveCategory;
 
 			RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), currentArchReq.Requirements);
-			//获取报名表对应文档
-			var enrollmentArchiveSet = from enrollmentArch in this.database.EnrollmentArchives
-									   where enrollmentArch.RecruitPlanID == planid && enrollmentArch.UserID == userid && enrollmentArch.ArchiveCategoryID == acid
-									   select enrollmentArch;
-			if (enrollmentArchiveSet.Any())
+            //获取报名表对应文档
+
+            var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(enroll => enroll.RecruitPlanID == plan.id && enroll.UserID == this.recruitmentContext.TargetUserId.Value);
+            var enrollmentArchiveSet = (await this.enrollmentManager.GetEnrollmentArchives(enrollment)).Where(ach => ach.ArchiveCategoryID == acid);
+
+            if (enrollmentArchiveSet.Any())
 			{
 				if (!reqType.IsMultipleEnabled())
 				{
@@ -136,10 +151,10 @@ namespace TalentGoWebApp.Controllers
 
 				//构造EnrollmentArchive对象并更新。
 				EnrollmentArchives enrollmentArch = new EnrollmentArchives();
-				enrollmentArch.ArchiveCategoryID = acid;
-				enrollmentArch.RecruitPlanID = planid;
-				enrollmentArch.UserID = userid;
-				enrollmentArch.Title = string.Empty;
+				enrollmentArch.ArchiveCategoryID = archiveCategory.id;
+				enrollmentArch.RecruitPlanID = plan.id;
+				enrollmentArch.UserID = this.recruitmentContext.TargetUserId.Value;
+				enrollmentArch.Title = string.Empty; //Keep Title as empty string. this property shold be used in the future.
 
 				//从MemoryStream输出字节序列
 				byte[] FileDataBytes = new byte[ms.Length];
@@ -149,7 +164,7 @@ namespace TalentGoWebApp.Controllers
 				enrollmentArch.MimeType = file.ContentType;
 				enrollmentArch.ArchiveData = FileDataBytes;
 
-				await this.archiveManager.AddOrUpdateArchive(enrollmentArch);
+				await this.enrollmentManager.AddEnrollmentArchive(enrollment, enrollmentArch);
 
 				ms.Flush();
 				ms.Close();
@@ -161,22 +176,15 @@ namespace TalentGoWebApp.Controllers
 
 		public async Task<ActionResult> RemoveFile(int eaid)
 		{
-			var enrollmentArchives = await this.archiveManager.GetEnrollmentArchives();
-			var current = enrollmentArchives.SingleOrDefault(e => e.id == eaid);
+            var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(enroll => enroll.RecruitPlanID == this.recruitmentContext.SelectedPlanId.Value && enroll.UserID == this.recruitmentContext.TargetUserId.Value);
+            var enrollmentArchives = await this.enrollmentManager.GetEnrollmentArchives(enrollment);
+            var current = enrollmentArchives.FirstOrDefault(e => e.id == eaid);
 
-			if (current == null)
+            if (current == null)
 			{
 				return Json(new { code = 404, msg = "找不到指定文档" }, "text/plain", JsonRequestBehavior.AllowGet);
 			}
-			this.database.EnrollmentArchives.Remove(current);
-			try
-			{
-				await this.database.SaveChangesAsync();
-			}
-			catch (Exception ex)
-			{
-				return Json(new { code = 500, msg = ex.Message }, "text/plain", JsonRequestBehavior.AllowGet);
-			}
+            await this.enrollmentManager.RemoveEnrollmentArchive(enrollment, current);
 			return Json(new { code = 0, msg = "操作成功" }, "text/plain", JsonRequestBehavior.AllowGet);
 		}
 

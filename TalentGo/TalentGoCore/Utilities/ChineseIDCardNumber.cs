@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TalentGo.Utilities
 {
-	/// <summary>
-	/// 表示一个中华人民共和国的居民身份证号。
-	/// </summary>
-	public class ChineseIDCardNumber
+    /// <summary>
+    /// 表示一个中华人民共和国的居民身份证号。
+    /// </summary>
+    public class ChineseIDCardNumber
 	{
 		private static readonly int[] Weight = new int[] { 7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1 };
 		private static readonly char[] CheckCodeMapper = new char[] { '1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2' };

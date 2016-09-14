@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 using TalentGo.Identity;
 
 namespace TalentGo.Recruitment
 {
+    /// <summary>
+    /// 表示一个报名表。
+    /// </summary>
 	[Table("EnrollmentData")]
 	public class EnrollmentData
 	{
@@ -19,33 +18,28 @@ namespace TalentGo.Recruitment
 			EnrollmentArchives = new HashSet<EnrollmentArchives>();
 		}
 
-		[HiddenInput(DisplayValue = false)]
 		[Key]
 		[Column(Order = 0)]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public int RecruitPlanID { get; set; }
 
-		[HiddenInput(DisplayValue = false)]
 		[Key]
 		[Column(Order = 1)]
 		[DatabaseGenerated(DatabaseGeneratedOption.None)]
 		public int UserID { get; set; }
 
 		[Display(Name = "姓名")]
-		[HiddenInput]
 		[Required]
 		[StringLength(5, MinimumLength = 2)]
 		public string Name { get; set; }
 
 		[Display(Name = "性别")]
-		[HiddenInput]
 		[Required]
 		[StringLength(2)]
 		public string Sex { get; set; }
 
 		[Display(Name = "出生日期")]
 		[DataType(DataType.Date)]
-		[HiddenInput]
 		[Column(TypeName = "date")]
 		public DateTime DateOfBirth { get; set; }
 
@@ -80,13 +74,11 @@ namespace TalentGo.Recruitment
 		public string Marriage { get; set; }
 
 		[Display(Name = "身份证号码")]
-		[HiddenInput]
 		[Required]
 		[StringLength(18)]
 		public string IDCardNumber { get; set; }
 
 		[Display(Name = "手机号码")]
-		[HiddenInput]
 		[Required]
 		[StringLength(15)]
 		public string Mobile { get; set; }

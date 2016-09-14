@@ -1,14 +1,10 @@
 namespace TalentGo.EntityFramework
 {
-	using System;
-	using System.Data.Entity;
-	using System.ComponentModel.DataAnnotations.Schema;
-	using System.Linq;
-	using TalentGo.Recruitment;
-	using TalentGo.Utilities;
-	using System.Web;
-	using Identity;
-	public partial class TalentGoDbContext : DbContext
+    using System.Data.Entity;
+    using TalentGo.Recruitment;
+    using TalentGo.Utilities;
+    using Identity;
+    public partial class TalentGoDbContext : DbContext
 	{
 		public TalentGoDbContext()
 			: base("name=DefaultConnection")
@@ -148,21 +144,6 @@ namespace TalentGo.EntityFramework
 				.HasMany(e => e.UserLogins)
 				.WithRequired(e => e.Users)
 				.HasForeignKey(e => e.UserId);
-		}
-
-		public static TalentGoDbContext FromContext(HttpContextBase context)
-		{
-			if (context.Items["DbContext"] == null)
-			{
-				context.Items["DbContext"] = new TalentGoDbContext();
-			}
-
-			return (TalentGoDbContext)context.Items["DbContext"];
-		}
-
-		public static TalentGoDbContext Create()
-		{
-			return new TalentGoDbContext();
 		}
 	}
 }

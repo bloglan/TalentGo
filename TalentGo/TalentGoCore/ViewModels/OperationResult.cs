@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TalentGo.ViewModels
+﻿namespace TalentGo.ViewModels
 {
-	/// <summary>
-	/// 表示一个操作结果的ViewModel
-	/// </summary>
-	public class OperationResult
+    /// <summary>
+    /// 表示一个操作结果的ViewModel
+    /// </summary>
+    public class OperationResult
 	{
 		public OperationResult(ResultStatus Status, string Message, string ReturnUrl, int RedirectInterval)
 		{

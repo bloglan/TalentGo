@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Routing;
 
 namespace TalentGo.Extension
 {
-	public static class FormatterExtension
+    public static class FormatterExtension
 	{
 		public static string FormatAs(this DateTime datetime, DateTimeParts parts, char DateSpraster, char TimeSp)
 		{
