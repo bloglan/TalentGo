@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TalentGo.Recruitment;
-using TalentGo.ViewModels;
 using TalentGoWebApp.Areas.Mgmt.Models;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers

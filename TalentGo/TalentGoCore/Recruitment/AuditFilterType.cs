@@ -1,4 +1,4 @@
-﻿namespace TalentGo.ViewModels
+﻿namespace TalentGo.Recruitment
 {
     public enum AuditFilterType
 	{

@@ -6,8 +6,6 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
-using TalentGo.Core;
-using TalentGo.Identity;
 using TalentGo.Recruitment;
 using TalentGo.Web;
 using TalentGoWebApp.Models;

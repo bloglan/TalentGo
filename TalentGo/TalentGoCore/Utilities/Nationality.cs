@@ -1,4 +1,4 @@
-namespace TalentGo.EntityFramework
+namespace TalentGo.Utilities
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;

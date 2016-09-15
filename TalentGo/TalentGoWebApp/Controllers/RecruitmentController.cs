@@ -5,11 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
-using TalentGo.Core;
 using TalentGo.Web;
-using TalentGo.Identity;
 using TalentGo.Recruitment;
-using TalentGo.ViewModels;
 using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Controllers

@@ -1,5 +1,5 @@
 ﻿using System.Security.Principal;
-using TalentGo.Identity;
+using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Models
 {

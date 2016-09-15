@@ -1,4 +1,4 @@
-﻿namespace TalentGo.Identity
+﻿namespace TalentGo.Recruitment
 {
     public static class ClaimDefinition
 	{

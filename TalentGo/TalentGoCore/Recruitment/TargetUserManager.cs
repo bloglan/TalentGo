@@ -5,10 +5,9 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
-using TalentGo.Core;
 using TalentGo.Utilities;
 
-namespace TalentGo.Identity
+namespace TalentGo.Recruitment
 {
     /// <summary>
     /// 一个目标用户管理器。

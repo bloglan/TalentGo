@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
-namespace TalentGo.EntityFramework.Tests
+namespace TalentGo.Utilities.Tests
 {
     [TestClass()]
     public class RecruitmentPlanStoreTests

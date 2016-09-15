@@ -61,17 +61,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActiveDirectory\ADFinder.cs" />
     <Compile Include="Backend\EmailMessage.cs" />
     <Compile Include="Backend\ISMSMessageStore.cs" />
     <Compile Include="Backend\QJYCSMSService.cs" />
     <Compile Include="Backend\SMSMessage.cs" />
     <Compile Include="Backend\SMSMessageBag.cs" />
     <Compile Include="Backend\SMSServiceBase.cs" />
-    <Compile Include="Core\IRecruitmentManagerFactory.cs" />
-    <Compile Include="Core\RecruitmentContextBase.cs" />
-    <Compile Include="Identity\ApplicationUserManager.cs" />
-    <Compile Include="Identity\TargetUser.cs" />
+    <Compile Include="Recruitment\ApplicationUserManager.cs" />
+    <Compile Include="Recruitment\TargetUser.cs" />
     <Compile Include="Identity\UserLogins.cs" />
     <Compile Include="Recruitment\ArchiveCategory.cs" />
     <Compile Include="Recruitment\ArchiveRequirements.cs" />
@@ -85,15 +82,16 @@
     <Compile Include="Recruitment\IRecruitmentPlanStore.cs" />
     <Compile Include="Recruitment\Major.cs" />
     <Compile Include="Recruitment\MajorCategory.cs" />
+    <Compile Include="Recruitment\RecruitmentContextBase.cs" />
     <Compile Include="Utilities\Article.cs" />
     <Compile Include="Recruitment\EnrollmentArchives.cs" />
     <Compile Include="Recruitment\EnrollmentData.cs" />
     <Compile Include="Recruitment\RecruitmentPlan.cs" />
-    <Compile Include="Identity\ClaimDefinition.cs" />
+    <Compile Include="Recruitment\ClaimDefinition.cs" />
     <Compile Include="Identity\EmailService.cs" />
-    <Compile Include="Identity\RegisterationDelegate.cs" />
+    <Compile Include="Recruitment\RegisterationDelegate.cs" />
     <Compile Include="Identity\SmsService.cs" />
-    <Compile Include="Identity\TargetUserManager.cs" />
+    <Compile Include="Recruitment\TargetUserManager.cs" />
     <Compile Include="Linq\OrderedExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recruitment\ArchiveCategoryManager.cs" />
@@ -113,17 +111,10 @@
     <Compile Include="Utilities\MobilePhoneValidationSession.cs" />
     <Compile Include="Utilities\MobileValidationSessionManager.cs" />
     <Compile Include="Utilities\Nationality.cs" />
-    <Compile Include="ViewModels\AnnounceFilterType.cs" />
-    <Compile Include="ViewModels\AuditFilterType.cs" />
-    <Compile Include="ViewModels\EnrollmentViewModels.cs" />
-    <Compile Include="ViewModels\OperationResult.cs" />
-    <Compile Include="ViewModels\UserDelegateFilterType.cs" />
+    <Compile Include="Recruitment\AnnounceFilterType.cs" />
+    <Compile Include="Recruitment\AuditFilterType.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EntityFramework\" />
-    <Folder Include="Extension\" />
-    <Folder Include="Mvc\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>

@@ -4,8 +4,8 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
-using TalentGo.Identity;
-using TalentGo.EntityFramework;
+using TalentGo.Recruitment;
+using TalentGo.Utilities;
 
 namespace TalentGoWebApp
 {

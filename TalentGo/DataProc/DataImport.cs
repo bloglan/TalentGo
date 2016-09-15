@@ -6,7 +6,7 @@ namespace DataProc
 {
     public class DataImport : IService
 	{
-		TalentGo.EntityFramework.TalentGoDbContext database = new TalentGo.EntityFramework.TalentGoDbContext();
+		TalentGo.Utilities.TalentGoDbContext database = new TalentGo.Utilities.TalentGoDbContext();
 
 		public void Run()
 		{

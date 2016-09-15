@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TalentGo.Identity;
 using TalentGo.Utilities;
-using TalentGo.ViewModels;
 using TalentGo.Linq;
 
 namespace TalentGo.Recruitment

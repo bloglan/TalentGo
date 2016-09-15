@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Compilation;
 using System.Web.Mvc;
-using TalentGo.Core;
-using TalentGo.Web;
 
 namespace TalentGoWebApp
 {
@@ -26,8 +24,8 @@ namespace TalentGoWebApp
             builder.RegisterAssemblyModules(assemblies.ToArray());
 
 #warning 作为测试
-            builder.RegisterAssemblyTypes(typeof(TalentGo.EntityFramework.TalentGoDbContext).Assembly).Where(t => t.Name.EndsWith("Store")).AsImplementedInterfaces();
-            builder.RegisterType<TalentGo.EntityFramework.TalentGoDbContext>().InstancePerRequest();
+            builder.RegisterAssemblyTypes(typeof(TalentGo.Utilities.TalentGoDbContext).Assembly).Where(t => t.Name.EndsWith("Store")).AsImplementedInterfaces();
+            builder.RegisterType<TalentGo.Utilities.TalentGoDbContext>().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(TalentGo.Recruitment.RecruitmentPlan).Assembly);
             //builder.RegisterAssemblyTypes(typeof(HttpRecruitmentContext).Assembly).Where(t => t.Name == "HttpRecruitmentContext").As<RecruitmentContextBase>();
 

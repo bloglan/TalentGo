@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using TalentGo.Identity;
-using TalentGo.ViewModels;
+using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {
-	/// <summary>
-	/// 用户列表的ViewModel
-	/// </summary>
-	public class UserListViewModel
+    /// <summary>
+    /// 用户列表的ViewModel
+    /// </summary>
+    public class UserListViewModel
     {
         public UserListViewModel()
         {

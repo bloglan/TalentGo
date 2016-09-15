@@ -1,9 +1,7 @@
-namespace TalentGo.EntityFramework
+namespace TalentGo.Utilities
 {
     using System.Data.Entity;
     using TalentGo.Recruitment;
-    using TalentGo.Utilities;
-    using Identity;
     public partial class TalentGoDbContext : DbContext
 	{
 		public TalentGoDbContext()

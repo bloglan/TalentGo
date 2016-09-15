@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 using System.Web;
-using TalentGo.Core;
+using TalentGo.Recruitment;
 
 namespace TalentGo.Web
 {

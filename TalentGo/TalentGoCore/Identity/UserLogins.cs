@@ -1,4 +1,4 @@
-namespace TalentGo.Identity
+namespace TalentGo.Recruitment
 {
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;

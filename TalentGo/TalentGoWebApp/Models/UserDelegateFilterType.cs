@@ -1,4 +1,4 @@
-﻿namespace TalentGo.ViewModels
+﻿namespace TalentGo.Recruitment
 {
     /// <summary>
     /// 用户代理过滤选项

@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TalentGo.Identity;
+using TalentGo.Recruitment;
 
-namespace TalentGo.EntityFramework
+namespace TalentGo.Utilities
 {
 
     public class UserStore :

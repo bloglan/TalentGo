@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TalentGo.Recruitment;
 
-namespace TalentGo.EntityFramework
+namespace TalentGo.Utilities
 {
     public class ArchiveCategoryStore : IArchiveCategoryStore
     {

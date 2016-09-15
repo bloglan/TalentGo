@@ -2,8 +2,8 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using System;
-using TalentGo.EntityFramework;
-using TalentGo.Identity;
+using TalentGo.Utilities;
+using TalentGo.Recruitment;
 
 namespace TalentGoWebApp
 {
@@ -11,7 +11,7 @@ namespace TalentGoWebApp
     {
         public static ApplicationUserManager CreateUserManager(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new TalentGo.EntityFramework.UserStore(context.Get<TalentGoDbContext>()));
+            var manager = new ApplicationUserManager(new TalentGo.Utilities.UserStore(context.Get<TalentGoDbContext>()));
             // 配置用户名的验证逻辑
             manager.UserValidator = new UserValidator<TargetUser, int>(manager)
             {

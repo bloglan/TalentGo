@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Net.Mail;
 using System.Threading;
-using TalentGo.EntityFramework;
+using TalentGo.Utilities;
 
 namespace DataProc
 {

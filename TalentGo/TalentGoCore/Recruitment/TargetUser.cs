@@ -5,9 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using TalentGo.Recruitment;
 
-namespace TalentGo.Identity
+namespace TalentGo.Recruitment
 {
     /// <summary>
     /// 表示一个目标用户
@@ -171,14 +170,14 @@ namespace TalentGo.Identity
 			var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
 			// 在此处添加自定义用户声明
 			// 添加了两项声明，RegistrationDelegate和DelegateInfo
-			userIdentity.AddClaim(new Claim(ClaimDefinition.RegisterationDelegateType, this.RegisterationDelegate, ClaimDefinition.TypeofString));
+			userIdentity.AddClaim(new Claim(ClaimDefinition.RegisterationDelegateType, this.RegisterationDelegate));
 			if (!string.IsNullOrEmpty(this.DelegateInfo))
 			{
-				userIdentity.AddClaim(new Claim(ClaimDefinition.DelegateInfo, this.DelegateInfo, ClaimDefinition.TypeofString));
+				userIdentity.AddClaim(new Claim(ClaimDefinition.DelegateInfo, this.DelegateInfo));
 			}
 
-			// 此处添加一项声明，使外部登陆用户总是具备InternetUser角色。
-			userIdentity.AddClaim(new Claim(ClaimDefinition.RoleClaimType, "InternetUser", ClaimDefinition.TypeofString));
+			// 此处添加一项声明，使外部登陆用户总是具备InternetUser的角色声明。
+			userIdentity.AddClaim(new Claim(userIdentity.RoleClaimType, "InternetUser"));
 			return userIdentity;
 		}
 

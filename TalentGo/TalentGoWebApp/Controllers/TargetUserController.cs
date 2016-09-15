@@ -5,15 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
-using TalentGo.Core;
-using TalentGo.Identity;
+using TalentGo.Recruitment;
 using TalentGo.Utilities;
 using TalentGo.Web;
 using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Controllers
 {
-	[Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
+    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
 	public class TargetUserController : Controller
 	{
 		TargetUserManager manager;

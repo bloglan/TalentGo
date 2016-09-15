@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TalentGo.Recruitment;
-using TalentGo.ViewModels;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {
-	public class EnrollmentListViewModel
+    public class EnrollmentListViewModel
 	{
 		public EnrollmentListViewModel()
 		{

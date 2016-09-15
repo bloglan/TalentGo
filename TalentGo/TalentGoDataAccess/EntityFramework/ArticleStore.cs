@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TalentGo.Recruitment;
-using TalentGo.Utilities;
 
-namespace TalentGo.EntityFramework
+namespace TalentGo.Utilities
 {
     public class ArticleStore : IArticleStore
     {

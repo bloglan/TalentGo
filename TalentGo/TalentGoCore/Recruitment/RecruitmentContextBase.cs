@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 
-namespace TalentGo.Core
+namespace TalentGo.Recruitment
 {
     /// <summary>
     /// 封装与招聘业务有关信息的上下文。
