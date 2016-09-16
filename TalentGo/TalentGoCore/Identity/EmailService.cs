@@ -3,7 +3,7 @@ using System;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
-namespace TalentGo.Recruitment
+namespace TalentGo.Identity
 {
     public class EmailService : IIdentityMessageService
     {

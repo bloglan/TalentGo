@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using System;
 using TalentGo.Utilities;
+using TalentGo.Identity;
 using TalentGo.Recruitment;
 
 namespace TalentGoWebApp

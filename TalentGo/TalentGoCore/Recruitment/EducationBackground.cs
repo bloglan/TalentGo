@@ -11,7 +11,7 @@ namespace TalentGo.Recruitment
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public EducationBackground()
         {
-            EnrollmentData = new HashSet<EnrollmentData>();
+            EnrollmentData = new HashSet<Enrollment>();
         }
 
         [Key]
@@ -25,6 +25,6 @@ namespace TalentGo.Recruitment
         public int PRI { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EnrollmentData> EnrollmentData { get; set; }
+        public virtual ICollection<Enrollment> EnrollmentData { get; set; }
     }
 }

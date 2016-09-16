@@ -57,7 +57,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			{
 				// TODO: Add insert logic here
 				//
-				model.WhenCreated = DateTime.Now;
 				model.WhenChanged = DateTime.Now;
 				model.Visible = true;
 

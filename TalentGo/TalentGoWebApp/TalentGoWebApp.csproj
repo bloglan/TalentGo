@@ -19,8 +19,8 @@
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44300</IISExpressSSLPort>
-    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
-    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressAnonymousAuthentication>disabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
@@ -371,7 +371,7 @@
     <Content Include="Areas\Mgmt\Views\Maintenance\Index.cshtml" />
     <Content Include="Areas\Mgmt\Views\Users\Index.cshtml" />
     <Content Include="Areas\Mgmt\Views\Users\UserList.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\SmartStatistics.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Enrollment\SmartStatistics.cshtml" />
     <Content Include="Areas\Mgmt\Views\BaseData\Create.cshtml" />
     <Content Include="Areas\Mgmt\Views\BaseData\Update.cshtml" />
     <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Detail.cshtml" />

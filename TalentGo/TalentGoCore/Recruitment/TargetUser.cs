@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TalentGo.Identity;
 
 namespace TalentGo.Recruitment
 {
@@ -17,8 +18,8 @@ namespace TalentGo.Recruitment
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
 		public TargetUser()
 		{
-			EnrollmentData = new HashSet<EnrollmentData>();
-			UserLogins = new HashSet<UserLogins>();
+			EnrollmentData = new HashSet<Enrollment>();
+			UserLogins = new HashSet<UserLogin>();
 		}
 
         /// <summary>
@@ -151,13 +152,13 @@ namespace TalentGo.Recruitment
         /// 目标用户所持有的报名表。
         /// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public virtual ICollection<EnrollmentData> EnrollmentData { get; set; }
+		public virtual ICollection<Enrollment> EnrollmentData { get; set; }
 
         /// <summary>
         /// 目标用户所持有的所有关联登陆（目前未使用）
         /// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public virtual ICollection<UserLogins> UserLogins { get; set; }
+		public virtual ICollection<UserLogin> UserLogins { get; set; }
 
         /// <summary>
         /// 提供一个创建ClaimsIdentity的可等待方法，由SignManager调用。

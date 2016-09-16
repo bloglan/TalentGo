@@ -5,12 +5,12 @@ namespace TalentGo.Recruitment
 {
     public interface IEnrollmentArchiveStore : IEnrollmentStore
 	{
-        IQueryable<EnrollmentArchives> EnrollmentArchives { get; }
+        IQueryable<EnrollmentArchive> EnrollmentArchives { get; }
 
-        Task<IQueryable<EnrollmentArchives>> GetEnrollmentArchives(EnrollmentData enrollment);
+        Task<IQueryable<EnrollmentArchive>> GetEnrollmentArchives(Enrollment enrollment);
 
-        Task AddArchiveToEnrollment(EnrollmentData enrollment, EnrollmentArchives archive);
+        Task AddArchiveToEnrollment(Enrollment enrollment, EnrollmentArchive archive);
 
-        Task RemoveArchiveFromEnrollment(EnrollmentData enrollment, EnrollmentArchives archive);
+        Task RemoveArchiveFromEnrollment(Enrollment enrollment, EnrollmentArchive archive);
 	}
 }

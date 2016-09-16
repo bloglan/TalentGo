@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using TalentGo.Recruitment;
+using TalentGo.Identity;
 using TalentGoWebApp.Areas.Mgmt.Models;
 using TalentGo.Linq;
+using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {

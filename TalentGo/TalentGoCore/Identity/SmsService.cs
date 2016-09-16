@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
 
-namespace TalentGo.Recruitment
+namespace TalentGo.Identity
 {
     public class SmsService : IIdentityMessageService
 	{

@@ -1,4 +1,4 @@
-﻿namespace TalentGo.Recruitment
+﻿namespace TalentGo.Identity
 {
     /// <summary>
     /// 用户代理过滤选项

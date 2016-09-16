@@ -35,7 +35,7 @@ namespace TalentGoWebApp.Controllers
 			}
 
 			var enrollarchives = await this.enrollmentManager.GetEnrollmentArchives(enrollment);
-			EnrollmentArchives data = enrollarchives.SingleOrDefault(e => e.ArchiveCategoryID == 5);
+			EnrollmentArchive data = enrollarchives.SingleOrDefault(e => e.ArchiveCategoryID == 5);
 			if (data == null)
 				return File("~/Content/WebRes/NoHeadImage.jpg", "image/jpeg");
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TalentGo.Identity;
 using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models

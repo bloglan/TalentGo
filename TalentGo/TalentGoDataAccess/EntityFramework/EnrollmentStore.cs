@@ -13,7 +13,7 @@ namespace TalentGo.Utilities
             this.dbContext = DbContext;
         }
 
-        public IQueryable<EnrollmentArchives> EnrollmentArchives
+        public IQueryable<EnrollmentArchive> EnrollmentArchives
         {
             get
             {
@@ -21,7 +21,7 @@ namespace TalentGo.Utilities
             }
         }
 
-        public IQueryable<EnrollmentData> Enrollments
+        public IQueryable<Enrollment> Enrollments
         {
             get
             {
@@ -29,13 +29,13 @@ namespace TalentGo.Utilities
             }
         }
 
-        public async Task<EnrollmentData> FindByIdAsync(int PlanId, int UserId)
+        public async Task<Enrollment> FindByIdAsync(int PlanId, int UserId)
         {
             return this.dbContext.EnrollmentData.FirstOrDefault(e => e.RecruitPlanID == PlanId && e.UserID == UserId);
         }
 
 
-        public async Task CreateAsync(EnrollmentData Enrollment)
+        public async Task CreateAsync(Enrollment Enrollment)
         {
             Enrollment.WhenCreated = DateTime.Now;
             Enrollment.WhenChanged = DateTime.Now;
@@ -44,12 +44,12 @@ namespace TalentGo.Utilities
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(EnrollmentData Enrollment)
+        public async Task UpdateAsync(Enrollment Enrollment)
         {
             var current = this.dbContext.EnrollmentData.FirstOrDefault(e => e.RecruitPlanID == Enrollment.RecruitPlanID && e.UserID == Enrollment.UserID);
             if (current != null)
             {
-                var entry = this.dbContext.Entry<EnrollmentData>(current);
+                var entry = this.dbContext.Entry<Enrollment>(current);
 
                 entry.CurrentValues.SetValues(Enrollment);
                 entry.Property(p => p.WhenCreated).IsModified = false;
@@ -61,7 +61,7 @@ namespace TalentGo.Utilities
         }
 
 
-        public async Task DeleteAsync(EnrollmentData Enrollment)
+        public async Task DeleteAsync(Enrollment Enrollment)
         {
             var current = await this.FindByIdAsync(Enrollment.RecruitPlanID, Enrollment.UserID);
             if (current != null)
@@ -71,12 +71,12 @@ namespace TalentGo.Utilities
             }
         }
 
-        public async Task<IQueryable<EnrollmentArchives>> GetEnrollmentArchives(EnrollmentData enrollment)
+        public async Task<IQueryable<EnrollmentArchive>> GetEnrollmentArchives(Enrollment enrollment)
         {
             return this.dbContext.EnrollmentArchives.Where(e => e.RecruitPlanID == enrollment.RecruitPlanID && e.UserID == enrollment.UserID);
         }
 
-        public async Task AddArchiveToEnrollment(EnrollmentData enrollment, EnrollmentArchives archive)
+        public async Task AddArchiveToEnrollment(Enrollment enrollment, EnrollmentArchive archive)
         {
             var currentEnrollment = await this.FindByIdAsync(enrollment.RecruitPlanID, enrollment.UserID);
             if (enrollment != null)
@@ -91,7 +91,7 @@ namespace TalentGo.Utilities
             }
         }
 
-        public async Task RemoveArchiveFromEnrollment(EnrollmentData enrollment, EnrollmentArchives archive)
+        public async Task RemoveArchiveFromEnrollment(Enrollment enrollment, EnrollmentArchive archive)
         {
             var currentEnrollment = await this.FindByIdAsync(enrollment.RecruitPlanID, enrollment.UserID);
             if (enrollment != null)

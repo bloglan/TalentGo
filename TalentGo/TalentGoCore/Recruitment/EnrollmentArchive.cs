@@ -5,7 +5,7 @@ namespace TalentGo.Recruitment
     using System.ComponentModel.DataAnnotations.Schema;
 
     [Table("EnrollmentArchives")]
-    public partial class EnrollmentArchives
+    public partial class EnrollmentArchive
     {
         public int id { get; set; }
 
@@ -32,6 +32,6 @@ namespace TalentGo.Recruitment
 
         public virtual ArchiveCategory ArchiveCategory { get; set; }
 
-        public virtual EnrollmentData EnrollmentData { get; set; }
+        public virtual Enrollment EnrollmentData { get; set; }
     }
 }

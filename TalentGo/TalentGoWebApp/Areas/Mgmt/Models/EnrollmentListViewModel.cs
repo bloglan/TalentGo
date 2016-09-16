@@ -40,6 +40,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Models
 
 		public int AllCount { get; set; }
 
-		public IEnumerable<EnrollmentData> EnrollmentList { get; set; }
+		public IEnumerable<Enrollment> EnrollmentList { get; set; }
 	}
 }

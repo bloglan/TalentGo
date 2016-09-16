@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace TalentGo.Recruitment
@@ -137,9 +136,9 @@ namespace TalentGo.Recruitment
         /// <returns></returns>
         public async Task UpdateRecruitmentPlan(RecruitmentPlan plan)
         {
-            ///只有State处于Created的计划可以被修改。
-            ///可修改的字段包括Title, Recruitment, IsPublic, ExpirationDate, EnrollExpirationDate
-            ///
+            //只有State处于Created的计划可以被修改。
+            //可修改的字段包括Title, Recruitment, IsPublic, ExpirationDate, EnrollExpirationDate
+            //
             RecruitmentPlan current = this.store.RecruitmentPlans.SingleOrDefault(e => e.id == plan.id && !e.WhenPublished.HasValue);
             if (current == null)
                 throw new ArgumentException("找不到计划或指定的计划不能修改");
@@ -204,106 +203,6 @@ namespace TalentGo.Recruitment
         }
 
         /// <summary>
-        /// 对指定报名的所有已提交的报名提交审核状态。执行该操作意味着审核已结束，并且将审核状态发布到应聘者。
-        /// 执行该操作后，不能执行反提交操作。
-        /// </summary>
-        /// <param name="plan"></param>
-        /// <param name="AnnounceExamExpirationDate"></param>
-        /// <returns></returns>
-        public async Task CommitAudit(RecruitmentPlan plan, DateTime AnnounceExamExpirationDate, DateTime ExamStartTime, DateTime ExamEndTime, string ExamLocation)
-        {
-            if (plan == null)
-                throw new ArgumentNullException("plan");
-
-            if (AnnounceExamExpirationDate < DateTime.Now)
-                throw new ArgumentException("声明参考的截止日期不能晚于当前日期。");
-
-            RecruitmentPlan currentplan = await this.FindByIDAsync(plan.id);
-            if (currentplan == null)
-                throw new ArgumentException("找不到指定的招聘计划。");
-
-            if (DateTime.Now < currentplan.EnrollExpirationDate)
-                throw new ArgumentException("审核的提交早于报名截止日期。");
-
-            if (AnnounceExamExpirationDate < currentplan.EnrollExpirationDate)
-                throw new ArgumentException("声明参考的截止日期不能早于报名截止日期。");
-
-            if (currentplan.WhenAuditCommited.HasValue)
-                return;
-
-            ///检查与此招聘计划关联的报名表。
-            ///如果报名表未提交，则直接设置不通过，附加说明为未在报名截止日期内提交。
-            ///如果审核状态Approved值未设置，则回退，报告人力资源管理员必须为已提交的报名表设置审核状态。
-            ///如果以上检查都符合条件，为Plan设置提交日期，为每份报名表设置提交日期，并将审核结果提交短信发送队列进行发送。
-            ///
-            //检查提交日期在规定截止日期内的，尚未设置Approved的报名表。若存在，则审核提交操作无效。
-            var checkSet = from enroll in currentplan.EnrollmentData
-                           where enroll.WhenCommited < currentplan.EnrollExpirationDate && !enroll.Approved.HasValue
-                           select enroll;
-            if (checkSet.Any())
-                throw new InvalidOperationException("还有未设定审核结果的报名表。请全部设定后，再进行提交。");
-
-            //设置声明考试的截止日期。
-            currentplan.AnnounceExpirationDate = AnnounceExamExpirationDate;
-
-            SMSSvc.SMSServiceClient smsClient = new SMSSvc.SMSServiceClient();
-            SmtpClient smtpClient = new SmtpClient("mail.qjyc.cn");
-            smtpClient.UseDefaultCredentials = true;
-
-            //开始每项提交并发送短信。
-            foreach (EnrollmentData data in currentplan.EnrollmentData)
-            {
-                //若没有提交，或提交日期晚于报名截止日期的，直接设定为不通过。
-                if (!data.WhenCommited.HasValue || data.WhenCommited > currentplan.EnrollExpirationDate)
-                {
-                    data.Approved = false;
-                    data.AuditMessage = "未在指定的报名截止时间内提交";
-                }
-
-                data.WhenAudit = DateTime.Now;
-
-                //提交发送短信
-                string smsMsg;
-                if (data.Approved.Value)
-                    smsMsg = string.Format(smsApprovedMsg, data.Name, currentplan.Title, currentplan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
-                else
-                    smsMsg = string.Format(smsRejectiveMsg, data.Name, currentplan.Title, currentplan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
-
-                await smsClient.SendMessageAsync(new string[] { data.Mobile }, smsMsg, new SMSSvc.SendMessageOption());
-
-                //提交发送邮件
-                //if (data.Users.EmailValid)
-                //{
-                //	MailMessage mail = new MailMessage();
-                //	mail.From = new MailAddress("job@qjyc.cn", "曲靖烟草招聘");
-                //	mail.To.Add(new MailAddress(data.Users.Email, data.Name));
-                //	mail.Subject = "曲靖烟草招聘报名审核通知";
-                //	mail.Body = smsMsg;
-                //	await smtpClient.SendMailAsync(mail);
-                //	await Task.Delay(800);
-                //}
-
-            }
-
-            smsClient.Close();
-            smtpClient.Dispose();
-
-            //每项提交完成后，修改currentPlan的标记，表示已提交审核。
-            currentplan.WhenAuditCommited = DateTime.Now;
-
-            //设定考试时间和地点
-            currentplan.ExamStartTime = ExamStartTime;
-            currentplan.ExamEndTime = ExamEndTime;
-            currentplan.ExamLocation = ExamLocation;
-
-            await this.store.UpdateAsync(currentplan);
-        }
-        string smsRejectiveMsg = "{0}，您好，您所填报的{1}报名资料，经初审未通过，感谢您的参与！";
-        string smsApprovedMsg = "{0}，您好，您所填报的{1}报名资料，经初审通过，请于{2}前登陆网站声明是否参加考试，逾期未声明是否参加考试的不予参加考试。谢谢您的合作。";
-
-
-
-        /// <summary>
         /// 根据指定的ID查找招聘计划。若未找到指定的招聘计划，则返回默认值null。
         /// </summary>
         /// <param name="PlanID"></param>
@@ -313,7 +212,7 @@ namespace TalentGo.Recruitment
             return await this.store.FindByIdAsync(PlanID);
         }
 
-        public async Task<IQueryable<ArchiveRequirements>> GetArchiveRequirements(RecruitmentPlan plan)
+        public async Task<IQueryable<ArchiveRequirement>> GetArchiveRequirements(RecruitmentPlan plan)
         {
             var arStore = this.store as IArchiveRequirementStore;
             if (arStore == null)
@@ -322,7 +221,7 @@ namespace TalentGo.Recruitment
             return await arStore.GetArchiveRequirementsAsync(plan);
         }
 
-        public async Task AddArchiveRequirement(RecruitmentPlan plan, ArchiveRequirements requirement)
+        public async Task AddArchiveRequirement(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var arStore = this.store as IArchiveRequirementStore;
             if (arStore == null)
@@ -331,7 +230,7 @@ namespace TalentGo.Recruitment
             await arStore.AddArchiveRequirementAsync(plan, requirement);
         }
 
-        public async Task UpdateArchiveRequirement(RecruitmentPlan plan, ArchiveRequirements requirement)
+        public async Task UpdateArchiveRequirement(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var arStore = this.store as IArchiveRequirementStore;
             if (arStore == null)
@@ -340,7 +239,7 @@ namespace TalentGo.Recruitment
             await arStore.UpdateArchiveRequirementAsync(plan, requirement);
         }
 
-        public async Task RemoveArchiveRequirement(RecruitmentPlan plan, ArchiveRequirements requirement)
+        public async Task RemoveArchiveRequirement(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var arStore = this.store as IArchiveRequirementStore;
             if (arStore == null)

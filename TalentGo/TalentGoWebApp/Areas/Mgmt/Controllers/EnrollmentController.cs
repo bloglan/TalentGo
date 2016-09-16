@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using TalentGo.Identity;
 using TalentGo.Recruitment;
 using TalentGoWebApp.Areas.Mgmt.Models;
 
@@ -101,7 +102,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			//书写标题
 			sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t类别\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
 
-			foreach(EnrollmentData data in model.EnrollmentList)
+			foreach(Enrollment data in model.EnrollmentList)
 			{
 				sw.Write(recruitmentPlan.Title + "\t");
 				sw.Write(data.Name + "\t");
@@ -196,7 +197,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
 
-            var enrollment = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == planid && e.UserID == userid && e.WhenCommited.HasValue);
+            var enrollment = (await this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.UserID == user.Id);
 			if (enrollment == null)
 			{
 				result.Code = 404;
@@ -204,12 +205,26 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
 			}
 
-			enrollment.Approved = Audit;
+            if (Audit.HasValue)
+            {
+                if (Audit.Value)
+                {
+                    enrollment.Accept();
+                }
+                else
+                {
+                    enrollment.Refuse();
+                }
+            }
+            else
+            {
+                enrollment.UnsetAudit();
+            }
 
-			await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
+            await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
 
 			//更新统计
-			this.UpdateStatistics(result);
+			await this.UpdateStatistics(result);
 
 			return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
 
@@ -233,7 +248,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
 
-			var enrollment = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == planid && e.UserID == userid && e.WhenCommited.HasValue);
+            var enrollment = this.enrollmentManager.CommitedEnrollments.FirstOrDefault(e => e.UserID == user.Id && e.RecruitPlanID == plan.id);
 			if (enrollment == null)
 			{
 				result.Code = 404;
@@ -241,12 +256,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
 			}
 
-			if (string.IsNullOrEmpty(message))
-				enrollment.AuditMessage = null;
-			else
-				enrollment.AuditMessage = message;
-
-
+            enrollment.SetAuditMessage(message);
 			await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
 
 			return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
@@ -304,14 +314,14 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 			var enrollmentData = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
 
-			if (model.Approved)
-				enrollmentData.Approved = true;
-			else if (model.Rejective)
-				enrollmentData.Approved = false;
-			else
-				enrollmentData.Approved = null;
+            if (model.Approved)
+                enrollmentData.Accept();
+            else if (model.Rejective)
+                enrollmentData.Refuse();
+            else
+                enrollmentData.UnsetAudit();
 
-			enrollmentData.AuditMessage = model.AuditMessage;
+            enrollmentData.SetAuditMessage(model.AuditMessage);
 
             await this.enrollmentManager.UpdateEnrollment(user, plan, enrollmentData);
 
@@ -328,5 +338,18 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			return PartialView(this.GetStatistics(PlanID));
 		}
 
-	}
+        [ChildActionOnly]
+        public async Task<ActionResult> SmartStatistics(RecruitmentPlan plan)
+        {
+            var enrollmentSet = await this.enrollmentManager.GetEnrollmentsOfPlan(plan);
+            EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()
+            {
+                CommitedEnrollmentCount = enrollmentSet.Count(e => e.WhenCommited.HasValue),
+                ApprovedEnrollmentCount = enrollmentSet.Count(e => e.Approved.HasValue && e.Approved.Value),
+                AnnouncedTakeExamCount = enrollmentSet.Count(e => e.IsTakeExam.HasValue && e.IsTakeExam.Value)
+            };
+            return PartialView(model);
+        }
+
+    }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TalentGo.Identity;
 using TalentGo.Recruitment;
 
 namespace TalentGo.Utilities
@@ -360,7 +361,7 @@ namespace TalentGo.Utilities
 
 		public Task AddLoginAsync(TargetUser user, UserLoginInfo login)
 		{
-			UserLogins newEntry = this.database.UserLogins.Create();
+			UserLogin newEntry = this.database.UserLogins.Create();
 			newEntry.UserId = user.Id;
 			newEntry.LoginProvider = login.LoginProvider;
 			newEntry.ProviderKey = login.ProviderKey;
@@ -371,7 +372,7 @@ namespace TalentGo.Utilities
 
 		public Task RemoveLoginAsync(TargetUser user, UserLoginInfo login)
 		{
-			UserLogins current = this.database.UserLogins.SingleOrDefault(e => e.UserId == user.Id && e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
+			UserLogin current = this.database.UserLogins.SingleOrDefault(e => e.UserId == user.Id && e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
 			if (current != null)
 			{
 				this.database.UserLogins.Remove(current);
@@ -394,7 +395,7 @@ namespace TalentGo.Utilities
 
 		public async Task<TargetUser> FindAsync(UserLoginInfo login)
 		{
-			UserLogins entry = this.database.UserLogins.SingleOrDefault(e => e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
+			UserLogin entry = this.database.UserLogins.SingleOrDefault(e => e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
 			if (entry != null)
 			{
 				return await this.FindByIdAsync(entry.UserId);

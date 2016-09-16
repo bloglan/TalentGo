@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using TalentGo.Identity;
 using TalentGo.Recruitment;
 using TalentGoWebApp.Areas.Mgmt.Models;
 
@@ -13,11 +14,13 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
     {
         RecruitmentPlanManager recruitmentManager;
         ArchiveCategoryManager archiveCategoryManager;
+        EnrollmentManager enrollmentManager;
 
-        public RecruitmentPlanController(RecruitmentPlanManager recruitmentManager, ArchiveCategoryManager archiveCategoryManager)
+        public RecruitmentPlanController(RecruitmentPlanManager recruitmentManager, ArchiveCategoryManager archiveCategoryManager, EnrollmentManager enrollmentManager)
         {
             this.recruitmentManager = recruitmentManager;
             this.archiveCategoryManager = archiveCategoryManager;
+            this.enrollmentManager = enrollmentManager;
         }
 
 
@@ -187,7 +190,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             //				 where archreq.RecruitmentPlanID == id
             //				 select archreq;
 
-            List<ArchiveRequirements> orginialReqList = new List<ArchiveRequirements>(archreqSet);
+            List<ArchiveRequirement> orginialReqList = new List<ArchiveRequirement>(archreqSet);
 
             foreach (ArchiveRequirementsViewModel item in model)
             {
@@ -200,7 +203,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 {
                     //如果一项被启用，则从原始表查找，若没有发现，则新建，若存在，则更新。
                     if (orgselected == null)
-                        await this.recruitmentManager.AddArchiveRequirement(plan, new ArchiveRequirements()
+                        await this.recruitmentManager.AddArchiveRequirement(plan, new ArchiveRequirement()
                         {
                             ArchiveCategoryID = item.ArchiveCategory.id,
                             RecruitmentPlanID = id,
@@ -301,7 +304,8 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             //开始提交。
             try
             {
-                await this.recruitmentManager.CommitAudit(plan, model.AnnounceExpirationDate, model.ExamStartTime, model.ExamEndTime, model.ExamLocation);
+                //await this.recruitmentManager.CommitAudit(plan, model.AnnounceExpirationDate, model.ExamStartTime, model.ExamEndTime, model.ExamLocation);
+                await this.enrollmentManager.CompleteAudit(plan);
                 //return RedirectToAction("Index");
                 return View("OperationResult", new OperationResult(ResultStatus.Success, "该计划已成功结束审核，审核结果将自动通过短信和邮件顺次通知应聘者本人。接下来，应聘者将提交是否参加考试的声明。在声明截止时间过后，您将能获得本次招聘计划参加考试的人员名单及统计信息。", this.Url.Action("Index"), 20));
             }
@@ -314,17 +318,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         #region ChildActions
 
-        [ChildActionOnly]
-        public ActionResult SmartStatistics(TalentGo.Recruitment.RecruitmentPlan plan)
-        {
-            EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()
-            {
-                CommitedEnrollmentCount = plan.EnrollmentData.Count(e => e.WhenCommited.HasValue),
-                ApprovedEnrollmentCount = plan.EnrollmentData.Count(e => e.Approved.HasValue && e.Approved.Value),
-                AnnouncedTakeExamCount = plan.EnrollmentData.Count(e => e.IsTakeExam.HasValue && e.IsTakeExam.Value)
-            };
-            return PartialView(model);
-        }
 
         #endregion
     }

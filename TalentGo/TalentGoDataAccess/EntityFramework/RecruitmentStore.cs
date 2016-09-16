@@ -58,23 +58,23 @@ namespace TalentGo.Utilities
             return this.db.RecruitmentPlan.FirstOrDefault(plan => plan.id == Id);
         }
 
-        public async Task<IQueryable<ArchiveRequirements>> GetArchiveRequirementsAsync(RecruitmentPlan plan)
+        public async Task<IQueryable<ArchiveRequirement>> GetArchiveRequirementsAsync(RecruitmentPlan plan)
         {
             return this.db.ArchiveRequirements.Where(ar => ar.RecruitmentPlanID == plan.id);
         }
 
-        public async Task AddArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirements requirement)
+        public async Task AddArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             this.db.ArchiveRequirements.Add(requirement);
             await this.db.SaveChangesAsync();
         }
 
-        public async Task UpdateArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirements requirement)
+        public async Task UpdateArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var current = (await this.GetArchiveRequirementsAsync(plan)).FirstOrDefault(r => r.ArchiveCategoryID == requirement.ArchiveCategoryID && r.RecruitmentPlanID == requirement.RecruitmentPlanID);
             if (current != null)
             {
-                var entry = this.db.Entry<ArchiveRequirements>(current);
+                var entry = this.db.Entry<ArchiveRequirement>(current);
                 entry.CurrentValues.SetValues(requirement);
 
                 await this.db.SaveChangesAsync();
@@ -82,7 +82,7 @@ namespace TalentGo.Utilities
         }
 
 
-        public async Task RemoveArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirements requirement)
+        public async Task RemoveArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var current = (await this.GetArchiveRequirementsAsync(plan)).FirstOrDefault(r => r.ArchiveCategoryID == requirement.ArchiveCategoryID && r.RecruitmentPlanID == requirement.RecruitmentPlanID);
             if (current != null)

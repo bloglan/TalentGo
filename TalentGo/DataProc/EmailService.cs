@@ -34,7 +34,7 @@ namespace DataProc
 					smtpClient.UseDefaultCredentials = true;
 					MailMessage mail = new MailMessage();
 					mail.From = new MailAddress("job@qjyc.cn", "曲靖烟草招聘");
-					mail.To.Add(new MailAddress(enrollmentSet[i].Users.Email, enrollmentSet[i].Name));
+					mail.To.Add(new MailAddress(enrollmentSet[i].User.Email, enrollmentSet[i].Name));
 					mail.Subject = "曲靖烟草招聘报名审核通知";
 					mail.Body = string.Format(smsFormatString, enrollmentSet[i].Name, enrollmentSet[i].RecruitmentPlan.Title, enrollmentSet[i].RecruitmentPlan.AnnounceExpirationDate.Value.ToLongDateString());
 					smtpClient.Send(mail);

@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using TalentGo.Web;
-using TalentGo.Recruitment;
+using TalentGo.Identity;
 using TalentGoWebApp.Models;
+using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Controllers
 {
@@ -118,7 +119,7 @@ namespace TalentGoWebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Enroll(int? id, EnrollmentData model)
+        public async Task<ActionResult> Enroll(int? id, Enrollment model)
         {
             RecruitmentPlan plan = null;
             if (id.HasValue)
@@ -173,9 +174,9 @@ namespace TalentGoWebApp.Controllers
         }
 
         [ChildActionOnly]
-        public async Task<ActionResult> ArchiveListOfEnrollment(ArchiveRequirements requirement)
+        public async Task<ActionResult> ArchiveListOfEnrollment(ArchiveRequirement requirement)
         {
-            EnrollmentData enrollmentData = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.UserID == this.user.Id && e.RecruitPlanID == this.recruitmentContext.SelectedPlanId.Value);
+            Enrollment enrollmentData = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.UserID == this.user.Id && e.RecruitPlanID == this.recruitmentContext.SelectedPlanId.Value);
 
             var CurrentUserEnrollmentArchivesByRequired = from arch in await this.enrollmentManager.GetEnrollmentArchives(enrollmentData)
                                                           where arch.ArchiveCategoryID == requirement.ArchiveCategoryID

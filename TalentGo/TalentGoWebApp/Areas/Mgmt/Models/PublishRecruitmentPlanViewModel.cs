@@ -4,7 +4,7 @@ using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {
-	public class PublishRecruitmentPlanViewModel
+    public class PublishRecruitmentPlanViewModel
 	{
 		public PublishRecruitmentPlanViewModel()
 		{

@@ -43,11 +43,11 @@ namespace TalentGoWebApp.Controllers
 			var article = this.articleManager.FindByID(id);
 
 			//如果关联了plan，则以Plan的IsPublic为准来显示。
-			if (article.RelatedPlan.HasValue)
-			{
-				if (article.RecruitmentPlan.IsPublic == IsPublic)
-					return View(article);
-			}
+			//if (article.RelatedPlan.HasValue)
+			//{
+			//	if (article.RecruitmentPlan.IsPublic == IsPublic)
+			//		return View(article);
+			//}
 
 			//未关联的情况，则根据Article.IsPublic来判断，如果没有值，或值等于IsPublic，则显示。
 			if (!article.IsPublic.HasValue || article.IsPublic == IsPublic)

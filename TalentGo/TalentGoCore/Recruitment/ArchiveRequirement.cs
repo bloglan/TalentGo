@@ -3,7 +3,8 @@ namespace TalentGo.Recruitment
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public partial class ArchiveRequirements
+    [Table("ArchiveRequirements")]
+    public partial class ArchiveRequirement
     {
         [Key]
         [Column(Order = 0)]

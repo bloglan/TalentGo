@@ -1,29 +1,31 @@
 namespace TalentGo.Recruitment
 {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel.DataAnnotations;
-	using System.ComponentModel.DataAnnotations.Schema;
-	using Utilities;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
-    /// 表示一个招聘计划
+    /// 表示一个招聘计划。
     /// </summary>
 	[Table("RecruitmentPlan")]
     public partial class RecruitmentPlan
     {
+        /// <summary>
+        /// Default Constructor.
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public RecruitmentPlan()
         {
-            ArchiveRequirements = new HashSet<ArchiveRequirements>();
-            Article = new HashSet<Article>();
-            EnrollmentData = new HashSet<EnrollmentData>();
+            ArchiveRequirements = new HashSet<ArchiveRequirement>();
+            //Article = new HashSet<Article>();
+            //EnrollmentData = new HashSet<Enrollment>();
         }
 
         /// <summary>
-        /// 计划Id
+        /// 计划Id。
         /// </summary>
-        public int id { get; set; }
+        public int id { get; protected set; }
 
         /// <summary>
         /// 招聘计划名称。
@@ -39,7 +41,7 @@ namespace TalentGo.Recruitment
         public string Recruitment { get; set; }
 
         /// <summary>
-        /// 年度
+        /// 年度。
         /// </summary>
         public int Year { get; set; }
 
@@ -73,7 +75,7 @@ namespace TalentGo.Recruitment
         /// <summary>
         /// 获取审核提交的时间。
         /// </summary>
-        public DateTime? WhenAuditCommited { get; set; }
+        public DateTime? WhenAuditCommited { get; protected set; }
 
         /// <summary>
         /// 设置声明考试的截止时间。
@@ -101,13 +103,23 @@ namespace TalentGo.Recruitment
         [StringLength(100)]
         public string ExamLocation { get; set; }
 
+        /// <summary>
+        /// gets archive requirements of this Recruitment plan.
+        /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ArchiveRequirements> ArchiveRequirements { get; set; }
+        public virtual ICollection<ArchiveRequirement> ArchiveRequirements { get; protected set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Article> Article { get; set; }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EnrollmentData> EnrollmentData { get; set; }
+        internal void CompleteAudit()
+        {
+            if (this.WhenPublished.HasValue)
+            {
+                if (!this.WhenAuditCommited.HasValue)
+                {
+                    this.WhenAuditCommited = DateTime.Now;
+                    return;
+                }
+            }
+            throw new InvalidOperationException("操作无效，计划未发布或已完成审核。");
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TalentGo.Recruitment
+﻿namespace TalentGo.Identity
 {
     /// <summary>
     /// 表示一个操作结果的ViewModel

@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using TalentGo.Recruitment;
 using TalentGo.Extension;
 using TalentGo.Web;
+using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Controllers
 {
@@ -149,7 +149,7 @@ namespace TalentGoWebApp.Controllers
 				}
 
 				//构造EnrollmentArchive对象并更新。
-				EnrollmentArchives enrollmentArch = new EnrollmentArchives();
+				EnrollmentArchive enrollmentArch = new EnrollmentArchive();
 				enrollmentArch.ArchiveCategoryID = archiveCategory.id;
 				enrollmentArch.RecruitPlanID = plan.id;
 				enrollmentArch.UserID = this.recruitmentContext.TargetUserId.Value;

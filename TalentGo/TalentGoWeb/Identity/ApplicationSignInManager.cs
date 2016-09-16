@@ -2,8 +2,9 @@
 using Microsoft.Owin.Security;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TalentGo.Recruitment;
 
-namespace TalentGo.Recruitment
+namespace TalentGo.Identity
 {
     public class ApplicationSignInManager : SignInManager<TargetUser, int>
 	{

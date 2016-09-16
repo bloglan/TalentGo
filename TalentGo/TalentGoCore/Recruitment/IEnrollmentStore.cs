@@ -6,14 +6,14 @@ namespace TalentGo.Recruitment
     public interface IEnrollmentStore
     {
 
-        IQueryable<EnrollmentData> Enrollments { get; }
+        IQueryable<Enrollment> Enrollments { get; }
 
-        Task<EnrollmentData> FindByIdAsync(int PlanId, int UserId);
+        Task<Enrollment> FindByIdAsync(int PlanId, int UserId);
 
-        Task CreateAsync(EnrollmentData Enrollment);
+        Task CreateAsync(Enrollment Enrollment);
 
-        Task UpdateAsync(EnrollmentData Enrollment);
+        Task UpdateAsync(Enrollment Enrollment);
 
-        Task DeleteAsync(EnrollmentData Enrollment);
+        Task DeleteAsync(Enrollment Enrollment);
     }
 }

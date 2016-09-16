@@ -5,12 +5,12 @@ namespace TalentGo.Recruitment
 {
     public interface IArchiveRequirementStore : IRecruitmentPlanStore
     {
-        Task AddArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirements requirement);
+        Task AddArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirement requirement);
 
-        Task UpdateArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirements requirement);
+        Task UpdateArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirement requirement);
 
-        Task RemoveArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirements requirement);
+        Task RemoveArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirement requirement);
 
-        Task<IQueryable<ArchiveRequirements>> GetArchiveRequirementsAsync(RecruitmentPlan plan);
+        Task<IQueryable<ArchiveRequirement>> GetArchiveRequirementsAsync(RecruitmentPlan plan);
     }
 }

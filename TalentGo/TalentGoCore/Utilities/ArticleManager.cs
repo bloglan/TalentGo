@@ -52,7 +52,7 @@ namespace TalentGo.Utilities
 
 		public async Task CreateArticle(Article article)
 		{
-			article.WhenCreated = DateTime.Now;
+			//article.WhenCreated = DateTime.Now;
 			article.WhenChanged = DateTime.Now;
 
 			await this.store.CreateAsync(article);
