@@ -69,9 +69,11 @@
     <Compile Include="Backend\SMSServiceBase.cs" />
     <Compile Include="Recruitment\ApplicationUserManager.cs" />
     <Compile Include="Recruitment\ExaminationPlan.cs" />
+    <Compile Include="Recruitment\ExaminationPlanManager.cs" />
     <Compile Include="Recruitment\ExaminationRoom.cs" />
     <Compile Include="Recruitment\ExaminationRoomManager.cs" />
     <Compile Include="Recruitment\ExaminationSubject.cs" />
+    <Compile Include="Recruitment\IExaminationPlanStore.cs" />
     <Compile Include="Recruitment\IExaminationRoomStore.cs" />
     <Compile Include="Recruitment\TargetUser.cs" />
     <Compile Include="Identity\UserLogin.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
+using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {

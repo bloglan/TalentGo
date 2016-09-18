@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using TalentGo.Utilities;
+using TalentGo.EntityFramework;
 
 namespace DataProc
 {

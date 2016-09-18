@@ -139,7 +139,7 @@ namespace TalentGo.Recruitment
             //只有State处于Created的计划可以被修改。
             //可修改的字段包括Title, Recruitment, IsPublic, ExpirationDate, EnrollExpirationDate
             //
-            RecruitmentPlan current = this.store.RecruitmentPlans.SingleOrDefault(e => e.id == plan.id && !e.WhenPublished.HasValue);
+            RecruitmentPlan current = this.store.RecruitmentPlans.SingleOrDefault(e => e.id == plan.id && e.WhenPublished.HasValue);
             if (current == null)
                 throw new ArgumentException("找不到计划或指定的计划不能修改");
 
@@ -147,7 +147,7 @@ namespace TalentGo.Recruitment
             if (plan.ExpirationDate < DateTime.Now)
                 throw new ArgumentException("招聘计划的有效期早于当前时间。");
 
-            if (plan.EnrollExpirationDate < DateTime.Now)
+            if (plan.EnrollExpirationDate > DateTime.Now)
                 throw new ArgumentException("报名截止日期早于当前时间。");
 
             if (plan.EnrollExpirationDate > plan.ExpirationDate)

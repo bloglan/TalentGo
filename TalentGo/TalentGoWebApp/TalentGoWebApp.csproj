@@ -262,6 +262,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\CreateTargetUserViewModel.cs" />
     <Compile Include="Models\EnrollmentStateViewModel.cs" />
+    <Compile Include="Models\EnrollViewModel.cs" />
     <Compile Include="Models\LoginPartialViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\OperationResult.cs" />

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
 using TalentGoWebApp.Areas.Mgmt.Models;
+using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
@@ -138,7 +139,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                            {
                                ArchiveCategory = arch,
                                Enabled = planreqs.Any(pr => pr.ArchiveCategoryID == arch.id),
-                               RequirementType = planreqs.Any(pr => pr.ArchiveCategoryID == arch.id) ? planreqs.First(pr => pr.ArchiveCategoryID == arch.id).Requirements : "One"
+                               RequirementType = planreqs.Any(pr => pr.ArchiveCategoryID == arch.id) ? planreqs.FirstOrDefault(pr => pr.ArchiveCategoryID == arch.id).Requirements : "One"
                            };
 
             //    var archreqSet = from arch in this.database.ArchiveCategory
@@ -176,7 +177,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             });
             ViewData["ArchiveReqTypeTable"] = reqs;
 
-            return View(modelset);
+            return View(new List<ArchiveRequirementsViewModel>(modelset));
         }
 
         [HttpPost]
@@ -304,6 +305,10 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             //开始提交。
             try
             {
+                plan.AnnounceExpirationDate = model.AnnounceExpirationDate;
+                plan.ExamStartTime = model.ExamStartTime;
+                plan.ExamEndTime = model.ExamEndTime;
+                plan.ExamLocation = model.ExamLocation;
                 //await this.recruitmentManager.CommitAudit(plan, model.AnnounceExpirationDate, model.ExamStartTime, model.ExamEndTime, model.ExamLocation);
                 await this.enrollmentManager.CompleteAudit(plan);
                 //return RedirectToAction("Index");

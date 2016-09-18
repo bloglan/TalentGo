@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Compilation;
 using System.Web.Mvc;
+using TalentGo.EntityFramework;
 using TalentGo.Recruitment;
 
 namespace TalentGoWebApp
@@ -25,9 +26,9 @@ namespace TalentGoWebApp
             builder.RegisterAssemblyModules(assemblies.ToArray());
 
 #warning 作为测试
-            builder.RegisterAssemblyTypes(typeof(TalentGo.Utilities.TalentGoDbContext).Assembly).Where(t => t.Name.EndsWith("Store")).AsImplementedInterfaces();
-            builder.RegisterType<TalentGo.Utilities.TalentGoDbContext>().InstancePerRequest();
-            builder.RegisterAssemblyTypes(typeof(RecruitmentPlan).Assembly);
+            builder.RegisterAssemblyTypes(typeof(TalentGoDbContext).Assembly).Where(t => t.Name.EndsWith("Store")).AsImplementedInterfaces().InstancePerRequest();
+            builder.RegisterType<TalentGoDbContext>().InstancePerRequest();
+            builder.RegisterAssemblyTypes(typeof(RecruitmentPlan).Assembly).Where(t => t.Name.EndsWith("Manager")).InstancePerRequest();
             //builder.RegisterAssemblyTypes(typeof(HttpRecruitmentContext).Assembly).Where(t => t.Name == "HttpRecruitmentContext").As<RecruitmentContextBase>();
 
             var container = builder.Build();

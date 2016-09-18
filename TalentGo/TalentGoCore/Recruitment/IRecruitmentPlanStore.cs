@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace TalentGo.Recruitment
 {
-    public interface IRecruitmentPlanStore
-	{
+    public interface IRecruitmentPlanStore : IDisposable
+    {
         IQueryable<RecruitmentPlan> RecruitmentPlans { get; }
 
         Task<RecruitmentPlan> FindByIdAsync(int Id);

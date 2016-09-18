@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
 using TalentGoWebApp.Areas.Mgmt.Models;
+using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
@@ -29,9 +30,9 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		/// <param name="id"></param>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult EnrollmentList(int id, EnrollmentListViewModel model)
+		public async Task<ActionResult> EnrollmentList(int id, EnrollmentListViewModel model)
 		{
-			var recruitmentPlan = this.recruitmentPlanManager.AvailableRecruitmentPlans.SingleOrDefault(e => e.id == id);
+            var recruitmentPlan = await this.recruitmentPlanManager.FindByIDAsync(id);
 			if (recruitmentPlan == null)
 				return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到报名计划。", this.Url.Action("Index", "RecruitmentPlan"), 3));
 
@@ -333,9 +334,9 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 
 		[ChildActionOnly]
-		public ActionResult Statistics(int PlanID)
+		public async Task<ActionResult> Statistics(int PlanID)
 		{
-			return PartialView(this.GetStatistics(PlanID));
+			return PartialView(await this.GetStatistics(PlanID));
 		}
 
         [ChildActionOnly]

@@ -4,7 +4,7 @@
 @if (Model.HasEnrollment)
 {
 	@Html.Partial("EnrollmentStatePartial", Model.Enrollment)
-	@Html.ActionLink("浏览我的报名信息", "PreviewEnrollment", null, new { @class = "btn btn-default" })
+	@Html.ActionLink("浏览我的报名信息", "PreviewEnrollment", new { id = Model.Plan.id }, new { @class = "btn btn-default" })
 	if (Model.Enrollment.WhenCommited.HasValue)
 	{
 
@@ -13,7 +13,7 @@
 			//审核通过的
 			if (Model.Plan.AnnounceExpirationDate.Value > DateTime.Now && !Model.Enrollment.WhenAnnounced.HasValue)
 			{
-				@Html.ActionLink("声明参加考试", "AnnounceForExam", null, new { @class = "btn btn-primary" })
+				@Html.ActionLink("声明参加考试", "AnnounceForExam", new { id = Model.Plan.id }, new { @class = "btn btn-primary" })
 			}
 		}
 	}

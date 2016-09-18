@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TalentGo.Recruitment;
+using TalentGo.EntityFramework;
 using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers

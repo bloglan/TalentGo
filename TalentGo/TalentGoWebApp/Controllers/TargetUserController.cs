@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using TalentGo.Recruitment;
-using TalentGo.Utilities;
+using TalentGo.EntityFramework;
 using TalentGo.Web;
 using TalentGoWebApp.Models;
+using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {

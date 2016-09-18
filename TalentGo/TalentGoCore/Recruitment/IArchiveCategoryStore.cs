@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace TalentGo.Recruitment
@@ -6,7 +7,7 @@ namespace TalentGo.Recruitment
     /// <summary>
     /// 提供资料类别项的数据存储访问能力。
     /// </summary>
-    public interface IArchiveCategoryStore
+    public interface IArchiveCategoryStore : IDisposable
     {
         IQueryable<ArchiveCategory> ArchiveCategories { get; }
 

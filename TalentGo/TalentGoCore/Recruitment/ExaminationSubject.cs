@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TalentGo.Recruitment
 {
@@ -8,9 +9,16 @@ namespace TalentGo.Recruitment
     /// </summary>
     public class ExaminationSubject
     {
-        public ExaminationSubject()
+        internal ExaminationSubject()
         {
             UsedExaminationRooms = new HashSet<ExaminationRoom>();
+        }
+
+        public ExaminationSubject(ExaminationPlan plan)
+            : this()
+        {
+            ExaminationPlan = plan;
+            ExaminationPlanId = plan.Id;
         }
         /// <summary>
         /// 考试科目标识符。
@@ -20,7 +28,10 @@ namespace TalentGo.Recruitment
         /// <summary>
         /// 关联考试计划。
         /// </summary>
-        public int ExaminationPlanId { get; set; }
+        public int ExaminationPlanId { get; protected set; }
+
+        [ForeignKey(nameof(ExaminationPlanId))]
+        public virtual ExaminationPlan ExaminationPlan { get; protected set; }
 
         /// <summary>
         /// 考试科目。

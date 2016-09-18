@@ -6,7 +6,7 @@ namespace DataProc
 {
     public class DataExport : IService
 	{
-		TalentGo.Utilities.TalentGoDbContext database = new TalentGo.Utilities.TalentGoDbContext();
+		TalentGo.EntityFramework.TalentGoDbContext database = new TalentGo.EntityFramework.TalentGoDbContext();
 		public void Run()
 		{
 			var dirInfo = Directory.CreateDirectory(DataIOConfig.Path + "\\" + DataIOConfig.PlanID.ToString("00"));

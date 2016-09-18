@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("TalentGoDAL")]
+[assembly: AssemblyTitle("TalentGoCoreTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("TalentGoDAL")]
+[assembly: AssemblyProduct("TalentGoCoreTests")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("bdbac5cb-2540-46bf-9a50-65eea7f51cc9")]
+[assembly: Guid("ba1fda5a-cbcd-4766-9d44-b1bc16fa0eaf")]
 
 // 程序集的版本信息由下列四个值组成: 
 //

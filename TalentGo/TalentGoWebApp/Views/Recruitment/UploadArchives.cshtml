@@ -1,5 +1,4 @@
-﻿@using TalentGo.Recruitment
-@model IEnumerable<ArchiveRequirements>
+﻿@model IEnumerable<ArchiveRequirement>
 @{
 	ViewBag.Title = "管理报名资料";
 }
@@ -18,7 +17,7 @@
 </ol>
 <hr />
 
-@foreach (ArchiveRequirements req in Model)
+@foreach (ArchiveRequirement req in Model)
 {
 	<div>
 		<h3>@req.ArchiveCategory.Name</h3>

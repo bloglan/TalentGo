@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TalentGo.Utilities;
 using TalentGo.Linq;
 using System.Net.Mail;
 using System.Transactions;
+using TalentGo.Utilities;
 
 namespace TalentGo.Recruitment
 {
@@ -261,7 +261,7 @@ namespace TalentGo.Recruitment
             SmtpClient smtpClient = new SmtpClient("mail.qjyc.cn");
             smtpClient.UseDefaultCredentials = true;
 
-            using (TransactionScope transScope = new TransactionScope())
+            using (TransactionScope transScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
                 foreach (Enrollment data in enrollments)
                 {
@@ -275,13 +275,13 @@ namespace TalentGo.Recruitment
                     data.CompleteAudit();
 
                     //提交发送短信
-                    string smsMsg;
-                    if (data.Approved.Value)
-                        smsMsg = string.Format(smsApprovedMsg, data.Name, plan.Title, plan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
-                    else
-                        smsMsg = string.Format(smsRejectiveMsg, data.Name, plan.Title, plan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
+                    //string smsMsg;
+                    //if (data.Approved.Value)
+                    //    smsMsg = string.Format(smsApprovedMsg, data.Name, plan.Title, plan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
+                    //else
+                    //    smsMsg = string.Format(smsRejectiveMsg, data.Name, plan.Title, plan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
 
-                    await smsClient.SendMessageAsync(new string[] { data.Mobile }, smsMsg, new SMSSvc.SendMessageOption());
+                    //await smsClient.SendMessageAsync(new string[] { data.Mobile }, smsMsg, new SMSSvc.SendMessageOption());
 
                     //提交发送邮件
                     //if (data.Users.EmailValid)

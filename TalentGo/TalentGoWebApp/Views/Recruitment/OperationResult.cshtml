@@ -1,17 +1,17 @@
-﻿@model TalentGo.ViewModels.OperationResult
+﻿@model OperationResult
 @{
 	var decorateClass = string.Empty;
 	switch (Model.Result)
 	{
-		case TalentGo.ViewModels.ResultStatus.Success:
+		case ResultStatus.Success:
 			ViewBag.Title = "成功";
 			decorateClass = "panel-success";
 			break;
-		case TalentGo.ViewModels.ResultStatus.Warning:
+		case ResultStatus.Warning:
 			ViewBag.Title = "警告";
 			decorateClass = "panel-warning";
 			break;
-		case TalentGo.ViewModels.ResultStatus.Failure:
+		case ResultStatus.Failure:
 			ViewBag.Title = "失败";
 			decorateClass = "panel-danger";
 			break;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace TalentGo.Recruitment
 {
@@ -15,7 +16,7 @@ namespace TalentGo.Recruitment
         /// Default ctor.
         /// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-		public Enrollment()
+		protected Enrollment()
 		{
 			EnrollmentArchives = new HashSet<EnrollmentArchive>();
 		}
@@ -257,13 +258,18 @@ namespace TalentGo.Recruitment
         /// <summary>
         /// Gets recruitment plan of this enrollment.
         /// </summary>
-		public virtual RecruitmentPlan RecruitmentPlan { get; set; }
+        [ForeignKey(nameof(RecruitPlanID))]
+		public virtual RecruitmentPlan RecruitmentPlan { get; protected set; }
 
         /// <summary>
         /// Gets target user of this enrollment.
         /// </summary>
-		public virtual TargetUser User { get; set; }
+        [ForeignKey("UserID")]
+		public virtual TargetUser User { get; protected set; }
 
+        /// <summary>
+        /// Gets a bool value indicate wheather this enrollment has commited or not.
+        /// </summary>
         [NotMapped]
         public bool HasCommited
         {
@@ -273,10 +279,26 @@ namespace TalentGo.Recruitment
         /// <summary>
         /// Commit this enrollment.
         /// </summary>
-        internal void Commit()
+        internal virtual void Commit()
         {
             if (this.HasCommited)
                 throw new InvalidOperationException("已提交的报名表不能重复提交");
+
+            //为已提交文档顺次检查需求性是否满足？
+            foreach(var requirement in this.RecruitmentPlan.ArchiveRequirements)
+            {
+                RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements);
+                if (reqType.IsRequried())
+                    if (!this.EnrollmentArchives.Any(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID))
+                        throw new InvalidOperationException("无法提交，需求未满足。");
+                if (!reqType.IsMultipleEnabled())
+                    if (this.EnrollmentArchives.Count(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID) > 1)
+                        throw new InvalidOperationException("无法提交，需求未满足。");
+
+            }
+            
+            //TODO:其他需要执行的检查。
+
             this.WhenCommited = DateTime.Now;
         }
 

@@ -202,7 +202,7 @@
 				<th><span>操作</span></th>
 			</tr>
 		</thead>
-		@foreach (EnrollmentData item in Model.EnrollmentList)
+		@foreach (Enrollment item in Model.EnrollmentList)
 		{
 			<tr>
 				<td><img src="@Url.Action("HeadImage", "ArchiveData", new { planid = item.RecruitPlanID, userid = item.UserID, area = "" })" style="max-width: 100px; max-height: 150px;" class="img-responsive" /></td>
@@ -235,7 +235,7 @@
 				</td>
 				<td>
 					<p><abbr title="@item.WhenCommited.Value">@item.WhenCommited.Value.ToShortDateString()</abbr></p>
-					@if (item.Users.RegisterationDelegate == "Intranet")
+					@if (item.User.RegisterationDelegate == "Intranet")
 					{
 						<p>代理人：</p>
 					}

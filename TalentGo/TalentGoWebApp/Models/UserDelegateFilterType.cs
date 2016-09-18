@@ -1,4 +1,4 @@
-﻿namespace TalentGo.Identity
+﻿namespace TalentGoWebApp.Models
 {
     /// <summary>
     /// 用户代理过滤选项

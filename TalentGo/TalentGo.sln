@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoDataAccessTests", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{B8A7101B-552F-4AEE-8367-D8CD6E8BC988}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoCoreTests", "TalentGoCoreTests\TalentGoCoreTests.csproj", "{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,11 +55,16 @@ Global
 		{FE6098BC-56D5-49DE-BF5E-E59A30EB7FC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE6098BC-56D5-49DE-BF5E-E59A30EB7FC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE6098BC-56D5-49DE-BF5E-E59A30EB7FC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FE6098BC-56D5-49DE-BF5E-E59A30EB7FC2} = {B8A7101B-552F-4AEE-8367-D8CD6E8BC988}
+		{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF} = {B8A7101B-552F-4AEE-8367-D8CD6E8BC988}
 	EndGlobalSection
 EndGlobal

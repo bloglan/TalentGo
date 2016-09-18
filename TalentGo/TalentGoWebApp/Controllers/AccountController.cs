@@ -8,13 +8,14 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TalentGoWebApp.Models;
 using TalentGo.Identity;
-using TalentGo.Utilities;
+using TalentGo.EntityFramework;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
 using TalentGo.Web;
 using TalentGo.Recruitment;
+using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {

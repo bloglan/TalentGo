@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
 
-namespace TalentGo.Utilities
+namespace TalentGo.EntityFramework
 {
 
     public class UserStore :
@@ -211,11 +211,15 @@ namespace TalentGo.Utilities
 		#endregion
 
 		#region IQueryableUserStore<TargetUser, int>
+
+        /// <summary>
+        /// Get Target User collection from database.
+        /// </summary>
 		public IQueryable<TargetUser> Users
 		{
 			get
 			{
-                return this.database.Users.AsNoTracking();
+                return this.database.Users;
 			}
 		}
 

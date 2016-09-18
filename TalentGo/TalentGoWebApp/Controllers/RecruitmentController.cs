@@ -107,10 +107,13 @@ namespace TalentGoWebApp.Controllers
 
             if (enrollment.WhenCommited.HasValue)
             {
-                return RedirectToAction("PreviewEnrollment");
+                return RedirectToAction("PreviewEnrollment", new { id = plan.id });
                 //return View("OperationResult", new OperationResult(ResultStatus.Warning, "您的报名资料已提交，不能重复提交。您可以查看您所提交的报名资料。", this.Url.Action("PreviewEnrollment"), 5));
             }
-            return View(enrollment);
+
+            EnrollViewModel model = new Models.EnrollViewModel();
+            model.ReadFrom(enrollment);
+            return View(model);
         }
 
         /// <summary>
@@ -119,7 +122,7 @@ namespace TalentGoWebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Enroll(int? id, Enrollment model)
+        public async Task<ActionResult> Enroll(int? id, EnrollViewModel model)
         {
             RecruitmentPlan plan = null;
             if (id.HasValue)
@@ -141,18 +144,23 @@ namespace TalentGoWebApp.Controllers
             if (ModelState.IsValid)
             {
                 //如果有传入参数ID，则指示了要选中的招聘计划。
-                
 
 
-                if (this.enrollmentManager.Enrollments.Any(e => e.RecruitPlanID == plan.id && e.UserID == this.user.Id))
+                var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.RecruitPlanID == plan.id && e.UserID == this.user.Id);
+                if (enrollment == null)
                 {
-                    //It's an existing enrollment and then update it.
-                    await this.enrollmentManager.UpdateEnrollment(this.user, plan, model);
+                    enrollment = new Enrollment(plan, user);
+                    model.WriteTo(enrollment);
+                    await this.enrollmentManager.CreateEnrollment(user, plan, enrollment);
                 }
                 else
                 {
-                    await this.enrollmentManager.CreateEnrollment(this.user, plan, model);
+                    model.WriteTo(enrollment);
+                    await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
                 }
+
+                
+                
                 return RedirectToAction("UploadArchives");
             }
 
@@ -198,8 +206,8 @@ namespace TalentGoWebApp.Controllers
                 return HttpNotFound();
 
 
-            if (enrollment.WhenCommited.HasValue)
-                return View("OperationResult", new OperationResult(ResultStatus.Warning, "您的报名资料已提交，不能重复提交。您可以查看您所提交的报名资料。", this.Url.Action("PreviewEnrollment"), 5));
+            if (enrollment.HasCommited)
+                return View("OperationResult", new OperationResult(ResultStatus.Warning, "您的报名资料已提交，不能重复提交。您可以查看您所提交的报名资料。", this.Url.Action("PreviewEnrollment", new { id = enrollment.RecruitPlanID }), 5));
             return View(enrollment);
         }
 
@@ -215,7 +223,7 @@ namespace TalentGoWebApp.Controllers
             var enrollment = this.enrollmentManager.Enrollments.First(e => e.UserID == this.user.Id && e.RecruitPlanID == plan.id);
             try
             {
-                
+
                 await this.enrollmentManager.CommitEnrollment(this.user, plan, enrollment);
                 //导航到报名已完成。
                 OperationResult reslt = new OperationResult(ResultStatus.Success, "报名已成功提交。您的报名资料将等待初步审核。敬请时常留意本网站通知公告，及时了解您的报名审核结果。", this.Url.Action("Index"), 10);
@@ -231,7 +239,7 @@ namespace TalentGoWebApp.Controllers
                 }
                 ModelState.AddModelError("", "请返回到“管理照片资料”按要求上传资料。");
                 if (enrollment.WhenCommited.HasValue)
-                    return View("OperationResult", new OperationResult(ResultStatus.Warning, "您的报名资料已提交，不能重复提交。您可以查看您所提交的报名资料。", this.Url.Action("PreviewEnrollment"), 5));
+                    return View("OperationResult", new OperationResult(ResultStatus.Warning, "您的报名资料已提交，不能重复提交。您可以查看您所提交的报名资料。", this.Url.Action("PreviewEnrollment", new { id = enrollment.RecruitPlanID }), 5));
                 return View(enrollment);
             }
             catch (InvalidOperationException invalidOperationEx)
@@ -248,14 +256,14 @@ namespace TalentGoWebApp.Controllers
         /// 浏览报名资料。若没有，则跳转到操作警告。
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> PreviewEnrollment()
+        public async Task<ActionResult> PreviewEnrollment(int? id)
         {
-            if (!this.recruitmentContext.SelectedPlanId.HasValue)
+            if (!id.HasValue)
                 return HttpNotFound();
 
-            var plan = this.recruitManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
+            var plan = await this.recruitManager.FindByIDAsync(id.Value);
 
-            var enrollment = this.enrollmentManager.Enrollments.First(e => e.UserID == this.user.Id && e.RecruitPlanID == plan.Id);
+            var enrollment = this.enrollmentManager.Enrollments.First(e => e.UserID == this.user.Id && e.RecruitPlanID == plan.id);
             return View(enrollment);
 
         }
@@ -264,14 +272,14 @@ namespace TalentGoWebApp.Controllers
         /// 声明是否参加考试。
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> AnnounceForExam()
+        public async Task<ActionResult> AnnounceForExam(int? id)
         {
-            if (!this.recruitmentContext.SelectedPlanId.HasValue)
+            if (!id.HasValue)
                 return HttpNotFound();
 
-            var plan = this.recruitManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
+            var plan = await this.recruitManager.FindByIDAsync(id.Value);
 
-            var enrollment = this.enrollmentManager.Enrollments.First(e => e.UserID == this.user.Id && e.RecruitPlanID == plan.Id);
+            var enrollment = this.enrollmentManager.Enrollments.First(e => e.UserID == this.user.Id && e.RecruitPlanID == plan.id);
             return View(enrollment);
         }
 
@@ -281,11 +289,14 @@ namespace TalentGoWebApp.Controllers
         /// <param name="obj"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> AnnounceForExam(bool IsTakeExam)
+        public async Task<ActionResult> AnnounceForExam(int? id, bool IsTakeExam)
         {
             try
             {
-                var plan = await this.recruitManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
+                if (!id.HasValue)
+                    return HttpNotFound();
+
+                var plan = await this.recruitManager.FindByIDAsync(id.Value);
                 await this.enrollmentManager.AnnounceForExam(this.user, plan, IsTakeExam);
             }
             catch (Exception ex)
@@ -307,8 +318,13 @@ namespace TalentGoWebApp.Controllers
         {
             RecruitmentPanelStateModel viewModel = new RecruitmentPanelStateModel();
             viewModel.Plan = plan;
-            viewModel.HasEnrollment = true;
-            viewModel.Enrollment = this.enrollmentManager.Enrollments.First(e => e.UserID == this.user.Id && e.RecruitPlanID == plan.id);
+            var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.UserID == this.user.Id && e.RecruitPlanID == plan.id);
+            if (enrollment != null)
+            {
+                viewModel.HasEnrollment = true;
+                viewModel.Enrollment = enrollment;
+            }
+            
 
             return PartialView(viewModel);
         }
@@ -418,21 +434,21 @@ namespace TalentGoWebApp.Controllers
                 GraduatedYears.Add(new SelectListItem() { Value = (DateTime.Now.Year - 1).ToString(), Text = (DateTime.Now.Year - 1).ToString() });
             ViewData["GraduatedYears"] = GraduatedYears;
 
-            //民族列表
-#warning 需要再实现。
-            ViewData["Nationality"] = new List<SelectListItem>()
+            List<string> nationalityStrList = new List<string>()
             {
-                new SelectListItem()
-                {
-                    Text = "汉",
-                    Value = "汉"
-                },
-                new SelectListItem()
-                {
-                    Text = "其他",
-                    Value = "其他"
-                }
+                "汉", "蒙古", "回", "藏", "维吾尔", "苗"
+,               "彝", "壮", "布依", "朝鲜", "满", "侗"
+,               "瑶", "白", "土家", "哈尼", "哈萨克", "傣"
+,               "黎", "傈僳", "佤", "畲", "高山", "拉祜"
+,               "水", "东乡", "纳西", "景颇", "柯尔克孜", "土", "达翰尔"
+,               "仫佬", "羌", "布朗", "撒拉", "毛南", "仡佬", "锡伯"
+,               "阿昌", "普米", "塔吉克", "怒", "乌孜别克", "俄罗斯", "鄂温克"
+,               "德昂", "保安", "裕固", "京", "塔塔尔", "独龙", "鄂伦春"
+,               "赫哲", "门巴", "珞巴", "基诺", "其他"
             };
+            //民族列表
+            ViewData["Nationality"] = from nat in nationalityStrList
+                                      select new SelectListItem() { Text = nat, Value = nat };
         }
 
         #endregion

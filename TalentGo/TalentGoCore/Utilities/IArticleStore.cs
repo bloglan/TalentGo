@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace TalentGo.Utilities
@@ -6,7 +7,7 @@ namespace TalentGo.Utilities
     /// <summary>
     /// Defined interface for store Article.
     /// </summary>
-    public interface IArticleStore
+    public interface IArticleStore : IDisposable
     {
         /// <summary>
         /// Get a qeuryable collection for all articles.

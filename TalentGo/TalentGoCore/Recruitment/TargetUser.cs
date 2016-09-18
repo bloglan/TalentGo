@@ -25,7 +25,8 @@ namespace TalentGo.Recruitment
         /// <summary>
         /// 用户ID，实现IUser接口
         /// </summary>
-		public int Id { get; set; }
+        [Key]
+		public int Id { get; protected set; }
 
         /// <summary>
         /// 用户名/登录名，实现IUser接口

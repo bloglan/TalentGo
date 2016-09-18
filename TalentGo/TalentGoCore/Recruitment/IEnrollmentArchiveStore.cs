@@ -1,10 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace TalentGo.Recruitment
 {
-    public interface IEnrollmentArchiveStore : IEnrollmentStore
-	{
+    public interface IEnrollmentArchiveStore : IEnrollmentStore, IDisposable
+    {
         IQueryable<EnrollmentArchive> EnrollmentArchives { get; }
 
         Task<IQueryable<EnrollmentArchive>> GetEnrollmentArchives(Enrollment enrollment);

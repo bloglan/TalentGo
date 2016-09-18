@@ -1,8 +1,9 @@
 using System.Data.Entity;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
+using TalentGo.Utilities;
 
-namespace TalentGo.Utilities
+namespace TalentGo.EntityFramework
 {
     /// <summary>
     /// A DbContext definitions for TalentGo database.
@@ -145,13 +146,13 @@ namespace TalentGo.Utilities
 				.Property(e => e.UserName)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<TargetUser>()
-				.HasMany(e => e.EnrollmentData)
-				.WithRequired(e => e.User)
-				.HasForeignKey(e => e.UserID)
-				.WillCascadeOnDelete(false);
+            //modelBuilder.Entity<TargetUser>()
+            //    .HasMany(e => e.EnrollmentData)
+            //    .WithRequired(e => e.User)
+            //    .HasForeignKey(e => e.UserID)
+            //    .WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<TargetUser>()
+            modelBuilder.Entity<TargetUser>()
 				.HasMany(e => e.UserLogins)
 				.WithRequired(e => e.Users)
 				.HasForeignKey(e => e.UserId);
