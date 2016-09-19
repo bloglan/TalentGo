@@ -35,9 +35,9 @@ namespace TalentGo.Recruitment
             switch(User.RegisterationDelegate)
             {
                 case "Internet":
-                    return this.AvailableRecruitmentPlans.Where(plan => plan.IsPublic);
+                    return this.AllRecruitmentPlans.Where(plan => plan.IsPublic && plan.WhenPublished.HasValue);
                 case "Intranet":
-                    return this.AvailableRecruitmentPlans.Where(plan => !plan.IsPublic);
+                    return this.AllRecruitmentPlans.Where(plan => !plan.IsPublic && plan.WhenPublished.HasValue);
             }
             throw new InvalidOperationException("无法识别TargetUser的RegisterationDelegate。");
         }
