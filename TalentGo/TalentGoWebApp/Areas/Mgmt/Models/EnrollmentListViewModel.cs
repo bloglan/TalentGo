@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TalentGo.Recruitment;
-using TalentGo.ViewModels;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {
-	public class EnrollmentListViewModel
+    public class EnrollmentListViewModel
 	{
 		public EnrollmentListViewModel()
 		{
@@ -41,6 +40,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Models
 
 		public int AllCount { get; set; }
 
-		public IEnumerable<EnrollmentData> EnrollmentList { get; set; }
+		public IEnumerable<Enrollment> EnrollmentList { get; set; }
 	}
 }

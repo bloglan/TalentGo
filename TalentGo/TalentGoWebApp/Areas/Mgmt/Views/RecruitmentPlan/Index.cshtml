@@ -31,7 +31,7 @@
 					<td><abbr title="@plan.WhenCreated">@plan.WhenCreated.ToShortDateString()</abbr></td>
 					<td><abbr title="@plan.ExpirationDate">@plan.ExpirationDate.ToShortDateString()</abbr></td>
 					<td>@Html.Partial("RecruitmentPlanState", @plan)</td>
-					<td>@Html.Action("SmartStatistics", new { plan = plan })</td>
+					<td>@Html.Action("SmartStatistics", "Enrollment", new { plan = plan })</td>
 					<td>@Html.Partial("RecruitmentPlanOperation", @plan)</td>
 				</tr>
 			}

@@ -1,11 +1,11 @@
-﻿@model EnrollmentData
+﻿@model Enrollment
 
 @*显示报名有关的资料清单*@
 
 <h3>报名资料</h3>
 
 <div class="row">
-	@foreach (EnrollmentArchives arch in Model.EnrollmentArchives)
+	@foreach (EnrollmentArchive arch in Model.EnrollmentArchives)
 	{
 		<div class="col-md-3">
 			<div class="thumbnail">

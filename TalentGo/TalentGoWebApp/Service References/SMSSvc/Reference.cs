@@ -8,24 +8,413 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TalentGoWebApp.SMSSvc {
+namespace TalentGoWebApp.SMSSvc
+{
+
+
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SendMessageOption", Namespace="http://www.ynssxsoft.com")]
+    [System.SerializableAttribute()]
+    public partial class SendMessageOption : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool EnableSessionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int RelatedSessionIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool SendImmediatelyField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> SendTimeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> SessionExpiredField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool EnableSession {
+            get {
+                return this.EnableSessionField;
+            }
+            set {
+                if ((this.EnableSessionField.Equals(value) != true)) {
+                    this.EnableSessionField = value;
+                    this.RaisePropertyChanged("EnableSession");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int RelatedSessionID {
+            get {
+                return this.RelatedSessionIDField;
+            }
+            set {
+                if ((this.RelatedSessionIDField.Equals(value) != true)) {
+                    this.RelatedSessionIDField = value;
+                    this.RaisePropertyChanged("RelatedSessionID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool SendImmediately {
+            get {
+                return this.SendImmediatelyField;
+            }
+            set {
+                if ((this.SendImmediatelyField.Equals(value) != true)) {
+                    this.SendImmediatelyField = value;
+                    this.RaisePropertyChanged("SendImmediately");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> SendTime {
+            get {
+                return this.SendTimeField;
+            }
+            set {
+                if ((this.SendTimeField.Equals(value) != true)) {
+                    this.SendTimeField = value;
+                    this.RaisePropertyChanged("SendTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> SessionExpired {
+            get {
+                return this.SessionExpiredField;
+            }
+            set {
+                if ((this.SessionExpiredField.Equals(value) != true)) {
+                    this.SessionExpiredField = value;
+                    this.RaisePropertyChanged("SessionExpired");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SendMessageResult", Namespace="http://www.ynssxsoft.com")]
+    [System.SerializableAttribute()]
+    public partial class SendMessageResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MessageIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private TalentGoWebApp.SMSSvc.SendMessageOption OptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ResultCodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SessionIDField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MessageID {
+            get {
+                return this.MessageIDField;
+            }
+            set {
+                if ((this.MessageIDField.Equals(value) != true)) {
+                    this.MessageIDField = value;
+                    this.RaisePropertyChanged("MessageID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public TalentGoWebApp.SMSSvc.SendMessageOption Option {
+            get {
+                return this.OptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OptionField, value) != true)) {
+                    this.OptionField = value;
+                    this.RaisePropertyChanged("Option");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ResultCode {
+            get {
+                return this.ResultCodeField;
+            }
+            set {
+                if ((this.ResultCodeField.Equals(value) != true)) {
+                    this.ResultCodeField = value;
+                    this.RaisePropertyChanged("ResultCode");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SessionID {
+            get {
+                return this.SessionIDField;
+            }
+            set {
+                if ((this.SessionIDField.Equals(value) != true)) {
+                    this.SessionIDField = value;
+                    this.RaisePropertyChanged("SessionID");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ReceivedMessage", Namespace="http://www.ynssxsoft.com")]
+    [System.SerializableAttribute()]
+    public partial class ReceivedMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CodeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private TalentGoWebApp.SMSSvc.SMSMessage[] MessagesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> SessionExpiredField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Code {
+            get {
+                return this.CodeField;
+            }
+            set {
+                if ((this.CodeField.Equals(value) != true)) {
+                    this.CodeField = value;
+                    this.RaisePropertyChanged("Code");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public TalentGoWebApp.SMSSvc.SMSMessage[] Messages {
+            get {
+                return this.MessagesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessagesField, value) != true)) {
+                    this.MessagesField = value;
+                    this.RaisePropertyChanged("Messages");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> SessionExpired {
+            get {
+                return this.SessionExpiredField;
+            }
+            set {
+                if ((this.SessionExpiredField.Equals(value) != true)) {
+                    this.SessionExpiredField = value;
+                    this.RaisePropertyChanged("SessionExpired");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SMSMessage", Namespace="http://www.ynssxsoft.com")]
+    [System.SerializableAttribute()]
+    public partial class SMSMessage : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FromField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ContentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ReveicedTimeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string From {
+            get {
+                return this.FromField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FromField, value) != true)) {
+                    this.FromField = value;
+                    this.RaisePropertyChanged("From");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=1)]
+        public string Content {
+            get {
+                return this.ContentField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ContentField, value) != true)) {
+                    this.ContentField = value;
+                    this.RaisePropertyChanged("Content");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+        public System.DateTime ReveicedTime {
+            get {
+                return this.ReveicedTimeField;
+            }
+            set {
+                if ((this.ReveicedTimeField.Equals(value) != true)) {
+                    this.ReveicedTimeField = value;
+                    this.RaisePropertyChanged("ReveicedTime");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://www.ynssxsoft.com", ConfigurationName="SMSSvc.ISMSService")]
     public interface ISMSService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://www.ynssxsoft.com/ISMSService/SendMessage", ReplyAction="http://www.ynssxsoft.com/ISMSService/SendMessageResponse")]
-        TalentGo.SMSSvc.SendMessageResult SendMessage(string[] ToList, string Message, TalentGo.SMSSvc.SendMessageOption option);
+        TalentGoWebApp.SMSSvc.SendMessageResult SendMessage(string[] ToList, string Message, TalentGoWebApp.SMSSvc.SendMessageOption option);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://www.ynssxsoft.com/ISMSService/SendMessage", ReplyAction="http://www.ynssxsoft.com/ISMSService/SendMessageResponse")]
-        System.Threading.Tasks.Task<TalentGo.SMSSvc.SendMessageResult> SendMessageAsync(string[] ToList, string Message, TalentGo.SMSSvc.SendMessageOption option);
+        System.Threading.Tasks.Task<TalentGoWebApp.SMSSvc.SendMessageResult> SendMessageAsync(string[] ToList, string Message, TalentGoWebApp.SMSSvc.SendMessageOption option);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://www.ynssxsoft.com/ISMSService/GetReceivedMessage", ReplyAction="http://www.ynssxsoft.com/ISMSService/GetReceivedMessageResponse")]
-        TalentGo.SMSSvc.ReceivedMessage GetReceivedMessage(int SessionID);
+        TalentGoWebApp.SMSSvc.ReceivedMessage GetReceivedMessage(int SessionID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://www.ynssxsoft.com/ISMSService/GetReceivedMessage", ReplyAction="http://www.ynssxsoft.com/ISMSService/GetReceivedMessageResponse")]
-        System.Threading.Tasks.Task<TalentGo.SMSSvc.ReceivedMessage> GetReceivedMessageAsync(int SessionID);
+        System.Threading.Tasks.Task<TalentGoWebApp.SMSSvc.ReceivedMessage> GetReceivedMessageAsync(int SessionID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -55,19 +444,19 @@ namespace TalentGoWebApp.SMSSvc {
                 base(binding, remoteAddress) {
         }
         
-        public TalentGo.SMSSvc.SendMessageResult SendMessage(string[] ToList, string Message, TalentGo.SMSSvc.SendMessageOption option) {
+        public TalentGoWebApp.SMSSvc.SendMessageResult SendMessage(string[] ToList, string Message, TalentGoWebApp.SMSSvc.SendMessageOption option) {
             return base.Channel.SendMessage(ToList, Message, option);
         }
         
-        public System.Threading.Tasks.Task<TalentGo.SMSSvc.SendMessageResult> SendMessageAsync(string[] ToList, string Message, TalentGo.SMSSvc.SendMessageOption option) {
+        public System.Threading.Tasks.Task<TalentGoWebApp.SMSSvc.SendMessageResult> SendMessageAsync(string[] ToList, string Message, TalentGoWebApp.SMSSvc.SendMessageOption option) {
             return base.Channel.SendMessageAsync(ToList, Message, option);
         }
         
-        public TalentGo.SMSSvc.ReceivedMessage GetReceivedMessage(int SessionID) {
+        public TalentGoWebApp.SMSSvc.ReceivedMessage GetReceivedMessage(int SessionID) {
             return base.Channel.GetReceivedMessage(SessionID);
         }
         
-        public System.Threading.Tasks.Task<TalentGo.SMSSvc.ReceivedMessage> GetReceivedMessageAsync(int SessionID) {
+        public System.Threading.Tasks.Task<TalentGoWebApp.SMSSvc.ReceivedMessage> GetReceivedMessageAsync(int SessionID) {
             return base.Channel.GetReceivedMessageAsync(SessionID);
         }
     }

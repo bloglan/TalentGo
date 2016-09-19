@@ -4,7 +4,7 @@ using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {
-	public class CommitAuditViewModel
+    public class CommitAuditViewModel
 	{
 		public RecruitmentPlan Plan { get; set; }
 

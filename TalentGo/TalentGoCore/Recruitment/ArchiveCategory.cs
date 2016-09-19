@@ -4,7 +4,6 @@ namespace TalentGo.Recruitment
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Data.Entity.Spatial;
 
     [Table("ArchiveCategory")]
     public partial class ArchiveCategory
@@ -12,8 +11,8 @@ namespace TalentGo.Recruitment
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ArchiveCategory()
         {
-            ArchiveRequirements = new HashSet<ArchiveRequirements>();
-            EnrollmentArchives = new HashSet<EnrollmentArchives>();
+            ArchiveRequirements = new HashSet<ArchiveRequirement>();
+            EnrollmentArchives = new HashSet<EnrollmentArchive>();
         }
 
         public int id { get; set; }
@@ -58,9 +57,9 @@ namespace TalentGo.Recruitment
         public int? MaxFileSize { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ArchiveRequirements> ArchiveRequirements { get; set; }
+        public virtual ICollection<ArchiveRequirement> ArchiveRequirements { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EnrollmentArchives> EnrollmentArchives { get; set; }
+        public virtual ICollection<EnrollmentArchive> EnrollmentArchives { get; set; }
     }
 }

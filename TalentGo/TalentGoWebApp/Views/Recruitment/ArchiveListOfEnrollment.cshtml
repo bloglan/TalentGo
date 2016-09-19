@@ -1,7 +1,6 @@
-﻿@using TalentGo.Recruitment
-@model IEnumerable<EnrollmentArchives>
+﻿@model IEnumerable<EnrollmentArchive>
 
-@foreach (EnrollmentArchives archive in Model)
+@foreach (EnrollmentArchive archive in Model)
 {
 	<div class="col-md-3 img-thumbnail">
 		<img src="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = archive.id })" class="img-responsive" />
@@ -12,7 +11,7 @@
 	</div>
 }
 @{ 
-	var requirement = Html.ViewContext.RouteData.Values["requirement"] as ArchiveRequirements;
+	var requirement = Html.ViewContext.RouteData.Values["requirement"] as ArchiveRequirement;
 	RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements);
 }
 @*如果没有项，或（有项但More不为false），则显示添加新资料按钮*@

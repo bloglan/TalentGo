@@ -2,7 +2,7 @@
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {
-	public class ArchiveRequirementsViewModel
+    public class ArchiveRequirementsViewModel
 	{
 		public ArchiveCategory ArchiveCategory { get; set; }
 

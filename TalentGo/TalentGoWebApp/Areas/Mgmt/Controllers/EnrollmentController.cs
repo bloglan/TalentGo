@@ -1,27 +1,28 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using System.Web.Routing;
-using TalentGo.EntityFramework;
+using TalentGo.Identity;
 using TalentGo.Recruitment;
-using TalentGo.ViewModels;
 using TalentGoWebApp.Areas.Mgmt.Models;
+using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
-	[Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
+    [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class EnrollmentController : Controller
 	{
 		EnrollmentManager enrollmentManager;
-		TalentGoDbContext database;
-
-		protected override void Initialize(RequestContext requestContext)
-		{
-			base.Initialize(requestContext);
-			this.enrollmentManager = new EnrollmentManager(requestContext.HttpContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-		}
+        RecruitmentPlanManager recruitmentPlanManager;
+        TargetUserManager targetUserManager;
+        public EnrollmentController(EnrollmentManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager, TargetUserManager targetUserManager)
+        {
+            this.enrollmentManager = enrollmentManager;
+            this.recruitmentPlanManager = recruitmentPlanManager;
+            this.targetUserManager = targetUserManager;
+        }
 
 		/// <summary>
 		/// 获取审核列表
@@ -29,9 +30,9 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		/// <param name="id"></param>
 		/// <param name="model"></param>
 		/// <returns></returns>
-		public ActionResult EnrollmentList(int id, EnrollmentListViewModel model)
+		public async Task<ActionResult> EnrollmentList(int id, EnrollmentListViewModel model)
 		{
-			var recruitmentPlan = this.database.RecruitmentPlan.SingleOrDefault(e => e.id == id);
+            var recruitmentPlan = await this.recruitmentPlanManager.FindByIDAsync(id);
 			if (recruitmentPlan == null)
 				return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到报名计划。", this.Url.Action("Index", "RecruitmentPlan"), 3));
 
@@ -47,19 +48,39 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			model.IsAudit = recruitmentPlan.WhenAuditCommited.HasValue;
 
 			//准备ViewData
-			ViewData["MajorCategoryList"] = from mc in this.database.MajorCategory
-											orderby mc.PRI
-											select new SelectListItem() { Text = mc.nid, Value = mc.nid };
+			ViewData["MajorCategoryList"] = new List<SelectListItem>()
+            {
+                new SelectListItem()
+                {
+                    Text = "财务会计",
+                    Value = "财务会计"
+                },
+                new SelectListItem()
+                {
+                    Text = "计算机",
+                    Value = "计算机"
+                },
+                new SelectListItem()
+                {
+                    Text = "农学",
+                    Value = "农学"
+                },
+                new SelectListItem()
+                {
+                    Text = "综合",
+                    Value = "综合"
+                }
+            };
 
-			int allCount;
+            int allCount;
 			model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.MajorCategory, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
 			model.AllCount = allCount;
 			return View(model);
 		}
 
-		public ActionResult ExportAuditList(int id, EnrollmentListViewModel model)
+		public async Task<ActionResult> ExportAuditList(int id, EnrollmentListViewModel model)
 		{
-			var recruitmentPlan = this.database.RecruitmentPlan.SingleOrDefault(e => e.id == id);
+            var recruitmentPlan = await this.recruitmentPlanManager.FindByIDAsync(id);
 			if (recruitmentPlan == null)
 				return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到报名计划。", this.Url.Action("Index", "RecruitmentPlan"), 3));
 
@@ -82,7 +103,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			//书写标题
 			sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t类别\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
 
-			foreach(EnrollmentData data in model.EnrollmentList)
+			foreach(Enrollment data in model.EnrollmentList)
 			{
 				sw.Write(recruitmentPlan.Title + "\t");
 				sw.Write(data.Name + "\t");
@@ -159,10 +180,25 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			//return File(new byte[0], "text/csv");
 		}
 
-		public ActionResult SetAuditFlag(int planid, int userid, bool? Audit)
+		public async Task<ActionResult> SetAuditFlag(int planid, int userid, bool? Audit)
 		{
 			SetAuditResult result = new SetAuditResult(planid, userid);
-			var enrollment = this.database.EnrollmentData.SingleOrDefault(e => e.RecruitPlanID == planid && e.UserID == userid && e.WhenCommited.HasValue);
+            var user = await this.targetUserManager.FindByIdAsync(userid);
+            if (user == null)
+            {
+                result.Code = 404;
+                result.Message = "找不到用户";
+                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
+            }
+            var plan = (await this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
+            if (plan == null)
+            {
+                result.Code = 404;
+                result.Message = "找不到招聘计划";
+                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
+            }
+
+            var enrollment = (await this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.UserID == user.Id);
 			if (enrollment == null)
 			{
 				result.Code = 404;
@@ -170,21 +206,50 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
 			}
 
-			enrollment.Approved = Audit;
+            if (Audit.HasValue)
+            {
+                if (Audit.Value)
+                {
+                    enrollment.Accept();
+                }
+                else
+                {
+                    enrollment.Refuse();
+                }
+            }
+            else
+            {
+                enrollment.UnsetAudit();
+            }
 
-			this.database.SaveChanges();
+            await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
 
 			//更新统计
-			this.UpdateStatistics(result);
+			await this.UpdateStatistics(result);
 
 			return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
 
 		}
 
-		public ActionResult SetAuditMessage(int planid, int userid, string message)
+		public async Task<ActionResult> SetAuditMessage(int planid, int userid, string message)
 		{
 			SetAuditResult result = new SetAuditResult(planid, userid);
-			var enrollment = this.database.EnrollmentData.SingleOrDefault(e => e.RecruitPlanID == planid && e.UserID == userid && e.WhenCommited.HasValue);
+            var user = await this.targetUserManager.FindByIdAsync(userid);
+            if (user == null)
+            {
+                result.Code = 404;
+                result.Message = "找不到用户";
+                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
+            }
+            var plan = (await this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
+            if (plan == null)
+            {
+                result.Code = 404;
+                result.Message = "找不到招聘计划";
+                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
+            }
+
+            var enrollment = this.enrollmentManager.CommitedEnrollments.FirstOrDefault(e => e.UserID == user.Id && e.RecruitPlanID == plan.id);
 			if (enrollment == null)
 			{
 				result.Code = 404;
@@ -192,27 +257,24 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
 			}
 
-			if (string.IsNullOrEmpty(message))
-				enrollment.AuditMessage = null;
-			else
-				enrollment.AuditMessage = message;
-
-
-			this.database.SaveChanges();
+            enrollment.SetAuditMessage(message);
+			await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
 
 			return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
 		}
 
-		void UpdateStatistics(SetAuditResult result)
+		async Task UpdateStatistics(SetAuditResult result)
 		{
-			result.Statistics = this.GetStatistics(result.PlanID);
+			result.Statistics = await this.GetStatistics(result.PlanID);
 		}
 
-		EnrollmentStatisticsViewModel GetStatistics(int PlanID)
+		async Task<EnrollmentStatisticsViewModel> GetStatistics(int PlanID)
 		{
-			var enrollmentSet = from enroll in this.database.EnrollmentData
+            var plan = await this.recruitmentPlanManager.FindByIDAsync(PlanID);
+			var enrollmentSet = from enroll in this.enrollmentManager.Enrollments
 								where enroll.RecruitPlanID == PlanID && enroll.WhenCommited.HasValue
 								select enroll;
+
 			EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()
 			{
 				CommitedEnrollmentCount = enrollmentSet.Count(),
@@ -231,7 +293,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		{
 			//id --> PlanID
 
-			var enrollmentData = this.database.EnrollmentData.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
+			var enrollmentData = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
 			if (enrollmentData == null)
 				return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到指定的报名表", this.Url.Action("AuditList", new { id = model.ID }), 3));
 
@@ -246,20 +308,23 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Detail(EnrollmentDetailViewModel model)
+		public async Task<ActionResult> Detail(EnrollmentDetailViewModel model)
 		{
-			var enrollmentData = this.database.EnrollmentData.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
+            var user = await this.targetUserManager.FindByIdAsync(model.UserID);
+            var plan = (await this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).Single(p => p.id == model.ID);
 
-			if (model.Approved)
-				enrollmentData.Approved = true;
-			else if (model.Rejective)
-				enrollmentData.Approved = false;
-			else
-				enrollmentData.Approved = null;
+			var enrollmentData = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
 
-			enrollmentData.AuditMessage = model.AuditMessage;
+            if (model.Approved)
+                enrollmentData.Accept();
+            else if (model.Rejective)
+                enrollmentData.Refuse();
+            else
+                enrollmentData.UnsetAudit();
 
-			this.database.SaveChanges();
+            enrollmentData.SetAuditMessage(model.AuditMessage);
+
+            await this.enrollmentManager.UpdateEnrollment(user, plan, enrollmentData);
 
 			var redirectUrl = this.Url.Action("EnrollmentList", new { id = model.ID });
 
@@ -269,10 +334,23 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 
 		[ChildActionOnly]
-		public ActionResult Statistics(int PlanID)
+		public async Task<ActionResult> Statistics(int PlanID)
 		{
-			return PartialView(this.GetStatistics(PlanID));
+			return PartialView(await this.GetStatistics(PlanID));
 		}
 
-	}
+        [ChildActionOnly]
+        public async Task<ActionResult> SmartStatistics(RecruitmentPlan plan)
+        {
+            var enrollmentSet = await this.enrollmentManager.GetEnrollmentsOfPlan(plan);
+            EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()
+            {
+                CommitedEnrollmentCount = enrollmentSet.Count(e => e.WhenCommited.HasValue),
+                ApprovedEnrollmentCount = enrollmentSet.Count(e => e.Approved.HasValue && e.Approved.Value),
+                AnnouncedTakeExamCount = enrollmentSet.Count(e => e.IsTakeExam.HasValue && e.IsTakeExam.Value)
+            };
+            return PartialView(model);
+        }
+
+    }
 }

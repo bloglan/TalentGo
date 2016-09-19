@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace TalentGo.Recruitment
 {
-	/// <summary>
-	/// 材料的需求要求。
-	/// </summary>
-	public enum RequirementType
+    /// <summary>
+    /// 材料的需求要求。
+    /// </summary>
+    public enum RequirementType
 	{
 		/// <summary>
 		/// 零个或一个

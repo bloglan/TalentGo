@@ -8,11 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TalentGo.SMSSvc {
-    using System.Runtime.Serialization;
-    using System;
-    
-    
+namespace TalentGo.SMSSvc
+{
+
+
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="SendMessageOption", Namespace="http://www.ynssxsoft.com")]

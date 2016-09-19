@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TalentGoWebApp.Models;
 using TalentGo.Identity;
+using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Controllers
 {

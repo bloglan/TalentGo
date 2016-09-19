@@ -8,38 +8,35 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TalentGoWebApp.Models;
 using TalentGo.Identity;
-using System.Web.Routing;
-using TalentGo.Utilities;
+using TalentGo.EntityFramework;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Net.Mail;
-using TalentGo.EntityFramework;
+using TalentGo.Web;
+using TalentGo.Recruitment;
+using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {
-	[Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
+    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
 	public class AccountController : Controller
 	{
-		private ApplicationSignInManager _signInManager;
-		private ApplicationUserManager _userManager;
-		TalentGoDbContext database;
+		ApplicationSignInManager _signInManager;
+		ApplicationUserManager _userManager;
+        MobileValidationSessionManager mvsManager;
 
 		public AccountController()
 		{
 		}
 
-		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+		public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, MobileValidationSessionManager validationManager)
 		{
 			UserManager = userManager;
 			SignInManager = signInManager;
+            this.mvsManager = validationManager;
 		}
 
-		protected override void Initialize(RequestContext requestContext)
-		{
-			base.Initialize(requestContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
-		}
 
 		public ApplicationSignInManager SignInManager
 		{
@@ -92,6 +89,10 @@ namespace TalentGoWebApp.Controllers
 			switch (result)
 			{
 				case SignInStatus.Success:
+                    var user = await this.UserManager.FindByNameAsync(model.IDCardNumber);
+                    var context = this.HttpContext.GetRecruitmentContext();
+                    context.TargetUserId = user.Id;
+
 					return RedirectToLocal(returnUrl);
 				case SignInStatus.LockedOut:
 					return View("Lockout");
@@ -169,17 +170,12 @@ namespace TalentGoWebApp.Controllers
 
 
 
-			//先测试验证码
-			//再进行其他合规测试，这样可以充分利用验证码测试的复杂性，延缓自动程序利用验证错误条件进行猜测和攻击。
+            //先测试验证码
+            //再进行其他合规测试，这样可以充分利用验证码测试的复杂性，延缓自动程序利用验证错误条件进行猜测和攻击。
 
+            var session = await this.mvsManager.FindAvailableSession(model.Mobile);
 
-			var validateSessionSet = from mobileValidate in this.database.MobilePhoneValidationSession
-									 where mobileValidate.Mobile == model.Mobile
-									 orderby mobileValidate.WhenCreated descending
-									 select mobileValidate;
-
-			var validateSession = validateSessionSet.FirstOrDefault(); //取得最近的一次数据。
-			if (validateSession == null || validateSession.ExpirationDate < DateTime.Now || validateSession.IsValid)
+			if (session == null)
 			{
 				//没有任何验证，或者验证已超过任何有效期，或者此验证码已被验证了。
 				this.ModelState.AddModelError("ValidateCode", "验证码错误或失效。");
@@ -187,7 +183,7 @@ namespace TalentGoWebApp.Controllers
 			}
 
 			//检查Code是否正确
-			if (validateSession.ValidateCode != model.ValidateCode)
+			if (session.ValidateCode != model.ValidateCode)
 			{
 				this.ModelState.AddModelError("ValidateCode", "验证码错误或失效。");
 				return View(model);
@@ -195,7 +191,7 @@ namespace TalentGoWebApp.Controllers
 
 			bool IsMobileValid = false;
 			bool IsEmailValid = false;
-			if (string.IsNullOrEmpty(validateSession.Email))
+			if (string.IsNullOrEmpty(session.Email))
 			{
 				//如果不存在邮箱，则是通过手机验证
 				IsMobileValid = true;
@@ -203,7 +199,7 @@ namespace TalentGoWebApp.Controllers
 			else
 			{
 				//存在邮箱时，若请求人工服务没有值，则通过Email验证。
-				if (!validateSession.ManualRequired.HasValue)
+				if (!session.ManualRequired.HasValue)
 				{
 					IsEmailValid = true;
 				}
@@ -212,7 +208,7 @@ namespace TalentGoWebApp.Controllers
 			
 			//IsEmailValid = !string.IsNullOrEmpty(validateSession.Email) && !validateSession.ManualRequired.HasValue; //做个标记表明尝试通过邮箱取得验证码。那么就设置为邮箱已验证。
 
-			if (IsEmailValid && validateSession.Email != model.Email)
+			if (IsEmailValid && session.Email != model.Email)
 			{
 				//如果是邮箱验证，但与传入的邮箱地址不匹配的，拒绝通过。
 				this.ModelState.AddModelError("ValidateCode", "验证码错误或失效。");
@@ -220,8 +216,10 @@ namespace TalentGoWebApp.Controllers
 			}
 
 			//至此，已完成验证，设置已验证过标记。保存数据库。
-			validateSession.IsValid = true;
-			this.database.SaveChanges();
+			session.IsValid = true;
+
+
+            await this.mvsManager.UpdateSession(session);
 
 			List<KeyValuePair<string, string>> Errors = new List<KeyValuePair<string, string>>();
 
@@ -238,17 +236,17 @@ namespace TalentGoWebApp.Controllers
 			}
 
 			TargetUser currentuser = null;
-			currentuser = this.database.Users.SingleOrDefault(e => e.UserName == model.IDCardNumber);
+			currentuser = await this.UserManager.FindByNameAsync(model.IDCardNumber);
 			if (currentuser != null)
 			{
 				Errors.Add(new KeyValuePair<string, string>("IDCardNumber", "此身份证号码已被注册。"));
 			}
-			currentuser = this.database.Users.SingleOrDefault(e => e.Email == model.Email);
+			currentuser = await this.UserManager.FindByEmailAsync(model.Email);
 			if (currentuser != null)
 			{
 				Errors.Add(new KeyValuePair<string, string>("Email", "此电子邮件地址已被注册。"));
 			}
-			currentuser = this.database.Users.SingleOrDefault(e => e.Mobile == model.Mobile);
+			currentuser = await this.UserManager.FindByMobileAsync(model.Mobile);
 			if (currentuser != null)
 			{
 				Errors.Add(new KeyValuePair<string, string>("Mobile", "此手机号码已被注册。"));
@@ -304,7 +302,7 @@ namespace TalentGoWebApp.Controllers
 				return Json(new { code = 401, msg = "无效的手机号码。" }, "text/plain", JsonRequestBehavior.AllowGet);
 			}
 
-			var current = this.database.Users.SingleOrDefault(e => e.Mobile == mobile);
+			var current = await this.UserManager.FindByMobileAsync(mobile);
 			if (current != null)
 			{
 				return Json(new { code = 450, msg = "该手机号码已被使用。" }, "text/plain", JsonRequestBehavior.AllowGet);
@@ -312,37 +310,30 @@ namespace TalentGoWebApp.Controllers
 
 			//这是发送注册用的验证码，手机号也不应当重复，所以检测数据库中是否存在此手机号
 			DateTime now = DateTime.Now;
-			var session = (from ses in this.database.MobilePhoneValidationSession
+
+			var session = (from ses in this.mvsManager.Sessions
 						   where ses.Mobile == mobile && !ses.IsValid && ses.ExpirationDate > now
 						   orderby ses.WhenCreated descending
 						   select ses).FirstOrDefault();
 			if (session == null)
 			{
-				session = this.database.MobilePhoneValidationSession.Create();
+                session = new MobilePhoneValidationSession();
 				session.UsedFor = "Register";
 				session.WhenCreated = DateTime.Now;
 				session.ExpirationDate = DateTime.Now.AddMinutes(30);
 				session.ValidateCode = ((new Random().Next(90000)) + 10000).ToString();
 				session.IsValid = false;
 				session.Mobile = mobile;
-				this.database.MobilePhoneValidationSession.Add(session);
+				await this.mvsManager.CreateSession(session);
 			}
 
-			try
-			{
-				this.database.SaveChanges();
-			}
-			catch (Exception ex)
-			{
-				return Json(new { code = 500, msg = "故障[D]，请稍后重试，或联系技术支持。" }, "text/plain", JsonRequestBehavior.AllowGet);
-			}
 
 			using (SMSSvc.SMSServiceClient client = new SMSSvc.SMSServiceClient())
 			{
-				TalentGo.SMSSvc.SendMessageResult result;
+				SMSSvc.SendMessageResult result;
 				try
 				{
-					result = client.SendMessage(new string[] { session.Mobile }, "验证码是" + session.ValidateCode + "。请在30分钟内使用，请勿将验证码告诉任何人。", new TalentGo.SMSSvc.SendMessageOption());
+					result = client.SendMessage(new string[] { session.Mobile }, "验证码是" + session.ValidateCode + "。请在30分钟内使用，请勿将验证码告诉任何人。", new SMSSvc.SendMessageOption());
 
 				}
 				catch (Exception ex)
@@ -601,7 +592,7 @@ namespace TalentGoWebApp.Controllers
 
 
 		[AllowAnonymous]
-		public ActionResult SendVCodeByEmail(string Email, string Mobile)
+		public async Task<ActionResult> SendVCodeByEmail(string Email, string Mobile)
 		{
 			//验证电话号码和邮箱的格式有效性。
 			Regex regMobile = new Regex(@"^[1]+[3,4,5,7,8]+\d{9}$");
@@ -619,7 +610,7 @@ namespace TalentGoWebApp.Controllers
 
 			DateTime now = DateTime.Now;
 			//根据Mobile查找条目，
-			var MobileValidationSession = (from session in this.database.MobilePhoneValidationSession
+			var MobileValidationSession = (from session in this.mvsManager.Sessions
 										   where session.Mobile == Mobile && session.ExpirationDate > now
 										   orderby session.WhenCreated descending
 										   select session).FirstOrDefault();
@@ -640,7 +631,7 @@ namespace TalentGoWebApp.Controllers
 				MobileValidationSession.LastTryTime = now;
 				MobileValidationSession.ExpirationDate = now.AddHours(6);
 
-				this.database.SaveChanges();
+                await this.mvsManager.UpdateSession(MobileValidationSession);
 
 				this.SendValidationCodeByEmail(Email, MobileValidationSession.ValidateCode);
 				return Json(new { code = 0, msg = "我们已向此邮箱发送了邮件，请注意查收。若您无法收到邮件，请在5分钟后再次尝试。" }, "text/plain", JsonRequestBehavior.AllowGet);
@@ -657,7 +648,7 @@ namespace TalentGoWebApp.Controllers
 					MobileValidationSession.Email = Email;
 					MobileValidationSession.LastTryTime = now;
 
-					this.database.SaveChanges();
+                    await this.mvsManager.UpdateSession(MobileValidationSession);
 
 					this.SendValidationCodeByEmail(Email, MobileValidationSession.ValidateCode);
 					return Json(new { code = 0, msg = "我们已向此邮箱发送了邮件，请注意查收。我们留意到您已经尝试过一次，并更改了电子邮件地址。若您仍无法收到邮件，请在5分钟后使用相同的电子邮件地址再次尝试，我们将会指派工作人员与您电话联系，请保持手机畅通。" }, "text/plain", JsonRequestBehavior.AllowGet);
@@ -667,7 +658,7 @@ namespace TalentGoWebApp.Controllers
 					MobileValidationSession.LastTryTime = now;
 					MobileValidationSession.ManualRequired = true;
 
-					this.database.SaveChanges();
+                    await this.mvsManager.UpdateSession(MobileValidationSession);
 
 					this.SendValidationCodeByEmail(Email, MobileValidationSession.ValidateCode);
 
@@ -714,7 +705,7 @@ namespace TalentGoWebApp.Controllers
 			{
 				string SupportMobile = "13887441196"; //李晋平 13887441196
 
-				sms.SendMessage(new string[] { SupportMobile }, "手机号为" + Mobile + "的注册用户无法收到验证码，其当前有效验证码为" + VCode + "，请在收到此短信6小时之内致电该手机号码，协助其完成注册。谢谢。", new TalentGo.SMSSvc.SendMessageOption());
+				sms.SendMessage(new string[] { SupportMobile }, "手机号为" + Mobile + "的注册用户无法收到验证码，其当前有效验证码为" + VCode + "，请在收到此短信6小时之内致电该手机号码，协助其完成注册。谢谢。", new SMSSvc.SendMessageOption());
 			}
 		}
 
@@ -727,7 +718,7 @@ namespace TalentGoWebApp.Controllers
 		[HttpPost]
 		[AllowAnonymous]
 		[ValidateAntiForgeryToken]
-		public ActionResult FindPasswordViaMobile(FindPasswordViaMobileViewModel model)
+		public async Task<ActionResult> FindPasswordViaMobile(FindPasswordViaMobileViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -736,7 +727,7 @@ namespace TalentGoWebApp.Controllers
 			//为了隐藏，构造一个假的token
 			string token = "EbzHFOl%2BLSZ%2B3NjS1tgZyL10hmrXA78SfDgKmU%2Fxl5sAXPsfyrsEflP3k%2FBFRL%2BUXNBNtI2XuEQLJi7GiFlMEuUtp%2FCuvgyysDuN6Us3EaVf1kyKNHdyJpx8VkwKc0BwuJ0b1pjfJKITt5UExXTidehh0%2BlyK2NuAFwouA0lVwQ%55";
 
-			var user = this.database.Users.SingleOrDefault(e => e.Mobile == model.Mobile);
+			var user = await this.UserManager.FindByMobileAsync(model.Mobile);
 			if (user == null)
 			{
 				//不要提示用户找不到用户对象，以免被自动程序测试。
@@ -755,31 +746,31 @@ namespace TalentGoWebApp.Controllers
 
 			//创建验证码并发送
 			DateTime now = DateTime.Now;
-			var session = (from ses in this.database.MobilePhoneValidationSession
+			var session = (from ses in this.mvsManager.Sessions
 						   where ses.Mobile == model.Mobile && !ses.IsValid && ses.ExpirationDate > now
 						   orderby ses.WhenCreated descending
 						   select ses).FirstOrDefault();
 			if (session == null)
 			{
-				session = this.database.MobilePhoneValidationSession.Create();
+                session = new MobilePhoneValidationSession();
 				session.UsedFor = "ResetPassword";
 				session.WhenCreated = DateTime.Now;
 				session.ExpirationDate = DateTime.Now.AddMinutes(30);
 				session.ValidateCode = ((new Random().Next(90000)) + 10000).ToString();
 				session.IsValid = false;
 				session.Mobile = model.Mobile;
-				this.database.MobilePhoneValidationSession.Add(session);
+
+                await this.mvsManager.CreateSession(session);
 			}
 
-			this.database.SaveChanges();
 
 
 			using (SMSSvc.SMSServiceClient client = new SMSSvc.SMSServiceClient())
 			{
-				TalentGo.SMSSvc.SendMessageResult result;
+				SMSSvc.SendMessageResult result;
 				try
 				{
-					result = client.SendMessage(new string[] { session.Mobile }, "验证码是" + session.ValidateCode + "。请在30分钟内使用，请勿将验证码告诉任何人。", new TalentGo.SMSSvc.SendMessageOption());
+					result = client.SendMessage(new string[] { session.Mobile }, "验证码是" + session.ValidateCode + "。请在30分钟内使用，请勿将验证码告诉任何人。", new SMSSvc.SendMessageOption());
 
 				}
 				catch (Exception ex)
@@ -815,14 +806,14 @@ namespace TalentGoWebApp.Controllers
 				return View(model);
 			}
 
-			var user = this.database.Users.SingleOrDefault(e => e.Mobile == model.Mobile);
+			var user = await this.UserManager.FindByMobileAsync(model.Mobile);
 			if (user == null)
 			{
 				//不要显示找不到用户。
 				return View("ResetPasswordConfirmation");
 			}
 			DateTime now = DateTime.Now;
-			var vCodeSession = (from session in this.database.MobilePhoneValidationSession
+			var vCodeSession = (from session in this.mvsManager.Sessions
 								where session.Mobile == model.Mobile
 									&& session.ValidateCode == model.ValidateCode
 									&& !session.IsValid
@@ -835,9 +826,9 @@ namespace TalentGoWebApp.Controllers
 
 			//更新数据库，将isValid设为true;
 			vCodeSession.IsValid = true;
-			this.database.SaveChanges();
-
-			//重置密码
+            await this.mvsManager.UpdateSession(vCodeSession);
+                
+            //重置密码
 			var result = await this.UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
 
 			if (result.Succeeded)

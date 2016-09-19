@@ -5,24 +5,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
+using TalentGo.Recruitment;
 using TalentGo.EntityFramework;
-using TalentGo.Identity;
-using TalentGo.Utilities;
+using TalentGo.Web;
 using TalentGoWebApp.Models;
+using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {
-	[Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
+    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
 	public class TargetUserController : Controller
 	{
-		TargetUserManager targetUserManager;
-		TalentGoDbContext database;
+		TargetUserManager manager;
+        RecruitmentContextBase recruitmentContext;
 
-		protected override void Initialize(RequestContext requestContext)
+        public TargetUserController(TargetUserManager targetUserManager)
+        {
+            this.manager = targetUserManager;
+        }
+
+        protected override void Initialize(RequestContext requestContext)
 		{
 			base.Initialize(requestContext);
-			this.targetUserManager = new TargetUserManager(requestContext.HttpContext);
-			this.database = TalentGoDbContext.FromContext(requestContext.HttpContext);
+            this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
 		}
 		// GET: TargetUser
 		public ActionResult Index()
@@ -37,7 +42,7 @@ namespace TalentGoWebApp.Controllers
 
 		public async Task<ActionResult> AssignTargetUser()
 		{
-			return View(await this.targetUserManager.GetAvaiableTargetUsers());
+			return View(await this.manager.GetAvaiableTargetUsers(this.recruitmentContext));
 		}
 
 		/// <summary>
@@ -50,13 +55,18 @@ namespace TalentGoWebApp.Controllers
 		{
 			try
 			{
-				await this.targetUserManager.SetTargetUserByID(SelectedUserID);
-				return RedirectToAction("Index", "Recruitment");
-			}
+                var selectedTargetUser = (await this.manager.GetAvaiableTargetUsers(this.recruitmentContext)).FirstOrDefault(t => t.Id == SelectedUserID);
+                if (selectedTargetUser != null)
+                {
+                    this.recruitmentContext.TargetUserId = selectedTargetUser.Id;
+                    return RedirectToAction("Index", "Recruitment");
+                }
+                return View(await this.manager.GetAvaiableTargetUsers(this.recruitmentContext));
+            }
 			catch (Exception ex)
 			{
-				return View(await this.targetUserManager.GetAvaiableTargetUsers());
-			}
+                return View(await this.manager.GetAvaiableTargetUsers(this.recruitmentContext));
+            }
 		}
 
 
@@ -82,17 +92,16 @@ namespace TalentGoWebApp.Controllers
 			}
 
 			List<KeyValuePair<string,string>> Errors = new List<KeyValuePair<string, string>>();
-			var user = this.database.Users.FirstOrDefault(e => e.UserName == cardNumber.IDCardNumber);
-			if (user != null)
+			if(this.manager.TargetUsers.Any(e => e.UserName == cardNumber.IDCardNumber))
 			{
 				Errors.Add(new KeyValuePair<string, string>("IDCardNumber", "该身份证号码已被注册。"));
 			}
 
-			if (this.database.Users.SingleOrDefault(e => e.Email == model.Email) != null)
+			if (this.manager.TargetUsers.Any(e => e.Email == model.Email))
 			{
 				Errors.Add(new KeyValuePair<string, string>("Email", "该邮件地址已被注册。"));
 			}
-			if (this.database.Users.SingleOrDefault(e => e.Mobile == model.Mobile) != null)
+			if (this.manager.TargetUsers.Any(e => e.Mobile == model.Mobile))
 			{
 				Errors.Add(new KeyValuePair<string, string>("Mobile", "该手机号码已被注册。"));
 			}
@@ -115,7 +124,7 @@ namespace TalentGoWebApp.Controllers
 			};
 			try
 			{
-				await this.targetUserManager.CreateTargetUser(newuser);
+				await this.manager.CreateTargetUser(newuser, this.recruitmentContext);
 				return RedirectToAction("AssignTargetUser");
 			}
 			catch(DbEntityValidationException validationException)
