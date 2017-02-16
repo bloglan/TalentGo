@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="f78a22de-8eb8-4a88-b557-46fad318638a" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://ws.qjyc.cn/sms/verificationcodeservice.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="VerificationCodeService.wsdl" MetadataType="Wsdl" ID="d6128475-317d-4d56-b15f-17eb39183939" SourceId="1" SourceUrl="http://ws.qjyc.cn/sms/VerificationCodeService.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="VerificationCodeService.disco" MetadataType="Disco" ID="5e5427eb-974a-451b-a4a6-6d0c37c18100" SourceId="1" SourceUrl="http://ws.qjyc.cn/sms/VerificationCodeService.svc?disco" />
+    <MetadataFile FileName="VerificationCodeService.xsd" MetadataType="Schema" ID="d455287e-c97c-4238-bc13-4f5d33a3f522" SourceId="1" SourceUrl="http://ws.qjyc.cn/sms/VerificationCodeService.svc?xsd=xsd2" />
+    <MetadataFile FileName="VerificationCodeService1.xsd" MetadataType="Schema" ID="41aac811-4577-403e-a8f5-75ef45644537" SourceId="1" SourceUrl="http://ws.qjyc.cn/sms/VerificationCodeService.svc?xsd=xsd1" />
+    <MetadataFile FileName="VerificationCodeService2.xsd" MetadataType="Schema" ID="fa0f7f42-30f7-4960-b569-927c59303679" SourceId="1" SourceUrl="http://ws.qjyc.cn/sms/VerificationCodeService.svc?xsd=xsd0" />
+    <MetadataFile FileName="VerificationCodeService1.wsdl" MetadataType="Wsdl" ID="51484dec-5378-41f4-924f-9ef790ccb85b" SourceId="1" SourceUrl="http://ws.qjyc.cn/sms/VerificationCodeService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

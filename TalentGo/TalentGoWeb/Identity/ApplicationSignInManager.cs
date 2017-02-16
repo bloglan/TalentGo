@@ -18,6 +18,9 @@ namespace TalentGo.Identity
 			return user.GenerateUserIdentityAsync((ApplicationUserManager)this.UserManager);
 		}
 
-		
-	}
+        public override Task SignInAsync(TargetUser user, bool isPersistent, bool rememberBrowser)
+        {
+            return base.SignInAsync(user, isPersistent, rememberBrowser);
+        }
+    }
 }

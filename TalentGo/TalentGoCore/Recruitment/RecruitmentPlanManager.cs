@@ -32,12 +32,13 @@ namespace TalentGo.Recruitment
 
         public async Task<IQueryable<RecruitmentPlan>> GetPlansForUser(TargetUser User)
         {
+            var year = DateTime.Now.Year;
             switch(User.RegisterationDelegate)
             {
                 case "Internet":
-                    return this.AllRecruitmentPlans.Where(plan => plan.IsPublic && plan.WhenPublished.HasValue);
+                    return this.AllRecruitmentPlans.Where(plan => plan.IsPublic && plan.WhenPublished.HasValue && plan.Year == year);
                 case "Intranet":
-                    return this.AllRecruitmentPlans.Where(plan => !plan.IsPublic && plan.WhenPublished.HasValue);
+                    return this.AllRecruitmentPlans.Where(plan => !plan.IsPublic && plan.WhenPublished.HasValue && plan.Year == year);
             }
             throw new InvalidOperationException("无法识别TargetUser的RegisterationDelegate。");
         }
@@ -48,7 +49,7 @@ namespace TalentGo.Recruitment
         /// <returns></returns>
         public async Task<IQueryable<RecruitmentPlan>> GetAvariableRecruitPlan(TargetUser user)
         {
-            
+
             /////如果已存在报名资料，则返回报名资料对应的Plan
             /////
             //TargetUser currentuser = context.TargetUser;
