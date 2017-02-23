@@ -73,7 +73,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             };
 
             int allCount;
-			model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.MajorCategory, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
+			model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.MajorCategory, model.CollegeName, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
 			model.AllCount = allCount;
 			return View(model);
 		}
@@ -93,7 +93,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			}
 
 			int allCount;
-			model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.MajorCategory, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, true, out allCount);
+			model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.MajorCategory, model.CollegeName, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, true, out allCount);
 			model.AllCount = allCount;
 
 			MemoryStream ms = new MemoryStream();

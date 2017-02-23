@@ -28,10 +28,17 @@
 		else
 		{
 			<span class="text-danger">报名已截止</span>
-		}
-	}
+        }
+    }
 }
 else
 {
-	@Html.ActionLink("报名", "Enroll", new { id = Model.Plan.id }, new { @class = "btn btn-primary" })
+    if (Model.Plan.EnrollExpirationDate.Value >= DateTime.Now)
+    {
+        @Html.ActionLink("报名", "Enroll", new { id = Model.Plan.id }, new { @class = "btn btn-primary" })
+    }
+    else
+    {
+        <span class="text-danger">报名已截止</span>
+    }
 }

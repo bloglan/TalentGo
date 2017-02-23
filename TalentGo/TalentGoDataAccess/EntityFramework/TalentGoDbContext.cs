@@ -35,6 +35,8 @@ namespace TalentGo.EntityFramework
 		public virtual DbSet<UserLogin> UserLogins { get; set; }
 		public virtual DbSet<TargetUser> Users { get; set; }
 
+
+
         /// <summary>
         /// fluent api
         /// </summary>

@@ -19,14 +19,16 @@ namespace TalentGoWebApp.Controllers
         RecruitmentPlanManager recruitManager;
         EnrollmentManager enrollmentManager;
         RecruitmentContextBase recruitmentContext;
+        ICollegeSuggestionProvider csProvider;
 
         TargetUser user = null;
 
-        public RecruitmentController(TargetUserManager targetUserManager, RecruitmentPlanManager recruitmentPlanManager, EnrollmentManager enrollmentManager)
+        public RecruitmentController(TargetUserManager targetUserManager, RecruitmentPlanManager recruitmentPlanManager, EnrollmentManager enrollmentManager, ICollegeSuggestionProvider CollegeSuggestionProvider)
         {
             this.targetUserManager = targetUserManager;
             this.recruitManager = recruitmentPlanManager;
             this.enrollmentManager = enrollmentManager;
+            this.csProvider = CollegeSuggestionProvider;
         }
 
         protected override void Initialize(RequestContext requestContext)
@@ -116,6 +118,17 @@ namespace TalentGoWebApp.Controllers
             return View(model);
         }
 
+
+        public async Task<JsonResult> PromptCollege()
+        {
+            var input = this.Request["term"];
+            if (string.IsNullOrEmpty(input))
+                return Json(null, JsonRequestBehavior.AllowGet);
+
+            var result = this.csProvider.SuggestCollegeName(input);
+            return Json(from item in result select new { label = item, value = item }, JsonRequestBehavior.AllowGet);
+        }
+
         /// <summary>
         /// 报名的Post
         /// </summary>
@@ -159,8 +172,8 @@ namespace TalentGoWebApp.Controllers
                     await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
                 }
 
-                
-                
+
+
                 return RedirectToAction("UploadArchives");
             }
 
@@ -324,7 +337,7 @@ namespace TalentGoWebApp.Controllers
                 viewModel.HasEnrollment = true;
                 viewModel.Enrollment = enrollment;
             }
-            
+
 
             return PartialView(viewModel);
         }
@@ -430,8 +443,8 @@ namespace TalentGoWebApp.Controllers
             //年份选择表
             List<SelectListItem> GraduatedYears = new List<SelectListItem>();
             GraduatedYears.Add(new SelectListItem() { Value = DateTime.Now.Year.ToString(), Text = DateTime.Now.Year.ToString() });
-            if (!plan.IsPublic)
-                GraduatedYears.Add(new SelectListItem() { Value = (DateTime.Now.Year - 1).ToString(), Text = (DateTime.Now.Year - 1).ToString() });
+            //if (!plan.IsPublic)
+            GraduatedYears.Add(new SelectListItem() { Value = (DateTime.Now.Year - 1).ToString(), Text = (DateTime.Now.Year - 1).ToString() });
             ViewData["GraduatedYears"] = GraduatedYears;
 
             List<string> nationalityStrList = new List<string>()

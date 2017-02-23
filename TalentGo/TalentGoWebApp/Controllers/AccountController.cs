@@ -762,45 +762,50 @@ namespace TalentGoWebApp.Controllers
             }
 
             //创建验证码并发送
-            DateTime now = DateTime.Now;
-            var session = (from ses in this.mvsManager.Sessions
-                           where ses.Mobile == model.Mobile && !ses.IsValid && ses.ExpirationDate > now
-                           orderby ses.WhenCreated descending
-                           select ses).FirstOrDefault();
-            if (session == null)
+            using (var vcodeClient = new VerificationCodeClient())
             {
-                session = new MobilePhoneValidationSession();
-                session.UsedFor = "ResetPassword";
-                session.WhenCreated = DateTime.Now;
-                session.ExpirationDate = DateTime.Now.AddMinutes(30);
-                session.ValidateCode = ((new Random().Next(90000)) + 10000).ToString();
-                session.IsValid = false;
-                session.Mobile = model.Mobile;
-
-                await this.mvsManager.CreateSession(session);
+                vcodeClient.Send(model.Mobile);
             }
 
+            //DateTime now = DateTime.Now;
+            //var session = (from ses in this.mvsManager.Sessions
+            //               where ses.Mobile == model.Mobile && !ses.IsValid && ses.ExpirationDate > now
+            //               orderby ses.WhenCreated descending
+            //               select ses).FirstOrDefault();
+            //if (session == null)
+            //{
+            //    session = new MobilePhoneValidationSession();
+            //    session.UsedFor = "ResetPassword";
+            //    session.WhenCreated = DateTime.Now;
+            //    session.ExpirationDate = DateTime.Now.AddMinutes(30);
+            //    session.ValidateCode = ((new Random().Next(90000)) + 10000).ToString();
+            //    session.IsValid = false;
+            //    session.Mobile = model.Mobile;
+
+            //    await this.mvsManager.CreateSession(session);
+            //}
 
 
-            using (SMSSvc.SMSServiceClient client = new SMSSvc.SMSServiceClient())
-            {
-                SMSSvc.SendMessageResult result;
-                try
-                {
-                    result = client.SendMessage(new string[] { session.Mobile }, "验证码是" + session.ValidateCode + "。请在30分钟内使用，请勿将验证码告诉任何人。", new SMSSvc.SendMessageOption());
 
-                }
-                catch (Exception ex)
-                {
-                    //不要提示异常。
-                    return RedirectToAction("ResetPasswordViaMobile", "Account", new { code = token });
-                }
-                if (result.ResultCode != 0)
-                {
-                    //记录此故障
-                    Trace.TraceInformation("发送验证码故障：" + result.ResultCode.ToString());
-                }
-            }
+            //using (SMSSvc.SMSServiceClient client = new SMSSvc.SMSServiceClient())
+            //{
+            //    SMSSvc.SendMessageResult result;
+            //    try
+            //    {
+            //        result = client.SendMessage(new string[] { session.Mobile }, "验证码是" + session.ValidateCode + "。请在30分钟内使用，请勿将验证码告诉任何人。", new SMSSvc.SendMessageOption());
+
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        //不要提示异常。
+            //        return RedirectToAction("ResetPasswordViaMobile", "Account", new { code = token });
+            //    }
+            //    if (result.ResultCode != 0)
+            //    {
+            //        //记录此故障
+            //        Trace.TraceInformation("发送验证码故障：" + result.ResultCode.ToString());
+            //    }
+            //}
 
             return RedirectToAction("ResetPasswordViaMobile", "Account", new { code = token });
 
@@ -829,21 +834,27 @@ namespace TalentGoWebApp.Controllers
                 //不要显示找不到用户。
                 return View("ResetPasswordConfirmation");
             }
-            DateTime now = DateTime.Now;
-            var vCodeSession = (from session in this.mvsManager.Sessions
-                                where session.Mobile == model.Mobile
-                                    && session.ValidateCode == model.ValidateCode
-                                    && !session.IsValid
-                                    && session.ExpirationDate > now
-                                orderby session.WhenCreated descending
-                                select session).FirstOrDefault();
 
-            if (vCodeSession == null)
-                return View("ResetPasswordConfirmation");
+            using (var vcclient = new VerificationCodeClient())
+            {
+                if (!vcclient.Verify(model.Mobile, model.ValidateCode))
+                    return View("ResetPasswordConfirmation");
+            }
+            //DateTime now = DateTime.Now;
+            //var vCodeSession = (from session in this.mvsManager.Sessions
+            //                    where session.Mobile == model.Mobile
+            //                        && session.ValidateCode == model.ValidateCode
+            //                        && !session.IsValid
+            //                        && session.ExpirationDate > now
+            //                    orderby session.WhenCreated descending
+            //                    select session).FirstOrDefault();
 
-            //更新数据库，将isValid设为true;
-            vCodeSession.IsValid = true;
-            await this.mvsManager.UpdateSession(vCodeSession);
+            //if (vCodeSession == null)
+            //    return View("ResetPasswordConfirmation");
+
+            ////更新数据库，将isValid设为true;
+            //vCodeSession.IsValid = true;
+            //await this.mvsManager.UpdateSession(vCodeSession);
 
             //重置密码
             var result = await this.UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);

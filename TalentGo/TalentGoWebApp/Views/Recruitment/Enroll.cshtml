@@ -274,10 +274,28 @@
 {
 
 
-	@*@Styles.Render("~/Content/jqueryuicss")*@
+	@Styles.Render("~/Content/jqueryuicss")
 }
 
 @section Scripts {
 	@Scripts.Render("~/bundles/jqueryval")
 	@*@Scripts.Render("~/bundles/jqueryui")*@
+}
+@using (Html.BeginScriptContext())
+{
+    Html.AddScriptFile("~/bundles/jqueryui");
+    Html.AddScriptBlock(
+        @<script>
+
+            $(function () {
+
+                $("#@Html.NameFor(m => m.School)").autocomplete({
+                    source: "@Url.Action("PromptCollege")",
+                    minLength: 2
+                });
+
+            });
+
+    </script>
+        );
 }

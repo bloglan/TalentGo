@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="EntityFramework\ArchiveCategoryStore.cs" />
     <Compile Include="EntityFramework\ArticleStore.cs" />
+    <Compile Include="EntityFramework\CollegeSuggestionProvider.cs" />
     <Compile Include="EntityFramework\EnrollmentStore.cs" />
     <Compile Include="EntityFramework\RecruitmentStore.cs" />
     <Compile Include="EntityFramework\TalentGoDbContext.cs" />

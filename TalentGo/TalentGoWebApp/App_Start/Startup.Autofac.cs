@@ -26,7 +26,7 @@ namespace TalentGoWebApp
             builder.RegisterAssemblyModules(assemblies.ToArray());
 
 #warning 作为测试
-            builder.RegisterAssemblyTypes(typeof(TalentGoDbContext).Assembly).Where(t => t.Name.EndsWith("Store")).AsImplementedInterfaces().InstancePerRequest();
+            builder.RegisterAssemblyTypes(typeof(TalentGoDbContext).Assembly).Where(t => t.Name.EndsWith("Store") || t.Name.EndsWith("Provider")).AsImplementedInterfaces().InstancePerRequest();
             builder.RegisterType<TalentGoDbContext>().InstancePerRequest();
             builder.RegisterAssemblyTypes(typeof(RecruitmentPlan).Assembly).Where(t => t.Name.EndsWith("Manager")).InstancePerRequest();
             //builder.RegisterAssemblyTypes(typeof(HttpRecruitmentContext).Assembly).Where(t => t.Name == "HttpRecruitmentContext").As<RecruitmentContextBase>();

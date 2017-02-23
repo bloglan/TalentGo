@@ -73,6 +73,7 @@
     <Compile Include="Recruitment\ExaminationRoom.cs" />
     <Compile Include="Recruitment\ExaminationRoomManager.cs" />
     <Compile Include="Recruitment\ExaminationSubject.cs" />
+    <Compile Include="Recruitment\ICollegeSuggestionProvider.cs" />
     <Compile Include="Recruitment\IExaminationPlanStore.cs" />
     <Compile Include="Recruitment\IExaminationRoomStore.cs" />
     <Compile Include="Recruitment\TargetUser.cs" />

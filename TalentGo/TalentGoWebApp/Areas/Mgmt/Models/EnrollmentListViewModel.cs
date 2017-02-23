@@ -19,6 +19,9 @@ namespace TalentGoWebApp.Areas.Mgmt.Models
 
 		public bool IsAudit { get; set; }
 
+        [Display(Name = "学校名称")]
+        public string CollegeName { get; set; }
+
 		public string MajorCategory { get; set; }
 
 		public AuditFilterType AuditFilter { get; set; }
@@ -26,7 +29,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Models
 		public AnnounceFilterType AnnounceFilter { get; set; }
 
 		public bool? AnnouncedForExam { get; set; }
-		
+
 		[Display(Name = "搜索")]
 		public string Keywords { get; set; }
 

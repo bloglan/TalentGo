@@ -399,11 +399,12 @@ namespace TalentGo.Recruitment
         /// </summary>
         /// <param name="PlanID">指定的招聘计划。</param>
         /// <param name="MajorCategory">指定的专业大类，若未指定，则获取全部。</param>
+        /// <param name="CollegeName"></param>
         /// <param name="AuditFilter">审核标记，null表示未审核，通过标记为true，false标记为未通过</param>
         /// <param name="AnounceFilter"></param>
         /// <param name="Keywords">关键字，若提供，可对姓名、身份证号码、移动电话号码、籍贯、生源地、学校、填写专业字段进行匹配搜索。否则查询全部。</param>
         /// <returns></returns>
-        public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnounceFilter, string Keywords)
+        public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, string CollegeName, AuditFilterType AuditFilter, AnnounceFilterType AnounceFilter, string Keywords)
         {
             //带分页
             //
@@ -424,6 +425,9 @@ namespace TalentGo.Recruitment
                     e.School.StartsWith(Keywords) ||
                     e.Major.StartsWith(Keywords)
                 );
+
+            if (!string.IsNullOrEmpty(CollegeName))
+                initSet = initSet.Where(e => e.School.Contains(CollegeName));
 
             switch (AuditFilter)
             {
@@ -466,6 +470,7 @@ namespace TalentGo.Recruitment
         /// </summary>
         /// <param name="PlanID"></param>
         /// <param name="MajorCategory"></param>
+        /// <param name="CollegeName"></param>
         /// <param name="AuditFilter"></param>
         /// <param name="AnnounceFilter"></param>
         /// <param name="Keywords"></param>
@@ -473,9 +478,9 @@ namespace TalentGo.Recruitment
         /// <param name="DownDirection"></param>
         /// <param name="ItemCount"></param>
         /// <returns></returns>
-		public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, out int ItemCount)
+		public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, string CollegeName, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, out int ItemCount)
         {
-            var resultSet = this.GetCommitedEnrollmentData(PlanID, MajorCategory, AuditFilter, AnnounceFilter, Keywords);
+            var resultSet = this.GetCommitedEnrollmentData(PlanID, MajorCategory, CollegeName, AuditFilter, AnnounceFilter, Keywords);
 
             ItemCount = resultSet.Count();
             if (ItemCount == 0)
@@ -499,6 +504,7 @@ namespace TalentGo.Recruitment
         /// </summary>
         /// <param name="PlanID"></param>
         /// <param name="MajorCategory"></param>
+        /// <param name="CollegeName"></param>
         /// <param name="AuditFilter"></param>
         /// <param name="AnnounceFilter"></param>
         /// <param name="Keywords"></param>
@@ -508,9 +514,9 @@ namespace TalentGo.Recruitment
         /// <param name="PageSize"></param>
         /// <param name="ItemCount"></param>
         /// <returns></returns>
-        public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
+        public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, string CollegeName, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
         {
-            var result = this.GetCommitedEnrollmentData(PlanID, MajorCategory, AuditFilter, AnnounceFilter, Keywords, OrderColumn, DownDirection, out ItemCount);
+            var result = this.GetCommitedEnrollmentData(PlanID, MajorCategory, CollegeName, AuditFilter, AnnounceFilter, Keywords, OrderColumn, DownDirection, out ItemCount);
             if (ItemCount == 0)
             {
                 return result;
