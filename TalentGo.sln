@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoWebApp", "TalentGoWebApp\TalentGoWebApp.csproj", "{8F251122-6433-4670-B49F-6B71ECF0125B}"
 EndProject
@@ -17,9 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoWeb", "TalentGoWeb\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoDataAccessTests", "TalentGoDataAccessTests\TalentGoDataAccessTests.csproj", "{FE6098BC-56D5-49DE-BF5E-E59A30EB7FC2}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{B8A7101B-552F-4AEE-8367-D8CD6E8BC988}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoCoreTests", "TalentGoCoreTests\TalentGoCoreTests.csproj", "{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A0B9839-A619-4C80-B23A-B4258B8B172E}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,8 +66,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{FE6098BC-56D5-49DE-BF5E-E59A30EB7FC2} = {B8A7101B-552F-4AEE-8367-D8CD6E8BC988}
-		{BA1FDA5A-CBCD-4766-9D44-B1BC16FA0EAF} = {B8A7101B-552F-4AEE-8367-D8CD6E8BC988}
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F134B673-5B42-45AD-9AB8-1E4D4527DD50}
 	EndGlobalSection
 EndGlobal

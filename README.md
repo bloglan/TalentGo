@@ -1,4 +1,4 @@
-#你已添加了首个自述文件!
+# 你已添加了首个自述文件!
 README.md 文件旨在使读者快速熟悉项目的作用。刚刚接触 Markdown? [了解详细信息](http://go.microsoft.com/fwlink/p/?LinkId=524306&clcid=0x804)
 
 ##编辑此自述文件并将更改提交到主题分支
