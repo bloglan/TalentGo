@@ -5,15 +5,25 @@ using TalentGo.Recruitment;
 
 namespace TalentGo.EntityFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ArchiveCategoryStore : IArchiveCategoryStore
     {
         TalentGoDbContext dbContext;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DbContext"></param>
         public ArchiveCategoryStore(TalentGoDbContext DbContext)
         {
             this.dbContext = DbContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<ArchiveCategory> ArchiveCategories
         {
             get
@@ -22,6 +32,11 @@ namespace TalentGo.EntityFramework
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         public async Task CreateAsync(ArchiveCategory archiveCategory)
         {
             archiveCategory.WhenCreated = DateTime.Now;
@@ -31,6 +46,11 @@ namespace TalentGo.EntityFramework
             await this.dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         public async Task DeleteAsync(ArchiveCategory archiveCategory)
         {
             var current = this.dbContext.ArchiveCategory.FirstOrDefault(a => a.id == archiveCategory.id);
@@ -41,11 +61,21 @@ namespace TalentGo.EntityFramework
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
         public async Task<ArchiveCategory> FindByIdAsync(int Id)
         {
             return this.dbContext.ArchiveCategory.FirstOrDefault(a => a.id == Id);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         public async Task UpdateAsync(ArchiveCategory archiveCategory)
         {
             var current = await this.FindByIdAsync(archiveCategory.id);
@@ -64,6 +94,10 @@ namespace TalentGo.EntityFramework
         #region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -87,6 +121,9 @@ namespace TalentGo.EntityFramework
         // }
 
         // 添加此代码以正确实现可处置模式。
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。

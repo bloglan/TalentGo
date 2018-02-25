@@ -1,10 +1,25 @@
 ﻿namespace TalentGo.Recruitment
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum AnnounceFilterType
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		All = 0,
-		TakeExam = 1,
-		NotTakeExam = 2,
-		NotAnnounced = 3
+        /// <summary>
+        /// 
+        /// </summary>
+        TakeExam = 1,
+        /// <summary>
+        /// 
+        /// </summary>
+        NotTakeExam = 2,
+        /// <summary>
+        /// 
+        /// </summary>
+        NotAnnounced = 3
 	}
 }

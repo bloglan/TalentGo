@@ -1,5 +1,8 @@
 ﻿namespace TalentGo.Recruitment
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ClaimDefinition
 	{
 		/// <summary>

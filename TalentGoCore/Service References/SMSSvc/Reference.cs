@@ -428,30 +428,68 @@ namespace TalentGo.SMSSvc
         public SMSServiceClient() {
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="endpointConfigurationName"></param>
         public SMSServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="endpointConfigurationName"></param>
+        /// <param name="remoteAddress"></param>
         public SMSServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="endpointConfigurationName"></param>
+        /// <param name="remoteAddress"></param>
         public SMSServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <param name="remoteAddress"></param>
         public SMSServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ToList"></param>
+        /// <param name="Message"></param>
+        /// <param name="option"></param>
+        /// <returns></returns>
         public TalentGo.SMSSvc.SendMessageResult SendMessage(string[] ToList, string Message, TalentGo.SMSSvc.SendMessageOption option) {
             return base.Channel.SendMessage(ToList, Message, option);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ToList"></param>
+        /// <param name="Message"></param>
+        /// <param name="option"></param>
+        /// <returns></returns>
         public System.Threading.Tasks.Task<TalentGo.SMSSvc.SendMessageResult> SendMessageAsync(string[] ToList, string Message, TalentGo.SMSSvc.SendMessageOption option) {
             return base.Channel.SendMessageAsync(ToList, Message, option);
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="SessionID"></param>
+        /// <returns></returns>
         public TalentGo.SMSSvc.ReceivedMessage GetReceivedMessage(int SessionID) {
             return base.Channel.GetReceivedMessage(SessionID);
         }

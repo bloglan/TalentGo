@@ -12,12 +12,24 @@ namespace TalentGo.Recruitment
         /// </summary>
         public abstract IPrincipal LoginUser { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public abstract int? TargetUserId { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public abstract int? SelectedPlanId { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public abstract int? CurrentEnrollmentId { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public virtual void ClearAll()
         {
             this.TargetUserId = null;

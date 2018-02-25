@@ -1,10 +1,25 @@
 ﻿namespace TalentGo.Recruitment
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public enum AuditFilterType
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		All = 0,
-		Rejective = 1,
+        /// <summary>
+        /// 
+        /// </summary>
+        Rejective = 1,
+        /// <summary>
+        /// 
+        /// </summary>
 		Approved = 2,
+        /// <summary>
+        /// 
+        /// </summary>
 		NotSet = 3
 	}
 }

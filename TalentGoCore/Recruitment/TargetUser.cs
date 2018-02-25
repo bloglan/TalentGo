@@ -15,6 +15,9 @@ namespace TalentGo.Recruitment
     [Table("Users")]
 	public class TargetUser : IUser<int>
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
 		public TargetUser()
 		{

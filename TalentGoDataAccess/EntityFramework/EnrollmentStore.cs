@@ -6,14 +6,25 @@ using TalentGo.Recruitment;
 
 namespace TalentGo.EntityFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EnrollmentStore : IEnrollmentStore, IEnrollmentArchiveStore
     {
         TalentGoDbContext dbContext;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DbContext"></param>
         public EnrollmentStore(TalentGoDbContext DbContext)
         {
             this.dbContext = DbContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<EnrollmentArchive> EnrollmentArchives
         {
             get
@@ -33,12 +44,22 @@ namespace TalentGo.EntityFramework
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="PlanId"></param>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         public async Task<Enrollment> FindByIdAsync(int PlanId, int UserId)
         {
             return this.dbContext.EnrollmentData.FirstOrDefault(e => e.RecruitPlanID == PlanId && e.UserID == UserId);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Enrollment"></param>
+        /// <returns></returns>
         public async Task CreateAsync(Enrollment Enrollment)
         {
             Enrollment.WhenCreated = DateTime.Now;
@@ -48,6 +69,12 @@ namespace TalentGo.EntityFramework
             await this.dbContext.SaveChangesAsync();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Enrollment"></param>
+        /// <returns></returns>
         public async Task UpdateAsync(Enrollment Enrollment)
         {
             var current = this.dbContext.EnrollmentData.FirstOrDefault(e => e.RecruitPlanID == Enrollment.RecruitPlanID && e.UserID == Enrollment.UserID);
@@ -65,6 +92,11 @@ namespace TalentGo.EntityFramework
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Enrollment"></param>
+        /// <returns></returns>
         public async Task DeleteAsync(Enrollment Enrollment)
         {
             var current = await this.FindByIdAsync(Enrollment.RecruitPlanID, Enrollment.UserID);
@@ -75,11 +107,22 @@ namespace TalentGo.EntityFramework
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="enrollment"></param>
+        /// <returns></returns>
         public async Task<IQueryable<EnrollmentArchive>> GetEnrollmentArchives(Enrollment enrollment)
         {
             return this.dbContext.EnrollmentArchives.Where(e => e.RecruitPlanID == enrollment.RecruitPlanID && e.UserID == enrollment.UserID);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="enrollment"></param>
+        /// <param name="archive"></param>
+        /// <returns></returns>
         public async Task AddArchiveToEnrollment(Enrollment enrollment, EnrollmentArchive archive)
         {
             var currentEnrollment = await this.FindByIdAsync(enrollment.RecruitPlanID, enrollment.UserID);
@@ -95,6 +138,12 @@ namespace TalentGo.EntityFramework
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="enrollment"></param>
+        /// <param name="archive"></param>
+        /// <returns></returns>
         public async Task RemoveArchiveFromEnrollment(Enrollment enrollment, EnrollmentArchive archive)
         {
             var currentEnrollment = await this.FindByIdAsync(enrollment.RecruitPlanID, enrollment.UserID);
@@ -115,6 +164,10 @@ namespace TalentGo.EntityFramework
         #region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -138,6 +191,9 @@ namespace TalentGo.EntityFramework
         // }
 
         // 添加此代码以正确实现可处置模式。
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。

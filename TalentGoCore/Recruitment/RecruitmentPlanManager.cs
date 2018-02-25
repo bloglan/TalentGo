@@ -12,16 +12,26 @@ namespace TalentGo.Recruitment
     {
         IRecruitmentPlanStore store;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Store"></param>
         public RecruitmentPlanManager(IRecruitmentPlanStore Store)
         {
             this.store = Store;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<RecruitmentPlan> AllRecruitmentPlans
         {
             get { return this.store.RecruitmentPlans; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<RecruitmentPlan> AvailableRecruitmentPlans
         {
             get
@@ -30,6 +40,11 @@ namespace TalentGo.Recruitment
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="User"></param>
+        /// <returns></returns>
         public async Task<IQueryable<RecruitmentPlan>> GetPlansForUser(TargetUser User)
         {
             switch(User.RegisterationDelegate)
@@ -48,7 +63,7 @@ namespace TalentGo.Recruitment
         /// <returns></returns>
         public async Task<IQueryable<RecruitmentPlan>> GetAvariableRecruitPlan(TargetUser user)
         {
-            
+
             /////如果已存在报名资料，则返回报名资料对应的Plan
             /////
             //TargetUser currentuser = context.TargetUser;
@@ -65,16 +80,15 @@ namespace TalentGo.Recruitment
             //    return plans.AsEnumerable();
             //}
 
-            ///招聘计划状态为Normal
-            ///招聘年度与DateTime.Now.Year
-            ///根据用户的RegisterationDelegate决定过滤是否公开的招聘计划
-            ///		如果IIdentity是ClaimsIdentity，说明为外部用户，选择公开招聘计划。
-            ///		如果IIdentity是WindowsIdentity，说明是内部用户，根据其SID从用户表中选取模拟用户（其子女）///
-            ///招聘计划处于ExpirationDate指定的有效期内。
-            ///
+            //招聘计划状态为Normal
+            //招聘年度与DateTime.Now.Year
+            //根据用户的RegisterationDelegate决定过滤是否公开的招聘计划
+            //		如果IIdentity是ClaimsIdentity，说明为外部用户，选择公开招聘计划。
+            //		如果IIdentity是WindowsIdentity，说明是内部用户，根据其SID从用户表中选取模拟用户（其子女）///
+            //招聘计划处于ExpirationDate指定的有效期内。
+            //
 
-            RegisterationDelegate regDelegate;
-            if (!Enum.TryParse<RegisterationDelegate>(user.RegisterationDelegate, true, out regDelegate))
+            if (!Enum.TryParse<RegisterationDelegate>(user.RegisterationDelegate, true, out RegisterationDelegate regDelegate))
                 return new List<RecruitmentPlan>().AsQueryable();
 
             //确定是否内外网的代码段，还需斟酌。
@@ -106,13 +120,13 @@ namespace TalentGo.Recruitment
         /// <returns></returns>
         public async Task CreateRecruitmentPlan(RecruitmentPlan plan)
         {
-            ///必须有明确的Publisher
-            ///设置WhenCreated为当前时间
-            ///设置State为Created
-            ///有效期晚于当前日期
-            ///报名截止日期晚于当前日期
-            ///其他必填字段验证
-            ///
+            //必须有明确的Publisher
+            //设置WhenCreated为当前时间
+            //设置State为Created
+            //有效期晚于当前日期
+            //报名截止日期晚于当前日期
+            //其他必填字段验证
+            //
             if (plan.ExpirationDate < DateTime.Now)
                 throw new ArgumentException("招聘计划的有效期早于当前时间。");
 
@@ -183,9 +197,9 @@ namespace TalentGo.Recruitment
         /// <returns></returns>
         public async Task PublishRecruitmentPlan(int PlanID, DateTime EnrollExpirationDate)
         {
-            ///当State处于Created时，将其设置为Normal.
-            ///当State处于Normal时，不做任何操作。
-            ///
+            //当State处于Created时，将其设置为Normal.
+            //当State处于Normal时，不做任何操作。
+            //
             RecruitmentPlan plan = await this.FindByIDAsync(PlanID);
             if (plan == null)
                 return;
@@ -212,6 +226,11 @@ namespace TalentGo.Recruitment
             return await this.store.FindByIdAsync(PlanID);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plan"></param>
+        /// <returns></returns>
         public async Task<IQueryable<ArchiveRequirement>> GetArchiveRequirements(RecruitmentPlan plan)
         {
             var arStore = this.store as IArchiveRequirementStore;
@@ -221,6 +240,12 @@ namespace TalentGo.Recruitment
             return await arStore.GetArchiveRequirementsAsync(plan);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plan"></param>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         public async Task AddArchiveRequirement(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var arStore = this.store as IArchiveRequirementStore;
@@ -230,6 +255,12 @@ namespace TalentGo.Recruitment
             await arStore.AddArchiveRequirementAsync(plan, requirement);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plan"></param>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         public async Task UpdateArchiveRequirement(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var arStore = this.store as IArchiveRequirementStore;
@@ -239,6 +270,12 @@ namespace TalentGo.Recruitment
             await arStore.UpdateArchiveRequirementAsync(plan, requirement);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plan"></param>
+        /// <param name="requirement"></param>
+        /// <returns></returns>
         public async Task RemoveArchiveRequirement(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
             var arStore = this.store as IArchiveRequirementStore;

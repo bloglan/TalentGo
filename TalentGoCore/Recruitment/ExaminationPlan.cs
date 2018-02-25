@@ -14,20 +14,34 @@ namespace TalentGo.Recruitment
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="recruitmentPlan"></param>
         public ExaminationPlan(RecruitmentPlan recruitmentPlan)
         {
             this.RecruitmentPlan = recruitmentPlan;
             this.RecruitmentPlanId = recruitmentPlan.id;
         }
+
         /// <summary>
         /// 考试计划Id。
         /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DateTime WhenCreated { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DateTime WhenChanted { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public DateTime? WhenPublished { get; protected set; }
 
         /// <summary>
@@ -46,6 +60,9 @@ namespace TalentGo.Recruitment
         /// </summary>
         public virtual ICollection<ExaminationSubject> Subjects { get; protected set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [NotMapped]
         public bool HasPublished { get { return this.WhenPublished.HasValue; } }
 

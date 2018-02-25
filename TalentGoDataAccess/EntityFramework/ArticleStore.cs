@@ -11,11 +11,19 @@ namespace TalentGo.EntityFramework
     public class ArticleStore : IArticleStore
     {
         TalentGoDbContext dbContext;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DbContext"></param>
         public ArticleStore(TalentGoDbContext DbContext)
         {
             this.dbContext = DbContext;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<Article> Articles
         {
             get
@@ -24,6 +32,11 @@ namespace TalentGo.EntityFramework
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
         public async Task CreateAsync(Article article)
         {
             //article.WhenCreated = DateTime.Now;
@@ -33,6 +46,11 @@ namespace TalentGo.EntityFramework
             await this.dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
         public async Task RemoveAsync(Article article)
         {
             if (article == null)
@@ -46,6 +64,11 @@ namespace TalentGo.EntityFramework
             await this.dbContext.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
         public async Task UpdateAsync(Article article)
         {
             var current = this.dbContext.Article.FirstOrDefault(a => a.id == article.id);
@@ -62,6 +85,10 @@ namespace TalentGo.EntityFramework
         #region IDisposable Support
         private bool disposedValue = false; // 要检测冗余调用
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
@@ -85,6 +112,9 @@ namespace TalentGo.EntityFramework
         // }
 
         // 添加此代码以正确实现可处置模式。
+        /// <summary>
+        /// 
+        /// </summary>
         public void Dispose()
         {
             // 请勿更改此代码。将清理代码放入以上 Dispose(bool disposing) 中。

@@ -29,6 +29,9 @@ namespace TalentGo.Recruitment
 		OneOrMore = 3
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	public static class RequirementTypeExtensions
 	{
 		static readonly int Requried = 2;

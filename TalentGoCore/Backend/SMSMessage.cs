@@ -5,10 +5,19 @@
     /// </summary>
     public class SMSMessage
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string To { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string MessageBody { get; set; }
     }
 }

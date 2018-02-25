@@ -46,6 +46,12 @@ namespace TalentGo.Utilities
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="IDCardNumberString"></param>
+        /// <param name="chineseIDCardNumber"></param>
+        /// <returns></returns>
 		public static bool TryParseIDCardNumber(string IDCardNumberString, out ChineseIDCardNumber chineseIDCardNumber)
 		{
 			try

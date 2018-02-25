@@ -14,6 +14,10 @@ namespace TalentGo.Recruitment
             UsedExaminationRooms = new HashSet<ExaminationRoom>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plan"></param>
         public ExaminationSubject(ExaminationPlan plan)
             : this()
         {
@@ -30,6 +34,9 @@ namespace TalentGo.Recruitment
         /// </summary>
         public int ExaminationPlanId { get; protected set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [ForeignKey(nameof(ExaminationPlanId))]
         public virtual ExaminationPlan ExaminationPlan { get; protected set; }
 

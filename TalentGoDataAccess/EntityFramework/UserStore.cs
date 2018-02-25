@@ -226,6 +226,13 @@ namespace TalentGo.EntityFramework
         #endregion
 
         #region IUserPhoneNumberStore<TargetUser, int>
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
         public Task SetPhoneNumberAsync(TargetUser user, string phoneNumber)
 		{
 			if (user == null)
@@ -236,6 +243,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<string> GetPhoneNumberAsync(TargetUser user)
 		{
 			if (user == null)
@@ -245,6 +257,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<string>(user.Mobile);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<bool> GetPhoneNumberConfirmedAsync(TargetUser user)
 		{
 			if (user == null)
@@ -254,6 +271,12 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<bool>(user.MobileValid);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="confirmed"></param>
+        /// <returns></returns>
 		public Task SetPhoneNumberConfirmedAsync(TargetUser user, bool confirmed)
 		{
 			if (user == null)
@@ -267,6 +290,12 @@ namespace TalentGo.EntityFramework
 		#endregion
 
 		#region IUserLockoutStore<TargetUser, int>
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<DateTimeOffset> GetLockoutEndDateAsync(TargetUser user)
 		{
 			if (user == null)
@@ -278,6 +307,12 @@ namespace TalentGo.EntityFramework
 
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="lockoutEnd"></param>
+        /// <returns></returns>
 		public Task SetLockoutEndDateAsync(TargetUser user, DateTimeOffset lockoutEnd)
 		{
 			if (user == null)
@@ -288,6 +323,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<int> IncrementAccessFailedCountAsync(TargetUser user)
 		{
 			if (user == null)
@@ -298,6 +338,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(user.AccessFailedCount);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task ResetAccessFailedCountAsync(TargetUser user)
 		{
 			if (user == null)
@@ -308,6 +353,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<int> GetAccessFailedCountAsync(TargetUser user)
 		{
 			if (user == null)
@@ -317,6 +367,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(user.AccessFailedCount);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<bool> GetLockoutEnabledAsync(TargetUser user)
 		{
 			if (user == null)
@@ -326,6 +381,12 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<bool>(user.LockoutEnabled);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="enabled"></param>
+        /// <returns></returns>
 		public Task SetLockoutEnabledAsync(TargetUser user, bool enabled)
 		{
 			if (user == null)
@@ -340,6 +401,12 @@ namespace TalentGo.EntityFramework
 
 		#region IUserTwoFactorStore<TargetUser, int>
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="enabled"></param>
+        /// <returns></returns>
 		public Task SetTwoFactorEnabledAsync(TargetUser user, bool enabled)
 		{
 			if (user == null)
@@ -350,6 +417,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<bool> GetTwoFactorEnabledAsync(TargetUser user)
 		{
 			if (user == null)
@@ -363,6 +435,12 @@ namespace TalentGo.EntityFramework
 
 		#region IUserLoginStore<TargetUser, int>
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="login"></param>
+        /// <returns></returns>
 		public Task AddLoginAsync(TargetUser user, UserLoginInfo login)
 		{
 			UserLogin newEntry = this.database.UserLogins.Create();
@@ -374,6 +452,12 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="login"></param>
+        /// <returns></returns>
 		public Task RemoveLoginAsync(TargetUser user, UserLoginInfo login)
 		{
 			UserLogin current = this.database.UserLogins.SingleOrDefault(e => e.UserId == user.Id && e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
@@ -385,6 +469,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public async Task<IList<UserLoginInfo>> GetLoginsAsync(TargetUser user)
 		{
 			TargetUser current = this.database.Users.SingleOrDefault(e => e.Id == user.Id);
@@ -397,6 +486,11 @@ namespace TalentGo.EntityFramework
 					select new UserLoginInfo(l.LoginProvider, l.ProviderKey)).ToList<UserLoginInfo>();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="login"></param>
+        /// <returns></returns>
 		public async Task<TargetUser> FindAsync(UserLoginInfo login)
 		{
 			UserLogin entry = this.database.UserLogins.SingleOrDefault(e => e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);

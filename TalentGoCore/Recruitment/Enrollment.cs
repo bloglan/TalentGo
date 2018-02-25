@@ -21,6 +21,11 @@ namespace TalentGo.Recruitment
 			EnrollmentArchives = new HashSet<EnrollmentArchive>();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="plan"></param>
+        /// <param name="user"></param>
         public Enrollment(RecruitmentPlan plan, TargetUser user)
             : this()
         {
@@ -246,13 +251,25 @@ namespace TalentGo.Recruitment
 		[Display(Name = "参加考试")]
 		public bool? IsTakeExam { get; protected set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual Degree Degree1 { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual EducationBackground EducationBackground1 { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public virtual ICollection<EnrollmentArchive> EnrollmentArchives { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual MajorCategory MajorCategory { get; set; }
 
         /// <summary>
@@ -302,7 +319,10 @@ namespace TalentGo.Recruitment
             this.WhenCommited = DateTime.Now;
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="IsAccept"></param>
         protected virtual void SetAudit(bool IsAccept)
         {
             if (!this.HasCommited)
@@ -313,16 +333,25 @@ namespace TalentGo.Recruitment
             this.Approved = IsAccept;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Accept()
         {
             this.SetAudit(true);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Refuse()
         {
             this.SetAudit(false);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void UnsetAudit()
         {
             if (!this.WhenCommited.HasValue)
@@ -333,6 +362,10 @@ namespace TalentGo.Recruitment
             this.Approved = null;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Message"></param>
         public void SetAuditMessage(string Message)
         {
             if (!this.WhenCommited.HasValue)
@@ -355,6 +388,10 @@ namespace TalentGo.Recruitment
             this.WhenAudit = DateTime.Now;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="IsTakeExam"></param>
         public void Announce(bool IsTakeExam)
         {
             if (!this.WhenAudit.HasValue)

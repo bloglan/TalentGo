@@ -31,6 +31,9 @@ namespace TalentGo.Recruitment
             this.targetUserManager = targetUserManager;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<Enrollment> Enrollments
         {
             get { return this.store.Enrollments; }

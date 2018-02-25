@@ -8,12 +8,30 @@ namespace TalentGo.Utilities
     /// </summary>
     public interface IMobileValidationSessionStore
     {
+        /// <summary>
+        /// 
+        /// </summary>
         IQueryable<MobilePhoneValidationSession> Sessions { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         Task CreateAsync(MobilePhoneValidationSession session);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         Task UpdateAsync(MobilePhoneValidationSession session);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         Task DeleteAsync(MobilePhoneValidationSession session);
     }
 }

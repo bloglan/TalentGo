@@ -10,13 +10,23 @@ namespace TalentGo.Recruitment
     {
         IArchiveCategoryStore store;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Store"></param>
         public ArchiveCategoryManager(IArchiveCategoryStore Store)
         {
             this.store = Store;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<ArchiveCategory> ArchiveCategories { get { return this.store.ArchiveCategories; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<ArchiveCategory> AvailableArchiveCategories
         {
             get
@@ -25,16 +35,31 @@ namespace TalentGo.Recruitment
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         public async Task CreateArchiveCategory(ArchiveCategory archiveCategory)
         {
             await this.store.CreateAsync(archiveCategory);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         public async Task UpdateArchiveCategory(ArchiveCategory archiveCategory)
         {
             await this.store.UpdateAsync(archiveCategory);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         public async Task DeleteArchiveCategory(ArchiveCategory archiveCategory)
         {
             await this.store.DeleteAsync(archiveCategory);

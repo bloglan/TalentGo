@@ -5,8 +5,16 @@ using System.Threading.Tasks;
 
 namespace TalentGo.Identity
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class EmailService : IIdentityMessageService
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="message"></param>
+        /// <returns></returns>
         public Task SendAsync(IdentityMessage message)
         {
             using (SmtpClient smtpClient = new SmtpClient("EXCH13SRV.qjyc.cn"))

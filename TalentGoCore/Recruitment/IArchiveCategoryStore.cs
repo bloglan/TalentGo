@@ -9,6 +9,9 @@ namespace TalentGo.Recruitment
     /// </summary>
     public interface IArchiveCategoryStore : IDisposable
     {
+        /// <summary>
+        /// 
+        /// </summary>
         IQueryable<ArchiveCategory> ArchiveCategories { get; }
 
         /// <summary>
@@ -18,10 +21,25 @@ namespace TalentGo.Recruitment
         /// <returns></returns>
         Task<ArchiveCategory> FindByIdAsync(int Id);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         Task CreateAsync(ArchiveCategory archiveCategory);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         Task UpdateAsync(ArchiveCategory archiveCategory);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="archiveCategory"></param>
+        /// <returns></returns>
         Task DeleteAsync(ArchiveCategory archiveCategory);
     }
 }

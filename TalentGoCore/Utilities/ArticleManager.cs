@@ -6,15 +6,25 @@ using TalentGo.Recruitment;
 
 namespace TalentGo.Utilities
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ArticleManager
 	{
         IArticleStore store;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Store"></param>
 		public ArticleManager(IArticleStore Store)
 		{
             this.store = Store;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<Article> Articles { get { return this.store.Articles; } }
 
         
@@ -45,11 +55,21 @@ namespace TalentGo.Utilities
 			}
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 		public Article FindByID(int id)
 		{
 			return this.store.Articles.SingleOrDefault(e => e.id == id);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
 		public async Task CreateArticle(Article article)
 		{
 			//article.WhenCreated = DateTime.Now;
@@ -58,11 +78,21 @@ namespace TalentGo.Utilities
 			await this.store.CreateAsync(article);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
 		public async Task UpdateArticle(Article article)
 		{
             await this.store.UpdateAsync(article);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <returns></returns>
 		public async Task RemoveArticle(Article article)
 		{
             await this.store.RemoveAsync(article);

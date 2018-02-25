@@ -7,6 +7,10 @@
     {
         IExaminationRoomStore store;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Store"></param>
         public ExaminationRoomManager(IExaminationRoomStore Store)
         {
             this.store = Store;

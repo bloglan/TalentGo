@@ -5,13 +5,25 @@ using System.Threading.Tasks;
 
 namespace TalentGo.Recruitment
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class ApplicationUserManager : UserManager<TargetUser, int>
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="store"></param>
 		public ApplicationUserManager(IUserStore<TargetUser, int> store):base(store)
 		{
 
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Mobile"></param>
+        /// <returns></returns>
         public async Task<TargetUser> FindByMobileAsync(string Mobile)
         {
             var store = this.Store as IQueryableUserStore<TargetUser, int>;
