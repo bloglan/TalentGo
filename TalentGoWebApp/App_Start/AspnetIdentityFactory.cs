@@ -12,7 +12,7 @@ namespace TalentGoWebApp
     {
         public static ApplicationUserManager CreateUserManager(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context)
         {
-            var manager = new ApplicationUserManager(new TalentGo.EntityFramework.UserStore(context.Get<TalentGoDbContext>()));
+            var manager = new ApplicationUserManager(new UserStore(context.Get<TalentGoDbContext>()));
             // 配置用户名的验证逻辑
             manager.UserValidator = new UserValidator<TargetUser, int>(manager)
             {
