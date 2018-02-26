@@ -2,9 +2,11 @@
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using System;
+using TalentGo;
 using TalentGo.EntityFramework;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
+using TalentGo.Web;
 
 namespace TalentGoWebApp
 {
@@ -14,7 +16,7 @@ namespace TalentGoWebApp
         {
             var manager = new ApplicationUserManager(new UserStore(context.Get<TalentGoDbContext>()));
             // 配置用户名的验证逻辑
-            manager.UserValidator = new UserValidator<TargetUser, int>(manager)
+            manager.UserValidator = new UserValidator<WebUser, int>(manager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
@@ -37,11 +39,11 @@ namespace TalentGoWebApp
 
             // 注册双重身份验证提供程序。此应用程序使用手机和电子邮件作为接收用于验证用户的代码的一个步骤
             // 你可以编写自己的提供程序并将其插入到此处。
-            manager.RegisterTwoFactorProvider("电话代码", new PhoneNumberTokenProvider<TargetUser, int>
+            manager.RegisterTwoFactorProvider("电话代码", new PhoneNumberTokenProvider<WebUser, int>
             {
                 MessageFormat = "你的安全代码是 {0}"
             });
-            manager.RegisterTwoFactorProvider("电子邮件代码", new EmailTokenProvider<TargetUser, int>
+            manager.RegisterTwoFactorProvider("电子邮件代码", new EmailTokenProvider<WebUser, int>
             {
                 Subject = "安全代码",
                 BodyFormat = "你的安全代码是 {0}"
@@ -52,7 +54,7 @@ namespace TalentGoWebApp
             if (dataProtectionProvider != null)
             {
                 manager.UserTokenProvider =
-                    new DataProtectorTokenProvider<TargetUser, int>(dataProtectionProvider.Create("ASP.NET Identity"));
+                    new DataProtectorTokenProvider<WebUser, int>(dataProtectionProvider.Create("ASP.NET Identity"));
             }
             return manager;
         }

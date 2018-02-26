@@ -1,32 +1,37 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using TalentGo.Identity;
 using TalentGo.Recruitment;
+using TalentGo.Web;
 
 namespace TalentGo.EntityFramework
 {
 
     public class UserStore :
-		IUserStore<TargetUser, int>,
-		IUserPasswordStore<TargetUser, int>,
-		IUserSecurityStampStore<TargetUser, int>,
-		IUserEmailStore<TargetUser, int>,
-		IQueryableUserStore<TargetUser, int>,
-		IUserPhoneNumberStore<TargetUser, int>,
-		IUserLockoutStore<TargetUser, int>,
-		IUserTwoFactorStore<TargetUser, int>,
-		IUserLoginStore<TargetUser, int>
+		IUserStore<WebUser, int>,
+		IUserPasswordStore<WebUser, int>,
+		IUserSecurityStampStore<WebUser, int>,
+		IUserEmailStore<WebUser, int>,
+		IQueryableUserStore<WebUser, int>,
+		IUserPhoneNumberStore<WebUser, int>,
+		IUserLockoutStore<WebUser, int>,
+		IUserTwoFactorStore<WebUser, int>,
+		IUserLoginStore<WebUser, int>
 	{
-		TalentGoDbContext database;
+		DbContext database;
+        DbSet<WebUser> set;
+        DbSet<UserLogin> userLoginSet;
 
 
-
-		public UserStore(TalentGoDbContext DbContext)
+		public UserStore(DbContext DbContext)
 		{
 			this.database = DbContext;
+            this.set = this.database.Set<WebUser>();
+            this.userLoginSet = this.database.Set<UserLogin>();
 		}
 
 		public void Dispose()
@@ -57,20 +62,9 @@ namespace TalentGo.EntityFramework
 
 		#region IUserStore<TargetUser, int>
 
-		public async Task CreateAsync(TargetUser user)
+		public async Task CreateAsync(WebUser user)
 		{
-			user.WhenCreated = DateTime.Now;
-			user.WhenChanged = DateTime.Now;
-			user.LoginCount = 0;
-			user.Enabled = true;
-			RegisterationDelegate result;
-
-			//如果RegisterationDelegate不匹配，默认为Internet，只对创建的新用户有影响。
-			if (!Enum.TryParse<RegisterationDelegate>(user.RegisterationDelegate, out result))
-				user.RegisterationDelegate = RegisterationDelegate.Internet.ToString();
-
-			//user.RegisterationDelegate = RegisterationDelegate.Internet.ToString();
-			this.database.Users.Add(user);
+			this.set.Add(user);
 			try
 			{
 				await this.database.SaveChangesAsync();
@@ -82,33 +76,33 @@ namespace TalentGo.EntityFramework
 			
 		}
 
-		public async Task DeleteAsync(TargetUser user)
+		public async Task DeleteAsync(WebUser user)
 		{
-			TargetUser usr = this.database.Users.Single(m => m.Id == user.Id);
-			this.database.Users.Remove(usr);
+			WebUser usr = this.set.Single(m => m.Id == user.Id);
+			this.set.Remove(usr);
 			await this.database.SaveChangesAsync();
 		}
 
-		public async Task<TargetUser> FindByIdAsync(int userId)
+		public async Task<WebUser> FindByIdAsync(int userId)
 		{
-			return this.database.Users.SingleOrDefault(e => e.Id == userId);
+			return this.set.SingleOrDefault(e => e.Id == userId);
 		}
 
-		public async Task<TargetUser> FindByNameAsync(string userName)
+		public async Task<WebUser> FindByNameAsync(string userName)
 		{
-			TargetUser user = this.database.Users.SingleOrDefault(m => m.UserName.ToUpper() == userName.ToUpper());
+			WebUser user = this.set.SingleOrDefault(m => m.UserName.ToUpper() == userName.ToUpper());
 			return user;
 		}
 
 
 
-		public async Task UpdateAsync(TargetUser user)
+		public async Task UpdateAsync(WebUser user)
 		{
-			TargetUser current = this.database.Users.Single(m => m.Id == user.Id);
+			WebUser current = this.set.Single(m => m.Id == user.Id);
 
 			current.WhenChanged = DateTime.Now;
 
-			var entry = this.database.Entry<TargetUser>(current);
+			var entry = this.database.Entry<WebUser>(current);
 			entry.CurrentValues.SetValues(user);
 
 			await this.database.SaveChangesAsync();
@@ -117,19 +111,19 @@ namespace TalentGo.EntityFramework
 		#endregion
 
 		#region IUserPasswordStore<TargetUser>
-		public Task<string> GetPasswordHashAsync(TargetUser user)
+		public Task<string> GetPasswordHashAsync(WebUser user)
 		{
 			if (user == null)
 				throw new ArgumentNullException("user");
 			return Task.FromResult<string>(user.HashPassword);
 		}
 
-		public Task<bool> HasPasswordAsync(TargetUser user)
+		public Task<bool> HasPasswordAsync(WebUser user)
 		{
 			return Task.FromResult<bool>(user.HashPassword != null);
 		}
 
-		public Task SetPasswordHashAsync(TargetUser user, string passwordHash)
+		public Task SetPasswordHashAsync(WebUser user, string passwordHash)
 		{
 			if (user == null)
 			{
@@ -144,7 +138,7 @@ namespace TalentGo.EntityFramework
 
 		#region IUserSecurityStampStore<TargetUser, int>
 
-		public Task SetSecurityStampAsync(TargetUser user, string stamp)
+		public Task SetSecurityStampAsync(WebUser user, string stamp)
 		{
 			if (user == null)
 			{
@@ -154,7 +148,7 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
-		public Task<string> GetSecurityStampAsync(TargetUser user)
+		public Task<string> GetSecurityStampAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -169,7 +163,7 @@ namespace TalentGo.EntityFramework
 
 		#region IUserEmailStore<TargetUser, int>
 
-		public Task SetEmailAsync(TargetUser user, string email)
+		public Task SetEmailAsync(WebUser user, string email)
 		{
 			if (user == null)
 				throw new ArgumentNullException("user");
@@ -177,21 +171,21 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
-		public Task<string> GetEmailAsync(TargetUser user)
+		public Task<string> GetEmailAsync(WebUser user)
 		{
 			if (user == null)
 				throw new ArgumentNullException("user");
 			return Task.FromResult<string>(user.Email);
 		}
 
-		public Task<bool> GetEmailConfirmedAsync(TargetUser user)
+		public Task<bool> GetEmailConfirmedAsync(WebUser user)
 		{
 			if (user == null)
 				throw new ArgumentNullException("user");
 			return Task.FromResult<bool>(user.EmailValid);
 		}
 
-		public Task SetEmailConfirmedAsync(TargetUser user, bool confirmed)
+		public Task SetEmailConfirmedAsync(WebUser user, bool confirmed)
 		{
 			if (user == null)
 			{
@@ -201,9 +195,9 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
-		public async Task<TargetUser> FindByEmailAsync(string email)
+		public async Task<WebUser> FindByEmailAsync(string email)
 		{
-				TargetUser current = this.database.Users.SingleOrDefault(e => e.Email == email);
+				WebUser current = this.set.SingleOrDefault(e => e.Email == email);
 				return current;
 		}
 
@@ -215,11 +209,11 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// Get Target User collection from database.
         /// </summary>
-		public IQueryable<TargetUser> Users
+		public IQueryable<WebUser> Users
 		{
 			get
 			{
-                return this.database.Users;
+                return this.set;
 			}
 		}
 
@@ -233,7 +227,7 @@ namespace TalentGo.EntityFramework
         /// <param name="user"></param>
         /// <param name="phoneNumber"></param>
         /// <returns></returns>
-        public Task SetPhoneNumberAsync(TargetUser user, string phoneNumber)
+        public Task SetPhoneNumberAsync(WebUser user, string phoneNumber)
 		{
 			if (user == null)
 			{
@@ -248,7 +242,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task<string> GetPhoneNumberAsync(TargetUser user)
+		public Task<string> GetPhoneNumberAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -262,7 +256,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task<bool> GetPhoneNumberConfirmedAsync(TargetUser user)
+		public Task<bool> GetPhoneNumberConfirmedAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -277,7 +271,7 @@ namespace TalentGo.EntityFramework
         /// <param name="user"></param>
         /// <param name="confirmed"></param>
         /// <returns></returns>
-		public Task SetPhoneNumberConfirmedAsync(TargetUser user, bool confirmed)
+		public Task SetPhoneNumberConfirmedAsync(WebUser user, bool confirmed)
 		{
 			if (user == null)
 			{
@@ -296,7 +290,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task<DateTimeOffset> GetLockoutEndDateAsync(TargetUser user)
+		public Task<DateTimeOffset> GetLockoutEndDateAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -313,7 +307,7 @@ namespace TalentGo.EntityFramework
         /// <param name="user"></param>
         /// <param name="lockoutEnd"></param>
         /// <returns></returns>
-		public Task SetLockoutEndDateAsync(TargetUser user, DateTimeOffset lockoutEnd)
+		public Task SetLockoutEndDateAsync(WebUser user, DateTimeOffset lockoutEnd)
 		{
 			if (user == null)
 			{
@@ -328,7 +322,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task<int> IncrementAccessFailedCountAsync(TargetUser user)
+		public Task<int> IncrementAccessFailedCountAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -343,7 +337,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task ResetAccessFailedCountAsync(TargetUser user)
+		public Task ResetAccessFailedCountAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -358,7 +352,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task<int> GetAccessFailedCountAsync(TargetUser user)
+		public Task<int> GetAccessFailedCountAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -372,7 +366,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task<bool> GetLockoutEnabledAsync(TargetUser user)
+		public Task<bool> GetLockoutEnabledAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -387,7 +381,7 @@ namespace TalentGo.EntityFramework
         /// <param name="user"></param>
         /// <param name="enabled"></param>
         /// <returns></returns>
-		public Task SetLockoutEnabledAsync(TargetUser user, bool enabled)
+		public Task SetLockoutEnabledAsync(WebUser user, bool enabled)
 		{
 			if (user == null)
 			{
@@ -407,7 +401,7 @@ namespace TalentGo.EntityFramework
         /// <param name="user"></param>
         /// <param name="enabled"></param>
         /// <returns></returns>
-		public Task SetTwoFactorEnabledAsync(TargetUser user, bool enabled)
+		public Task SetTwoFactorEnabledAsync(WebUser user, bool enabled)
 		{
 			if (user == null)
 			{
@@ -422,7 +416,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public Task<bool> GetTwoFactorEnabledAsync(TargetUser user)
+		public Task<bool> GetTwoFactorEnabledAsync(WebUser user)
 		{
 			if (user == null)
 			{
@@ -441,13 +435,13 @@ namespace TalentGo.EntityFramework
         /// <param name="user"></param>
         /// <param name="login"></param>
         /// <returns></returns>
-		public Task AddLoginAsync(TargetUser user, UserLoginInfo login)
+		public Task AddLoginAsync(WebUser user, UserLoginInfo login)
 		{
-			UserLogin newEntry = this.database.UserLogins.Create();
+			UserLogin newEntry = this.userLoginSet.Create();
 			newEntry.UserId = user.Id;
 			newEntry.LoginProvider = login.LoginProvider;
 			newEntry.ProviderKey = login.ProviderKey;
-			this.database.UserLogins.Add(newEntry);
+			this.userLoginSet.Add(newEntry);
 			this.database.SaveChanges();
 			return Task.FromResult(0);
 		}
@@ -458,12 +452,12 @@ namespace TalentGo.EntityFramework
         /// <param name="user"></param>
         /// <param name="login"></param>
         /// <returns></returns>
-		public Task RemoveLoginAsync(TargetUser user, UserLoginInfo login)
+		public Task RemoveLoginAsync(WebUser user, UserLoginInfo login)
 		{
-			UserLogin current = this.database.UserLogins.SingleOrDefault(e => e.UserId == user.Id && e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
+			UserLogin current = this.userLoginSet.SingleOrDefault(e => e.UserId == user.Id && e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
 			if (current != null)
 			{
-				this.database.UserLogins.Remove(current);
+				this.userLoginSet.Remove(current);
 				this.database.SaveChanges();
 			}
 			return Task.FromResult(0);
@@ -474,9 +468,9 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-		public async Task<IList<UserLoginInfo>> GetLoginsAsync(TargetUser user)
+		public async Task<IList<UserLoginInfo>> GetLoginsAsync(WebUser user)
 		{
-			TargetUser current = this.database.Users.SingleOrDefault(e => e.Id == user.Id);
+			WebUser current = this.set.SingleOrDefault(e => e.Id == user.Id);
 
 			if (current == null)
 				return new List<UserLoginInfo>();
@@ -491,14 +485,14 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="login"></param>
         /// <returns></returns>
-		public async Task<TargetUser> FindAsync(UserLoginInfo login)
+		public async Task<WebUser> FindAsync(UserLoginInfo login)
 		{
-			UserLogin entry = this.database.UserLogins.SingleOrDefault(e => e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
+			UserLogin entry = this.userLoginSet.SingleOrDefault(e => e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
 			if (entry != null)
 			{
 				return await this.FindByIdAsync(entry.UserId);
 			}
-			return default(TargetUser);
+			return default(WebUser);
 		}
 
 		#endregion

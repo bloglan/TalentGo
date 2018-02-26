@@ -7,6 +7,8 @@ using Owin;
 using TalentGo.Identity;
 using TalentGo.EntityFramework;
 using TalentGo.Recruitment;
+using TalentGo;
+using TalentGo.Web;
 
 namespace TalentGoWebApp
 {
@@ -32,7 +34,7 @@ namespace TalentGoWebApp
                 {
                     // 当用户登录时使应用程序可以验证安全戳。
                     // 这是一项安全功能，当你更改密码或者向帐户添加外部登录名时，将使用此功能。
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, TargetUser, int>(
+                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, WebUser, int>(
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
                         getUserIdCallback: (claimsIdentlty) => claimsIdentlty.GetUserId<int>())

@@ -72,6 +72,10 @@
       <Project>{3dbea3d2-558b-4a4c-9322-a299e3931e71}</Project>
       <Name>TalentGoCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TalentGoWebServerLib\TalentGoWebServerLib.csproj">
+      <Project>{8b634ddb-fd91-474f-a292-5825322713d5}</Project>
+      <Name>TalentGoWebServerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

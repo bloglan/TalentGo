@@ -144,8 +144,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
@@ -221,25 +221,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\Startup.Autofac.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\ArticleController.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\BaseDataController.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\EnrollmentController.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\HomeController.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\MaintenanceController.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\RecruitmentPlanController.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\UsersController.cs" />
-    <Compile Include="Areas\Mgmt\MgmtAreaRegistration.cs" />
-    <Compile Include="Areas\Mgmt\Models\ArchiveRequirementsViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\BaseDataViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\EnrollmentListViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\CommitAuditViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\EnrollmentDetailViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\EnrollmentStatisticsViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\PublishRecruitmentPlanViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\RecruitmentPlanPrimaryViewModel.cs" />
-    <Compile Include="Areas\Mgmt\Models\RequirementTypeItem.cs" />
-    <Compile Include="Areas\Mgmt\Models\SetAuditResult.cs" />
-    <Compile Include="Areas\Mgmt\Models\UserListViewModel.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArchiveDataController.cs" />
     <Compile Include="Controllers\ArchivesController.cs" />
@@ -248,7 +229,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RecruitmentController.cs" />
-    <Compile Include="Controllers\TargetUserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -335,41 +315,8 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Mgmt\Views\web.config">
-      <SubType>Designer</SubType>
-    </Content>
-    <Content Include="Areas\Mgmt\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Home\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\BaseData\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\RecruitmentPlanState.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\RecruitmentPlanOperation.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Shared\EditorTemplates\CKEditor.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\PrimaryInfoEditor.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Create.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Edit.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Publish.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\CommitAudit.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\ArchiveRequirements.cshtml" />
     <Content Include="Properties\DataSources\TalentGo.SMSSvc.ReceivedMessage.datasource" />
     <Content Include="Properties\DataSources\TalentGo.SMSSvc.SendMessageResult.datasource" />
-    <Content Include="Areas\Mgmt\Views\Article\Create.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Article\Edit.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Enrollment\EnrollmentList.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Enrollment\Statistics.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Enrollment\Detail.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Article\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Article\Delete.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Shared\EditorTemplates\PublicFlag.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Shared\_Layout-Fluid.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Maintenance\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Users\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Users\UserList.cshtml" />
-    <Content Include="Areas\Mgmt\Views\Enrollment\SmartStatistics.cshtml" />
-    <Content Include="Areas\Mgmt\Views\BaseData\Create.cshtml" />
-    <Content Include="Areas\Mgmt\Views\BaseData\Update.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Detail.cshtml" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-reboot.min.css.map" />
@@ -872,9 +819,9 @@
       <Project>{64782707-ea70-42e4-b2e9-cb716c2ce961}</Project>
       <Name>TalentGoEntityFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TalentGoWeb\TalentGoWeb.csproj">
+    <ProjectReference Include="..\TalentGoWebServerLib\TalentGoWebServerLib.csproj">
       <Project>{8b634ddb-fd91-474f-a292-5825322713d5}</Project>
-      <Name>TalentGoWeb</Name>
+      <Name>TalentGoWebServerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -882,6 +829,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\" />
     <Folder Include="Views\ArchiveData\" />
     <Folder Include="Views\Archives\" />
   </ItemGroup>

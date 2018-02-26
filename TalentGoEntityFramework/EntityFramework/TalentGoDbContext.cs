@@ -1,7 +1,7 @@
 using System.Data.Entity;
 using TalentGo.Identity;
-using TalentGo.Recruitment;
 using TalentGo.Utilities;
+using TalentGo.Web;
 
 namespace TalentGo.EntityFramework
 {
@@ -33,7 +33,7 @@ namespace TalentGo.EntityFramework
 		public virtual DbSet<Nationality> Nationality { get; set; }
 		public virtual DbSet<RecruitmentPlan> RecruitmentPlan { get; set; }
 		public virtual DbSet<UserLogin> UserLogins { get; set; }
-		public virtual DbSet<TargetUser> Users { get; set; }
+		public virtual DbSet<Person> Users { get; set; }
 
         /// <summary>
         /// fluent api
@@ -122,27 +122,19 @@ namespace TalentGo.EntityFramework
 			//	.HasForeignKey(e => e.RecruitPlanID)
 			//	.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<TargetUser>()
+			modelBuilder.Entity<Person>()
 				.Property(e => e.IDCardNumber)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<TargetUser>()
+			modelBuilder.Entity<Person>()
 				.Property(e => e.Mobile)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<TargetUser>()
+			modelBuilder.Entity<WebUser>()
 				.Property(e => e.HashPassword)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<TargetUser>()
-				.Property(e => e.RegisterationDelegate)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<TargetUser>()
-				.Property(e => e.DelegateInfo)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<TargetUser>()
+			modelBuilder.Entity<WebUser>()
 				.Property(e => e.UserName)
 				.IsUnicode(false);
 
@@ -152,10 +144,6 @@ namespace TalentGo.EntityFramework
             //    .HasForeignKey(e => e.UserID)
             //    .WillCascadeOnDelete(false);
 
-            modelBuilder.Entity<TargetUser>()
-				.HasMany(e => e.UserLogins)
-				.WithRequired(e => e.Users)
-				.HasForeignKey(e => e.UserId);
 		}
 	}
 }

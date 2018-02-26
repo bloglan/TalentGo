@@ -1,4 +1,5 @@
 ﻿using System.Security.Principal;
+using TalentGo;
 using TalentGo.Recruitment;
 
 namespace TalentGoWebApp.Models
@@ -8,6 +9,6 @@ namespace TalentGoWebApp.Models
         public IIdentity identity { get; set; }
         public string DisplayName { get; set; }
 
-        public TargetUser TargetUser { get; set; }
+        public Person TargetUser { get; set; }
     }
 }

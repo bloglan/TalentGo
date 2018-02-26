@@ -6,7 +6,7 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
-using TalentGo.Recruitment;
+using TalentGo;
 using TalentGo.Web;
 using TalentGoWebApp.Models;
 
@@ -15,13 +15,11 @@ namespace TalentGoWebApp.Controllers
     public class HomeController : Controller
 	{
 
-        TargetUserManager targetUserManager;
         EnrollmentManager enrollmentManager;
         RecruitmentContextBase recruitmentContext;
 
-        public HomeController(TargetUserManager targetUserManager, EnrollmentManager enrollmentManager)
+        public HomeController(EnrollmentManager enrollmentManager)
         {
-            this.targetUserManager = targetUserManager;
             this.enrollmentManager = enrollmentManager;
         }
 
@@ -74,10 +72,6 @@ namespace TalentGoWebApp.Controllers
             var winidentity = this.User.Identity as WindowsIdentity;
             if (winidentity == null)
             {
-                //不是Windows登陆
-                var claimsidentity = this.User.Identity as ClaimsIdentity;
-                if (claimsidentity == null)
-                    throw new InvalidOperationException("操作错误，不支持的Identity类型。");
 
                 //
                 var user = await this.targetUserManager.FindByIdAsync(this.recruitmentContext.TargetUserId.Value);

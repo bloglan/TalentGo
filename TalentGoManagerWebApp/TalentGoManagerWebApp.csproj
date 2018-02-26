@@ -51,6 +51,18 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.Owin.4.0.1\lib\net45\Autofac.Integration.Mvc.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Owin, Version=4.2.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Owin.4.2.0\lib\net45\Autofac.Integration.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
     </Reference>
@@ -79,15 +91,24 @@
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.0.0\lib\net451\Microsoft.Owin.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -140,6 +161,26 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Areas\ex\exAreaRegistration.cs" />
+    <Compile Include="Areas\Mgmt\Controllers\ArticleController.cs" />
+    <Compile Include="Areas\Mgmt\Controllers\BaseDataController.cs" />
+    <Compile Include="Areas\Mgmt\Controllers\EnrollmentController.cs" />
+    <Compile Include="Areas\Mgmt\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Mgmt\Controllers\MaintenanceController.cs" />
+    <Compile Include="Areas\Mgmt\Controllers\RecruitmentPlanController.cs" />
+    <Compile Include="Areas\Mgmt\Controllers\UsersController.cs" />
+    <Compile Include="Areas\Mgmt\MgmtAreaRegistration.cs" />
+    <Compile Include="Areas\Mgmt\Models\ArchiveRequirementsViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\BaseDataViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\CommitAuditViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\EnrollmentDetailViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\EnrollmentListViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\EnrollmentStatisticsViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\PublishRecruitmentPlanViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\RecruitmentPlanPrimaryViewModel.cs" />
+    <Compile Include="Areas\Mgmt\Models\RequirementTypeItem.cs" />
+    <Compile Include="Areas\Mgmt\Models\SetAuditResult.cs" />
+    <Compile Include="Areas\Mgmt\Models\UserListViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -181,6 +222,40 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Areas\ex\Views\web.config" />
+    <Content Include="Areas\Mgmt\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Article\Create.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Article\Delete.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Article\Edit.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Article\Index.cshtml" />
+    <Content Include="Areas\Mgmt\Views\BaseData\Create.cshtml" />
+    <Content Include="Areas\Mgmt\Views\BaseData\Index.cshtml" />
+    <Content Include="Areas\Mgmt\Views\BaseData\Update.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Enrollment\Detail.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Enrollment\EnrollmentList.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Enrollment\SmartStatistics.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Enrollment\Statistics.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Home\Index.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Maintenance\Index.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\ArchiveRequirements.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\CommitAudit.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Create.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Detail.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Edit.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Index.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\PrimaryInfoEditor.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Publish.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\RecruitmentPlanOperation.cshtml" />
+    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\RecruitmentPlanState.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Shared\_Layout-Fluid.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Shared\EditorTemplates\CKEditor.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Shared\EditorTemplates\PublicFlag.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Users\Index.cshtml" />
+    <Content Include="Areas\Mgmt\Views\Users\UserList.cshtml" />
+    <Content Include="Areas\Mgmt\Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -230,6 +305,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\ex\Controllers\" />
+    <Folder Include="Areas\ex\Models\" />
+    <Folder Include="Areas\ex\Views\Shared\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -252,9 +330,9 @@
       <Project>{64782707-ea70-42e4-b2e9-cb716c2ce961}</Project>
       <Name>TalentGoEntityFramework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TalentGoWeb\TalentGoWeb.csproj">
+    <ProjectReference Include="..\TalentGoWebServerLib\TalentGoWebServerLib.csproj">
       <Project>{8b634ddb-fd91-474f-a292-5825322713d5}</Project>
-      <Name>TalentGoWeb</Name>
+      <Name>TalentGoWebServerLib</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

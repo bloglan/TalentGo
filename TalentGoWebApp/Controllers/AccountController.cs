@@ -16,6 +16,7 @@ using System.Net.Mail;
 using TalentGo.Web;
 using TalentGo.Recruitment;
 using TalentGo.Utilities;
+using TalentGo;
 
 namespace TalentGoWebApp.Controllers
 {
@@ -235,7 +236,7 @@ namespace TalentGoWebApp.Controllers
 				Errors.Add(new KeyValuePair<string, string>("IDCardNumber", "不是一个有效的身份证号码。"));
 			}
 
-			TargetUser currentuser = null;
+			Person currentuser = null;
 			currentuser = await this.UserManager.FindByNameAsync(model.IDCardNumber);
 			if (currentuser != null)
 			{
@@ -264,7 +265,7 @@ namespace TalentGoWebApp.Controllers
 			}
 
 
-			var user = new TargetUser { UserName = cardnumber.IDCardNumber, Email = model.Email, Mobile = model.Mobile, MobileValid = IsMobileValid, EmailValid = IsEmailValid, IDCardNumber = cardnumber.IDCardNumber, DisplayName = model.RealName };
+			var user = new WebUser { UserName = cardnumber.IDCardNumber, Email = model.Email, Mobile = model.Mobile, MobileValid = IsMobileValid, EmailValid = IsEmailValid, IDCardNumber = cardnumber.IDCardNumber, DisplayName = model.RealName };
 			var result = await UserManager.CreateAsync(user, model.Password);
 			//
 			if (result.Succeeded)
@@ -550,7 +551,7 @@ namespace TalentGoWebApp.Controllers
 				{
 					return View("ExternalLoginFailure");
 				}
-				var user = new TargetUser { UserName = model.Email, Email = model.Email };
+				var user = new WebUser { UserName = model.Email, Email = model.Email };
 				var result = await UserManager.CreateAsync(user);
 				if (result.Succeeded)
 				{

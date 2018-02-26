@@ -8,23 +8,21 @@ using System.Web.Routing;
 using TalentGo.Web;
 using TalentGo.Identity;
 using TalentGoWebApp.Models;
-using TalentGo.Recruitment;
+using TalentGo;
 
 namespace TalentGoWebApp.Controllers
 {
     [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
     public class RecruitmentController : Controller
     {
-        TargetUserManager targetUserManager;
         RecruitmentPlanManager recruitManager;
         EnrollmentManager enrollmentManager;
         RecruitmentContextBase recruitmentContext;
 
-        TargetUser user = null;
+        Person user = null;
 
-        public RecruitmentController(TargetUserManager targetUserManager, RecruitmentPlanManager recruitmentPlanManager, EnrollmentManager enrollmentManager)
+        public RecruitmentController(RecruitmentPlanManager recruitmentPlanManager, EnrollmentManager enrollmentManager)
         {
-            this.targetUserManager = targetUserManager;
             this.recruitManager = recruitmentPlanManager;
             this.enrollmentManager = enrollmentManager;
         }
