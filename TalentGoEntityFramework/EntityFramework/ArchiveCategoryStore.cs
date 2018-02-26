@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using TalentGo.Recruitment;
 
 namespace TalentGo.EntityFramework
 {
@@ -10,15 +10,17 @@ namespace TalentGo.EntityFramework
     /// </summary>
     public class ArchiveCategoryStore : IArchiveCategoryStore
     {
-        TalentGoDbContext dbContext;
+        DbContext dbContext;
+        DbSet<ArchiveCategory> set;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="DbContext"></param>
-        public ArchiveCategoryStore(TalentGoDbContext DbContext)
+        /// <param name="dbContext"></param>
+        public ArchiveCategoryStore(DbContext dbContext)
         {
-            this.dbContext = DbContext;
+            this.dbContext = dbContext;
+            this.set = this.dbContext.Set<ArchiveCategory>();
         }
 
         /// <summary>
@@ -28,7 +30,7 @@ namespace TalentGo.EntityFramework
         {
             get
             {
-                return this.dbContext.ArchiveCategory.AsNoTracking();
+                return this.set;
             }
         }
 
@@ -42,7 +44,7 @@ namespace TalentGo.EntityFramework
             archiveCategory.WhenCreated = DateTime.Now;
             archiveCategory.WhenChanged = DateTime.Now;
 
-            this.dbContext.ArchiveCategory.Add(archiveCategory);
+            this.set.Add(archiveCategory);
             await this.dbContext.SaveChangesAsync();
         }
 
@@ -53,10 +55,10 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task DeleteAsync(ArchiveCategory archiveCategory)
         {
-            var current = this.dbContext.ArchiveCategory.FirstOrDefault(a => a.id == archiveCategory.id);
+            var current = this.set.FirstOrDefault(a => a.id == archiveCategory.id);
             if (current != null)
             {
-                this.dbContext.ArchiveCategory.Remove(current);
+                this.set.Remove(current);
                 await this.dbContext.SaveChangesAsync();
             }
         }
@@ -68,7 +70,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<ArchiveCategory> FindByIdAsync(int Id)
         {
-            return this.dbContext.ArchiveCategory.FirstOrDefault(a => a.id == Id);
+            return this.set.FirstOrDefault(a => a.id == Id);
         }
 
         /// <summary>
@@ -78,17 +80,9 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task UpdateAsync(ArchiveCategory archiveCategory)
         {
-            var current = await this.FindByIdAsync(archiveCategory.id);
-            if (current != null)
-            {
-                var entry = this.dbContext.Entry<ArchiveCategory>(current);
-                entry.CurrentValues.SetValues(archiveCategory);
-                entry.Property(p => p.WhenCreated).IsModified = false;
 
-                current.WhenChanged = DateTime.Now;
-
-                await this.dbContext.SaveChangesAsync();
-            }
+            this.dbContext.Entry(archiveCategory).State = EntityState.Modified;
+            await this.dbContext.SaveChangesAsync();
         }
 
         #region IDisposable Support

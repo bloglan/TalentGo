@@ -235,10 +235,6 @@
 				</td>
 				<td>
 					<p><abbr title="@item.WhenCommited.Value">@item.WhenCommited.Value.ToShortDateString()</abbr></p>
-					@if (item.User.RegisterationDelegate == "Intranet")
-					{
-						<p>代理人：</p>
-					}
 					@if (item.WhenAnnounced.HasValue)
 					{
 						if (item.IsTakeExam.Value)

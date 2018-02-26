@@ -6,7 +6,6 @@ using Microsoft.Owin.Security.Cookies;
 using Owin;
 using TalentGo.Identity;
 using TalentGo.EntityFramework;
-using TalentGo.Recruitment;
 using TalentGo;
 using TalentGo.Web;
 

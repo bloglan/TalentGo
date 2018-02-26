@@ -6,7 +6,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using TalentGo.Recruitment;
 
 namespace TalentGo.Web
 {
@@ -15,6 +14,9 @@ namespace TalentGo.Web
     /// </summary>
     public class WebUser : Person, IUser<int>
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public WebUser()
             : base()
         {

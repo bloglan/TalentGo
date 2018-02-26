@@ -85,9 +85,5 @@ namespace TalentGo.Utilities
 		[UIHint("PublicFlag")]
 		public bool? IsPublic { get; set; }
 
-        /// <summary>
-        /// Navigation property to Recruitment Plan.
-        /// </summary>
-        //public virtual RecruitmentPlan RecruitmentPlan { get; set; }
     }
 }

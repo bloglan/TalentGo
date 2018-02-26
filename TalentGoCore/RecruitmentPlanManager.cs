@@ -45,7 +45,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="User"></param>
         /// <returns></returns>
-        public async Task<IQueryable<RecruitmentPlan>> GetPlansForUser(Person User)
+        public IQueryable<RecruitmentPlan> GetPlansForUser(Person User)
         {
             return this.AllRecruitmentPlans.Where(plan => plan.IsPublic && plan.WhenPublished.HasValue);
         }
@@ -54,7 +54,7 @@ namespace TalentGo
         /// 获取可用的、与用户相关联的招聘计划。
         /// </summary>
         /// <returns></returns>
-        public async Task<IQueryable<RecruitmentPlan>> GetAvariableRecruitPlan(Person user)
+        public IQueryable<RecruitmentPlan> GetAvariableRecruitPlan(Person user)
         {
 
             /////如果已存在报名资料，则返回报名资料对应的Plan

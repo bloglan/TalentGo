@@ -98,17 +98,8 @@
     <Compile Include="RequirementType.cs" />
     <Compile Include="EnrollmentManager.cs" />
     <Compile Include="RecruitmentPlanManager.cs" />
-    <Compile Include="Service References\SMSSvc\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Utilities\ArticleManager.cs" />
     <Compile Include="Utilities\ChineseIDCardNumber.cs" />
-    <Compile Include="Utilities\DataExporter.cs" />
-    <Compile Include="Utilities\IMobileValidationSessionStore.cs" />
-    <Compile Include="Utilities\MobilePhoneValidationSession.cs" />
-    <Compile Include="Utilities\MobileValidationSessionManager.cs" />
     <Compile Include="Utilities\Nationality.cs" />
     <Compile Include="AnnounceFilterType.cs" />
     <Compile Include="AuditFilterType.cs" />
@@ -118,44 +109,7 @@
     <Folder Include="Recruitment\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\SMSSvc\SMSService.wsdl" />
-    <None Include="Service References\SMSSvc\SMSService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\SMSSvc\SMSService1.wsdl" />
-    <None Include="Service References\SMSSvc\SMSService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\SMSSvc\SMSService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\SMSSvc\TalentGo.SMSSvc.ReceivedMessage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\SMSSvc\TalentGo.SMSSvc.SendMessageResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\SMSSvc\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Service References\SMSSvc\configuration.svcinfo" />
-    <None Include="Service References\SMSSvc\configuration91.svcinfo" />
-    <None Include="Service References\SMSSvc\SMSService.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\SMSSvc\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

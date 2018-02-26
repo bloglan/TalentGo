@@ -17,7 +17,7 @@
     <RootNamespace>TalentGoWebApp</RootNamespace>
     <AssemblyName>TalentGoWebApp</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>
     </IISExpressSSLPort>
@@ -216,11 +216,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\AspnetIdentityFactory.cs" />
+    <Compile Include="App_Start\AutofacConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="App_Start\Startup.Autofac.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArchiveDataController.cs" />
     <Compile Include="Controllers\ArchivesController.cs" />
@@ -238,7 +238,6 @@
     <Compile Include="Models\EnrollViewModel.cs" />
     <Compile Include="Models\LoginPartialViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\OperationResult.cs" />
     <Compile Include="Models\RecruitmentPanelStateModel.cs" />
     <Compile Include="Models\UserDelegateFilterType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -248,12 +247,11 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="Utilities\ControllerExtension.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\bootstrap-grid.css" />
-    <Content Include="Content\bootstrap-grid.min.css" />
-    <Content Include="Content\bootstrap-reboot.css" />
-    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload-noscript.css" />
@@ -308,6 +306,7 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="Content\WebRes\NoHeadImage.jpg" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
@@ -317,15 +316,15 @@
     </Content>
     <Content Include="Properties\DataSources\TalentGo.SMSSvc.ReceivedMessage.datasource" />
     <Content Include="Properties\DataSources\TalentGo.SMSSvc.SendMessageResult.datasource" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap-grid.min.css.map" />
-    <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
     <None Include="Properties\PublishProfiles\PublishToFileSystem.pubxml" />
-    <Content Include="Scripts\bootstrap.bundle.js" />
-    <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\ckeditor\adapters\jquery.js" />
@@ -589,10 +588,6 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.js.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -746,7 +741,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Recruitment\Index.cshtml" />
-    <Content Include="Views\TargetUser\AssignTargetUser.cshtml" />
     <Content Include="Views\Common\Index.cshtml" />
     <Content Include="Views\Recruitment\RecruitmentPanel.cshtml" />
     <Content Include="Views\Recruitment\ViewEnrollPanel.cshtml" />
@@ -764,7 +758,6 @@
     <Content Include="Views\Shared\_EnrollmentDataPropertiesViewer.cshtml" />
     <Content Include="Views\Recruitment\Detail.cshtml" />
     <Content Include="Views\Recruitment\AnnounceForExam.cshtml" />
-    <Content Include="Views\TargetUser\CreateUser.cshtml" />
     <Content Include="Views\Shared\OperationResult.cshtml" />
     <None Include="Service References\SMSSvc\SMSService.wsdl" />
     <None Include="Service References\SMSSvc\SMSService.xsd">
@@ -871,6 +864,10 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Target Name="BuildViews" Condition="'$(MvcBuildViews)'=='true'" AfterTargets="Build">
+    <Message Importance="normal" Text="Precompiling views" />
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>

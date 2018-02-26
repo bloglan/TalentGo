@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="4298f5f7-35db-4457-bbdf-889a141740ab" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://sms.qjyc.cn/SMSService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="SMSService.xsd" MetadataType="Schema" ID="25ca8d71-2ae5-44e8-930d-459f74d19f07" SourceId="1" SourceUrl="http://sms.qjyc.cn/SMSService.svc?xsd=xsd0" />
+    <MetadataFile FileName="SMSService1.xsd" MetadataType="Schema" ID="5c237b29-df19-4117-82c5-1950a6a899bf" SourceId="1" SourceUrl="http://sms.qjyc.cn/SMSService.svc?xsd=xsd1" />
+    <MetadataFile FileName="SMSService.disco" MetadataType="Disco" ID="0ca7b5be-17c0-43ec-a1f9-9f58dcd1b78f" SourceId="1" SourceUrl="http://sms.qjyc.cn/SMSService.svc?disco" />
+    <MetadataFile FileName="SMSService.wsdl" MetadataType="Wsdl" ID="e40ab1e8-f858-412e-860f-7694a9d2d0d7" SourceId="1" SourceUrl="http://sms.qjyc.cn/SMSService.svc?wsdl" />
+    <MetadataFile FileName="SMSService1.wsdl" MetadataType="Wsdl" ID="c226c12e-90a7-4ec3-b3bd-7ed040ad1beb" SourceId="1" SourceUrl="http://sms.qjyc.cn/SMSService.svc?wsdl=wsdl0" />
+    <MetadataFile FileName="SMSService2.xsd" MetadataType="Schema" ID="ba5a1aa1-f934-4dd9-96b4-af1348a2e595" SourceId="1" SourceUrl="http://sms.qjyc.cn/SMSService.svc?xsd=xsd2" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

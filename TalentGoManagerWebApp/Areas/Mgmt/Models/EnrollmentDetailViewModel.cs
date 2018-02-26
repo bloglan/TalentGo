@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TalentGo.Recruitment;
+using TalentGo;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {

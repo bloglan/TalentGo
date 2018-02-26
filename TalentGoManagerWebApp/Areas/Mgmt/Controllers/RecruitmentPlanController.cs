@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TalentGo.Identity;
-using TalentGo.Recruitment;
+using TalentGo;
 using TalentGoWebApp.Areas.Mgmt.Models;
-using TalentGoWebApp.Models;
+using TalentGo.Models;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
@@ -26,7 +26,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 
         // GET: Mgmt/RecruitmentPlan
-        public async Task<ActionResult> Index(int? id)
+        public ActionResult Index(int? id)
         {
             //id: Year of recruitment plan.
             var plans = this.recruitmentManager.AllRecruitmentPlans;

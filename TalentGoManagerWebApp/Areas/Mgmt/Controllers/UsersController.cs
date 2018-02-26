@@ -4,18 +4,17 @@ using System.Web.Mvc;
 using TalentGo.Identity;
 using TalentGoWebApp.Areas.Mgmt.Models;
 using TalentGo.Linq;
-using TalentGo.Recruitment;
-using TalentGoWebApp.Models;
 using TalentGo;
+using TalentGo.Web;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
     [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class UsersController : Controller
 	{
-        TargetUserManager targetUserManager;
+        ApplicationUserManager targetUserManager;
 
-        public UsersController(TargetUserManager targetUserManager)
+        public UsersController(ApplicationUserManager targetUserManager)
         {
             this.targetUserManager = targetUserManager;
         }
@@ -36,7 +35,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				};
 			}
 			int allCount;
-			model.AppUserList = this.GetSelectedUsers(model.UserDelegateFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
+			model.AppUserList = this.GetSelectedUsers(model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
 
 			model.AllCount = allCount;
 
@@ -44,12 +43,12 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		}
 
 
-		public IQueryable<Person> GetSelectedUsers(UserDelegateFilterType DelegateFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
+		public IQueryable<Person> GetSelectedUsers(string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
 		{
             ///带分页
             ///
             //先获得符合初始条件的集合
-            var userSet = this.targetUserManager.TargetUsers;
+            var userSet = this.targetUserManager.Users;
 
 			//if (userSet.Count() <= 0)
 			//{
@@ -66,18 +65,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 					e.Email.StartsWith(Keywords)
 				);
 
-			switch (DelegateFilter)
-			{
-				case UserDelegateFilterType.All:
-					//DoNothing
-					break;
-				case UserDelegateFilterType.Intranet:
-					userSet = userSet.Where(e => e.RegisterationDelegate == "Intranet");
-					break;
-				case UserDelegateFilterType.Internet:
-					userSet = userSet.Where(e => e.RegisterationDelegate == "Internet");
-					break;
-			}
 
 			ItemCount = userSet.Count();
 			if (ItemCount == 0)

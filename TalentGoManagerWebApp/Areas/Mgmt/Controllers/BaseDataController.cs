@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using TalentGo.Recruitment;
+using TalentGo;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
@@ -113,7 +113,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         }
 
-        public async Task<ActionResult> GetPicture(int eaid)
+        public ActionResult GetPicture(int eaid)
         {
             var item = this.archManager.ArchiveCategories.SingleOrDefault(e => e.id == eaid);
             if (item == null)
@@ -199,7 +199,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             try
             {
                 ///TODO: call to ArchiveCategoryManager but no method supported.
-#warning 尚未实现。
 
             }
             catch (Exception ex)

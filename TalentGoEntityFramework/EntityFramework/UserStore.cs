@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using TalentGo.Identity;
-using TalentGo.Recruitment;
 using TalentGo.Web;
 
 namespace TalentGo.EntityFramework
 {
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class UserStore :
 		IUserStore<WebUser, int>,
 		IUserPasswordStore<WebUser, int>,
@@ -26,7 +26,10 @@ namespace TalentGo.EntityFramework
         DbSet<WebUser> set;
         DbSet<UserLogin> userLoginSet;
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DbContext"></param>
 		public UserStore(DbContext DbContext)
 		{
 			this.database = DbContext;
@@ -34,6 +37,9 @@ namespace TalentGo.EntityFramework
             this.userLoginSet = this.database.Set<UserLogin>();
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public void Dispose()
 		{
 			//this.database.Dispose();
@@ -41,9 +47,16 @@ namespace TalentGo.EntityFramework
 			GC.SuppressFinalize(this);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
 		public bool DisposeContext { get; set; }
 		private bool _disposed;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
 		protected virtual void Dispose(bool disposing)
 		{
 			if (this.DisposeContext && disposing && this.database != null)
@@ -62,6 +75,11 @@ namespace TalentGo.EntityFramework
 
 		#region IUserStore<TargetUser, int>
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public async Task CreateAsync(WebUser user)
 		{
 			this.set.Add(user);
@@ -76,6 +94,11 @@ namespace TalentGo.EntityFramework
 			
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public async Task DeleteAsync(WebUser user)
 		{
 			WebUser usr = this.set.Single(m => m.Id == user.Id);
@@ -83,19 +106,32 @@ namespace TalentGo.EntityFramework
 			await this.database.SaveChangesAsync();
 		}
 
-		public async Task<WebUser> FindByIdAsync(int userId)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+		public Task<WebUser> FindByIdAsync(int userId)
 		{
-			return this.set.SingleOrDefault(e => e.Id == userId);
+			return Task.FromResult(this.set.SingleOrDefault(e => e.Id == userId));
 		}
 
-		public async Task<WebUser> FindByNameAsync(string userName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+		public Task<WebUser> FindByNameAsync(string userName)
 		{
 			WebUser user = this.set.SingleOrDefault(m => m.UserName.ToUpper() == userName.ToUpper());
-			return user;
+			return Task.FromResult(user);
 		}
 
-
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public async Task UpdateAsync(WebUser user)
 		{
 			WebUser current = this.set.Single(m => m.Id == user.Id);
@@ -111,6 +147,12 @@ namespace TalentGo.EntityFramework
 		#endregion
 
 		#region IUserPasswordStore<TargetUser>
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<string> GetPasswordHashAsync(WebUser user)
 		{
 			if (user == null)
@@ -118,11 +160,22 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<string>(user.HashPassword);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<bool> HasPasswordAsync(WebUser user)
 		{
 			return Task.FromResult<bool>(user.HashPassword != null);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="passwordHash"></param>
+        /// <returns></returns>
 		public Task SetPasswordHashAsync(WebUser user, string passwordHash)
 		{
 			if (user == null)
@@ -138,6 +191,12 @@ namespace TalentGo.EntityFramework
 
 		#region IUserSecurityStampStore<TargetUser, int>
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="stamp"></param>
+        /// <returns></returns>
 		public Task SetSecurityStampAsync(WebUser user, string stamp)
 		{
 			if (user == null)
@@ -148,6 +207,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<string> GetSecurityStampAsync(WebUser user)
 		{
 			if (user == null)
@@ -163,6 +227,12 @@ namespace TalentGo.EntityFramework
 
 		#region IUserEmailStore<TargetUser, int>
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="email"></param>
+        /// <returns></returns>
 		public Task SetEmailAsync(WebUser user, string email)
 		{
 			if (user == null)
@@ -171,6 +241,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<string> GetEmailAsync(WebUser user)
 		{
 			if (user == null)
@@ -178,6 +253,11 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<string>(user.Email);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
 		public Task<bool> GetEmailConfirmedAsync(WebUser user)
 		{
 			if (user == null)
@@ -185,6 +265,12 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<bool>(user.EmailValid);
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="confirmed"></param>
+        /// <returns></returns>
 		public Task SetEmailConfirmedAsync(WebUser user, bool confirmed)
 		{
 			if (user == null)
@@ -195,10 +281,15 @@ namespace TalentGo.EntityFramework
 			return Task.FromResult<int>(0);
 		}
 
-		public async Task<WebUser> FindByEmailAsync(string email)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+		public Task<WebUser> FindByEmailAsync(string email)
 		{
 				WebUser current = this.set.SingleOrDefault(e => e.Email == email);
-				return current;
+				return Task.FromResult(current);
 		}
 
 

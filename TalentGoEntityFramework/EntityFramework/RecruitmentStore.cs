@@ -1,6 +1,6 @@
-﻿using System.Linq;
+﻿using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
-using TalentGo.Recruitment;
 
 namespace TalentGo.EntityFramework
 {
@@ -9,15 +9,19 @@ namespace TalentGo.EntityFramework
     /// </summary>
     public class RecruitmentStore : IRecruitmentPlanStore, IArchiveRequirementStore
     {
-        TalentGoDbContext db;
+        DbContext db;
+        DbSet<RecruitmentPlan> set;
+        DbSet<ArchiveRequirement> reqSet;
 
         /// <summary>
         /// Default ctor.
         /// </summary>
         /// <param name="DbContext"></param>
-        public RecruitmentStore(TalentGoDbContext DbContext)
+        public RecruitmentStore(DbContext DbContext)
         {
             this.db = DbContext;
+            this.set = this.db.Set<RecruitmentPlan>();
+            this.reqSet = this.db.Set<ArchiveRequirement>();
         }
 
         /// <summary>
@@ -27,7 +31,7 @@ namespace TalentGo.EntityFramework
         {
             get
             {
-                return this.db.RecruitmentPlan;
+                return this.set;
             }
         }
 
@@ -38,7 +42,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task CreateAsync(RecruitmentPlan Plan)
         {
-            this.db.RecruitmentPlan.Add(Plan);
+            this.set.Add(Plan);
             await this.db.SaveChangesAsync();
         }
 
@@ -71,7 +75,7 @@ namespace TalentGo.EntityFramework
             var current = await this.FindByIdAsync(Plan.id);
             if (current != null)
             {
-                this.db.RecruitmentPlan.Remove(current);
+                this.set.Remove(current);
                 await this.db.SaveChangesAsync();
             }
             
@@ -85,7 +89,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<RecruitmentPlan> FindByIdAsync(int Id)
         {
-            return this.db.RecruitmentPlan.FirstOrDefault(plan => plan.id == Id);
+            return this.set.FirstOrDefault(plan => plan.id == Id);
         }
 
         /// <summary>
@@ -95,7 +99,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<IQueryable<ArchiveRequirement>> GetArchiveRequirementsAsync(RecruitmentPlan plan)
         {
-            return this.db.ArchiveRequirements.Where(ar => ar.RecruitmentPlanID == plan.id);
+            return this.reqSet.Where(ar => ar.RecruitmentPlanID == plan.id);
         }
 
         /// <summary>
@@ -106,7 +110,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task AddArchiveRequirementAsync(RecruitmentPlan plan, ArchiveRequirement requirement)
         {
-            this.db.ArchiveRequirements.Add(requirement);
+            this.reqSet.Add(requirement);
             await this.db.SaveChangesAsync();
         }
 
@@ -139,7 +143,7 @@ namespace TalentGo.EntityFramework
             var current = (await this.GetArchiveRequirementsAsync(plan)).FirstOrDefault(r => r.ArchiveCategoryID == requirement.ArchiveCategoryID && r.RecruitmentPlanID == requirement.RecruitmentPlanID);
             if (current != null)
             {
-                this.db.ArchiveRequirements.Remove(current);
+                this.reqSet.Remove(current);
                 await this.db.SaveChangesAsync();
             }
         }

@@ -1,6 +1,5 @@
 namespace TalentGo.Web
 {
-    using Recruitment;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 

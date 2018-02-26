@@ -66,6 +66,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -76,13 +77,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connected Services\SMSSvc\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Connected Services\ValidationCodeSvc\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Extension\FormatterExtension.cs" />
     <Compile Include="Identity\ApplicationSignInManager.cs" />
+    <Compile Include="Identity\IMobileValidationSessionStore.cs" />
+    <Compile Include="Identity\MobilePhoneValidationSession.cs" />
+    <Compile Include="Identity\MobileValidationSessionManager.cs" />
+    <Compile Include="Models\OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\ApplicationUserManager.cs" />
     <Compile Include="Web\EmailService.cs" />
     <Compile Include="Web\HttpContextExtension.cs" />
     <Compile Include="Web\HttpRecruitmentContext.cs" />
+    <Compile Include="Web\IPhoneNumberValidationService.cs" />
+    <Compile Include="Web\PhoneNumberValidationService.cs" />
     <Compile Include="Web\SmsService.cs" />
     <Compile Include="Web\UserLogin.cs" />
     <Compile Include="Web\WebUser.cs" />
@@ -95,7 +112,77 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Connected Services\SMSSvc\SMSService.wsdl" />
+    <None Include="Connected Services\SMSSvc\SMSService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SMSSvc\SMSService1.wsdl" />
+    <None Include="Connected Services\SMSSvc\SMSService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SMSSvc\SMSService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\SMSSvc\TalentGo.SMSSvc.ReceivedMessage1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\SMSSvc\TalentGo.SMSSvc.SendMessageResult1.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ValidationCodeSvc\TalentGo.ValidationCodeSvc.SendVerificationCodeOperationResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Connected Services\ValidationCodeSvc\VerificationCodeService.wsdl" />
+    <None Include="Connected Services\ValidationCodeSvc\VerificationCodeService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ValidationCodeSvc\VerificationCodeService1.wsdl" />
+    <None Include="Connected Services\ValidationCodeSvc\VerificationCodeService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Connected Services\ValidationCodeSvc\VerificationCodeService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\TalentGo.SMSSvc.ReceivedMessage.datasource" />
+    <None Include="Properties\DataSources\TalentGo.SMSSvc.SendMessageResult.datasource" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Connected Services\SMSSvc\" />
+    <WCFMetadataStorage Include="Connected Services\ValidationCodeSvc\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SMSSvc\SMSService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SMSSvc\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SMSSvc\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\SMSSvc\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ValidationCodeSvc\VerificationCodeService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ValidationCodeSvc\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ValidationCodeSvc\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Connected Services\ValidationCodeSvc\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

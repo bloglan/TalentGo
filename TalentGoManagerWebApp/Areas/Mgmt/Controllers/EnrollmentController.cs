@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TalentGo.Identity;
-using TalentGo.Recruitment;
+using TalentGo;
 using TalentGoWebApp.Areas.Mgmt.Models;
-using TalentGoWebApp.Models;
+using TalentGo.Models;
+using TalentGo.Web;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
@@ -16,10 +17,13 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 	{
 		EnrollmentManager enrollmentManager;
         RecruitmentPlanManager recruitmentPlanManager;
-        public EnrollmentController(EnrollmentManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager)
+        ApplicationUserManager targetUserManager;
+
+        public EnrollmentController(EnrollmentManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager, ApplicationUserManager userManager)
         {
             this.enrollmentManager = enrollmentManager;
             this.recruitmentPlanManager = recruitmentPlanManager;
+            this.targetUserManager = userManager;
         }
 
 		/// <summary>
@@ -188,7 +192,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 result.Message = "找不到用户";
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
-            var plan = (await this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
+            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
             if (plan == null)
             {
                 result.Code = 404;
@@ -196,7 +200,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
 
-            var enrollment = (await this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.UserID == user.Id);
+            var enrollment = (this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.UserID == user.Id);
 			if (enrollment == null)
 			{
 				result.Code = 404;
@@ -239,7 +243,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 result.Message = "找不到用户";
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
-            var plan = (await this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
+            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
             if (plan == null)
             {
                 result.Code = 404;
@@ -309,7 +313,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		public async Task<ActionResult> Detail(EnrollmentDetailViewModel model)
 		{
             var user = await this.targetUserManager.FindByIdAsync(model.UserID);
-            var plan = (await this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).Single(p => p.id == model.ID);
+            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).Single(p => p.id == model.ID);
 
 			var enrollmentData = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
 
@@ -340,7 +344,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         [ChildActionOnly]
         public async Task<ActionResult> SmartStatistics(RecruitmentPlan plan)
         {
-            var enrollmentSet = await this.enrollmentManager.GetEnrollmentsOfPlan(plan);
+            var enrollmentSet = this.enrollmentManager.GetEnrollmentsOfPlan(plan);
             EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()
             {
                 CommitedEnrollmentCount = enrollmentSet.Count(e => e.WhenCommited.HasValue),

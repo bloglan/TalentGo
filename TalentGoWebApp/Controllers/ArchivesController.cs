@@ -11,7 +11,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using TalentGo.Extension;
 using TalentGo.Web;
-using TalentGo.Recruitment;
+using TalentGo;
 
 namespace TalentGoWebApp.Controllers
 {

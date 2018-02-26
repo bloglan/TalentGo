@@ -2,7 +2,7 @@
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using TalentGo.Recruitment;
+using TalentGo;
 using TalentGo.EntityFramework;
 using TalentGo.Utilities;
 
@@ -29,11 +29,11 @@ namespace TalentGoWebApp.Controllers
 		{
 			if (string.IsNullOrEmpty(ViewName))
 				ViewName = "ArticlePart";
-			var articleList = await this.articleManager.GetAvaiableArticles(IsPublic, plan);
+			var articleList = this.articleManager.GetAvaiableArticles(IsPublic, plan);
 			return PartialView(ViewName, articleList.Take(MaxCount));
 		}
 
-		public async Task<ActionResult> Detail(int id)
+		public ActionResult Detail(int id)
 		{
 			bool IsPublic = true;
 			if (this.User.Identity.IsAuthenticated && this.User.Identity is WindowsIdentity)

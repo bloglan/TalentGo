@@ -4,13 +4,29 @@ using System.Web.Routing;
 
 namespace TalentGo.Extension
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class FormatterExtension
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="datetime"></param>
+        /// <param name="parts"></param>
+        /// <param name="DateSpraster"></param>
+        /// <param name="TimeSp"></param>
+        /// <returns></returns>
 		public static string FormatAs(this DateTime datetime, DateTimeParts parts, char DateSpraster, char TimeSp)
 		{
 			return string.Empty;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
 		public static string SmartShow(this DateTime dt)
 		{
 			DateTime current = DateTime.Now;
@@ -104,6 +120,11 @@ namespace TalentGo.Extension
 			return ageBase;
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
 		public static string ToByteSize(this int size)
 		{
 			int absSize = Math.Abs(size);
@@ -117,6 +138,12 @@ namespace TalentGo.Extension
 				return ((decimal)size / (1024m * 1024m * 1024m)).ToString("0.#") + "GB";
 		}
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="AdditionalRouteValues"></param>
+        /// <returns></returns>
 		public static RouteValueDictionary ToRouteValues(this NameValueCollection col, Object AdditionalRouteValues)
 		{
 			var values = new RouteValueDictionary(AdditionalRouteValues);
@@ -133,18 +160,51 @@ namespace TalentGo.Extension
 
 	}
 
+    /// <summary>
+    /// 
+    /// </summary>
 	[Flags]
 	public enum DateTimeParts
 	{
+        /// <summary>
+        /// 
+        /// </summary>
 		Year = 1,
+        /// <summary>
+        /// 
+        /// </summary>
 		Month = 2,
+        /// <summary>
+        /// 
+        /// </summary>
 		Day = 4,
+        /// <summary>
+        /// 
+        /// </summary>
 		Hour = 8,
+        /// <summary>
+        /// 
+        /// </summary>
 		Minute = 16,
+        /// <summary>
+        /// 
+        /// </summary>
 		Second = 32,
+        /// <summary>
+        /// 
+        /// </summary>
 		MillionSecond = 64,
+        /// <summary>
+        /// 
+        /// </summary>
 		YearAndMonth = 3,
+        /// <summary>
+        /// 
+        /// </summary>
 		DateOnly = 7,
+        /// <summary>
+        /// 
+        /// </summary>
 		TimeOnly = 56
 	}
 }

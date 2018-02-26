@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TalentGo.Recruitment;
 
 namespace TalentGo.Utilities
 {
@@ -35,7 +34,7 @@ namespace TalentGo.Utilities
 		/// <param name="IsPublic">指示一个值，表示要取得适用于外网还是内网的文章。</param>
 		/// <param name="plan">可以为null，则表示列表与招聘计划无关。若不为null，则显示与招聘计划关联的文章列表。忽略IsPublic参数。</param>
 		/// <returns></returns>
-		public async Task<IEnumerable<Article>> GetAvaiableArticles(bool IsPublic, RecruitmentPlan plan)
+		public IEnumerable<Article> GetAvaiableArticles(bool IsPublic, RecruitmentPlan plan)
 		{
 			if (plan == null || plan.id == 0)
 			{

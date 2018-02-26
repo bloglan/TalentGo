@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using TalentGo.Recruitment;
+using TalentGo;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {

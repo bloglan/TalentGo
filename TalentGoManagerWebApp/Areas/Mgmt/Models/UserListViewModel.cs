@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TalentGo;
-using TalentGo.Identity;
-using TalentGo.Recruitment;
-using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
 {
@@ -17,12 +14,10 @@ namespace TalentGoWebApp.Areas.Mgmt.Models
         {
             this.OrderColumn = "WhenCreated";
             this.DownDirection = true;
-            this.UserDelegateFilter = UserDelegateFilterType.All;
             this.PageSize = 30;
         }
         [Display(Name = "关键字")]
         public string Keywords { get; set; }
-        public UserDelegateFilterType UserDelegateFilter { get; set; }
 
         public IEnumerable<Person> AppUserList { get; set; }
 

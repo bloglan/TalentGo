@@ -1,20 +1,28 @@
 ﻿using System.Security.Principal;
 using System.Web;
-using TalentGo.Recruitment;
 
 namespace TalentGo.Web
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class HttpRecruitmentContext : RecruitmentContextBase
     {
         HttpContextBase httpContext;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="HttpContext"></param>
         public HttpRecruitmentContext(HttpContextBase HttpContext)
         {
             this.httpContext = HttpContext;
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public override IPrincipal LoginUser
         {
             get
@@ -23,6 +31,9 @@ namespace TalentGo.Web
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override int? SelectedPlanId
         {
             get
@@ -41,6 +52,9 @@ namespace TalentGo.Web
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override int? TargetUserId
         {
             get
@@ -59,6 +73,9 @@ namespace TalentGo.Web
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public override int? CurrentEnrollmentId
         {
             get

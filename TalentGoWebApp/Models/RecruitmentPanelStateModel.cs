@@ -1,4 +1,4 @@
-﻿using TalentGo.Recruitment;
+﻿using TalentGo;
 
 namespace TalentGoWebApp.Models
 {

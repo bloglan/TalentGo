@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TalentGo.Backend
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SMSMessageBag
     {
         /// <summary>

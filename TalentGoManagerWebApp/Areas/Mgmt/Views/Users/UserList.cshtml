@@ -63,11 +63,7 @@
 			@Html.TextBoxFor(m => m.Keywords, new { @class = "form-control" })
 		</div>
 		<div class="form-group">
-			@Html.DropDownListFor(m => m.UserDelegateFilter, new List<SelectListItem>() {
-		   new SelectListItem() {Text = "所有用户", Value = UserDelegateFilterType.All.ToString() },
-		   new SelectListItem() {Text = "内部", Value = UserDelegateFilterType.Intranet.ToString() },
-		   new SelectListItem() {Text = "外部", Value = UserDelegateFilterType.Internet.ToString() }
-	   }, new { @class = "form-control" })
+			//
 		</div>
 
 		@Html.HiddenFor(m => m.OrderColumn)
@@ -163,13 +159,6 @@
 					@user.WhenCreated
 				</td>
 				<td>
-					@if (user.RegisterationDelegate == "Internet")
-					{
-						<p>外部报考</p>
-					}
-					else {
-						<p>内部报考</p>
-					}
 
 				</td>
 			</tr>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using TalentGo.Utilities;
@@ -10,15 +11,17 @@ namespace TalentGo.EntityFramework
     /// </summary>
     public class ArticleStore : IArticleStore
     {
-        TalentGoDbContext dbContext;
+        DbContext dbContext;
+        DbSet<Article> set;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="DbContext"></param>
-        public ArticleStore(TalentGoDbContext DbContext)
+        public ArticleStore(DbContext DbContext)
         {
             this.dbContext = DbContext;
+            this.set = this.dbContext.Set<Article>();
         }
 
         /// <summary>
@@ -28,7 +31,7 @@ namespace TalentGo.EntityFramework
         {
             get
             {
-                return this.dbContext.Article.AsNoTracking();
+                return this.set;
             }
         }
 
@@ -42,7 +45,7 @@ namespace TalentGo.EntityFramework
             //article.WhenCreated = DateTime.Now;
             //article.WhenChanged = DateTime.Now;
 
-            this.dbContext.Article.Add(article);
+            this.set.Add(article);
             await this.dbContext.SaveChangesAsync();
         }
 
@@ -53,14 +56,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task RemoveAsync(Article article)
         {
-            if (article == null)
-                throw new ArgumentNullException(nameof(article));
-
-            var current = await this.dbContext.Article.FindAsync(article.id);
-            if (current == null)
-                throw new ArgumentException("Can not find article in any data store.");
-
-            this.dbContext.Article.Remove(current);
+            this.set.Remove(article);
             await this.dbContext.SaveChangesAsync();
         }
 
@@ -71,14 +67,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task UpdateAsync(Article article)
         {
-            var current = this.dbContext.Article.FirstOrDefault(a => a.id == article.id);
-
-            var currentEntry = this.dbContext.Entry<Article>(current);
-            currentEntry.CurrentValues.SetValues(article);
-            //currentEntry.Property(p => p.WhenCreated).IsModified = false;
-
-            current.WhenChanged = DateTime.Now;
-
+            this.dbContext.Entry(article).State = EntityState.Modified;
             await this.dbContext.SaveChangesAsync();
         }
 

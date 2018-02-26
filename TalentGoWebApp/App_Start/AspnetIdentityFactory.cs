@@ -5,7 +5,6 @@ using System;
 using TalentGo;
 using TalentGo.EntityFramework;
 using TalentGo.Identity;
-using TalentGo.Recruitment;
 using TalentGo.Web;
 
 namespace TalentGoWebApp

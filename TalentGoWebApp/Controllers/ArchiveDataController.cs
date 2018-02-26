@@ -2,7 +2,7 @@
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using TalentGo.Recruitment;
+using TalentGo;
 using TalentGo.Web;
 
 namespace TalentGoWebApp.Controllers
@@ -46,20 +46,20 @@ namespace TalentGoWebApp.Controllers
 		{
 			if (this.User.Identity is WindowsIdentity && (this.User.IsInRole("QJYC\\招聘管理员") || this.User.IsInRole("QJYC\\招聘监督人")))
 			{
-				var arch = await this.enrollmentManager.FindEnrollmentArchiveByIdAsync(eaid);
+				var arch = this.enrollmentManager.FindEnrollmentArchiveByIdAsync(eaid);
 				if (arch == null)
 					return File("~/Content/WebRes/NoHeadImage.jpg", "image/jpeg");
 				return File(arch.ArchiveData, arch.MimeType);
 			}
 
-			var enrollmentArchiveSet = await this.enrollmentManager.FindEnrollmentArchiveByIdAsync(eaid);
+			var enrollmentArchiveSet = this.enrollmentManager.FindEnrollmentArchiveByIdAsync(eaid);
 			if (enrollmentArchiveSet == null)
 				return HttpNotFound();
 
 			return File(enrollmentArchiveSet.ArchiveData, enrollmentArchiveSet.MimeType);
 		}
 
-		public async Task<ActionResult> GetSampleImage(int acid)
+		public ActionResult GetSampleImage(int acid)
 		{
 			var current = this.archiveCategoryManager.ArchiveCategories.Single(e => e.id == acid);
 			if (current == null)

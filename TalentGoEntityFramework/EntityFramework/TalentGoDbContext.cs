@@ -18,21 +18,75 @@ namespace TalentGo.EntityFramework
 		{
 		}
 
-
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<ArchiveCategory> ArchiveCategory { get; set; }
-		public virtual DbSet<ArchiveRequirement> ArchiveRequirements { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public virtual DbSet<ArchiveRequirement> ArchiveRequirements { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<Article> Article { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<Degree> Degree { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<EducationBackground> EducationBackground { get; set; }
 		//public virtual DbSet<EmailValidationSession> EmailValidationSession { get; set; }
+
+            /// <summary>
+            /// 
+            /// </summary>
 		public virtual DbSet<EnrollmentArchive> EnrollmentArchives { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<Enrollment> EnrollmentData { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<Major> Major { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<MajorCategory> MajorCategory { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<MobilePhoneValidationSession> MobilePhoneValidationSession { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<Nationality> Nationality { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<RecruitmentPlan> RecruitmentPlan { get; set; }
+        
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<UserLogin> UserLogins { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
 		public virtual DbSet<Person> Users { get; set; }
 
         /// <summary>

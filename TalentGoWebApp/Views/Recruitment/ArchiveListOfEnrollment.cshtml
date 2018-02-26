@@ -22,7 +22,7 @@
 			<i class="glyphicon glyphicon-plus"></i>
 			<span>上传文件</span>
 			<!-- The file input field used as target for the file upload widget -->
-			<input id="fileupload" type="file" name="files[]" data-url="@Url.Action("UploadFiles", "Archives", new { planid = requirement.RecruitmentPlanID, userid = ((TargetUser)this.ViewData["user"]).Id, acid = requirement.ArchiveCategoryID })" data-needmore="@(((RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements)).IsMultipleEnabled().ToString())">
+			<input id="fileupload" type="file" name="files[]" data-url="@Url.Action("UploadFiles", "Archives", new { planid = requirement.RecruitmentPlanID, userid = ((WebUser)this.ViewData["user"]).Id, acid = requirement.ArchiveCategoryID })" data-needmore="@(((RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements)).IsMultipleEnabled().ToString())">
 		</span>
 	</div>
 }

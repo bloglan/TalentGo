@@ -9,6 +9,7 @@ using TalentGo.Web;
 using TalentGo.Identity;
 using TalentGoWebApp.Models;
 using TalentGo;
+using TalentGo.Models;
 
 namespace TalentGoWebApp.Controllers
 {
@@ -18,13 +19,15 @@ namespace TalentGoWebApp.Controllers
         RecruitmentPlanManager recruitManager;
         EnrollmentManager enrollmentManager;
         RecruitmentContextBase recruitmentContext;
+        ApplicationUserManager targetUserManager;
 
         Person user = null;
 
-        public RecruitmentController(RecruitmentPlanManager recruitmentPlanManager, EnrollmentManager enrollmentManager)
+        public RecruitmentController(RecruitmentPlanManager recruitmentPlanManager, EnrollmentManager enrollmentManager, ApplicationUserManager userManager)
         {
             this.recruitManager = recruitmentPlanManager;
             this.enrollmentManager = enrollmentManager;
+            this.targetUserManager = userManager;
         }
 
         protected override void Initialize(RequestContext requestContext)
@@ -32,7 +35,7 @@ namespace TalentGoWebApp.Controllers
             base.Initialize(requestContext);
             this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
             if (this.recruitmentContext.TargetUserId.HasValue)
-                user = this.targetUserManager.TargetUsers.FirstOrDefault(t => t.Id == this.recruitmentContext.TargetUserId.Value);
+                user = this.targetUserManager.Users.FirstOrDefault(t => t.Id == this.recruitmentContext.TargetUserId.Value);
         }
 
         //protected override void OnException(ExceptionContext filterContext)
@@ -59,12 +62,12 @@ namespace TalentGoWebApp.Controllers
         /// <returns></returns>
         public async Task<ActionResult> Index()
         {
-            return View(await this.recruitManager.GetPlansForUser(this.user));
+            return View(this.recruitManager.GetPlansForUser(this.user));
         }
 
         public async Task<ActionResult> Detail(int id)
         {
-            var current = (await this.recruitManager.GetPlansForUser(this.user)).First(plan => plan.id == id);
+            var current = (this.recruitManager.GetPlansForUser(this.user)).First(plan => plan.id == id);
             if (current == null)
                 return HttpNotFound();
 
@@ -76,13 +79,13 @@ namespace TalentGoWebApp.Controllers
         /// 报名（填写和编辑报名表）
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Enroll(int? id)
+        public ActionResult Enroll(int? id)
         {
             //如果有传入参数ID，则指示了要选中的招聘计划。
             RecruitmentPlan plan = null;
             if (id.HasValue)
             {
-                plan = (await this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == id.Value);
+                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == id.Value);
                 if (plan == null)
                     return HttpNotFound();
 
@@ -93,7 +96,7 @@ namespace TalentGoWebApp.Controllers
                 if (!this.recruitmentContext.SelectedPlanId.HasValue)
                     return HttpNotFound();
 
-                plan = (await this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == this.recruitmentContext.SelectedPlanId.Value);
+                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == this.recruitmentContext.SelectedPlanId.Value);
             }
 
             //准备下拉框及相关数据
@@ -101,7 +104,7 @@ namespace TalentGoWebApp.Controllers
 
             var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.RecruitPlanID == plan.id && e.UserID == this.user.Id);
             if (enrollment == null)
-                enrollment = await this.enrollmentManager.NewEnrollment(this.user, plan);
+                enrollment = this.enrollmentManager.NewEnrollment(this.user, plan);
 
             if (enrollment.WhenCommited.HasValue)
             {
@@ -125,7 +128,7 @@ namespace TalentGoWebApp.Controllers
             RecruitmentPlan plan = null;
             if (id.HasValue)
             {
-                plan = (await this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == id.Value);
+                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == id.Value);
                 if (plan == null)
                     return HttpNotFound();
 
@@ -136,7 +139,7 @@ namespace TalentGoWebApp.Controllers
                 if (!this.recruitmentContext.SelectedPlanId.HasValue)
                     return HttpNotFound();
 
-                plan = (await this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == this.recruitmentContext.SelectedPlanId.Value);
+                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.id == this.recruitmentContext.SelectedPlanId.Value);
             }
 
             if (ModelState.IsValid)
@@ -196,7 +199,7 @@ namespace TalentGoWebApp.Controllers
         /// 浏览待提交的报名表，并执行提交。
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> CommitEnrollment()
+        public ActionResult CommitEnrollment()
         {
             //
             var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.UserID == this.user.Id && e.RecruitPlanID == this.recruitmentContext.SelectedPlanId.Value);
@@ -312,7 +315,7 @@ namespace TalentGoWebApp.Controllers
         /// <param name="plan"></param>
         /// <returns></returns>
         [ChildActionOnly]
-        public async Task<ActionResult> RecruitmentPanel(RecruitmentPlan plan)
+        public ActionResult RecruitmentPanel(RecruitmentPlan plan)
         {
             RecruitmentPanelStateModel viewModel = new RecruitmentPanelStateModel();
             viewModel.Plan = plan;

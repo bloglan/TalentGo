@@ -22,7 +22,6 @@ namespace TalentGo
         /// </summary>
         /// <param name="Store"></param>
         /// <param name="recruitmentPlanManager"></param>
-        /// <param name="targetUserManager"></param>
 		public EnrollmentManager(IEnrollmentStore Store, RecruitmentPlanManager recruitmentPlanManager)
         {
             this.store = Store;
@@ -50,7 +49,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task<IQueryable<Enrollment>> GetEnrollmentsOfPlan(RecruitmentPlan plan)
+        public IQueryable<Enrollment> GetEnrollmentsOfPlan(RecruitmentPlan plan)
         {
             return this.CommitedEnrollments.Where(en => en.RecruitPlanID == plan.id);
         }
@@ -77,7 +76,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public async Task<EnrollmentArchive> FindEnrollmentArchiveByIdAsync(int Id)
+        public EnrollmentArchive FindEnrollmentArchiveByIdAsync(int Id)
         {
             var store = this.store as IEnrollmentArchiveStore;
             if (store == null)
@@ -98,7 +97,7 @@ namespace TalentGo
         /// <param name="user"></param>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task<Enrollment> NewEnrollment(Person user, RecruitmentPlan plan)
+        public Enrollment NewEnrollment(Person user, RecruitmentPlan plan)
         {
             //根据当前需求，不允许存在多个报名表。
             if (this.Enrollments.Any(e => e.UserID == user.Id))
@@ -138,9 +137,15 @@ namespace TalentGo
             await this.store.CreateAsync(enrollment);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="plan"></param>
+        /// <param name="enrollment"></param>
+        /// <returns></returns>
         public async Task UpdateEnrollment(Person user, RecruitmentPlan plan, Enrollment enrollment)
         {
-#warning 需要进行检查和应用策略。
             await this.store.UpdateAsync(enrollment);
         }
 
@@ -219,7 +224,7 @@ namespace TalentGo
             if (plan.WhenAuditCommited.HasValue)
                 return;
 
-            var enrollments = await this.GetEnrollmentsOfPlan(plan);
+            var enrollments = this.GetEnrollmentsOfPlan(plan);
             if (enrollments.Any(e => !e.Approved.HasValue))
                 throw new InvalidOperationException("操作失败，还有未设置审核标记的报名表。");
 
@@ -249,9 +254,6 @@ namespace TalentGo
             //设置声明考试的截止日期。
             //currentplan.AnnounceExpirationDate = AnnounceExamExpirationDate;
 
-            SMSSvc.SMSServiceClient smsClient = new SMSSvc.SMSServiceClient();
-            SmtpClient smtpClient = new SmtpClient("mail.qjyc.cn");
-            smtpClient.UseDefaultCredentials = true;
 
             using (TransactionScope transScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
@@ -289,8 +291,6 @@ namespace TalentGo
                     await this.UpdateEnrollment(null, plan, data);
                 }
 
-                smsClient.Close();
-                smtpClient.Dispose();
 
                 //每项提交完成后，修改currentPlan的标记，表示已提交审核。
                 plan.CompleteAudit();
@@ -308,8 +308,8 @@ namespace TalentGo
             //开始每项提交并发送短信。
 
         }
-        string smsRejectiveMsg = "{0}，您好，您所填报的{1}报名资料，经初审未通过，感谢您的参与！";
-        string smsApprovedMsg = "{0}，您好，您所填报的{1}报名资料，经初审通过，请于{2}前登陆网站声明是否参加考试，逾期未声明是否参加考试的不予参加考试。谢谢您的合作。";
+        //string smsRejectiveMsg = "{0}，您好，您所填报的{1}报名资料，经初审未通过，感谢您的参与！";
+        //string smsApprovedMsg = "{0}，您好，您所填报的{1}报名资料，经初审通过，请于{2}前登陆网站声明是否参加考试，逾期未声明是否参加考试的不予参加考试。谢谢您的合作。";
 
 
         /// <summary>
