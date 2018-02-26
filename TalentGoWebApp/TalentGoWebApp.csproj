@@ -227,6 +227,7 @@
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\JobController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\RecruitmentController.cs" />
     <Compile Include="Global.asax.cs">
@@ -798,6 +799,8 @@
     <Content Include="Service References\SMSSvc\TalentGoWebApp.SMSSvc.SendMessageResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Views\Job\Index.cshtml" />
+    <Content Include="Views\Job\JobList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

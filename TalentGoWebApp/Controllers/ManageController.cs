@@ -11,7 +11,7 @@ using TalentGo.Web;
 
 namespace TalentGoWebApp.Controllers
 {
-	[Authorize(Roles = "InternetUser")]
+	[Authorize]
 	public class ManageController : Controller
     {
         private ApplicationSignInManager _signInManager;

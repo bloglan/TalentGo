@@ -36,7 +36,7 @@ namespace TalentGo.Utilities
 		/// <returns></returns>
 		public IEnumerable<Article> GetAvaiableArticles(bool IsPublic, RecruitmentPlan plan)
 		{
-			if (plan == null || plan.id == 0)
+			if (plan == null || plan.Id == 0)
 			{
 				var articleSet = from article in this.store.Articles
 								 where (!article.IsPublic.HasValue || article.IsPublic.Value == IsPublic) && article.Visible && !article.RelatedPlan.HasValue
@@ -47,7 +47,7 @@ namespace TalentGo.Utilities
 			else
 			{
 				var planArticleSet = from article in this.store.Articles
-                                     where article.RelatedPlan == plan.id && article.Visible
+                                     where article.RelatedPlan == plan.Id && article.Visible
 									 orderby article.WhenChanged descending
 									 select article;
 				return planArticleSet.Take(50);

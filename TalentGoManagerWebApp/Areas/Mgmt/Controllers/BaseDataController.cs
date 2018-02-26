@@ -29,7 +29,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         public ActionResult Update(int id)
         {
-            var Ac = this.archManager.ArchiveCategories.SingleOrDefault(e => e.id == id);
+            var Ac = this.archManager.ArchiveCategories.SingleOrDefault(e => e.Id == id);
             if (Ac != null)
             {
                 return View(Ac);
@@ -115,7 +115,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         public ActionResult GetPicture(int eaid)
         {
-            var item = this.archManager.ArchiveCategories.SingleOrDefault(e => e.id == eaid);
+            var item = this.archManager.ArchiveCategories.SingleOrDefault(e => e.Id == eaid);
             if (item == null)
                 return HttpNotFound();
 
@@ -132,7 +132,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
             var file = this.Request.Files[0];
 
-            var archiveCategory = this.archManager.ArchiveCategories.SingleOrDefault(e => e.id == acid);
+            var archiveCategory = this.archManager.ArchiveCategories.SingleOrDefault(e => e.Id == acid);
             if (archiveCategory == null)
                 return Json(new { name = "找不到文档编目。", id = 0 }, "text/plain");
 
@@ -179,14 +179,14 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 ms.Flush();
                 ms.Close();
 
-                return Json(new { name = archiveCategory.Name, id = archiveCategory.id }, "text/plain");
+                return Json(new { name = archiveCategory.Name, id = archiveCategory.Id }, "text/plain");
 
             }
         }
 
         public async Task<ActionResult> RemoveFile(int eaid)
         {
-            var current = this.archManager.ArchiveCategories.SingleOrDefault(e => e.id == eaid);
+            var current = this.archManager.ArchiveCategories.SingleOrDefault(e => e.Id == eaid);
 
             if (current == null)
             {

@@ -52,7 +52,7 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-		public virtual DbSet<Enrollment> EnrollmentData { get; set; }
+		public virtual DbSet<ApplicationForm> EnrollmentData { get; set; }
 
         /// <summary>
         /// 
@@ -127,15 +127,15 @@ namespace TalentGo.EntityFramework
 				.Property(e => e.MimeType)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<Enrollment>()
+			modelBuilder.Entity<ApplicationForm>()
 				.Property(e => e.IDCardNumber)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<Enrollment>()
+			modelBuilder.Entity<ApplicationForm>()
 				.Property(e => e.Mobile)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<Enrollment>()
+			modelBuilder.Entity<ApplicationForm>()
 				.HasMany(e => e.EnrollmentArchives)
 				.WithRequired(e => e.EnrollmentData)
 				.HasForeignKey(e => new { e.RecruitPlanID, e.UserID })

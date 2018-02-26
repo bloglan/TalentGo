@@ -7,7 +7,7 @@ namespace TalentGo
     /// <summary>
     /// 
     /// </summary>
-    public interface IEnrollmentArchiveStore : IEnrollmentStore, IDisposable
+    public interface IEnrollmentArchiveStore : IApplicationFormStore, IDisposable
     {
         /// <summary>
         /// 
@@ -19,7 +19,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="enrollment"></param>
         /// <returns></returns>
-        Task<IQueryable<EnrollmentArchive>> GetEnrollmentArchives(Enrollment enrollment);
+        Task<IQueryable<EnrollmentArchive>> GetEnrollmentArchives(ApplicationForm enrollment);
 
         /// <summary>
         /// 
@@ -27,7 +27,7 @@ namespace TalentGo
         /// <param name="enrollment"></param>
         /// <param name="archive"></param>
         /// <returns></returns>
-        Task AddArchiveToEnrollment(Enrollment enrollment, EnrollmentArchive archive);
+        Task AddArchiveToEnrollment(ApplicationForm enrollment, EnrollmentArchive archive);
 
         /// <summary>
         /// 
@@ -35,6 +35,6 @@ namespace TalentGo
         /// <param name="enrollment"></param>
         /// <param name="archive"></param>
         /// <returns></returns>
-        Task RemoveArchiveFromEnrollment(Enrollment enrollment, EnrollmentArchive archive);
+        Task RemoveArchiveFromEnrollment(ApplicationForm enrollment, EnrollmentArchive archive);
 	}
 }

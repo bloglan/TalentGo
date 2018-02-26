@@ -12,17 +12,17 @@ namespace TalentGo
     /// <summary>
     /// 表示招聘报名管理器
     /// </summary>
-    public class EnrollmentManager
+    public class ApplicationFormManager
     {
         RecruitmentPlanManager recruitManager;
-        IEnrollmentStore store;
+        IApplicationFormStore store;
 
         /// <summary>
         /// 构造函数。使用给定的报名表存储、招聘计划管理器和目标用户管理器初始化报名管理器。
         /// </summary>
         /// <param name="Store"></param>
         /// <param name="recruitmentPlanManager"></param>
-		public EnrollmentManager(IEnrollmentStore Store, RecruitmentPlanManager recruitmentPlanManager)
+		public ApplicationFormManager(IApplicationFormStore Store, RecruitmentPlanManager recruitmentPlanManager)
         {
             this.store = Store;
             this.recruitManager = recruitmentPlanManager;
@@ -31,17 +31,17 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        public IQueryable<Enrollment> Enrollments
+        public IQueryable<ApplicationForm> ApplicationForms
         {
-            get { return this.store.Enrollments; }
+            get { return this.store.ApplicationForms; }
         }
 
         /// <summary>
         /// 获取已提交的报名表。
         /// </summary>
-        public IQueryable<Enrollment> CommitedEnrollments
+        public IQueryable<ApplicationForm> CommitedForms
         {
-            get { return this.Enrollments.Where(e => e.WhenCommited.HasValue); }
+            get { return this.ApplicationForms.Where(e => e.WhenCommited.HasValue); }
         }
 
         /// <summary>
@@ -49,16 +49,16 @@ namespace TalentGo
         /// </summary>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public IQueryable<Enrollment> GetEnrollmentsOfPlan(RecruitmentPlan plan)
+        public IQueryable<ApplicationForm> GetEnrollmentsOfPlan(RecruitmentPlan plan)
         {
-            return this.CommitedEnrollments.Where(en => en.RecruitPlanID == plan.id);
+            return this.CommitedForms.Where(en => en.JobId == plan.Id);
         }
 
         /// <summary>
         /// 获取报名对应的上传的文档集合。
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<EnrollmentArchive>> GetEnrollmentArchives(Enrollment enrollment)
+        public async Task<IEnumerable<EnrollmentArchive>> GetEnrollmentArchives(ApplicationForm enrollment)
         {
             //获取报名表
             //获取报名表对应的资料
@@ -82,7 +82,7 @@ namespace TalentGo
             if (store == null)
                 throw new NotSupportedException();
 
-            return store.EnrollmentArchives.FirstOrDefault(ea => ea.id == Id);
+            return store.EnrollmentArchives.FirstOrDefault(ea => ea.Id == Id);
         }
 
 
@@ -97,13 +97,13 @@ namespace TalentGo
         /// <param name="user"></param>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public Enrollment NewEnrollment(Person user, RecruitmentPlan plan)
+        public ApplicationForm NewEnrollment(Person user, RecruitmentPlan plan)
         {
             //根据当前需求，不允许存在多个报名表。
-            if (this.Enrollments.Any(e => e.UserID == user.Id))
+            if (this.ApplicationForms.Any(e => e.UserId == user.Id))
                 throw new InvalidOperationException("操作失败，指定的用户已存在报名表。");
 
-            Enrollment data = new Enrollment(plan, user);
+            ApplicationForm data = new ApplicationForm(plan, user);
             //data.RecruitPlanID = plan.id;
             //data.UserID = user.Id;
             ChineseIDCardNumber cardNumber = ChineseIDCardNumber.CreateNumber(user.IDCardNumber);
@@ -128,10 +128,10 @@ namespace TalentGo
         /// <param name="plan"></param>
         /// <param name="enrollment"></param>
         /// <returns></returns>
-        public async Task CreateEnrollment(Person user, RecruitmentPlan plan, Enrollment enrollment)
+        public async Task CreateEnrollment(Person user, RecruitmentPlan plan, ApplicationForm enrollment)
         {
             //根据要求，一个用户只能参与一个报名。
-            if (this.Enrollments.Any(e => e.UserID == user.Id))
+            if (this.ApplicationForms.Any(e => e.UserId == user.Id))
                 throw new InvalidOperationException("操作失败，每个用户只能创建一个报名表。");
 
             await this.store.CreateAsync(enrollment);
@@ -144,7 +144,7 @@ namespace TalentGo
         /// <param name="plan"></param>
         /// <param name="enrollment"></param>
         /// <returns></returns>
-        public async Task UpdateEnrollment(Person user, RecruitmentPlan plan, Enrollment enrollment)
+        public async Task UpdateEnrollment(Person user, RecruitmentPlan plan, ApplicationForm enrollment)
         {
             await this.store.UpdateAsync(enrollment);
         }
@@ -154,7 +154,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="enrollment"></param>
         /// <returns></returns>
-        public async Task DeleteEnrollment(Enrollment enrollment)
+        public async Task DeleteEnrollment(ApplicationForm enrollment)
         {
             //如果该报名表已经提交，则不能删除。
             if (enrollment.WhenCommited.HasValue)
@@ -167,7 +167,7 @@ namespace TalentGo
         /// 提交报名资料。
         /// </summary>
         /// <returns></returns>
-        public async Task CommitEnrollment(Person user, RecruitmentPlan plan, Enrollment enrollment)
+        public async Task CommitEnrollment(Person user, RecruitmentPlan plan, ApplicationForm enrollment)
         {
             //提交报名资料时，对报名资料以及关联的图片文件资料进行检查。
             //提交后不能反向提交。
@@ -257,7 +257,7 @@ namespace TalentGo
 
             using (TransactionScope transScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                foreach (Enrollment data in enrollments)
+                foreach (ApplicationForm data in enrollments)
                 {
                     //若没有提交，或提交日期晚于报名截止日期的，直接设定为不通过。
                     if (!data.WhenCommited.HasValue || data.WhenCommited > plan.EnrollExpirationDate)
@@ -321,7 +321,7 @@ namespace TalentGo
         /// <returns></returns>
 		public async Task AnnounceForExam(Person user, RecruitmentPlan plan, bool IsTakeExam)
         {
-            Enrollment data = this.CommitedEnrollments.First(e => e.UserID == user.Id && e.RecruitPlanID == plan.id);
+            ApplicationForm data = this.CommitedForms.First(e => e.UserId == user.Id && e.JobId == plan.Id);
 
             //必须是已提交的，通过审核的，尚未声明的，当前在声明有效期内的。
             if (!data.WhenAudit.HasValue)
@@ -333,7 +333,7 @@ namespace TalentGo
             if (data.WhenAnnounced.HasValue)
                 throw new InvalidOperationException("无效的操作，已进行了声明。不能重复声明。");
 
-            if (data.RecruitmentPlan.AnnounceExpirationDate.Value < DateTime.Now)
+            if (data.Job.AnnounceExpirationDate.Value < DateTime.Now)
                 throw new InvalidOperationException("无效的操作，已过声明截止时间。");
 
             data.Announce(IsTakeExam);
@@ -352,7 +352,7 @@ namespace TalentGo
         /// <param name="enrollment"></param>
         /// <param name="archive"></param>
         /// <returns></returns>
-        public async Task AddEnrollmentArchive(Enrollment enrollment, EnrollmentArchive archive)
+        public async Task AddEnrollmentArchive(ApplicationForm enrollment, EnrollmentArchive archive)
         {
             var store = this.store as IEnrollmentArchiveStore;
             if (store == null)
@@ -367,7 +367,7 @@ namespace TalentGo
         /// <param name="enrollment"></param>
         /// <param name="archive"></param>
         /// <returns></returns>
-        public async Task RemoveEnrollmentArchive(Enrollment enrollment, EnrollmentArchive archive)
+        public async Task RemoveEnrollmentArchive(ApplicationForm enrollment, EnrollmentArchive archive)
         {
             var store = this.store as IEnrollmentArchiveStore;
             if (store == null)
@@ -395,12 +395,12 @@ namespace TalentGo
         /// <param name="AnounceFilter"></param>
         /// <param name="Keywords">关键字，若提供，可对姓名、身份证号码、移动电话号码、籍贯、生源地、学校、填写专业字段进行匹配搜索。否则查询全部。</param>
         /// <returns></returns>
-        public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnounceFilter, string Keywords)
+        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnounceFilter, string Keywords)
         {
             //带分页
             //
             //先获得符合初始条件的集合
-            var initSet = this.CommitedEnrollments.Where(e => e.RecruitPlanID == PlanID);
+            var initSet = this.CommitedForms.Where(e => e.JobId == PlanID);
 
             //根据条件过滤
 
@@ -465,7 +465,7 @@ namespace TalentGo
         /// <param name="DownDirection"></param>
         /// <param name="ItemCount"></param>
         /// <returns></returns>
-		public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, out int ItemCount)
+		public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, out int ItemCount)
         {
             var resultSet = this.GetCommitedEnrollmentData(PlanID, MajorCategory, AuditFilter, AnnounceFilter, Keywords);
 
@@ -477,7 +477,7 @@ namespace TalentGo
             if (string.IsNullOrEmpty(OrderColumn))
                 OrderColumn = "WhenCommited";
 
-            IOrderedQueryable<Enrollment> OrderedSet;
+            IOrderedQueryable<ApplicationForm> OrderedSet;
             if (DownDirection)
                 OrderedSet = resultSet.OrderByDescending(OrderColumn);
             else
@@ -500,7 +500,7 @@ namespace TalentGo
         /// <param name="PageSize"></param>
         /// <param name="ItemCount"></param>
         /// <returns></returns>
-        public IQueryable<Enrollment> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
+        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
         {
             var result = this.GetCommitedEnrollmentData(PlanID, MajorCategory, AuditFilter, AnnounceFilter, Keywords, OrderColumn, DownDirection, out ItemCount);
             if (ItemCount == 0)

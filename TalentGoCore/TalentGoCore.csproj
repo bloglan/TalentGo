@@ -70,7 +70,9 @@
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExaminationRoomStore.cs" />
+    <Compile Include="IJobStore.cs" />
     <Compile Include="Job.cs" />
+    <Compile Include="JobExtensions.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="ArchiveCategory.cs" />
     <Compile Include="ArchiveRequirement.cs" />
@@ -80,14 +82,14 @@
     <Compile Include="IArchiveRequirementStore.cs" />
     <Compile Include="Utilities\IArticleStore.cs" />
     <Compile Include="IEnrollmentArchiveStore.cs" />
-    <Compile Include="IEnrollmentStore.cs" />
+    <Compile Include="IApplicationFormStore.cs" />
     <Compile Include="IRecruitmentPlanStore.cs" />
     <Compile Include="Major.cs" />
     <Compile Include="MajorCategory.cs" />
     <Compile Include="RecruitmentContextBase.cs" />
     <Compile Include="Utilities\Article.cs" />
     <Compile Include="EnrollmentArchive.cs" />
-    <Compile Include="Enrollment.cs" />
+    <Compile Include="ApplicationForm.cs" />
     <Compile Include="RecruitmentPlan.cs" />
     <Compile Include="ClaimDefinition.cs" />
     <Compile Include="RegisterationDelegate.cs" />
@@ -96,7 +98,7 @@
     <Compile Include="ArchiveCategoryManager.cs" />
     <Compile Include="CommitEnrollmentException.cs" />
     <Compile Include="RequirementType.cs" />
-    <Compile Include="EnrollmentManager.cs" />
+    <Compile Include="ApplicationFormManager.cs" />
     <Compile Include="RecruitmentPlanManager.cs" />
     <Compile Include="Utilities\ArticleManager.cs" />
     <Compile Include="Utilities\ChineseIDCardNumber.cs" />

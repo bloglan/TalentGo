@@ -17,14 +17,13 @@ namespace TalentGo
         public RecruitmentPlan()
         {
             ArchiveRequirements = new HashSet<ArchiveRequirement>();
-            //Article = new HashSet<Article>();
-            //EnrollmentData = new HashSet<Enrollment>();
+            this.Jobs = new HashSet<Job>();
         }
 
         /// <summary>
         /// 计划Id。
         /// </summary>
-        public int id { get; protected set; }
+        public int Id { get; protected set; }
 
         /// <summary>
         /// 招聘计划名称。
@@ -120,5 +119,7 @@ namespace TalentGo
             }
             throw new InvalidOperationException("操作无效，计划未发布或已完成审核。");
         }
+
+        public virtual ICollection<Job> Jobs { get; protected set; }
     }
 }

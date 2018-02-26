@@ -53,7 +53,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task UpdateAsync(RecruitmentPlan Plan)
         {
-            RecruitmentPlan old = await this.FindByIdAsync(Plan.id);
+            RecruitmentPlan old = await this.FindByIdAsync(Plan.Id);
             if (old != null)
             {
                 var entry = this.db.Entry<RecruitmentPlan>(old);
@@ -72,7 +72,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task DeleteAsync(RecruitmentPlan Plan)
         {
-            var current = await this.FindByIdAsync(Plan.id);
+            var current = await this.FindByIdAsync(Plan.Id);
             if (current != null)
             {
                 this.set.Remove(current);
@@ -89,7 +89,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<RecruitmentPlan> FindByIdAsync(int Id)
         {
-            return this.set.FirstOrDefault(plan => plan.id == Id);
+            return this.set.FirstOrDefault(plan => plan.Id == Id);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<IQueryable<ArchiveRequirement>> GetArchiveRequirementsAsync(RecruitmentPlan plan)
         {
-            return this.reqSet.Where(ar => ar.RecruitmentPlanID == plan.id);
+            return this.reqSet.Where(ar => ar.RecruitmentPlanID == plan.Id);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿@model Enrollment
+﻿@model ApplicationForm
 
 @*显示报名有关的资料清单*@
 
@@ -9,8 +9,8 @@
 	{
 		<div class="col-md-3">
 			<div class="thumbnail">
-				<a href="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = arch.id, area = "" })" data-toggle="modal" data-target="#enrollmentArchiveBigView" data-remote="false">
-					<img src="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = arch.id, area = "" })" class="img-responsive" style="max-height: 180px;" />
+				<a href="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = arch.Id, area = "" })" data-toggle="modal" data-target="#enrollmentArchiveBigView" data-remote="false">
+					<img src="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = arch.Id, area = "" })" class="img-responsive" style="max-height: 180px;" />
 				</a>
 				<div class="caption">
 					<h4>@arch.ArchiveCategory.Name</h4>

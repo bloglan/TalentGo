@@ -15,9 +15,9 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
     {
         RecruitmentPlanManager recruitmentManager;
         ArchiveCategoryManager archiveCategoryManager;
-        EnrollmentManager enrollmentManager;
+        ApplicationFormManager enrollmentManager;
 
-        public RecruitmentPlanController(RecruitmentPlanManager recruitmentManager, ArchiveCategoryManager archiveCategoryManager, EnrollmentManager enrollmentManager)
+        public RecruitmentPlanController(RecruitmentPlanManager recruitmentManager, ArchiveCategoryManager archiveCategoryManager, ApplicationFormManager enrollmentManager)
         {
             this.recruitmentManager = recruitmentManager;
             this.archiveCategoryManager = archiveCategoryManager;
@@ -70,7 +70,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 };
 
                 await this.recruitmentManager.CreateRecruitmentPlan(newplan);
-                return RedirectToAction("ArchiveRequirements", new { id = newplan.id });
+                return RedirectToAction("ArchiveRequirements", new { id = newplan.Id });
             }
             return View(model);
 
@@ -138,8 +138,8 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                            select new ArchiveRequirementsViewModel()
                            {
                                ArchiveCategory = arch,
-                               Enabled = planreqs.Any(pr => pr.ArchiveCategoryID == arch.id),
-                               RequirementType = planreqs.Any(pr => pr.ArchiveCategoryID == arch.id) ? planreqs.FirstOrDefault(pr => pr.ArchiveCategoryID == arch.id).Requirements : "One"
+                               Enabled = planreqs.Any(pr => pr.ArchiveCategoryID == arch.Id),
+                               RequirementType = planreqs.Any(pr => pr.ArchiveCategoryID == arch.Id) ? planreqs.FirstOrDefault(pr => pr.ArchiveCategoryID == arch.Id).Requirements : "One"
                            };
 
             //    var archreqSet = from arch in this.database.ArchiveCategory
@@ -199,14 +199,14 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 ///如果原始表中未发现项，则新建。
                 ///若发现项，但需求有变，则更新。
                 ///
-                var orgselected = orginialReqList.Find(m => m.ArchiveCategoryID == item.ArchiveCategory.id);
+                var orgselected = orginialReqList.Find(m => m.ArchiveCategoryID == item.ArchiveCategory.Id);
                 if (item.Enabled)
                 {
                     //如果一项被启用，则从原始表查找，若没有发现，则新建，若存在，则更新。
                     if (orgselected == null)
                         await this.recruitmentManager.AddArchiveRequirement(plan, new ArchiveRequirement()
                         {
-                            ArchiveCategoryID = item.ArchiveCategory.id,
+                            ArchiveCategoryID = item.ArchiveCategory.Id,
                             RecruitmentPlanID = id,
                             Requirements = item.RequirementType
                         });

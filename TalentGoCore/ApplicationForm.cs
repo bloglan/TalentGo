@@ -10,46 +10,60 @@ namespace TalentGo
     /// 表示一个报名表。
     /// </summary>
 	[Table("EnrollmentData")]
-	public class Enrollment
+	public class ApplicationForm
 	{
         /// <summary>
         /// Default ctor.
         /// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-		protected Enrollment()
+		protected ApplicationForm()
 		{
-			EnrollmentArchives = new HashSet<EnrollmentArchive>();
+			//EnrollmentArchives = new HashSet<EnrollmentArchive>();
 		}
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="plan"></param>
+        /// <param name="job"></param>
         /// <param name="user"></param>
-        public Enrollment(RecruitmentPlan plan, Person user)
+        public ApplicationForm(Job job, Person user)
             : this()
         {
-            this.RecruitmentPlan = plan;
-            this.RecruitPlanID = plan.id;
-            this.UserID = user.Id;
+            this.Job = job;
+            this.JobId = job.Id;
+            this.UserId = user.Id;
             this.User = user;
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        [Key]
+        public int Id { get; protected set; }
+
+        /// <summary>
         /// related to recruitment plan by it's plan.
         /// </summary>
-		[Key]
-		[Column(Order = 0)]
-		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-		public int RecruitPlanID { get; protected set; }
+        [ForeignKey(nameof(Job))]
+        public int JobId { get; protected set; }
+
+        /// <summary>
+        /// Gets recruitment plan of this enrollment.
+        /// </summary>
+        public virtual Job Job { get; protected set; }
+
 
         /// <summary>
         /// related to a target user by its id.
         /// </summary>
-		[Key]
-		[Column(Order = 1)]
-		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-		public int UserID { get; protected set; }
+        [ForeignKey(nameof(User))]
+		public int UserId { get; protected set; }
+
+        /// <summary>
+        /// Gets target user of this enrollment.
+        /// </summary>
+        public virtual Person User { get; protected set; }
+
 
         /// <summary>
         /// user's full name.
@@ -264,25 +278,14 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public virtual ICollection<EnrollmentArchive> EnrollmentArchives { get; set; }
+		//public virtual ICollection<EnrollmentArchive> EnrollmentArchives { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
 		public virtual MajorCategory MajorCategory { get; set; }
 
-        /// <summary>
-        /// Gets recruitment plan of this enrollment.
-        /// </summary>
-        [ForeignKey(nameof(RecruitPlanID))]
-		public virtual RecruitmentPlan RecruitmentPlan { get; protected set; }
 
-        /// <summary>
-        /// Gets target user of this enrollment.
-        /// </summary>
-        [ForeignKey("UserID")]
-		public virtual Person User { get; protected set; }
 
         /// <summary>
         /// Gets a bool value indicate wheather this enrollment has commited or not.
@@ -302,17 +305,17 @@ namespace TalentGo
                 throw new InvalidOperationException("已提交的报名表不能重复提交");
 
             //为已提交文档顺次检查需求性是否满足？
-            foreach(var requirement in this.RecruitmentPlan.ArchiveRequirements)
-            {
-                RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements);
-                if (reqType.IsRequried())
-                    if (!this.EnrollmentArchives.Any(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID))
-                        throw new InvalidOperationException("无法提交，需求未满足。");
-                if (!reqType.IsMultipleEnabled())
-                    if (this.EnrollmentArchives.Count(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID) > 1)
-                        throw new InvalidOperationException("无法提交，需求未满足。");
+            //foreach(var requirement in this.Job.ArchiveRequirements)
+            //{
+            //    RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements);
+            //    if (reqType.IsRequried())
+            //        if (!this.EnrollmentArchives.Any(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID))
+            //            throw new InvalidOperationException("无法提交，需求未满足。");
+            //    if (!reqType.IsMultipleEnabled())
+            //        if (this.EnrollmentArchives.Count(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID) > 1)
+            //            throw new InvalidOperationException("无法提交，需求未满足。");
 
-            }
+            //}
             
             //TODO:其他需要执行的检查。
 

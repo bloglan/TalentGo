@@ -15,15 +15,15 @@ using TalentGo;
 
 namespace TalentGoWebApp.Controllers
 {
-    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
+    [Authorize]
 	public class ArchivesController : Controller
 	{
 		ArchiveCategoryManager archiveManager;
-        EnrollmentManager enrollmentManager;
+        ApplicationFormManager enrollmentManager;
         RecruitmentPlanManager recruitmentPlanManager;
         RecruitmentContextBase recruitmentContext;
 
-        public ArchivesController(ArchiveCategoryManager archiveManager, EnrollmentManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager)
+        public ArchivesController(ArchiveCategoryManager archiveManager, ApplicationFormManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager)
         {
             this.archiveManager = archiveManager;
             this.enrollmentManager = enrollmentManager;
@@ -72,7 +72,7 @@ namespace TalentGoWebApp.Controllers
 			RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), currentArchReq.Requirements);
             //获取报名表对应文档
 
-            var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(enroll => enroll.RecruitPlanID == plan.id && enroll.UserID == this.recruitmentContext.TargetUserId.Value);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == plan.Id && enroll.UserId == this.recruitmentContext.TargetUserId.Value);
             var enrollmentArchiveSet = (await this.enrollmentManager.GetEnrollmentArchives(enrollment)).Where(ach => ach.ArchiveCategoryID == acid);
 
             if (enrollmentArchiveSet.Any())
@@ -150,8 +150,8 @@ namespace TalentGoWebApp.Controllers
 
 				//构造EnrollmentArchive对象并更新。
 				EnrollmentArchive enrollmentArch = new EnrollmentArchive();
-				enrollmentArch.ArchiveCategoryID = archiveCategory.id;
-				enrollmentArch.RecruitPlanID = plan.id;
+				enrollmentArch.ArchiveCategoryID = archiveCategory.Id;
+				enrollmentArch.RecruitPlanID = plan.Id;
 				enrollmentArch.UserID = this.recruitmentContext.TargetUserId.Value;
 				enrollmentArch.Title = string.Empty; //Keep Title as empty string. this property shold be used in the future.
 
@@ -168,16 +168,16 @@ namespace TalentGoWebApp.Controllers
 				ms.Flush();
 				ms.Close();
 
-				return Json(new { name = archiveCategory.Name, id = enrollmentArch.id }, "text/plain");
+				return Json(new { name = archiveCategory.Name, id = enrollmentArch.Id }, "text/plain");
 
 			}
 		}
 
 		public async Task<ActionResult> RemoveFile(int eaid)
 		{
-            var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(enroll => enroll.RecruitPlanID == this.recruitmentContext.SelectedPlanId.Value && enroll.UserID == this.recruitmentContext.TargetUserId.Value);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == this.recruitmentContext.SelectedPlanId.Value && enroll.UserId == this.recruitmentContext.TargetUserId.Value);
             var enrollmentArchives = await this.enrollmentManager.GetEnrollmentArchives(enrollment);
-            var current = enrollmentArchives.FirstOrDefault(e => e.id == eaid);
+            var current = enrollmentArchives.FirstOrDefault(e => e.Id == eaid);
 
             if (current == null)
 			{

@@ -15,10 +15,10 @@ namespace TalentGoWebApp.Controllers
     public class HomeController : Controller
     {
 
-        EnrollmentManager enrollmentManager;
+        ApplicationFormManager enrollmentManager;
         RecruitmentContextBase recruitmentContext;
 
-        public HomeController(EnrollmentManager enrollmentManager)
+        public HomeController(ApplicationFormManager enrollmentManager)
         {
             this.enrollmentManager = enrollmentManager;
         }
@@ -42,7 +42,7 @@ namespace TalentGoWebApp.Controllers
         [ChildActionOnly]
         public ActionResult EnrollmentStatePartial()
         {
-            Enrollment enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.UserID == this.recruitmentContext.TargetUserId.Value);
+            ApplicationForm enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.recruitmentContext.TargetUserId.Value);
             return PartialView("EnrollmentStatePartial", enrollment);
         }
 

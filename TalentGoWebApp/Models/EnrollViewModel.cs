@@ -161,7 +161,7 @@ namespace TalentGoWebApp.Models
         [DataType(DataType.MultilineText)]
         public string Accomplishments { get; set; }
 
-        public void ReadFrom(Enrollment enrollment)
+        public void ReadFrom(ApplicationForm enrollment)
         {
             this.Name = enrollment.Name;
             this.Sex = enrollment.Sex;
@@ -184,7 +184,7 @@ namespace TalentGoWebApp.Models
             this.Accomplishments = enrollment.Accomplishments;
         }
 
-        public void WriteTo(Enrollment enrollment)
+        public void WriteTo(ApplicationForm enrollment)
         {
             enrollment.Name = this.Name;
             enrollment.Sex = this.Sex;

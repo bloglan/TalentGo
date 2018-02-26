@@ -24,7 +24,7 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        public int id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// 

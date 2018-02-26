@@ -19,7 +19,7 @@ using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {
-    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员")]
+    [Authorize()]
     public class AccountController : Controller
     {
         ApplicationSignInManager _signInManager;

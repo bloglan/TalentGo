@@ -15,11 +15,11 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
     [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class EnrollmentController : Controller
 	{
-		EnrollmentManager enrollmentManager;
+		ApplicationFormManager enrollmentManager;
         RecruitmentPlanManager recruitmentPlanManager;
         ApplicationUserManager targetUserManager;
 
-        public EnrollmentController(EnrollmentManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager, ApplicationUserManager userManager)
+        public EnrollmentController(ApplicationFormManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager, ApplicationUserManager userManager)
         {
             this.enrollmentManager = enrollmentManager;
             this.recruitmentPlanManager = recruitmentPlanManager;
@@ -45,7 +45,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 					PageIndex = 0
 				};
 			}
-			model.RecruitmentPlanID = recruitmentPlan.id;
+			model.RecruitmentPlanID = recruitmentPlan.Id;
 			model.RecruitmentPlanTitle = recruitmentPlan.Title;
 			model.IsAudit = recruitmentPlan.WhenAuditCommited.HasValue;
 
@@ -105,7 +105,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			//书写标题
 			sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t类别\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
 
-			foreach(Enrollment data in model.EnrollmentList)
+			foreach(ApplicationForm data in model.EnrollmentList)
 			{
 				sw.Write(recruitmentPlan.Title + "\t");
 				sw.Write(data.Name + "\t");
@@ -139,7 +139,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				if (HeadImageRow != null)
 				{
 					var sfx = HeadImageRow.MimeType == "image/jpeg" ? ".jpg" : ".png";
-					sw.Write(HeadImageRow.id.ToString("00000") + sfx + "\t");
+					sw.Write(HeadImageRow.Id.ToString("00000") + sfx + "\t");
 				}
 				else
 				{
@@ -150,7 +150,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				if (IDFrontRow != null)
 				{
 					var sfx = IDFrontRow.MimeType == "image/jpeg" ? ".jpg" : ".png";
-					sw.Write(IDFrontRow.id.ToString("00000") + sfx + "\t");
+					sw.Write(IDFrontRow.Id.ToString("00000") + sfx + "\t");
 				}
 				else
 				{
@@ -161,7 +161,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 				if (IDBackRow != null)
 				{
 					var sfx = IDBackRow.MimeType == "image/jpeg" ? ".jpg" : ".png";
-					sw.Write(IDBackRow.id.ToString("00000") + sfx + "\t");
+					sw.Write(IDBackRow.Id.ToString("00000") + sfx + "\t");
 				}
 				else
 				{
@@ -192,7 +192,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 result.Message = "找不到用户";
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
-            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
+            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.Id == planid);
             if (plan == null)
             {
                 result.Code = 404;
@@ -200,7 +200,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
 
-            var enrollment = (this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.UserID == user.Id);
+            var enrollment = (this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.UserId == user.Id);
 			if (enrollment == null)
 			{
 				result.Code = 404;
@@ -243,7 +243,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 result.Message = "找不到用户";
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
-            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.id == planid);
+            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.Id == planid);
             if (plan == null)
             {
                 result.Code = 404;
@@ -251,7 +251,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
 
-            var enrollment = this.enrollmentManager.CommitedEnrollments.FirstOrDefault(e => e.UserID == user.Id && e.RecruitPlanID == plan.id);
+            var enrollment = this.enrollmentManager.CommitedForms.FirstOrDefault(e => e.UserId == user.Id && e.JobId == plan.Id);
 			if (enrollment == null)
 			{
 				result.Code = 404;
@@ -273,8 +273,8 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		async Task<EnrollmentStatisticsViewModel> GetStatistics(int PlanID)
 		{
             var plan = await this.recruitmentPlanManager.FindByIDAsync(PlanID);
-			var enrollmentSet = from enroll in this.enrollmentManager.Enrollments
-								where enroll.RecruitPlanID == PlanID && enroll.WhenCommited.HasValue
+			var enrollmentSet = from enroll in this.enrollmentManager.ApplicationForms
+								where enroll.JobId == PlanID && enroll.WhenCommited.HasValue
 								select enroll;
 
 			EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()
@@ -295,7 +295,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		{
 			//id --> PlanID
 
-			var enrollmentData = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
+			var enrollmentData = this.enrollmentManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.UserId == model.UserID && e.WhenCommited.HasValue);
 			if (enrollmentData == null)
 				return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到指定的报名表", this.Url.Action("AuditList", new { id = model.ID }), 3));
 
@@ -313,9 +313,9 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		public async Task<ActionResult> Detail(EnrollmentDetailViewModel model)
 		{
             var user = await this.targetUserManager.FindByIdAsync(model.UserID);
-            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).Single(p => p.id == model.ID);
+            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).Single(p => p.Id == model.ID);
 
-			var enrollmentData = this.enrollmentManager.Enrollments.SingleOrDefault(e => e.RecruitPlanID == model.ID && e.UserID == model.UserID && e.WhenCommited.HasValue);
+			var enrollmentData = this.enrollmentManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.UserId == model.UserID && e.WhenCommited.HasValue);
 
             if (model.Approved)
                 enrollmentData.Accept();

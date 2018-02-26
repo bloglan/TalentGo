@@ -8,6 +8,6 @@ namespace TalentGoWebApp.Models
 
 		public RecruitmentPlan Plan { get; set; }
 
-		public Enrollment Enrollment { get; set; }
+		public ApplicationForm Enrollment { get; set; }
 	}
 }

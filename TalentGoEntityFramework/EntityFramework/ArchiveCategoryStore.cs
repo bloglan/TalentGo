@@ -55,7 +55,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task DeleteAsync(ArchiveCategory archiveCategory)
         {
-            var current = this.set.FirstOrDefault(a => a.id == archiveCategory.id);
+            var current = this.set.FirstOrDefault(a => a.Id == archiveCategory.Id);
             if (current != null)
             {
                 this.set.Remove(current);
@@ -70,7 +70,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<ArchiveCategory> FindByIdAsync(int Id)
         {
-            return this.set.FirstOrDefault(a => a.id == Id);
+            return this.set.FirstOrDefault(a => a.Id == Id);
         }
 
         /// <summary>

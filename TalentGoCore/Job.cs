@@ -34,6 +34,11 @@ namespace TalentGo
         public string Name { get; set; }
 
         /// <summary>
+        /// Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Work Direction.
         /// </summary>
         public string WorkDirection { get; set; }

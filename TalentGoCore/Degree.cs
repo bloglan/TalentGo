@@ -17,7 +17,7 @@ namespace TalentGo
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Degree()
         {
-            EnrollmentData = new HashSet<Enrollment>();
+            EnrollmentData = new HashSet<ApplicationForm>();
         }
 
         /// <summary>
@@ -41,6 +41,6 @@ namespace TalentGo
         /// 
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Enrollment> EnrollmentData { get; set; }
+        public virtual ICollection<ApplicationForm> EnrollmentData { get; set; }
     }
 }

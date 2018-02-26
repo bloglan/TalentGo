@@ -136,7 +136,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 											  select new SelectListItem()
 											  {
 												  Text = recruitment.Title,
-												  Value = recruitment.id.ToString()
+												  Value = recruitment.Id.ToString()
 											  };
 		}
 	}

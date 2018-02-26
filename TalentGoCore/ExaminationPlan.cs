@@ -21,7 +21,7 @@ namespace TalentGo
         public ExaminationPlan(RecruitmentPlan recruitmentPlan)
         {
             this.RecruitmentPlan = recruitmentPlan;
-            this.RecruitmentPlanId = recruitmentPlan.id;
+            this.RecruitmentPlanId = recruitmentPlan.Id;
         }
 
         /// <summary>

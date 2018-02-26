@@ -140,7 +140,7 @@ namespace TalentGo
             //只有State处于Created的计划可以被修改。
             //可修改的字段包括Title, Recruitment, IsPublic, ExpirationDate, EnrollExpirationDate
             //
-            RecruitmentPlan current = this.store.RecruitmentPlans.SingleOrDefault(e => e.id == plan.id && e.WhenPublished.HasValue);
+            RecruitmentPlan current = this.store.RecruitmentPlans.SingleOrDefault(e => e.Id == plan.Id && e.WhenPublished.HasValue);
             if (current == null)
                 throw new ArgumentException("找不到计划或指定的计划不能修改");
 
@@ -171,7 +171,7 @@ namespace TalentGo
         /// <returns></returns>
         public async Task DeleteRecruitmentPlan(RecruitmentPlan plan)
         {
-            var toRemove = await this.FindByIDAsync(plan.id);
+            var toRemove = await this.FindByIDAsync(plan.Id);
             if (plan.WhenPublished.HasValue)
                 throw new InvalidOperationException("已发布的招聘计划无法删除。");
 

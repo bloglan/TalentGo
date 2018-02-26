@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <title>@ViewBag.Title - 曲靖烟草招聘</title>
     @Styles.Render("~/Content/css")
-	@Styles.Render("~/Content/bootstrapDatetimePicker")
-    
+    @Styles.Render("~/Content/bootstrapDatetimePicker")
+
     @RenderSection("HeadScripts", required: false)
 </head>
 <body>
@@ -21,28 +21,15 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-				<a href="@Url.Action("Index", "Home", new { area = "" })" class="navbar-brand">
-					曲靖烟草招聘
-					@if (this.User.Identity is System.Security.Principal.WindowsIdentity)
-					{
-						<span class="small">[内网]</span>
-					}
-				</a>
-                @*@Html.ActionLink("曲靖烟草招聘", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
-				
+                <a href="@Url.Action("Index", "Home", new { area = "" })" class="navbar-brand">
+                    曲靖烟草招聘
+                </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("首页", "Index", "Home")</li>
                     <li>@Html.ActionLink("招聘报名", "Index", "Recruitment")</li>
                     <li>@Html.ActionLink("通知公告", "Index", "Article")</li>
-                    @if (this.User.IsInRole("QJYC\\招聘管理员")
-						|| this.User.IsInRole("QJYC\\招聘审核员")
-						|| this.User.IsInRole("QJYC\\招聘监督人")
-						|| this.User.IsInRole("QJYC\\企业域管理员"))
-                    {
-                        <li>@Html.ActionLink("后台管理", "Index", "Home", new { area = "Mgmt" }, null)</li>
-                    }
                 </ul>
                 @Html.Action("LoginPartial", "Home", new { area = "" });
             </div>
@@ -52,25 +39,25 @@
         @RenderBody()
         <hr />
         <footer>
-            
+
             <p>&copy; @DateTime.Now.Year - 云南省烟草公司曲靖市公司</p>
             <p>警告：本站点含有烟草内容，谢绝十八岁以下人士进入！</p>
-			<ul class="list-inline">
-				<li>@Html.ActionLink("支持", "Support", "Help")</li>
-				<li>@Html.ActionLink("常见问题解答", "FAQ", "Help")</li>
-				<li>@Html.ActionLink("隐私策略", "Privacy", "Help")</li>
-			</ul>
+            <ul class="list-inline">
+                <li>@Html.ActionLink("支持", "Support", "Help")</li>
+                <li>@Html.ActionLink("常见问题解答", "FAQ", "Help")</li>
+                <li>@Html.ActionLink("隐私策略", "Privacy", "Help")</li>
+            </ul>
         </footer>
     </div>
 
-    
-	@Scripts.Render("~/bundles/modernizr")
-	@Scripts.Render("~/bundles/jquery")
-	@Scripts.Render("~/bundles/jqueryval")
-	@Scripts.Render("~/bundles/bootstrap")
-	
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+
     @RenderSection("Scripts", required: false)
 
-	@Html.RenderScripts()
+    @Html.RenderScripts()
 </body>
 </html>

@@ -1,0 +1,15 @@
+﻿@model IQueryable<Job>
+
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <h2>@item.Name</h2>
+                <p>@item.Plan.Title</p>
+                <p>@Html.ActionLink("报名", "Enroll", "Enrollment", new { id = item.Id }, new { @class = "btn btn-primary" })</p>
+            </td>
+        </tr>
+    }
+</table>

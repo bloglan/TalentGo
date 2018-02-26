@@ -13,7 +13,7 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        public int id { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// 
@@ -68,6 +68,6 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        public virtual Enrollment EnrollmentData { get; set; }
+        public virtual ApplicationForm EnrollmentData { get; set; }
     }
 }

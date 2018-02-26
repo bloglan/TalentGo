@@ -9,7 +9,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Models
 
 		public int UserID { get; set; }
 
-		public Enrollment Enrollment { get; set; }
+		public ApplicationForm Enrollment { get; set; }
 
 		[Display(Name = "通过")]
 		public bool Approved { get; set; }

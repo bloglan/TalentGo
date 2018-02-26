@@ -3,11 +3,11 @@
 @foreach (EnrollmentArchive archive in Model)
 {
 	<div class="col-md-3 img-thumbnail">
-		<img src="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = archive.id })" class="img-responsive" />
+		<img src="@Url.Action("GetEnrollmentArchiveData", "ArchiveData", new { eaid = archive.Id })" class="img-responsive" />
 		<div class="caption">
 			<h4>@archive.ArchiveCategory.Name</h4>
 		</div>
-		<p><button class="btn btn-default btn-sm" onclick="return RemoveFile(this);" data-eaid="@archive.id">移除</button></p>
+		<p><button class="btn btn-default btn-sm" onclick="return RemoveFile(this);" data-eaid="@archive.Id">移除</button></p>
 	</div>
 }
 @{ 

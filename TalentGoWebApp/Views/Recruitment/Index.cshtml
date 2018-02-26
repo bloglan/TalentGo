@@ -23,7 +23,7 @@
 							<p>考试时间：@plan.ExamStartTime.Value.ToString("yyyy-MM-dd HH:mm") -- @plan.ExamEndTime.Value.ToString("HH:mm")</p>
 							<p>考试地点：@plan.ExamLocation</p>
 						}
-						@Html.ActionLink("查看招聘简章", "Detail", new { id = plan.id }, new { @class = "btn btn-default" })
+						@Html.ActionLink("查看招聘简章", "Detail", new { id = plan.Id }, new { @class = "btn btn-default" })
 					</div>
 					<div class="col-md-6">
 						@Html.Action("ArticlePart", "Article", new { IsPublic = true, plan = plan, MaxCount = 10 })

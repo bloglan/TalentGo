@@ -7,13 +7,13 @@ using TalentGo.Web;
 
 namespace TalentGoWebApp.Controllers
 {
-    [Authorize(Roles = "InternetUser,QJYC\\招聘登记员,QJYC\\招聘管理员,QJYC\\招聘监督人")]
+    [Authorize()]
 	public class ArchiveDataController : Controller
     {
-		EnrollmentManager enrollmentManager;
+		ApplicationFormManager enrollmentManager;
         ArchiveCategoryManager archiveCategoryManager;
 
-        public ArchiveDataController(EnrollmentManager enrollmentManager, ArchiveCategoryManager archiveCategoryManager)
+        public ArchiveDataController(ApplicationFormManager enrollmentManager, ArchiveCategoryManager archiveCategoryManager)
         {
             this.enrollmentManager = enrollmentManager;
             this.archiveCategoryManager = archiveCategoryManager;
@@ -23,7 +23,7 @@ namespace TalentGoWebApp.Controllers
 		public async Task<ActionResult> HeadImage(int planid, int userid)
         {
             var recruitmentContext = this.HttpContext.GetRecruitmentContext();
-            var enrollment = this.enrollmentManager.Enrollments.FirstOrDefault(e => e.RecruitPlanID == planid && e.UserID == userid);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.JobId == planid && e.UserId == userid);
 
             if (this.User.IsInRole("QJYC\\招聘管理员") || this.User.IsInRole("QJYC\\招聘监督人"))
 			{
@@ -61,7 +61,7 @@ namespace TalentGoWebApp.Controllers
 
 		public ActionResult GetSampleImage(int acid)
 		{
-			var current = this.archiveCategoryManager.ArchiveCategories.Single(e => e.id == acid);
+			var current = this.archiveCategoryManager.ArchiveCategories.Single(e => e.Id == acid);
 			if (current == null)
 				return HttpNotFound();
 
