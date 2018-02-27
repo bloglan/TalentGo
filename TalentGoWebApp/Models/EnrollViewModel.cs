@@ -160,52 +160,5 @@ namespace TalentGoWebApp.Models
         [StringLength(1000)]
         [DataType(DataType.MultilineText)]
         public string Accomplishments { get; set; }
-
-        public void ReadFrom(ApplicationForm enrollment)
-        {
-            this.Name = enrollment.Name;
-            this.Sex = enrollment.Sex;
-            this.DateOfBirth = enrollment.DateOfBirth;
-            this.Nationality = enrollment.Nationality;
-            this.PlaceOfBirth = enrollment.PlaceOfBirth;
-            this.Source = enrollment.Source;
-            this.PoliticalStatus = enrollment.PoliticalStatus;
-            this.Health = enrollment.Health;
-            this.Marriage = enrollment.Marriage;
-            this.IDCardNumber = enrollment.IDCardNumber;
-            this.Mobile = enrollment.Mobile;
-            this.School = enrollment.School;
-            this.Major = enrollment.Major;
-            this.YearOfGraduated = enrollment.YearOfGraduated;
-            this.SelectedMajor = enrollment.SelectedMajor;
-            this.EducationBackground = enrollment.EducationBackground;
-            this.Degree = enrollment.Degree;
-            this.Resume = enrollment.Resume;
-            this.Accomplishments = enrollment.Accomplishments;
-        }
-
-        public void WriteTo(ApplicationForm enrollment)
-        {
-            enrollment.Name = this.Name;
-            enrollment.Sex = this.Sex;
-            enrollment.DateOfBirth = this.DateOfBirth;
-            enrollment.Nationality = this.Nationality;
-            enrollment.PlaceOfBirth = this.PlaceOfBirth;
-            enrollment.Source = this.Source;
-            enrollment.PoliticalStatus = this.PoliticalStatus;
-            enrollment.Health = this.Health;
-            enrollment.Marriage = this.Marriage;
-            enrollment.IDCardNumber = this.IDCardNumber;
-            enrollment.Mobile = this.Mobile;
-            enrollment.School = this.School;
-            enrollment.Major = this.Major;
-            enrollment.YearOfGraduated = this.YearOfGraduated;
-            enrollment.SelectedMajor = this.SelectedMajor;
-            enrollment.EducationBackground = this.EducationBackground;
-            enrollment.Degree = this.Degree;
-            enrollment.Resume = this.Resume;
-            enrollment.Accomplishments = this.Accomplishments;
-        }
-
     }
 }

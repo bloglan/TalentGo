@@ -7,11 +7,18 @@ using System.Threading.Tasks;
 
 namespace TalentGo.EntityFramework
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class JobStore : IJobStore
     {
         DbContext db;
         DbSet<Job> set;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbContext"></param>
         public JobStore(DbContext dbContext)
         {
             this.db = dbContext;

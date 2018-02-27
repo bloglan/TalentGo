@@ -16,7 +16,7 @@
 			<col style="width: 10%;" />
 		</colgroup>
 		<tr>
-			<td colspan="7">招聘计划： @Model.RecruitmentPlan.Title</td>
+			<td colspan="7">招聘计划： @Model.Job.Plan.Title</td>
 		</tr>
 		<tr>
 			<td>姓名</td>
@@ -26,7 +26,7 @@
 			<td>出生日期</td>
 			<td>@Model.DateOfBirth.ToShortDateString()</td>
 			<td rowspan="4">
-				<img src="@Url.Action("HeadImage", "ArchiveData", new { planid = Model.RecruitPlanID, userid = Model.UserID, area = "" })" class="img-responsive" style="max-height: 240px; max-width: 180px;" />
+				<img src="@Url.Action("HeadImage", "ArchiveData", new { planid = Model.Job.PlanId, userid = Model.UserId, area = "" })" class="img-responsive" style="max-height: 240px; max-width: 180px;" />
 			</td>
 		</tr>
 		<tr>

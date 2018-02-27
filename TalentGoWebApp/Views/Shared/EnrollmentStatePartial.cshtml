@@ -6,9 +6,9 @@
 	{
 		if (!Model.WhenCommited.HasValue)
 		{
-			if (Model.RecruitmentPlan.EnrollExpirationDate >= DateTime.Now)
+			if (Model.Job.Plan.EnrollExpirationDate >= DateTime.Now)
 			{
-				<span class="label label-warning"><abbr title="请在 @Model.RecruitmentPlan.EnrollExpirationDate.Value.ToShortDateString() 前提交报名表。">报名尚未提交</abbr></span>
+				<span class="label label-warning"><abbr title="请在 @Model.Job.Plan.EnrollExpirationDate.Value.ToShortDateString() 前提交报名表。">报名尚未提交</abbr></span>
 			}
 			else
 			{
@@ -27,7 +27,7 @@
 				{
 					if (!Model.WhenAnnounced.HasValue)
 					{
-						<span class="label label-success"><abbr title="请在 @Model.RecruitmentPlan.AnnounceExpirationDate.Value.ToShortDateString() 前确认是否参加考试。">报名审核已通过</abbr></span>
+						<span class="label label-success"><abbr title="请在 @Model.Job.Plan.AnnounceExpirationDate.Value.ToShortDateString() 前确认是否参加考试。">报名审核已通过</abbr></span>
 					}
 					else
 					{

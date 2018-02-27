@@ -39,7 +39,7 @@
 					else {
 						if (Model.Approved.Value == true)
 						{
-							<li>尚未确认是否参加考试。请于 @Model.RecruitmentPlan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm") 前尽快确认。</li>
+							<li>尚未确认是否参加考试。请于 @Model.Job.Plan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm") 前尽快确认。</li>
 						}
 
 					}
@@ -52,7 +52,7 @@
 			}
 			else
 			{
-				<li>尚未提交。请及时填写并务必在报名截止时间 @Model.RecruitmentPlan.EnrollExpirationDate.Value.ToString("yyyy-MM-dd HH:mm") 之前提交。</li>
+				<li>尚未提交。请及时填写并务必在报名截止时间 @Model.Job.Plan.EnrollExpirationDate.Value.ToString("yyyy-MM-dd HH:mm") 之前提交。</li>
 			}
 
 

@@ -10,6 +10,7 @@ using TalentGo.Identity;
 using TalentGoWebApp.Models;
 using TalentGo;
 using TalentGo.Models;
+using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {
@@ -17,17 +18,19 @@ namespace TalentGoWebApp.Controllers
     public class RecruitmentController : Controller
     {
         RecruitmentPlanManager recruitManager;
-        ApplicationFormManager enrollmentManager;
+        ApplicationFormManager applicationFormManager;
         RecruitmentContextBase recruitmentContext;
         ApplicationUserManager targetUserManager;
+        IJobStore jobStore;
 
         Person user = null;
 
-        public RecruitmentController(RecruitmentPlanManager recruitmentPlanManager, ApplicationFormManager enrollmentManager, ApplicationUserManager userManager)
+        public RecruitmentController(RecruitmentPlanManager recruitmentPlanManager, ApplicationFormManager enrollmentManager, ApplicationUserManager userManager, IJobStore jobStore)
         {
             this.recruitManager = recruitmentPlanManager;
-            this.enrollmentManager = enrollmentManager;
+            this.applicationFormManager = enrollmentManager;
             this.targetUserManager = userManager;
+            this.jobStore = jobStore;
         }
 
         protected override void Initialize(RequestContext requestContext)
@@ -78,96 +81,87 @@ namespace TalentGoWebApp.Controllers
         /// <summary>
         /// 报名（填写和编辑报名表）
         /// </summary>
+        /// <param name="id">JobId</param>
         /// <returns></returns>
-        public ActionResult Enroll(int? id)
+        public ActionResult Enroll(int id)
         {
-            //如果有传入参数ID，则指示了要选中的招聘计划。
-            RecruitmentPlan plan = null;
-            if (id.HasValue)
-            {
-                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.Id == id.Value);
-                if (plan == null)
-                    return HttpNotFound();
+            var user = this.CurrentUser();
 
-                this.recruitmentContext.SelectedPlanId = plan.Id;
-            }
-            else
-            {
-                if (!this.recruitmentContext.SelectedPlanId.HasValue)
-                    return HttpNotFound();
+            var job = this.jobStore.Jobs.EnrollableJobs().FirstOrDefault(j => j.Id == id);
+            if (job == null)
+                return HttpNotFound();
 
-                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.Id == this.recruitmentContext.SelectedPlanId.Value);
-            }
+            if (user.ApplicationForms.Any(a => a.Job.PlanId == job.PlanId))
+                return HttpNotFound("您已在此招聘计划中填写过报名表。");
+
+
+            ChineseIDCardNumber number = ChineseIDCardNumber.CreateNumber(user.IDCardNumber);
 
             //准备下拉框及相关数据
-            this.InitModelSelectionData(plan, this.ViewData);
+            this.InitModelSelectionData(job.Plan, this.ViewData);
 
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.JobId == plan.Id && e.UserId == this.user.Id);
-            if (enrollment == null)
-                enrollment = this.enrollmentManager.NewEnrollment(this.user, plan);
-
-            if (enrollment.WhenCommited.HasValue)
+            EnrollViewModel model = new EnrollViewModel()
             {
-                return RedirectToAction("PreviewEnrollment", new { id = plan.Id });
-                //return View("OperationResult", new OperationResult(ResultStatus.Warning, "您的报名资料已提交，不能重复提交。您可以查看您所提交的报名资料。", this.Url.Action("PreviewEnrollment"), 5));
-            }
+                Name = user.DisplayName,
+                Sex = number.Gender == Gender.Male ? "男" : "女",
+                DateOfBirth = number.DateOfBirth,
+                IDCardNumber = number.IDCardNumber,
+                Mobile = user.Mobile,
+                Resume = "格式：\r\n 高中  1995.07-1998.09  曲靖一中   学生\r\n",
+                Accomplishments = "",
+            };
 
-            EnrollViewModel model = new Models.EnrollViewModel();
-            model.ReadFrom(enrollment);
             return View(model);
         }
 
         /// <summary>
         /// 报名的Post
         /// </summary>
+        /// <param name="id">JobId</param>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Enroll(int? id, EnrollViewModel model)
+        public async Task<ActionResult> Enroll(int id, EnrollViewModel model)
         {
-            RecruitmentPlan plan = null;
-            if (id.HasValue)
+            if (!this.ModelState.IsValid)
+                return View(model);
+
+            var job = this.jobStore.Jobs.EnrollableJobs().FirstOrDefault(j => j.Id == id);
+            if (job == null)
+                return HttpNotFound();
+
+            if (user.ApplicationForms.Any(a => a.Job.PlanId == job.PlanId))
+                return HttpNotFound("您已在此招聘计划中填写过报名表。");
+
+            this.InitModelSelectionData(job.Plan, this.ViewData);
+
+            var form = new ApplicationForm(job, user)
             {
-                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.Id == id.Value);
-                if (plan == null)
-                    return HttpNotFound();
+                Name = model.Name,
+                Sex = model.Sex,
+                DateOfBirth = model.DateOfBirth,
+                Nationality = model.Nationality,
+                PlaceOfBirth = model.PlaceOfBirth,
+                Source = model.Source,
+                PoliticalStatus = model.PoliticalStatus,
+                Health = model.Health,
+                Marriage = model.Marriage,
+                IDCardNumber = model.IDCardNumber,
+                Mobile = model.Mobile,
+                School = model.School,
+                Major = model.Major,
+                YearOfGraduated = model.YearOfGraduated,
+                SelectedMajor = model.SelectedMajor,
+                EducationBackground = model.EducationBackground,
+                Degree = model.Degree,
+                Resume = model.Resume,
+                Accomplishments = model.Accomplishments,
+            };
 
-                this.recruitmentContext.SelectedPlanId = plan.Id;
-            }
-            else
-            {
-                if (!this.recruitmentContext.SelectedPlanId.HasValue)
-                    return HttpNotFound();
+            await this.applicationFormManager.CreateAsync(form);
 
-                plan = (this.recruitManager.GetPlansForUser(this.user)).FirstOrDefault(p => p.Id == this.recruitmentContext.SelectedPlanId.Value);
-            }
+            return RedirectToAction("UploadArchives");
 
-            if (ModelState.IsValid)
-            {
-                //如果有传入参数ID，则指示了要选中的招聘计划。
-
-
-                var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.JobId == plan.Id && e.UserId == this.user.Id);
-                if (enrollment == null)
-                {
-                    enrollment = new ApplicationForm(plan, user);
-                    model.WriteTo(enrollment);
-                    await this.enrollmentManager.CreateEnrollment(user, plan, enrollment);
-                }
-                else
-                {
-                    model.WriteTo(enrollment);
-                    await this.enrollmentManager.UpdateEnrollment(user, plan, enrollment);
-                }
-
-                
-                
-                return RedirectToAction("UploadArchives");
-            }
-
-            //如果出错，重新显示此页。
-            this.InitModelSelectionData(plan, this.ViewData);
-            return View(model);
         }
 
         public async Task<ActionResult> UploadArchives()
@@ -185,9 +179,9 @@ namespace TalentGoWebApp.Controllers
         [ChildActionOnly]
         public async Task<ActionResult> ArchiveListOfEnrollment(ArchiveRequirement requirement)
         {
-            ApplicationForm enrollmentData = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
+            ApplicationForm enrollmentData = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
 
-            var CurrentUserEnrollmentArchivesByRequired = from arch in await this.enrollmentManager.GetEnrollmentArchives(enrollmentData)
+            var CurrentUserEnrollmentArchivesByRequired = from arch in await this.applicationFormManager.GetEnrollmentArchives(enrollmentData)
                                                           where arch.ArchiveCategoryID == requirement.ArchiveCategoryID
                                                           select arch;
 
@@ -202,7 +196,7 @@ namespace TalentGoWebApp.Controllers
         public ActionResult CommitEnrollment()
         {
             //
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
+            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
             if (enrollment == null)
                 return HttpNotFound();
 
@@ -221,11 +215,11 @@ namespace TalentGoWebApp.Controllers
         public async Task<ActionResult> CommitEnrollment(bool Agreement)
         {
             var plan = await this.recruitManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
-            var enrollment = this.enrollmentManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
             try
             {
 
-                await this.enrollmentManager.CommitEnrollment(this.user, plan, enrollment);
+                await this.applicationFormManager.CommitAsync(enrollment);
                 //导航到报名已完成。
                 OperationResult reslt = new OperationResult(ResultStatus.Success, "报名已成功提交。您的报名资料将等待初步审核。敬请时常留意本网站通知公告，及时了解您的报名审核结果。", this.Url.Action("Index"), 10);
                 return View("OperationResult", reslt);
@@ -264,7 +258,7 @@ namespace TalentGoWebApp.Controllers
 
             var plan = await this.recruitManager.FindByIDAsync(id.Value);
 
-            var enrollment = this.enrollmentManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
             return View(enrollment);
 
         }
@@ -280,7 +274,7 @@ namespace TalentGoWebApp.Controllers
 
             var plan = await this.recruitManager.FindByIDAsync(id.Value);
 
-            var enrollment = this.enrollmentManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
             return View(enrollment);
         }
 
@@ -298,7 +292,7 @@ namespace TalentGoWebApp.Controllers
                     return HttpNotFound();
 
                 var plan = await this.recruitManager.FindByIDAsync(id.Value);
-                await this.enrollmentManager.AnnounceForExam(this.user, plan, IsTakeExam);
+                await this.applicationFormManager.AnnounceForExamAsync(this.user, plan, IsTakeExam);
             }
             catch (Exception ex)
             {
@@ -319,13 +313,13 @@ namespace TalentGoWebApp.Controllers
         {
             RecruitmentPanelStateModel viewModel = new RecruitmentPanelStateModel();
             viewModel.Plan = plan;
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == plan.Id);
             if (enrollment != null)
             {
                 viewModel.HasEnrollment = true;
                 viewModel.Enrollment = enrollment;
             }
-            
+
 
             return PartialView(viewModel);
         }

@@ -4,7 +4,7 @@
 {
 
 
-	if (Model.RecruitmentPlan.EnrollExpirationDate >= DateTime.Now)
+	if (Model.Job.Plan.EnrollExpirationDate >= DateTime.Now)
 	{
 		@Html.ActionLink("修改报名表", "Enroll", null, new { @class = "btn btn-default" })
 

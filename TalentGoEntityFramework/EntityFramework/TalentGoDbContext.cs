@@ -135,11 +135,6 @@ namespace TalentGo.EntityFramework
 				.Property(e => e.Mobile)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<ApplicationForm>()
-				.HasMany(e => e.EnrollmentArchives)
-				.WithRequired(e => e.EnrollmentData)
-				.HasForeignKey(e => new { e.RecruitPlanID, e.UserID })
-				.WillCascadeOnDelete(false);
 
 			modelBuilder.Entity<MajorCategory>()
 				.HasMany(e => e.EnrollmentData)

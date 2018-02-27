@@ -57,6 +57,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationFormExtensions.cs" />
     <Compile Include="Backend\EmailMessage.cs" />
     <Compile Include="Backend\ISMSMessageStore.cs" />
     <Compile Include="Backend\QJYCSMSService.cs" />
@@ -106,10 +107,7 @@
     <Compile Include="AnnounceFilterType.cs" />
     <Compile Include="AuditFilterType.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Identity\" />
-    <Folder Include="Recruitment\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

@@ -120,6 +120,9 @@ namespace TalentGo
             throw new InvalidOperationException("操作无效，计划未发布或已完成审核。");
         }
 
+        /// <summary>
+        /// Get jobs of this plan.
+        /// </summary>
         public virtual ICollection<Job> Jobs { get; protected set; }
     }
 }

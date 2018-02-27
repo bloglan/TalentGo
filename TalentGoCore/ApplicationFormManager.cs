@@ -90,125 +90,90 @@ namespace TalentGo
         #region Operations for enrollment
 
         /// <summary>
-        /// 初始化一个新报名表。
-        /// 该操作返回一个初始报名表实例，以便进行填写。
-        /// 该操作不会将报名表添加到报名数据库中。若要完成并保存报名表，需要调用CreateEnrollmentAsync方法。
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="plan"></param>
-        /// <returns></returns>
-        public ApplicationForm NewEnrollment(Person user, RecruitmentPlan plan)
-        {
-            //根据当前需求，不允许存在多个报名表。
-            if (this.ApplicationForms.Any(e => e.UserId == user.Id))
-                throw new InvalidOperationException("操作失败，指定的用户已存在报名表。");
-
-            ApplicationForm data = new ApplicationForm(plan, user);
-            //data.RecruitPlanID = plan.id;
-            //data.UserID = user.Id;
-            ChineseIDCardNumber cardNumber = ChineseIDCardNumber.CreateNumber(user.IDCardNumber);
-            //设置默认值
-            data.Name = user.DisplayName;
-            //男女
-            data.Sex = cardNumber.Gender == Gender.Male ? "男" : "女";
-            //出生年月 从IDCardNumber推算
-            data.DateOfBirth = cardNumber.DateOfBirth;
-            data.IDCardNumber = user.IDCardNumber;
-            data.Mobile = user.Mobile;
-            data.Resume = "格式：\r\n 高中  1995.07-1998.09  曲靖一中   学生\r\n";
-            data.Accomplishments = "";
-
-            return data;
-        }
-
-        /// <summary>
         /// 为指定的用户和招聘计划创建报名表。
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="plan"></param>
-        /// <param name="enrollment"></param>
+        /// <param name="form"></param>
         /// <returns></returns>
-        public async Task CreateEnrollment(Person user, RecruitmentPlan plan, ApplicationForm enrollment)
+        public async Task CreateAsync(ApplicationForm form)
         {
             //根据要求，一个用户只能参与一个报名。
-            if (this.ApplicationForms.Any(e => e.UserId == user.Id))
-                throw new InvalidOperationException("操作失败，每个用户只能创建一个报名表。");
-
-            await this.store.CreateAsync(enrollment);
+            var currentPlanId = form.Job.PlanId;
+            var user = form.User;
+            if (user.ApplicationForms.Any(a => a.Job.PlanId == currentPlanId))
+                throw new InvalidOperationException("一个用户只能在一个计划内提交一个报名表。");
+            await this.store.CreateAsync(form);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="plan"></param>
-        /// <param name="enrollment"></param>
+        /// <param name="form"></param>
         /// <returns></returns>
-        public async Task UpdateEnrollment(Person user, RecruitmentPlan plan, ApplicationForm enrollment)
+        public async Task UpdateAsync(ApplicationForm form)
         {
-            await this.store.UpdateAsync(enrollment);
+            await this.store.UpdateAsync(form);
         }
 
         /// <summary>
         /// 删除报名表。
         /// </summary>
-        /// <param name="enrollment"></param>
+        /// <param name="form"></param>
         /// <returns></returns>
-        public async Task DeleteEnrollment(ApplicationForm enrollment)
+        public async Task DeleteAsync(ApplicationForm form)
         {
             //如果该报名表已经提交，则不能删除。
-            if (enrollment.WhenCommited.HasValue)
+            if (form.WhenCommited.HasValue)
                 throw new InvalidOperationException("操作失败，已提交的报名表不能删除。");
 
-            await this.store.DeleteAsync(enrollment);
+            await this.store.DeleteAsync(form);
         }
 
         /// <summary>
         /// 提交报名资料。
         /// </summary>
         /// <returns></returns>
-        public async Task CommitEnrollment(Person user, RecruitmentPlan plan, ApplicationForm enrollment)
+        public async Task CommitAsync(ApplicationForm form)
         {
             //提交报名资料时，对报名资料以及关联的图片文件资料进行检查。
             //提交后不能反向提交。
             //
-            if (enrollment.WhenCommited.HasValue)
+            if (form.WhenCommited.HasValue)
                 throw new InvalidOperationException("报名资料已处于提交状态，不能重复提交。");
 
             //检查提交文档的符合性。
             //ArchiveCategoryManager archiveMgr = new ArchiveCategoryManager(this.context);
 
-            var archiveReqs = await recruitManager.GetArchiveRequirements(plan);
-            var archives = await this.GetEnrollmentArchives(enrollment);
-            List<string> failMsg = new List<string>();
-            foreach (ArchiveRequirement req in archiveReqs)
-            {
-                //获得需求标记
-                RequirementType reqflag;
-                Enum.TryParse<RequirementType>(req.Requirements, out reqflag);
+            //var archiveReqs = await recruitManager.GetArchiveRequirements(plan);
+            //var archives = await this.GetEnrollmentArchives(form);
+            //List<string> failMsg = new List<string>();
+            //foreach (ArchiveRequirement req in archiveReqs)
+            //{
+            //    //获得需求标记
+            //    RequirementType reqflag;
+            //    Enum.TryParse<RequirementType>(req.Requirements, out reqflag);
 
-                //查询指定需求的文档
-                var result = from arch in archives
-                             where arch.ArchiveCategoryID == req.ArchiveCategoryID
-                             select arch;
+            //    //查询指定需求的文档
+            //    var result = from arch in archives
+            //                 where arch.ArchiveCategoryID == req.ArchiveCategoryID
+            //                 select arch;
 
-                if (reqflag.IsRequried() && result.Count() == 0)
-                {
-                    failMsg.Add(string.Format("{0}是需要的，但未提供。", req.ArchiveCategory.Name));
-                }
-            }
+            //    if (reqflag.IsRequried() && result.Count() == 0)
+            //    {
+            //        failMsg.Add(string.Format("{0}是需要的，但未提供。", req.ArchiveCategory.Name));
+            //    }
+            //}
 
-            if (failMsg.Count != 0)
-                throw new CommitEnrollmentException("上传的文档不符合要求。", failMsg);
+            //if (failMsg.Count != 0)
+            //    throw new CommitEnrollmentException("上传的文档不符合要求。", failMsg);
             //检查报名表及关联报名资料是否合格，若不合格，则提示错误。
             //检查报名截止时间，如果该提交在报名截止时间之后，则直接提示未通过。
 
-            if (plan.EnrollExpirationDate < DateTime.Now)
+            if (form.Job.Plan.EnrollExpirationDate < DateTime.Now)
                 throw new InvalidOperationException("报名截止时间已过。");
 
-            enrollment.Commit();
+            form.Commit();
 
-            await this.UpdateEnrollment(user, plan, enrollment);
+            await this.UpdateAsync(form);
         }
 
         /// <summary>
@@ -288,7 +253,7 @@ namespace TalentGo
                     //	await smtpClient.SendMailAsync(mail);
                     //	await Task.Delay(800);
                     //}
-                    await this.UpdateEnrollment(null, plan, data);
+                    await this.UpdateAsync(data);
                 }
 
 
@@ -319,7 +284,7 @@ namespace TalentGo
         /// <param name="plan"></param>
         /// <param name="IsTakeExam"></param>
         /// <returns></returns>
-		public async Task AnnounceForExam(Person user, RecruitmentPlan plan, bool IsTakeExam)
+		public async Task AnnounceForExamAsync(Person user, RecruitmentPlan plan, bool IsTakeExam)
         {
             ApplicationForm data = this.CommitedForms.First(e => e.UserId == user.Id && e.JobId == plan.Id);
 
@@ -333,7 +298,7 @@ namespace TalentGo
             if (data.WhenAnnounced.HasValue)
                 throw new InvalidOperationException("无效的操作，已进行了声明。不能重复声明。");
 
-            if (data.Job.AnnounceExpirationDate.Value < DateTime.Now)
+            if (data.Job.Plan.AnnounceExpirationDate.Value < DateTime.Now)
                 throw new InvalidOperationException("无效的操作，已过声明截止时间。");
 
             data.Announce(IsTakeExam);

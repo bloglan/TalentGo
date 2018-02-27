@@ -20,6 +20,7 @@ namespace TalentGo
 		{
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
+            this.ApplicationForms = new HashSet<ApplicationForm>();
 		}
 
         /// <summary>
@@ -68,5 +69,10 @@ namespace TalentGo
         /// </summary>
 		[StringLength(150)]
 		public string Email { get; set; }
+
+        /// <summary>
+        /// 获取与用户关联的报名表。
+        /// </summary>
+        public virtual ICollection<ApplicationForm> ApplicationForms { get; protected set; }
 	}
 }
