@@ -95,7 +95,7 @@ namespace TalentGoWebApp.Controllers
                 return HttpNotFound("您已在此招聘计划中填写过报名表。");
 
 
-            ChineseIDCardNumber number = ChineseIDCardNumber.CreateNumber(user.IDCardNumber);
+            ChineseIDCardNumber number = ChineseIDCardNumber.Parse(user.IDCardNumber);
 
             //准备下拉框及相关数据
             this.InitModelSelectionData(job.Plan, this.ViewData);
@@ -103,9 +103,9 @@ namespace TalentGoWebApp.Controllers
             EnrollViewModel model = new EnrollViewModel()
             {
                 Name = user.DisplayName,
-                Sex = number.Gender == Gender.Male ? "男" : "女",
+                Sex = number.IsMale ? "男" : "女",
                 DateOfBirth = number.DateOfBirth,
-                IDCardNumber = number.IDCardNumber,
+                IDCardNumber = number.ToString(),
                 Mobile = user.Mobile,
                 Resume = "格式：\r\n 高中  1995.07-1998.09  曲靖一中   学生\r\n",
                 Accomplishments = "",

@@ -181,15 +181,12 @@ namespace TalentGoWebApp.Controllers
 
 
             ///为了防止利用自动程序测试条件导致隐私泄露，我们首先进行验证码测试。只有验证码合格后，才进行唯一性判别
-            ChineseIDCardNumber cardnumber = null;
-            try
-            {
-                cardnumber = ChineseIDCardNumber.CreateNumber(model.IDCardNumber);
-            }
-            catch (Exception)
+            ChineseIDCardNumber cardnumber;
+            if (!ChineseIDCardNumber.TryParse(model.IDCardNumber, out cardnumber))
             {
                 Errors.Add(new KeyValuePair<string, string>("IDCardNumber", "不是一个有效的身份证号码。"));
             }
+            
 
             Person currentuser = null;
             currentuser = await this.UserManager.FindByNameAsync(model.IDCardNumber);
@@ -220,7 +217,7 @@ namespace TalentGoWebApp.Controllers
             }
 
 
-            var user = new WebUser { UserName = cardnumber.IDCardNumber, Email = model.Email, Mobile = model.Mobile, MobileValid = true, EmailValid = false, IDCardNumber = cardnumber.IDCardNumber, DisplayName = model.RealName };
+            var user = new WebUser { UserName = cardnumber.ToString(), Email = model.Email, Mobile = model.Mobile, MobileValid = true, EmailValid = false, IDCardNumber = cardnumber.ToString(), DisplayName = model.RealName };
             var result = await UserManager.CreateAsync(user, model.Password);
             //
             if (result.Succeeded)

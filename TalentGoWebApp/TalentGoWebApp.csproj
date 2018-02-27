@@ -801,6 +801,7 @@
     </Content>
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Job\JobList.cshtml" />
+    <Content Include="Views\Account\RegisterAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
