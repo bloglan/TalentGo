@@ -15,7 +15,6 @@ namespace TalentGo
         /// <summary>
         /// Default ctor.
         /// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
 		protected ApplicationForm()
 		{
 			//EnrollmentArchives = new HashSet<EnrollmentArchive>();
@@ -265,25 +264,6 @@ namespace TalentGo
 		[Display(Name = "参加考试")]
 		public bool? IsTakeExam { get; protected set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual Degree Degree1 { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual EducationBackground EducationBackground1 { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-		//public virtual ICollection<EnrollmentArchive> EnrollmentArchives { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual MajorCategory MajorCategory { get; set; }
 
 
 

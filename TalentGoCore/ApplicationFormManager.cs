@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TalentGo.Linq;
-using System.Net.Mail;
 using System.Transactions;
-using TalentGo.Utilities;
 
 namespace TalentGo
 {

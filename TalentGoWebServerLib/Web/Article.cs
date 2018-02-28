@@ -1,4 +1,4 @@
-namespace TalentGo.Utilities
+namespace TalentGo.Web
 {
     using System;
     using System.ComponentModel.DataAnnotations;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using TalentGo.Identity;
 using TalentGo;
 using TalentGoWebApp.Areas.Mgmt.Models;
 using TalentGo.Models;
@@ -124,108 +123,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return RedirectToAction("ArchiveRequirements", new { id = id });
             }
             return View(model);
-        }
-
-        public async Task<ActionResult> ArchiveRequirements(int id)
-        {
-            //构建ArchiveRequirementsViewModel的列表
-            var plan = await this.recruitmentManager.FindByIDAsync(id);
-            var planreqs = await this.recruitmentManager.GetArchiveRequirements(plan);
-            var allarch = this.archiveCategoryManager.ArchiveCategories;
-
-
-            var modelset = from arch in allarch
-                           select new ArchiveRequirementsViewModel()
-                           {
-                               ArchiveCategory = arch,
-                               Enabled = planreqs.Any(pr => pr.ArchiveCategoryID == arch.Id),
-                               RequirementType = planreqs.Any(pr => pr.ArchiveCategoryID == arch.Id) ? planreqs.FirstOrDefault(pr => pr.ArchiveCategoryID == arch.Id).Requirements : "One"
-                           };
-
-            //    var archreqSet = from arch in this.database.ArchiveCategory
-            //join archreq in this.database.ArchiveRequirements on new { archid = arch.id, planid = id } equals new { archid = archreq.ArchiveCategoryID, planid = archreq.RecruitmentPlanID } into tmp
-            //from mm in tmp.DefaultIfEmpty()
-            //select new ArchiveRequirementsViewModel()
-            //{
-            // ArchiveCategory = arch,
-            // Enabled = mm != null,
-            // RequirementType = mm == null ? "One" : mm.Requirements
-            //};
-
-            //构建下拉列表框
-            //ViewData["ArchiveReqTypeTable"] = Enum.GetNames(typeof(RequirementType));
-            List<SelectListItem> reqs = new List<SelectListItem>();
-            reqs.Add(new SelectListItem()
-            {
-                Text = "一个",
-                Value = RequirementType.One.ToString()
-            });
-            reqs.Add(new SelectListItem()
-            {
-                Text = "一个或多个",
-                Value = RequirementType.OneOrMore.ToString()
-            });
-            reqs.Add(new SelectListItem()
-            {
-                Text = "零个或多个",
-                Value = RequirementType.ZeroOrMore.ToString()
-            });
-            reqs.Add(new SelectListItem()
-            {
-                Text = "零个或一个",
-                Value = RequirementType.ZeroOrOne.ToString()
-            });
-            ViewData["ArchiveReqTypeTable"] = reqs;
-
-            return View(new List<ArchiveRequirementsViewModel>(modelset));
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> ArchiveRequirements(int id, List<ArchiveRequirementsViewModel> model)
-        {
-            //顺次轮询，
-            var plan = await this.recruitmentManager.FindByIDAsync(id);
-            var archreqSet = await this.recruitmentManager.GetArchiveRequirements(plan);
-
-            //var archreqSet = from archreq in this.database.ArchiveRequirements
-            //				 where archreq.RecruitmentPlanID == id
-            //				 select archreq;
-
-            List<ArchiveRequirement> orginialReqList = new List<ArchiveRequirement>(archreqSet);
-
-            foreach (ArchiveRequirementsViewModel item in model)
-            {
-                ///顺次轮询返回的需求设定，
-                ///如果原始表中未发现项，则新建。
-                ///若发现项，但需求有变，则更新。
-                ///
-                var orgselected = orginialReqList.Find(m => m.ArchiveCategoryID == item.ArchiveCategory.Id);
-                if (item.Enabled)
-                {
-                    //如果一项被启用，则从原始表查找，若没有发现，则新建，若存在，则更新。
-                    if (orgselected == null)
-                        await this.recruitmentManager.AddArchiveRequirement(plan, new ArchiveRequirement()
-                        {
-                            ArchiveCategoryID = item.ArchiveCategory.Id,
-                            RecruitmentPlanID = id,
-                            Requirements = item.RequirementType
-                        });
-                    else
-                    {
-                        orgselected.Requirements = item.RequirementType;
-                        await this.recruitmentManager.UpdateArchiveRequirement(plan, orgselected);
-                    }
-                }
-                else
-                {
-                    //如果一项被禁用，则从原始表查找，若发现，则删除。
-                    if (orgselected != null)
-                        await this.recruitmentManager.RemoveArchiveRequirement(plan, orgselected);
-                }
-
-            }
-
-            return RedirectToAction("Index");
         }
 
         public async Task<ActionResult> Publish(int id)

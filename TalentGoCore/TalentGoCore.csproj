@@ -69,8 +69,10 @@
     <Compile Include="ExaminationRoom.cs" />
     <Compile Include="ExaminationRoomManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
+    <Compile Include="FileManager.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExaminationRoomStore.cs" />
+    <Compile Include="IFileStoreProvider.cs" />
     <Compile Include="IJobStore.cs" />
     <Compile Include="InvalidNumberException.cs" />
     <Compile Include="Job.cs" />
@@ -82,14 +84,10 @@
     <Compile Include="EducationBackground.cs" />
     <Compile Include="IArchiveCategoryStore.cs" />
     <Compile Include="IArchiveRequirementStore.cs" />
-    <Compile Include="Utilities\IArticleStore.cs" />
     <Compile Include="IEnrollmentArchiveStore.cs" />
     <Compile Include="IApplicationFormStore.cs" />
     <Compile Include="IRecruitmentPlanStore.cs" />
-    <Compile Include="Major.cs" />
-    <Compile Include="MajorCategory.cs" />
     <Compile Include="RecruitmentContextBase.cs" />
-    <Compile Include="Utilities\Article.cs" />
     <Compile Include="EnrollmentArchive.cs" />
     <Compile Include="ApplicationForm.cs" />
     <Compile Include="RecruitmentPlan.cs" />
@@ -102,13 +100,13 @@
     <Compile Include="RequirementType.cs" />
     <Compile Include="ApplicationFormManager.cs" />
     <Compile Include="RecruitmentPlanManager.cs" />
-    <Compile Include="Utilities\ArticleManager.cs" />
     <Compile Include="ChineseIDCardNumber.cs" />
-    <Compile Include="Utilities\Nationality.cs" />
     <Compile Include="AnnounceFilterType.cs" />
     <Compile Include="AuditFilterType.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

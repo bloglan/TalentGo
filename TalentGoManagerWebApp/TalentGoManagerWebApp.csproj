@@ -113,6 +113,9 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.6132.35681, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.7\lib\net40\System.Linq.Dynamic.dll</HintPath>
+    </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
@@ -168,7 +171,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Mgmt\Controllers\ArticleController.cs" />
-    <Compile Include="Areas\Mgmt\Controllers\BaseDataController.cs" />
     <Compile Include="Areas\Mgmt\Controllers\EnrollmentController.cs" />
     <Compile Include="Areas\Mgmt\Controllers\HomeController.cs" />
     <Compile Include="Areas\Mgmt\Controllers\MaintenanceController.cs" />
@@ -473,16 +475,12 @@
     <Content Include="Areas\Mgmt\Views\Article\Delete.cshtml" />
     <Content Include="Areas\Mgmt\Views\Article\Edit.cshtml" />
     <Content Include="Areas\Mgmt\Views\Article\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\BaseData\Create.cshtml" />
-    <Content Include="Areas\Mgmt\Views\BaseData\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\BaseData\Update.cshtml" />
     <Content Include="Areas\Mgmt\Views\Enrollment\Detail.cshtml" />
     <Content Include="Areas\Mgmt\Views\Enrollment\EnrollmentList.cshtml" />
     <Content Include="Areas\Mgmt\Views\Enrollment\SmartStatistics.cshtml" />
     <Content Include="Areas\Mgmt\Views\Enrollment\Statistics.cshtml" />
     <Content Include="Areas\Mgmt\Views\Home\Index.cshtml" />
     <Content Include="Areas\Mgmt\Views\Maintenance\Index.cshtml" />
-    <Content Include="Areas\Mgmt\Views\RecruitmentPlan\ArchiveRequirements.cshtml" />
     <Content Include="Areas\Mgmt\Views\RecruitmentPlan\CommitAudit.cshtml" />
     <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Create.cshtml" />
     <Content Include="Areas\Mgmt\Views\RecruitmentPlan\Detail.cshtml" />

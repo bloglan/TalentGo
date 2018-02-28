@@ -13,7 +13,7 @@
 {
 	@Html.AntiForgeryToken()
 	<div class="form-horizontal">
-		@if (!Model.Enrollment.RecruitmentPlan.WhenAuditCommited.HasValue && this.User.IsInRole("QJYC\\招聘管理员"))
+		@if (!Model.Enrollment.Job.Plan.WhenAuditCommited.HasValue && this.User.IsInRole("QJYC\\招聘管理员"))
 		{
 			<div class="form-group">
 				@Html.LabelFor(m => m.Approved, new { @class = "control-label col-md-2" })
@@ -39,14 +39,14 @@
 			</div>
 			<div class="form-group">
 				<div class="col-md-10 col-md-offset-2">
-					@if (!@Model.Enrollment.RecruitmentPlan.WhenAuditCommited.HasValue)
+					@if (!@Model.Enrollment.Job.Plan.WhenAuditCommited.HasValue)
 					{
 						<input type="submit" class="btn btn-default" value="提交" />
 					}
 				</div>
 			</div>
 		}
-		<a href="@(Url.Action("EnrollmentList", new { id = Model.Enrollment.RecruitPlanID }) + this.Server.UrlDecode(this.Request["retrunParam"]))" class="btn btn-default">返回</a>
+		<a href="@(Url.Action("EnrollmentList", new { id = Model.Enrollment.Job.PlanId }) + this.Server.UrlDecode(this.Request["retrunParam"]))" class="btn btn-default">返回</a>
 	</div>
 }
 

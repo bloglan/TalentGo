@@ -1,6 +1,5 @@
 using System.Data.Entity;
 using TalentGo.Identity;
-using TalentGo.Utilities;
 using TalentGo.Web;
 
 namespace TalentGo.EntityFramework
@@ -33,16 +32,6 @@ namespace TalentGo.EntityFramework
         /// </summary>
 		public virtual DbSet<Article> Article { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<Degree> Degree { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<EducationBackground> EducationBackground { get; set; }
-		//public virtual DbSet<EmailValidationSession> EmailValidationSession { get; set; }
 
             /// <summary>
             /// 
@@ -54,25 +43,12 @@ namespace TalentGo.EntityFramework
         /// </summary>
 		public virtual DbSet<ApplicationForm> EnrollmentData { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<Major> Major { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<MajorCategory> MajorCategory { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
 		public virtual DbSet<MobilePhoneValidationSession> MobilePhoneValidationSession { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<Nationality> Nationality { get; set; }
 
         /// <summary>
         /// 
@@ -103,25 +79,7 @@ namespace TalentGo.EntityFramework
 				.Property(e => e.Requirements)
 				.IsUnicode(false);
 
-			modelBuilder.Entity<Degree>()
-				.HasMany(e => e.EnrollmentData)
-				.WithRequired(e => e.Degree1)
-				.HasForeignKey(e => e.Degree)
-				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<EducationBackground>()
-				.HasMany(e => e.EnrollmentData)
-				.WithRequired(e => e.EducationBackground1)
-				.HasForeignKey(e => e.EducationBackground)
-				.WillCascadeOnDelete(false);
-
-			//modelBuilder.Entity<EmailValidationSession>()
-			//	.Property(e => e.Email)
-			//	.IsUnicode(false);
-
-			//modelBuilder.Entity<EmailValidationSession>()
-			//	.Property(e => e.HashedCode)
-			//	.IsUnicode(false);
 
 			modelBuilder.Entity<EnrollmentArchive>()
 				.Property(e => e.MimeType)
@@ -136,16 +94,7 @@ namespace TalentGo.EntityFramework
 				.IsUnicode(false);
 
 
-			modelBuilder.Entity<MajorCategory>()
-				.HasMany(e => e.EnrollmentData)
-				.WithRequired(e => e.MajorCategory)
-				.HasForeignKey(e => e.SelectedMajor)
-				.WillCascadeOnDelete(false);
 
-			modelBuilder.Entity<MajorCategory>()
-				.HasMany(e => e.Major)
-				.WithRequired(e => e.MajorCategory)
-				.HasForeignKey(e => e.CategoryID);
 
 			modelBuilder.Entity<MobilePhoneValidationSession>()
 				.Property(e => e.Mobile)

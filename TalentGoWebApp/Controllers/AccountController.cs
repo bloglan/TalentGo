@@ -15,7 +15,6 @@ using System.Text.RegularExpressions;
 using System.Net.Mail;
 using TalentGo.Web;
 using TalentGo;
-using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {

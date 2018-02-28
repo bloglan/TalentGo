@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TalentGo.Utilities
+namespace TalentGo.Web
 {
     /// <summary>
     /// Defined interface for store Article.

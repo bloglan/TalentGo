@@ -10,7 +10,6 @@ using TalentGo.Identity;
 using TalentGoWebApp.Models;
 using TalentGo;
 using TalentGo.Models;
-using TalentGo.Utilities;
 
 namespace TalentGoWebApp.Controllers
 {

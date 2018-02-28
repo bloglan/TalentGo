@@ -95,9 +95,12 @@
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Web\ApplicationUserManager.cs" />
+    <Compile Include="Web\Article.cs" />
+    <Compile Include="Web\ArticleManager.cs" />
     <Compile Include="Web\EmailService.cs" />
     <Compile Include="Web\HttpContextExtension.cs" />
     <Compile Include="Web\HttpRecruitmentContext.cs" />
+    <Compile Include="Web\IArticleStore.cs" />
     <Compile Include="Web\IPhoneNumberValidationService.cs" />
     <Compile Include="Web\PhoneNumberValidationService.cs" />
     <Compile Include="Web\SmsService.cs" />

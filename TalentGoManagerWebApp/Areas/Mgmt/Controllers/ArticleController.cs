@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using TalentGo;
 using TalentGo.EntityFramework;
-using TalentGo.Utilities;
+using TalentGo.Web;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
