@@ -63,7 +63,7 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-		public virtual DbSet<Person> Users { get; set; }
+		public virtual DbSet<Person> Person { get; set; }
 
         /// <summary>
         /// fluent api
@@ -71,6 +71,12 @@ namespace TalentGo.EntityFramework
         /// <param name="modelBuilder"></param>
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
+            modelBuilder.Entity<Person>()
+                .ToTable("People");
+
+            modelBuilder.Entity<WebUser>()
+                .ToTable("WebUser");
+
 			modelBuilder.Entity<ArchiveCategory>()
 				.Property(e => e.MimeType)
 				.IsUnicode(false);

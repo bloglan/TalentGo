@@ -1,15 +1,17 @@
-﻿namespace TalentGoWebApp.Areas.Mgmt.Models
+﻿using System;
+
+namespace TalentGoWebApp.Areas.Mgmt.Models
 {
 	public class SetAuditResult
 	{
-		public SetAuditResult(int PlanID, int UserID)
+		public SetAuditResult(int PlanID, Guid UserID)
 		{
 			this.PlanID = PlanID;
 			this.UserID = UserID;
 		}
 		public int PlanID { get; set; }
 
-		public int UserID { get; set; }
+		public Guid UserID { get; set; }
 
 		public int Code { get; set; }
 

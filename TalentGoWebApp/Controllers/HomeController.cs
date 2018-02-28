@@ -42,7 +42,8 @@ namespace TalentGoWebApp.Controllers
         [ChildActionOnly]
         public ActionResult EnrollmentStatePartial()
         {
-            ApplicationForm enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.recruitmentContext.TargetUserId.Value);
+            var user = this.CurrentUser();
+            ApplicationForm enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.UserId == user.Id);
             return PartialView("EnrollmentStatePartial", enrollment);
         }
 

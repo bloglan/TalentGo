@@ -10,7 +10,6 @@ namespace TalentGo
     /// <summary>
     /// 表示一个用户
     /// </summary>
-    [Table("Users")]
 	public abstract class Person
 	{
         /// <summary>
@@ -27,7 +26,7 @@ namespace TalentGo
         /// 用户ID
         /// </summary>
         [Key]
-		public int Id { get; protected set; }
+		public Guid Id { get; protected set; }
 
 
         /// <summary>
@@ -36,6 +35,46 @@ namespace TalentGo
         [Required]
 		[StringLength(25)]
 		public string IDCardNumber { get; set; }
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public Sex Sex { get; set; }
+
+        /// <summary>
+        /// 出生日期。
+        /// </summary>
+        public DateTime DateOfBirth { get; set; }
+
+        /// <summary>
+        /// 民族
+        /// </summary>
+        public string Ethnicity { get; set; }
+
+        /// <summary>
+        /// 住址。
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
+        /// 签发机关。
+        /// </summary>
+        public string Issuer { get; set; }
+
+        /// <summary>
+        /// 签发日期。
+        /// </summary>
+        public DateTime IssueDate { get; set; }
+
+        /// <summary>
+        /// 失效日期。
+        /// </summary>
+        public DateTime? ExpiresAt { get; set; }
+
+        /// <summary>
+        /// 出生地。
+        /// </summary>
+        public string NativePlace { get; set; }
 
         /// <summary>
         /// 移动电话号码。
@@ -69,6 +108,36 @@ namespace TalentGo
         /// </summary>
 		[StringLength(150)]
 		public string Email { get; set; }
+
+        /// <summary>
+        /// IDCard Front File Id.
+        /// </summary>
+        public Guid? IDCardFrontFileId { get; internal set; }
+
+        /// <summary>
+        /// IDCard Front File.
+        /// </summary>
+        public virtual File IDCardFrontFile { get; internal set; }
+
+        /// <summary>
+        /// IDCard Back File Id.
+        /// </summary>
+        public Guid? IDCardBackFileId { get; internal set; }
+
+        /// <summary>
+        /// IDCard Back File
+        /// </summary>
+        public virtual File IDCardBackFile { get; internal set; }
+
+        /// <summary>
+        /// 证件照片Id。
+        /// </summary>
+        public Guid? HeadImageId { get; set; }
+
+        /// <summary>
+        /// HeadImage
+        /// </summary>
+        public virtual File HeadImage { get; set; }
 
         /// <summary>
         /// 获取与用户关联的报名表。

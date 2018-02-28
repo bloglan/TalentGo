@@ -9,7 +9,6 @@ namespace TalentGo
     /// <summary>
     /// 表示一个报名表。
     /// </summary>
-	[Table("EnrollmentData")]
 	public class ApplicationForm
 	{
         /// <summary>
@@ -56,7 +55,7 @@ namespace TalentGo
         /// related to a target user by its id.
         /// </summary>
         [ForeignKey(nameof(User))]
-		public int UserId { get; protected set; }
+		public Guid UserId { get; protected set; }
 
         /// <summary>
         /// Gets target user of this enrollment.
@@ -73,36 +72,12 @@ namespace TalentGo
 		public string Name { get; set; }
 
         /// <summary>
-        /// Sex of user.
-        /// </summary>
-		[Display(Name = "性别")]
-		[Required]
-		[StringLength(2)]
-		public string Sex { get; set; }
-
-        /// <summary>
-        /// Birth date.
-        /// </summary>
-		[Display(Name = "出生日期")]
-		[DataType(DataType.Date)]
-		[Column(TypeName = "date")]
-		public DateTime DateOfBirth { get; set; }
-
-        /// <summary>
-        /// Nationality.
-        /// </summary>
-		[Display(Name = "民族")]
-		[Required]
-		[StringLength(5)]
-		public string Nationality { get; set; }
-
-        /// <summary>
         /// Place of birth.
         /// </summary>
 		[Display(Name = "籍贯")]
 		[Required]
 		[StringLength(50)]
-		public string PlaceOfBirth { get; set; }
+		public string NativePlace { get; set; }
 
         /// <summary>
         /// Current home address.
@@ -137,22 +112,6 @@ namespace TalentGo
 		public string Marriage { get; set; }
 
         /// <summary>
-        /// Chinese ID card number.
-        /// </summary>
-		[Display(Name = "身份证号码")]
-		[Required]
-		[StringLength(18)]
-		public string IDCardNumber { get; set; }
-
-        /// <summary>
-        /// Mobile phone number.
-        /// </summary>
-		[Display(Name = "手机号码")]
-		[Required]
-		[StringLength(15)]
-		public string Mobile { get; set; }
-
-        /// <summary>
         /// Last graduated school.
         /// </summary>
 		[Display(Name = "毕业院校")]
@@ -174,13 +133,6 @@ namespace TalentGo
 		[Display(Name = "毕业年度")]
 		public int YearOfGraduated { get; set; }
 
-        /// <summary>
-        /// Major of enrollment.
-        /// </summary>
-		[Display(Name = "报考专业")]
-		[Required]
-		[StringLength(15)]
-		public string SelectedMajor { get; set; }
 
         /// <summary>
         /// Educational background.

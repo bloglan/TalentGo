@@ -9,6 +9,7 @@ using TalentGo;
 using TalentGoWebApp.Areas.Mgmt.Models;
 using TalentGo.Models;
 using TalentGo.Web;
+using System;
 
 namespace TalentGoWebApp.Areas.Mgmt.Controllers
 {
@@ -112,7 +113,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 sw.Write(data.Sex + "\t");
                 sw.Write(data.DateOfBirth.ToShortDateString() + "\t");
                 sw.Write(data.Nationality + "\t");
-                sw.Write(data.PlaceOfBirth + "\t");
+                sw.Write(data.NativePlace + "\t");
                 sw.Write(data.Source + "\t");
                 sw.Write(data.PoliticalStatus + "\t");
                 sw.Write(data.Health + "\t");
@@ -153,7 +154,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             //return File(new byte[0], "text/csv");
         }
 
-        public async Task<ActionResult> SetAuditFlag(int planid, int userid, bool? Audit)
+        public async Task<ActionResult> SetAuditFlag(int planid, Guid userid, bool? Audit)
         {
             SetAuditResult result = new SetAuditResult(planid, userid);
             var user = await this.targetUserManager.FindByIdAsync(userid);
@@ -204,7 +205,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         }
 
-        public async Task<ActionResult> SetAuditMessage(int planid, int userid, string message)
+        public async Task<ActionResult> SetAuditMessage(int planid, Guid userid, string message)
         {
             SetAuditResult result = new SetAuditResult(planid, userid);
             var user = await this.targetUserManager.FindByIdAsync(userid);

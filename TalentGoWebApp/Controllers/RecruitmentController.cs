@@ -34,10 +34,10 @@ namespace TalentGoWebApp.Controllers
 
         protected override void Initialize(RequestContext requestContext)
         {
-            base.Initialize(requestContext);
-            this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
-            if (this.recruitmentContext.TargetUserId.HasValue)
-                user = this.targetUserManager.Users.FirstOrDefault(t => t.Id == this.recruitmentContext.TargetUserId.Value);
+            //base.Initialize(requestContext);
+            //this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
+            //if (this.recruitmentContext.TargetUserId.HasValue)
+            //    user = this.targetUserManager.Users.FirstOrDefault(t => t.Id == this.recruitmentContext.TargetUserId.Value);
         }
 
         //protected override void OnException(ExceptionContext filterContext)
@@ -140,7 +140,7 @@ namespace TalentGoWebApp.Controllers
                 Sex = model.Sex,
                 DateOfBirth = model.DateOfBirth,
                 Nationality = model.Nationality,
-                PlaceOfBirth = model.PlaceOfBirth,
+                NativePlace = model.PlaceOfBirth,
                 Source = model.Source,
                 PoliticalStatus = model.PoliticalStatus,
                 Health = model.Health,

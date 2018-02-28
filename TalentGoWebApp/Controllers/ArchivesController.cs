@@ -50,11 +50,8 @@ namespace TalentGoWebApp.Controllers
 		/// <param name="acid"></param>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<ActionResult> UploadFiles(int planid, int userid, int acid)
+		public async Task<ActionResult> UploadFiles(int planid, Guid userid, int acid)
 		{
-            if (planid != this.recruitmentContext.SelectedPlanId
-                || userid != this.recruitmentContext.TargetUserId)
-                return Json(new { name = "拒绝执行，参数指示的报名无效。", id = 0 }, "text/plain");
 
             if (Request.Files.Count != 1) throw new HttpRequestValidationException("Attempt to upload chunked file containing more than one fragment per request");
 
@@ -72,7 +69,7 @@ namespace TalentGoWebApp.Controllers
 			RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), currentArchReq.Requirements);
             //获取报名表对应文档
 
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == plan.Id && enroll.UserId == this.recruitmentContext.TargetUserId.Value);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == plan.Id && enroll.UserId == this.CurrentUser().Id);
             var enrollmentArchiveSet = (await this.enrollmentManager.GetEnrollmentArchives(enrollment)).Where(ach => ach.ArchiveCategoryID == acid);
 
             if (enrollmentArchiveSet.Any())
@@ -175,7 +172,7 @@ namespace TalentGoWebApp.Controllers
 
 		public async Task<ActionResult> RemoveFile(int eaid)
 		{
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == this.recruitmentContext.SelectedPlanId.Value && enroll.UserId == this.recruitmentContext.TargetUserId.Value);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == this.recruitmentContext.SelectedPlanId.Value && enroll.UserId == this.CurrentUser().Id);
             var enrollmentArchives = await this.enrollmentManager.GetEnrollmentArchives(enrollment);
             var current = enrollmentArchives.FirstOrDefault(e => e.Id == eaid);
 

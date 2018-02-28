@@ -31,13 +31,6 @@ namespace TalentGo.Web
         public string Title { get; set; }
 
         /// <summary>
-        /// Article summary.
-        /// </summary>
-		[Display(Name = "概要")]
-		[StringLength(150)]
-        public string Summary { get; set; }
-
-        /// <summary>
         /// Primary content of Article.
         /// </summary>
 		[Display(Name = "正文")]
@@ -73,17 +66,8 @@ namespace TalentGo.Web
 		public bool Visible { get; set; }
 
         /// <summary>
-        /// Present wheather realted to a recruitment plan via plan's id.
+        /// 发布时间。
         /// </summary>
-		[Display(Name = "关联计划ID")]
-		public int? RelatedPlan { get; set; }
-
-        /// <summary>
-        /// Present a value indicate wheather this article displayed in public area or private.
-        /// </summary>
-		[Display(Name = "公开")]
-		[UIHint("PublicFlag")]
-		public bool? IsPublic { get; set; }
-
+        public DateTime? WhenPublished { get; set; }
     }
 }

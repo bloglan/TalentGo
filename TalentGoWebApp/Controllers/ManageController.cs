@@ -8,6 +8,7 @@ using Microsoft.Owin.Security;
 using TalentGoWebApp.Models;
 using TalentGo.Identity;
 using TalentGo.Web;
+using System;
 
 namespace TalentGoWebApp.Controllers
 {
@@ -64,7 +65,7 @@ namespace TalentGoWebApp.Controllers
                 : message == ManageMessageId.RemovePhoneSuccess ? "已删除你的电话号码。"
                 : "";
 
-            var userId = User.Identity.GetUserId<int>();
+            var userId = Guid.Parse(User.Identity.GetUserId());
 			var usr = this.UserManager.FindById(userId);
             return View(usr);
         }
@@ -76,10 +77,10 @@ namespace TalentGoWebApp.Controllers
         public async Task<ActionResult> RemoveLogin(string loginProvider, string providerKey)
         {
             ManageMessageId? message;
-            var result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId<int>(), new UserLoginInfo(loginProvider, providerKey));
+            var result = await UserManager.RemoveLoginAsync(Guid.Parse(User.Identity.GetUserId()), new UserLoginInfo(loginProvider, providerKey));
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+                var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                 if (user != null)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -111,7 +112,7 @@ namespace TalentGoWebApp.Controllers
                 return View(model);
             }
             // 生成令牌并发送该令牌
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId<int>(), model.Number);
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(Guid.Parse(User.Identity.GetUserId()), model.Number);
             if (UserManager.SmsService != null)
             {
                 var message = new IdentityMessage
@@ -130,8 +131,8 @@ namespace TalentGoWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EnableTwoFactorAuthentication()
         {
-            await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId<int>(), true);
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+            await UserManager.SetTwoFactorEnabledAsync(Guid.Parse(User.Identity.GetUserId()), true);
+            var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (user != null)
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -145,8 +146,8 @@ namespace TalentGoWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DisableTwoFactorAuthentication()
         {
-            await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId<int>(), false);
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+            await UserManager.SetTwoFactorEnabledAsync(Guid.Parse(User.Identity.GetUserId()), false);
+            var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (user != null)
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -158,7 +159,7 @@ namespace TalentGoWebApp.Controllers
         // GET: /Manage/VerifyPhoneNumber
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId<int>(), phoneNumber);
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(Guid.Parse(User.Identity.GetUserId()), phoneNumber);
             // 通过 SMS 提供程序发送短信以验证电话号码
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
@@ -173,10 +174,10 @@ namespace TalentGoWebApp.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId<int>(), model.PhoneNumber, model.Code);
+            var result = await UserManager.ChangePhoneNumberAsync(Guid.Parse(User.Identity.GetUserId()), model.PhoneNumber, model.Code);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+                var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                 if (user != null)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -192,12 +193,12 @@ namespace TalentGoWebApp.Controllers
         // GET: /Manage/RemovePhoneNumber
         public async Task<ActionResult> RemovePhoneNumber()
         {
-            var result = await UserManager.SetPhoneNumberAsync(User.Identity.GetUserId<int>(), null);
+            var result = await UserManager.SetPhoneNumberAsync(Guid.Parse(User.Identity.GetUserId()), null);
             if (!result.Succeeded)
             {
                 return RedirectToAction("Index", new { Message = ManageMessageId.Error });
             }
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+            var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (user != null)
             {
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -222,10 +223,10 @@ namespace TalentGoWebApp.Controllers
             {
                 return View(model);
             }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId<int>(), model.OldPassword, model.NewPassword);
+            var result = await UserManager.ChangePasswordAsync(Guid.Parse(User.Identity.GetUserId()), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+                var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                 if (user != null)
                 {
                     await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -251,10 +252,10 @@ namespace TalentGoWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId<int>(), model.NewPassword);
+                var result = await UserManager.AddPasswordAsync(Guid.Parse(User.Identity.GetUserId()), model.NewPassword);
                 if (result.Succeeded)
                 {
-                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+                    var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
                     if (user != null)
                     {
                         await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
@@ -276,12 +277,12 @@ namespace TalentGoWebApp.Controllers
                 message == ManageMessageId.RemoveLoginSuccess ? "已删除外部登录名。"
                 : message == ManageMessageId.Error ? "出现错误。"
                 : "";
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId<int>());
+            var user = await UserManager.FindByIdAsync(Guid.Parse(User.Identity.GetUserId()));
             if (user == null)
             {
                 return View("Error");
             }
-            var userLogins = await UserManager.GetLoginsAsync(User.Identity.GetUserId<int>());
+            var userLogins = await UserManager.GetLoginsAsync(Guid.Parse(User.Identity.GetUserId()));
             var otherLogins = AuthenticationManager.GetExternalAuthenticationTypes().Where(auth => userLogins.All(ul => auth.AuthenticationType != ul.LoginProvider)).ToList();
             ViewBag.ShowRemoveButton = user.HashPassword != null || userLogins.Count > 1;
             return View(new ManageLoginsViewModel
@@ -310,7 +311,7 @@ namespace TalentGoWebApp.Controllers
             {
                 return RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
             }
-            var result = await UserManager.AddLoginAsync(User.Identity.GetUserId<int>(), loginInfo.Login);
+            var result = await UserManager.AddLoginAsync(Guid.Parse(User.Identity.GetUserId()), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
@@ -347,7 +348,7 @@ namespace TalentGoWebApp.Controllers
 
         private bool HasPassword()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId<int>());
+            var user = UserManager.FindById(Guid.Parse(User.Identity.GetUserId()));
             if (user != null)
             {
                 return user.HashPassword != null;
@@ -357,7 +358,7 @@ namespace TalentGoWebApp.Controllers
 
         private bool HasPhoneNumber()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId<int>());
+            var user = UserManager.FindById(Guid.Parse(User.Identity.GetUserId()));
             if (user != null)
             {
                 return user.Mobile != null;

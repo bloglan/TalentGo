@@ -90,9 +90,6 @@ namespace TalentGoWebApp.Controllers
             {
                 case SignInStatus.Success:
                     var user = await this.UserManager.FindByNameAsync(model.IDCardNumber);
-                    var context = this.HttpContext.GetRecruitmentContext();
-                    context.TargetUserId = user.Id;
-
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -274,9 +271,9 @@ namespace TalentGoWebApp.Controllers
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
-        public async Task<ActionResult> ConfirmEmail(int userId, string code)
+        public async Task<ActionResult> ConfirmEmail(Guid userId, string code)
         {
-            if (userId == 0 || code == null)
+            if (code == null)
             {
                 return View("Error");
             }
@@ -393,10 +390,6 @@ namespace TalentGoWebApp.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == 0)
-            {
-                return View("Error");
-            }
             var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
             return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });

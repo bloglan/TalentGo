@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using TalentGo;
 
 namespace TalentGoWebApp.Areas.Mgmt.Models
@@ -7,7 +8,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Models
 	{
 		public int ID { get; set; }
 
-		public int UserID { get; set; }
+		public Guid UserID { get; set; }
 
 		public ApplicationForm Enrollment { get; set; }
 

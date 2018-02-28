@@ -10,13 +10,13 @@ namespace TalentGo.Web
     /// <summary>
     /// 
     /// </summary>
-    public class ApplicationUserManager : UserManager<WebUser, int>
+    public class ApplicationUserManager : UserManager<WebUser, Guid>
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="store"></param>
-		public ApplicationUserManager(IUserStore<WebUser, int> store)
+		public ApplicationUserManager(IUserStore<WebUser, Guid> store)
             : base(store)
         {
 
@@ -29,7 +29,7 @@ namespace TalentGo.Web
         /// <returns></returns>
         public Task<WebUser> FindByMobileAsync(string Mobile)
         {
-            var store = this.Store as IQueryableUserStore<WebUser, int>;
+            var store = this.Store as IQueryableUserStore<WebUser, Guid>;
             if (store == null)
                 throw new NotSupportedException();
 

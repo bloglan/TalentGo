@@ -33,10 +33,10 @@ namespace TalentGoWebApp
                 {
                     // 当用户登录时使应用程序可以验证安全戳。
                     // 这是一项安全功能，当你更改密码或者向帐户添加外部登录名时，将使用此功能。
-                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, WebUser, int>(
+                    OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, WebUser, Guid>(
                         validateInterval: TimeSpan.FromMinutes(30),
                         regenerateIdentityCallback: (manager, user) => user.GenerateUserIdentityAsync(manager),
-                        getUserIdCallback: (claimsIdentlty) => claimsIdentlty.GetUserId<int>())
+                        getUserIdCallback: (claimsIdentlty) => Guid.Parse(claimsIdentlty.GetUserId()))
                 }
             });
 

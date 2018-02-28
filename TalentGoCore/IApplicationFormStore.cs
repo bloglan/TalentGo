@@ -20,7 +20,7 @@ namespace TalentGo
         /// <param name="PlanId"></param>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        Task<ApplicationForm> FindByIdAsync(int PlanId, int UserId);
+        Task<ApplicationForm> FindByIdAsync(int PlanId, Guid UserId);
 
         /// <summary>
         /// Stores an enrollment into base data store.

@@ -12,15 +12,14 @@ namespace TalentGo.EntityFramework
     /// 
     /// </summary>
     public class UserStore :
-		IUserStore<WebUser, int>,
-		IUserPasswordStore<WebUser, int>,
-		IUserSecurityStampStore<WebUser, int>,
-		IUserEmailStore<WebUser, int>,
-		IQueryableUserStore<WebUser, int>,
-		IUserPhoneNumberStore<WebUser, int>,
-		IUserLockoutStore<WebUser, int>,
-		IUserTwoFactorStore<WebUser, int>,
-		IUserLoginStore<WebUser, int>
+		IUserStore<WebUser, Guid>,
+		IUserPasswordStore<WebUser, Guid>,
+		IUserSecurityStampStore<WebUser, Guid>,
+		IUserEmailStore<WebUser, Guid>,
+		IQueryableUserStore<WebUser, Guid>,
+		IUserPhoneNumberStore<WebUser, Guid>,
+		IUserLockoutStore<WebUser, Guid>,
+		IUserTwoFactorStore<WebUser, Guid>
 	{
 		DbContext database;
         DbSet<WebUser> set;
@@ -111,7 +110,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-		public Task<WebUser> FindByIdAsync(int userId)
+		public Task<WebUser> FindByIdAsync(Guid userId)
 		{
 			return Task.FromResult(this.set.SingleOrDefault(e => e.Id == userId));
 		}
@@ -518,74 +517,5 @@ namespace TalentGo.EntityFramework
 
 		#endregion
 
-		#region IUserLoginStore<TargetUser, int>
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="login"></param>
-        /// <returns></returns>
-		public Task AddLoginAsync(WebUser user, UserLoginInfo login)
-		{
-			UserLogin newEntry = this.userLoginSet.Create();
-			newEntry.UserId = user.Id;
-			newEntry.LoginProvider = login.LoginProvider;
-			newEntry.ProviderKey = login.ProviderKey;
-			this.userLoginSet.Add(newEntry);
-			this.database.SaveChanges();
-			return Task.FromResult(0);
-		}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="user"></param>
-        /// <param name="login"></param>
-        /// <returns></returns>
-		public Task RemoveLoginAsync(WebUser user, UserLoginInfo login)
-		{
-			UserLogin current = this.userLoginSet.SingleOrDefault(e => e.UserId == user.Id && e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
-			if (current != null)
-			{
-				this.userLoginSet.Remove(current);
-				this.database.SaveChanges();
-			}
-			return Task.FromResult(0);
-		}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="user"></param>
-        /// <returns></returns>
-		public async Task<IList<UserLoginInfo>> GetLoginsAsync(WebUser user)
-		{
-			WebUser current = this.set.SingleOrDefault(e => e.Id == user.Id);
-
-			if (current == null)
-				return new List<UserLoginInfo>();
-			//current
-			return (from l in current.UserLogins
-					where l.UserId == user.Id
-					select new UserLoginInfo(l.LoginProvider, l.ProviderKey)).ToList<UserLoginInfo>();
-		}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="login"></param>
-        /// <returns></returns>
-		public async Task<WebUser> FindAsync(UserLoginInfo login)
-		{
-			UserLogin entry = this.userLoginSet.SingleOrDefault(e => e.LoginProvider == login.LoginProvider && e.ProviderKey == login.ProviderKey);
-			if (entry != null)
-			{
-				return await this.FindByIdAsync(entry.UserId);
-			}
-			return default(WebUser);
-		}
-
-		#endregion
 	}
 }

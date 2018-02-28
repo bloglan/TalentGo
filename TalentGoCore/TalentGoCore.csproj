@@ -69,6 +69,7 @@
     <Compile Include="ExaminationRoom.cs" />
     <Compile Include="ExaminationRoomManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
+    <Compile Include="File.cs" />
     <Compile Include="FileManager.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExaminationRoomStore.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="ChineseIDCardNumber.cs" />
     <Compile Include="AnnounceFilterType.cs" />
     <Compile Include="AuditFilterType.cs" />
+    <Compile Include="Sex.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utilities\" />

@@ -375,7 +375,7 @@ namespace TalentGo
                     e.Name.StartsWith(Keywords) ||
                     e.IDCardNumber.StartsWith(Keywords) ||
                     e.Mobile.StartsWith(Keywords) ||
-                    e.PlaceOfBirth.StartsWith(Keywords) ||
+                    e.NativePlace.StartsWith(Keywords) ||
                     e.School.StartsWith(Keywords) ||
                     e.Major.StartsWith(Keywords)
                 );

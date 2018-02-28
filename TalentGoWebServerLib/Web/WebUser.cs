@@ -12,7 +12,7 @@ namespace TalentGo.Web
     /// <summary>
     /// 表示一个网站用户。
     /// </summary>
-    public class WebUser : Person, IUser<int>
+    public class WebUser : Person, IUser<Guid>
     {
         /// <summary>
         /// 
@@ -89,7 +89,7 @@ namespace TalentGo.Web
         /// </summary>
         /// <param name="manager"></param>
         /// <returns></returns>
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<WebUser, int> manager)
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<WebUser, Guid> manager)
         {
             // 请注意，authenticationType 必须与 CookieAuthenticationOptions.AuthenticationType 中定义的相应项匹配
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);

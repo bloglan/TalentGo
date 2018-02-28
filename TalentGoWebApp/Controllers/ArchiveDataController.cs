@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -20,7 +21,7 @@ namespace TalentGoWebApp.Controllers
         }
 
 		// GET: ArchiveData
-		public async Task<ActionResult> HeadImage(int planid, int userid)
+		public async Task<ActionResult> HeadImage(int planid, Guid userid)
         {
             var recruitmentContext = this.HttpContext.GetRecruitmentContext();
             var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.JobId == planid && e.UserId == userid);
