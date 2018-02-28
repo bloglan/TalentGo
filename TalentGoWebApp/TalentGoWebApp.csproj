@@ -242,11 +242,6 @@
     <Compile Include="Models\RecruitmentPanelStateModel.cs" />
     <Compile Include="Models\UserDelegateFilterType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service References\SMSSvc\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\ControllerExtension.cs" />
   </ItemGroup>
@@ -696,13 +691,6 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <None Include="Service References\SMSSvc\SMSService.disco" />
-    <None Include="Service References\SMSSvc\configuration91.svcinfo" />
-    <None Include="Service References\SMSSvc\configuration.svcinfo" />
-    <None Include="Service References\SMSSvc\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -760,17 +748,6 @@
     <Content Include="Views\Recruitment\Detail.cshtml" />
     <Content Include="Views\Recruitment\AnnounceForExam.cshtml" />
     <Content Include="Views\Shared\OperationResult.cshtml" />
-    <None Include="Service References\SMSSvc\SMSService.wsdl" />
-    <None Include="Service References\SMSSvc\SMSService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\SMSSvc\SMSService1.wsdl" />
-    <None Include="Service References\SMSSvc\SMSService1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\SMSSvc\SMSService2.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="Views\Article\ArticlePart.cshtml" />
     <Content Include="Views\Article\Detail.cshtml" />
     <Content Include="Views\Article\Index.cshtml" />
@@ -793,12 +770,6 @@
     <Content Include="Views\Account\FindPasswordViaMobile.cshtml" />
     <Content Include="Views\Account\ResetPasswordViaMobile.cshtml" />
     <Content Include="Views\Manage\Rename.cshtml" />
-    <Content Include="Service References\SMSSvc\TalentGoWebApp.SMSSvc.ReceivedMessage.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\SMSSvc\TalentGoWebApp.SMSSvc.SendMessageResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Job\JobList.cshtml" />
     <Content Include="Views\Account\RegisterAgreement.cshtml" />
@@ -822,16 +793,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
     <Folder Include="Views\ArchiveData\" />
     <Folder Include="Views\Archives\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\SMSSvc\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

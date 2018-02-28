@@ -76,7 +76,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             };
 
             int allCount;
-            model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.MajorCategory, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
+            model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
             model.AllCount = allCount;
             return View(model);
         }
@@ -96,7 +96,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             }
 
             int allCount;
-            model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.MajorCategory, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, true, out allCount);
+            model.EnrollmentList = this.enrollmentManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, true, out allCount);
             model.AllCount = allCount;
 
             MemoryStream ms = new MemoryStream();
@@ -104,26 +104,26 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             StreamWriter sw = new StreamWriter(ms, Encoding.Unicode);
 
             //书写标题
-            sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t类别\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
+            sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t应聘职位\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
 
             foreach (ApplicationForm data in model.EnrollmentList)
             {
                 sw.Write(recruitmentPlan.Title + "\t");
                 sw.Write(data.Name + "\t");
-                sw.Write(data.Sex + "\t");
-                sw.Write(data.DateOfBirth.ToShortDateString() + "\t");
-                sw.Write(data.Nationality + "\t");
+                sw.Write(data.User.Sex + "\t");
+                sw.Write(data.User.DateOfBirth.ToShortDateString() + "\t");
+                sw.Write(data.User.Ethnicity + "\t");
                 sw.Write(data.NativePlace + "\t");
                 sw.Write(data.Source + "\t");
                 sw.Write(data.PoliticalStatus + "\t");
                 sw.Write(data.Health + "\t");
                 sw.Write(data.Marriage + "\t");
-                sw.Write("=\"" + data.IDCardNumber + "\"" + "\t");
-                sw.Write("=\"" + data.Mobile + "\"" + "\t");
+                sw.Write("=\"" + data.User.IDCardNumber + "\"" + "\t");
+                sw.Write("=\"" + data.User.Mobile + "\"" + "\t");
                 sw.Write(data.School + "\t");
                 sw.Write(data.Major + "\t");
                 sw.Write(data.YearOfGraduated.ToString() + "\t");
-                sw.Write(data.SelectedMajor + "\t");
+                sw.Write(data.Job.Name + "\t");
                 sw.Write(data.EducationBackground + "\t");
                 sw.Write(data.Degree + "\t");
                 sw.Write(data.WhenCreated + "\t");

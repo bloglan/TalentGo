@@ -552,15 +552,6 @@ namespace TalentGoWebApp.Controllers
             }
         }
 
-        void ReportCannotReceiveVCode(string Mobile, string Email, string VCode)
-        {
-            using (var sms = new SMSSvc.SMSServiceClient())
-            {
-                string SupportMobile = "13887441196"; //李晋平 13887441196
-
-                sms.SendMessage(new string[] { SupportMobile }, "手机号为" + Mobile + "的注册用户无法收到验证码，其当前有效验证码为" + VCode + "，请在收到此短信6小时之内致电该手机号码，协助其完成注册。谢谢。", new SMSSvc.SendMessageOption());
-            }
-        }
 
         [AllowAnonymous]
         public ActionResult FindPasswordViaMobile()

@@ -39,7 +39,7 @@ namespace TalentGo.Web
 			if (plan == null || plan.Id == 0)
 			{
 				var articleSet = from article in this.store.Articles
-								 where (!article.IsPublic.HasValue || article.IsPublic.Value == IsPublic) && article.Visible && !article.RelatedPlan.HasValue
+								 where article.Visible
 								 orderby article.WhenChanged descending
 								 select article;
 				return articleSet.Take(50);
@@ -47,7 +47,7 @@ namespace TalentGo.Web
 			else
 			{
 				var planArticleSet = from article in this.store.Articles
-                                     where article.RelatedPlan == plan.Id && article.Visible
+                                     where article.Visible
 									 orderby article.WhenChanged descending
 									 select article;
 				return planArticleSet.Take(50);

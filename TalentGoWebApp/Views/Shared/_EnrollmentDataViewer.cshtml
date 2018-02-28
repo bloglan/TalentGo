@@ -22,18 +22,18 @@
 			<td>姓名</td>
 			<td>@Model.Name</td>
 			<td>性别</td>
-			<td>@Model.Sex</td>
+			<td>@Model.User.Sex</td>
 			<td>出生日期</td>
-			<td>@Model.DateOfBirth.ToShortDateString()</td>
+			<td>@Model.User.DateOfBirth.ToShortDateString()</td>
 			<td rowspan="4">
 				<img src="@Url.Action("HeadImage", "ArchiveData", new { planid = Model.Job.PlanId, userid = Model.UserId, area = "" })" class="img-responsive" style="max-height: 240px; max-width: 180px;" />
 			</td>
 		</tr>
 		<tr>
 			<td>民族</td>
-			<td>@Model.Nationality</td>
+			<td>@Model.User.Ethnicity</td>
 			<td>籍贯</td>
-			<td colspan="2">@Model.PlaceOfBirth</td>
+			<td colspan="2">@Model.NativePlace</td>
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
@@ -46,9 +46,9 @@
 		</tr>
 		<tr>
 			<td>身份证号</td>
-			<td colspan="2">@Model.IDCardNumber</td>
+			<td colspan="2">@Model.User.IDCardNumber</td>
 			<td>联系电话</td>
-			<td colspan="2">@Model.Mobile</td>
+			<td colspan="2">@Model.User.Mobile</td>
 		</tr>
 		<tr>
 			<td>现居地</td>
@@ -70,7 +70,7 @@
             <td>毕业年度</td>
             <td colspan="2">@Model.YearOfGraduated 年</td>
             <td>报考专业类别</td>
-            <td colspan="3">@Model.SelectedMajor</td>
+            <td colspan="3">@Model.Job.Name</td>
 		</tr>
 		<tr>
 			<td colspan="7">学习简历</td>

@@ -34,9 +34,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Visible)
         </th>
-        <th>
-            关联/属性
-        </th>
         <th>操作</th>
     </tr>
 
@@ -60,11 +57,6 @@
             </td>
             <td>
                 @(item.Visible ? "是" : "否")
-            </td>
-            <td>
-
-                @(item.IsPublic.HasValue ? (item.IsPublic.Value ? "公开" : "非公开") : "均可")
-
             </td>
             <td>
                 @if (this.User.IsInRole("QJYC\\招聘管理员"))

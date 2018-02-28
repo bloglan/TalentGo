@@ -211,15 +211,15 @@
 						@*<a href="@Url.Action("Detail", new { planid = item.RecruitPlanID, userid = item.UserID, retrunParam = this.Request.Url.Query })">@item.Name</a>*@
 						<a href="@Url.Action("Detail", this.Request.QueryString.ToRouteValues(new { UserID = item.UserId, id = item.JobId }))">@item.Name</a>
 					</p>
-					<p>@item.IDCardNumber</p>
-					<p>@item.Mobile</p>
+					<p>@item.User.IDCardNumber</p>
+					<p>@item.User.Mobile</p>
 				</td>
 				<td>
-					<p>@item.Sex</p>
-					<p>@item.DateOfBirth.ToShortDateString() @item.DateOfBirth.Age() 岁</p>
+					<p>@item.User.Sex</p>
+					<p>@item.User.DateOfBirth.ToShortDateString() @item.User.DateOfBirth.Age() 岁</p>
 				</td>
 				<td>
-					<p>@item.PlaceOfBirth</p>
+					<p>@item.NativePlace</p>
 					<p>@item.Source</p>
 				</td>
 				<td>
@@ -231,7 +231,7 @@
 					<p>@item.Degree</p>
 				</td>
 				<td>
-					<p>@item.SelectedMajor</p>
+					<p>@item.Job.Name</p>
 				</td>
 				<td>
 					<p><abbr title="@item.WhenCommited.Value">@item.WhenCommited.Value.ToShortDateString()</abbr></p>

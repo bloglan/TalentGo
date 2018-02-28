@@ -358,23 +358,19 @@ namespace TalentGo
         /// <param name="AnounceFilter"></param>
         /// <param name="Keywords">关键字，若提供，可对姓名、身份证号码、移动电话号码、籍贯、生源地、学校、填写专业字段进行匹配搜索。否则查询全部。</param>
         /// <returns></returns>
-        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnounceFilter, string Keywords)
+        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, AuditFilterType AuditFilter, AnnounceFilterType AnounceFilter, string Keywords)
         {
             //带分页
             //
             //先获得符合初始条件的集合
             var initSet = this.CommitedForms.Where(e => e.JobId == PlanID);
 
-            //根据条件过滤
-
-            if (!string.IsNullOrEmpty(MajorCategory))
-                initSet = initSet.Where(e => e.SelectedMajor == MajorCategory);
 
             if (!string.IsNullOrEmpty(Keywords))
                 initSet = initSet.Where(e =>
                     e.Name.StartsWith(Keywords) ||
-                    e.IDCardNumber.StartsWith(Keywords) ||
-                    e.Mobile.StartsWith(Keywords) ||
+                    e.User.IDCardNumber.StartsWith(Keywords) ||
+                    e.User.Mobile.StartsWith(Keywords) ||
                     e.NativePlace.StartsWith(Keywords) ||
                     e.School.StartsWith(Keywords) ||
                     e.Major.StartsWith(Keywords)
@@ -428,9 +424,9 @@ namespace TalentGo
         /// <param name="DownDirection"></param>
         /// <param name="ItemCount"></param>
         /// <returns></returns>
-		public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, out int ItemCount)
+		public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, out int ItemCount)
         {
-            var resultSet = this.GetCommitedEnrollmentData(PlanID, MajorCategory, AuditFilter, AnnounceFilter, Keywords);
+            var resultSet = this.GetCommitedEnrollmentData(PlanID, AuditFilter, AnnounceFilter, Keywords);
 
             ItemCount = resultSet.Count();
             if (ItemCount == 0)
@@ -453,7 +449,6 @@ namespace TalentGo
         /// 根据关键字、标记、排序指示和分页参数获取满足条件的指定页的报名表。
         /// </summary>
         /// <param name="PlanID"></param>
-        /// <param name="MajorCategory"></param>
         /// <param name="AuditFilter"></param>
         /// <param name="AnnounceFilter"></param>
         /// <param name="Keywords"></param>
@@ -463,9 +458,9 @@ namespace TalentGo
         /// <param name="PageSize"></param>
         /// <param name="ItemCount"></param>
         /// <returns></returns>
-        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, string MajorCategory, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
+        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
         {
-            var result = this.GetCommitedEnrollmentData(PlanID, MajorCategory, AuditFilter, AnnounceFilter, Keywords, OrderColumn, DownDirection, out ItemCount);
+            var result = this.GetCommitedEnrollmentData(PlanID, AuditFilter, AnnounceFilter, Keywords, OrderColumn, DownDirection, out ItemCount);
             if (ItemCount == 0)
             {
                 return result;

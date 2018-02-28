@@ -77,54 +77,6 @@ namespace TalentGo.EntityFramework
             modelBuilder.Entity<WebUser>()
                 .ToTable("WebUser");
 
-			modelBuilder.Entity<ArchiveCategory>()
-				.Property(e => e.MimeType)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<ArchiveRequirement>()
-				.Property(e => e.Requirements)
-				.IsUnicode(false);
-
-
-
-			modelBuilder.Entity<EnrollmentArchive>()
-				.Property(e => e.MimeType)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<ApplicationForm>()
-				.Property(e => e.IDCardNumber)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<ApplicationForm>()
-				.Property(e => e.Mobile)
-				.IsUnicode(false);
-
-
-
-
-			modelBuilder.Entity<MobilePhoneValidationSession>()
-				.Property(e => e.Mobile)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<MobilePhoneValidationSession>()
-				.Property(e => e.UsedFor)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<MobilePhoneValidationSession>()
-				.Property(e => e.Email)
-				.IsUnicode(false);
-
-			//modelBuilder.Entity<RecruitmentPlan>()
-			//	.HasMany(e => e.Article)
-			//	.WithOptional(e => e.RecruitmentPlan)
-			//	.HasForeignKey(e => e.RelatedPlan)
-			//	.WillCascadeOnDelete();
-
-			//modelBuilder.Entity<RecruitmentPlan>()
-			//	.HasMany(e => e.EnrollmentData)
-			//	.WithRequired(e => e.RecruitmentPlan)
-			//	.HasForeignKey(e => e.RecruitPlanID)
-			//	.WillCascadeOnDelete(false);
 
 			modelBuilder.Entity<Person>()
 				.Property(e => e.IDCardNumber)
@@ -141,13 +93,6 @@ namespace TalentGo.EntityFramework
 			modelBuilder.Entity<WebUser>()
 				.Property(e => e.UserName)
 				.IsUnicode(false);
-
-            //modelBuilder.Entity<TargetUser>()
-            //    .HasMany(e => e.EnrollmentData)
-            //    .WithRequired(e => e.User)
-            //    .HasForeignKey(e => e.UserID)
-            //    .WillCascadeOnDelete(false);
-
 		}
 	}
 }
