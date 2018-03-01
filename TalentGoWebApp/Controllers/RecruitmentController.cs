@@ -172,7 +172,7 @@ namespace TalentGoWebApp.Controllers
         [ChildActionOnly]
         public async Task<ActionResult> ArchiveListOfEnrollment(ArchiveRequirement requirement)
         {
-            ApplicationForm enrollmentData = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
+            ApplicationForm enrollmentData = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
 
             var CurrentUserEnrollmentArchivesByRequired = from arch in await this.applicationFormManager.GetEnrollmentArchives(enrollmentData)
                                                           where arch.ArchiveCategoryID == requirement.ArchiveCategoryID
@@ -189,7 +189,7 @@ namespace TalentGoWebApp.Controllers
         public ActionResult CommitEnrollment()
         {
             //
-            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
+            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
             if (enrollment == null)
                 return HttpNotFound();
 
@@ -208,7 +208,7 @@ namespace TalentGoWebApp.Controllers
         public async Task<ActionResult> CommitEnrollment(bool Agreement)
         {
             var plan = await this.recruitManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
-            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
             try
             {
 
@@ -251,7 +251,7 @@ namespace TalentGoWebApp.Controllers
 
             var plan = await this.recruitManager.FindByIDAsync(id.Value);
 
-            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
             return View(enrollment);
 
         }
@@ -267,7 +267,7 @@ namespace TalentGoWebApp.Controllers
 
             var plan = await this.recruitManager.FindByIDAsync(id.Value);
 
-            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
             return View(enrollment);
         }
 
@@ -306,7 +306,7 @@ namespace TalentGoWebApp.Controllers
         {
             RecruitmentPanelStateModel viewModel = new RecruitmentPanelStateModel();
             viewModel.Plan = plan;
-            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.UserId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
             if (enrollment != null)
             {
                 viewModel.HasEnrollment = true;

@@ -110,16 +110,16 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             {
                 sw.Write(recruitmentPlan.Title + "\t");
                 sw.Write(data.Name + "\t");
-                sw.Write(data.User.Sex + "\t");
-                sw.Write(data.User.DateOfBirth.ToShortDateString() + "\t");
-                sw.Write(data.User.Ethnicity + "\t");
+                sw.Write(data.Person.Sex + "\t");
+                sw.Write(data.Person.DateOfBirth.ToShortDateString() + "\t");
+                sw.Write(data.Person.Ethnicity + "\t");
                 sw.Write(data.NativePlace + "\t");
                 sw.Write(data.Source + "\t");
                 sw.Write(data.PoliticalStatus + "\t");
                 sw.Write(data.Health + "\t");
                 sw.Write(data.Marriage + "\t");
-                sw.Write("=\"" + data.User.IDCardNumber + "\"" + "\t");
-                sw.Write("=\"" + data.User.Mobile + "\"" + "\t");
+                sw.Write("=\"" + data.Person.IDCardNumber + "\"" + "\t");
+                sw.Write("=\"" + data.Person.Mobile + "\"" + "\t");
                 sw.Write(data.School + "\t");
                 sw.Write(data.Major + "\t");
                 sw.Write(data.YearOfGraduated.ToString() + "\t");
@@ -172,7 +172,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
 
-            var enrollment = (this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.UserId == user.Id);
+            var enrollment = (this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.PersonId == user.Id);
             if (enrollment == null)
             {
                 result.Code = 404;
@@ -196,7 +196,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 enrollment.UnsetAudit();
             }
 
-            await this.enrollmentManager.UpdateAsync(enrollment);
+            await this.enrollmentManager.ModifyAsync(enrollment);
 
             //更新统计
             await this.UpdateStatistics(result);
@@ -223,7 +223,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
             }
 
-            var enrollment = this.enrollmentManager.CommitedForms.FirstOrDefault(e => e.UserId == user.Id && e.JobId == plan.Id);
+            var enrollment = this.enrollmentManager.CommitedForms.FirstOrDefault(e => e.PersonId == user.Id && e.JobId == plan.Id);
             if (enrollment == null)
             {
                 result.Code = 404;
@@ -232,7 +232,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             }
 
             enrollment.SetAuditMessage(message);
-            await this.enrollmentManager.UpdateAsync(enrollment);
+            await this.enrollmentManager.ModifyAsync(enrollment);
 
             return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
         }
@@ -267,7 +267,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         {
             //id --> PlanID
 
-            var enrollmentData = this.enrollmentManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.UserId == model.UserID && e.WhenCommited.HasValue);
+            var enrollmentData = this.enrollmentManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.PersonId == model.UserID && e.WhenCommited.HasValue);
             if (enrollmentData == null)
                 return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到指定的报名表", this.Url.Action("AuditList", new { id = model.ID }), 3));
 
@@ -287,7 +287,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             var user = await this.targetUserManager.FindByIdAsync(model.UserID);
             var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).Single(p => p.Id == model.ID);
 
-            var enrollmentData = this.enrollmentManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.UserId == model.UserID && e.WhenCommited.HasValue);
+            var enrollmentData = this.enrollmentManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.PersonId == model.UserID && e.WhenCommited.HasValue);
 
             if (model.Approved)
                 enrollmentData.Accept();
@@ -298,7 +298,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
             enrollmentData.SetAuditMessage(model.AuditMessage);
 
-            await this.enrollmentManager.UpdateAsync(enrollmentData);
+            await this.enrollmentManager.ModifyAsync(enrollmentData);
 
             var redirectUrl = this.Url.Action("EnrollmentList", new { id = model.ID });
 

@@ -69,7 +69,7 @@ namespace TalentGoWebApp.Controllers
 			RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), currentArchReq.Requirements);
             //获取报名表对应文档
 
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == plan.Id && enroll.UserId == this.CurrentUser().Id);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == plan.Id && enroll.PersonId == this.CurrentUser().Id);
             var enrollmentArchiveSet = (await this.enrollmentManager.GetEnrollmentArchives(enrollment)).Where(ach => ach.ArchiveCategoryID == acid);
 
             if (enrollmentArchiveSet.Any())
@@ -172,7 +172,7 @@ namespace TalentGoWebApp.Controllers
 
 		public async Task<ActionResult> RemoveFile(int eaid)
 		{
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == this.recruitmentContext.SelectedPlanId.Value && enroll.UserId == this.CurrentUser().Id);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == this.recruitmentContext.SelectedPlanId.Value && enroll.PersonId == this.CurrentUser().Id);
             var enrollmentArchives = await this.enrollmentManager.GetEnrollmentArchives(enrollment);
             var current = enrollmentArchives.FirstOrDefault(e => e.Id == eaid);
 

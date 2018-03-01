@@ -96,9 +96,13 @@ namespace TalentGo
         {
             //根据要求，一个用户只能参与一个报名。
             var currentPlanId = form.Job.PlanId;
-            var user = form.User;
-            if (user.ApplicationForms.Any(a => a.Job.PlanId == currentPlanId))
-                throw new InvalidOperationException("一个用户只能在一个计划内提交一个报名表。");
+            var currentPersonId = form.PersonId;
+
+            if (this.store.ApplicationForms.Any(a => a.Job.PlanId == currentPlanId && a.PersonId == currentPersonId))
+            {
+                throw new InvalidOperationException("在一个招聘计划内只能创建一份报名表。");
+            }
+            
             await this.store.CreateAsync(form);
         }
 
@@ -107,8 +111,16 @@ namespace TalentGo
         /// </summary>
         /// <param name="form"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(ApplicationForm form)
+        public async Task ModifyAsync(ApplicationForm form)
         {
+            if (form == null)
+                throw new ArgumentNullException();
+
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("已提交的报名表不能修改。");
+
+            form.WhenChanged = DateTime.Now;
+
             await this.store.UpdateAsync(form);
         }
 
@@ -121,7 +133,7 @@ namespace TalentGo
         {
             //如果该报名表已经提交，则不能删除。
             if (form.WhenCommited.HasValue)
-                throw new InvalidOperationException("操作失败，已提交的报名表不能删除。");
+                throw new InvalidOperationException("已提交的报名表不能删除。");
 
             await this.store.DeleteAsync(form);
         }
@@ -132,46 +144,18 @@ namespace TalentGo
         /// <returns></returns>
         public async Task CommitAsync(ApplicationForm form)
         {
-            //提交报名资料时，对报名资料以及关联的图片文件资料进行检查。
-            //提交后不能反向提交。
-            //
-            if (form.WhenCommited.HasValue)
-                throw new InvalidOperationException("报名资料已处于提交状态，不能重复提交。");
+            if (form == null)
+                throw new ArgumentNullException();
 
-            //检查提交文档的符合性。
-            //ArchiveCategoryManager archiveMgr = new ArchiveCategoryManager(this.context);
+            if (form.Id == 0)
+                await this.CreateAsync(form);
 
-            //var archiveReqs = await recruitManager.GetArchiveRequirements(plan);
-            //var archives = await this.GetEnrollmentArchives(form);
-            //List<string> failMsg = new List<string>();
-            //foreach (ArchiveRequirement req in archiveReqs)
-            //{
-            //    //获得需求标记
-            //    RequirementType reqflag;
-            //    Enum.TryParse<RequirementType>(req.Requirements, out reqflag);
+            //TODO:检查传送资料是否齐全并满足规则。
 
-            //    //查询指定需求的文档
-            //    var result = from arch in archives
-            //                 where arch.ArchiveCategoryID == req.ArchiveCategoryID
-            //                 select arch;
+            if (!form.WhenCommited.HasValue)
+                form.WhenCommited = DateTime.Now;
 
-            //    if (reqflag.IsRequried() && result.Count() == 0)
-            //    {
-            //        failMsg.Add(string.Format("{0}是需要的，但未提供。", req.ArchiveCategory.Name));
-            //    }
-            //}
-
-            //if (failMsg.Count != 0)
-            //    throw new CommitEnrollmentException("上传的文档不符合要求。", failMsg);
-            //检查报名表及关联报名资料是否合格，若不合格，则提示错误。
-            //检查报名截止时间，如果该提交在报名截止时间之后，则直接提示未通过。
-
-            if (form.Job.Plan.EnrollExpirationDate < DateTime.Now)
-                throw new InvalidOperationException("报名截止时间已过。");
-
-            form.Commit();
-
-            await this.UpdateAsync(form);
+            await this.ModifyAsync(form);
         }
 
         /// <summary>
@@ -251,7 +235,7 @@ namespace TalentGo
                     //	await smtpClient.SendMailAsync(mail);
                     //	await Task.Delay(800);
                     //}
-                    await this.UpdateAsync(data);
+                    await this.ModifyAsync(data);
                 }
 
 
@@ -278,30 +262,31 @@ namespace TalentGo
         /// <summary>
         /// 声明是否参加考试。
         /// </summary>
-        /// <param name="user"></param>
-        /// <param name="plan"></param>
+        /// <param name="form"></param>
         /// <param name="IsTakeExam"></param>
         /// <returns></returns>
-		public async Task AnnounceForExamAsync(Person user, RecruitmentPlan plan, bool IsTakeExam)
+		public async Task AnnounceForExamAsync(ApplicationForm form, bool IsTakeExam)
         {
-            ApplicationForm data = this.CommitedForms.First(e => e.UserId == user.Id && e.JobId == plan.Id);
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
 
             //必须是已提交的，通过审核的，尚未声明的，当前在声明有效期内的。
-            if (!data.WhenAudit.HasValue)
+            if (!form.WhenAudit.HasValue)
                 throw new InvalidOperationException("无效的操作，尚未审核。");
 
-            if (!data.Approved.Value)
+            if (!form.Approved.Value)
                 throw new InvalidOperationException("无效的操作，审核未通过。");
 
-            if (data.WhenAnnounced.HasValue)
+            if (form.WhenAnnounced.HasValue)
                 throw new InvalidOperationException("无效的操作，已进行了声明。不能重复声明。");
 
-            if (data.Job.Plan.AnnounceExpirationDate.Value < DateTime.Now)
+            if (form.Job.Plan.AnnounceExpirationDate.Value < DateTime.Now)
                 throw new InvalidOperationException("无效的操作，已过声明截止时间。");
 
-            data.Announce(IsTakeExam);
+            form.IsTakeExam = IsTakeExam;
+            form.WhenAnnounced = DateTime.Now;
 
-            await this.store.UpdateAsync(data);
+            await this.store.UpdateAsync(form);
         }
 
 
@@ -353,7 +338,6 @@ namespace TalentGo
         /// 根据关键字、标记、获取满足条件的报名表。
         /// </summary>
         /// <param name="PlanID">指定的招聘计划。</param>
-        /// <param name="MajorCategory">指定的专业大类，若未指定，则获取全部。</param>
         /// <param name="AuditFilter">审核标记，null表示未审核，通过标记为true，false标记为未通过</param>
         /// <param name="AnounceFilter"></param>
         /// <param name="Keywords">关键字，若提供，可对姓名、身份证号码、移动电话号码、籍贯、生源地、学校、填写专业字段进行匹配搜索。否则查询全部。</param>
@@ -369,8 +353,8 @@ namespace TalentGo
             if (!string.IsNullOrEmpty(Keywords))
                 initSet = initSet.Where(e =>
                     e.Name.StartsWith(Keywords) ||
-                    e.User.IDCardNumber.StartsWith(Keywords) ||
-                    e.User.Mobile.StartsWith(Keywords) ||
+                    e.Person.IDCardNumber.StartsWith(Keywords) ||
+                    e.Person.Mobile.StartsWith(Keywords) ||
                     e.NativePlace.StartsWith(Keywords) ||
                     e.School.StartsWith(Keywords) ||
                     e.Major.StartsWith(Keywords)
@@ -416,8 +400,7 @@ namespace TalentGo
         /// 根据关键字、标记、排序指示获取满足条件的报名表。
         /// </summary>
         /// <param name="PlanID"></param>
-        /// <param name="MajorCategory"></param>
-        /// <param name="AuditFilter"></param>
+        /// <param name=" AuditFilter"></param>
         /// <param name="AnnounceFilter"></param>
         /// <param name="Keywords"></param>
         /// <param name="OrderColumn"></param>

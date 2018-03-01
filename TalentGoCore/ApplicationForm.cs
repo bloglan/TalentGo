@@ -16,21 +16,23 @@ namespace TalentGo
         /// </summary>
 		protected ApplicationForm()
 		{
-			//EnrollmentArchives = new HashSet<EnrollmentArchive>();
+            this.WhenCreated = DateTime.Now;
+            this.WhenChanged = DateTime.Now;
+            this.ChangeLog = string.Empty;
 		}
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="job"></param>
-        /// <param name="user"></param>
-        public ApplicationForm(Job job, Person user)
+        /// <param name="person"></param>
+        public ApplicationForm(Job job, Person person)
             : this()
         {
             this.Job = job;
             this.JobId = job.Id;
-            this.UserId = user.Id;
-            this.User = user;
+            this.PersonId = person.Id;
+            this.Person = person;
         }
 
         /// <summary>
@@ -54,13 +56,13 @@ namespace TalentGo
         /// <summary>
         /// related to a target user by its id.
         /// </summary>
-        [ForeignKey(nameof(User))]
-		public Guid UserId { get; protected set; }
+        [ForeignKey(nameof(Person))]
+		public Guid PersonId { get; protected set; }
 
         /// <summary>
         /// Gets target user of this enrollment.
         /// </summary>
-        public virtual Person User { get; protected set; }
+        public virtual Person Person { get; protected set; }
 
 
         /// <summary>
@@ -171,19 +173,29 @@ namespace TalentGo
         /// When created.
         /// </summary>
 		[Display(Name = "创建时间")]
-		public DateTime WhenCreated { get; set; }
+		public DateTime WhenCreated { get; protected set; }
 
         /// <summary>
         /// When changed.
         /// </summary>
 		[Display(Name = "修改时间")]
-		public DateTime? WhenChanged { get; set; }
+		public DateTime? WhenChanged { get; internal set; }
 
         /// <summary>
         /// When enrollment commited. if value of null, means uncommited.
         /// </summary>
 		[Display(Name = "提交时间")]
-		public DateTime? WhenCommited { get; protected set; }
+		public DateTime? WhenCommited { get; internal set; }
+
+        /// <summary>
+        /// 资料审查是否通过。
+        /// </summary>
+        public bool? FileReviewAccepted { get; internal set; }
+
+        /// <summary>
+        /// 资料审查时间。
+        /// </summary>
+        public DateTime? WhenFileReview { get; internal set; }
 
         /// <summary>
         /// When enrollment pass the audit. if value of null, means not audit yet.
@@ -208,15 +220,18 @@ namespace TalentGo
         /// When user announced take exam. if value of null, means not announced yet.
         /// </summary>
 		[Display(Name = "声明时间")]
-		public DateTime? WhenAnnounced { get; protected set; }
+		public DateTime? WhenAnnounced { get; internal set; }
 
         /// <summary>
         /// A value indicate wheather user determined to take exam or not.
         /// </summary>
 		[Display(Name = "参加考试")]
-		public bool? IsTakeExam { get; protected set; }
+		public bool? IsTakeExam { get; internal set; }
 
-
+        /// <summary>
+        /// 更改日志。
+        /// </summary>
+        public string ChangeLog { get; protected set; }
 
 
         /// <summary>
@@ -226,32 +241,6 @@ namespace TalentGo
         public bool HasCommited
         {
             get { return this.WhenCommited.HasValue; }
-        }
-
-        /// <summary>
-        /// Commit this enrollment.
-        /// </summary>
-        internal virtual void Commit()
-        {
-            if (this.HasCommited)
-                throw new InvalidOperationException("已提交的报名表不能重复提交");
-
-            //为已提交文档顺次检查需求性是否满足？
-            //foreach(var requirement in this.Job.ArchiveRequirements)
-            //{
-            //    RequirementType reqType = (RequirementType)Enum.Parse(typeof(RequirementType), requirement.Requirements);
-            //    if (reqType.IsRequried())
-            //        if (!this.EnrollmentArchives.Any(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID))
-            //            throw new InvalidOperationException("无法提交，需求未满足。");
-            //    if (!reqType.IsMultipleEnabled())
-            //        if (this.EnrollmentArchives.Count(ea => ea.ArchiveCategoryID == requirement.ArchiveCategoryID) > 1)
-            //            throw new InvalidOperationException("无法提交，需求未满足。");
-
-            //}
-            
-            //TODO:其他需要执行的检查。
-
-            this.WhenCommited = DateTime.Now;
         }
 
         /// <summary>
@@ -324,19 +313,34 @@ namespace TalentGo
         }
 
         /// <summary>
-        /// 
+        /// Log message with current datetime.
         /// </summary>
-        /// <param name="IsTakeExam"></param>
-        public void Announce(bool IsTakeExam)
+        /// <param name="message"></param>
+        public void Log(string message)
         {
-            if (!this.WhenAudit.HasValue)
-                throw new InvalidOperationException("未完成审核的不能进行声明。");
+            this.Log(DateTime.Now, message);
+        }
 
-            if (!this.Approved.HasValue || !this.Approved.Value)
-                throw new InvalidOperationException("未审核通过的不能进行声明。");
+        /// <summary>
+        /// Log message with message.
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="message"></param>
+        public void Log(DateTime dateTime, string message)
+        {
+            this.ChangeLog += string.Format("[{0}]{1}\r\n", dateTime, message);
+        }
 
-            this.IsTakeExam = IsTakeExam;
-            this.WhenAnnounced = DateTime.Now;
+        /// <summary>
+        /// log message from format and arguments with datetime.
+        /// </summary>
+        /// <param name="dateTime"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
+        public void Log(DateTime dateTime, string format, params object[] args)
+        {
+            var message = string.Format(format, args);
+            this.Log(dateTime, message);
         }
     }
 }

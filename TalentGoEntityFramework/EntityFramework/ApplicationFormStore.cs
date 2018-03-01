@@ -55,7 +55,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<ApplicationForm> FindByIdAsync(int PlanId, Guid UserId)
         {
-            return this.set.FirstOrDefault(e => e.JobId == PlanId && e.UserId == UserId);
+            return this.set.FirstOrDefault(e => e.JobId == PlanId && e.PersonId == UserId);
         }
 
         /// <summary>
