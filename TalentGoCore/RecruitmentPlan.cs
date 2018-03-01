@@ -16,8 +16,9 @@ namespace TalentGo
         /// </summary>
         public RecruitmentPlan()
         {
-            ArchiveRequirements = new HashSet<ArchiveRequirement>();
             this.Jobs = new HashSet<Job>();
+            this.Notifications = new HashSet<Notification>();
+            this.WhenCreated = DateTime.Now;
         }
 
         /// <summary>
@@ -38,25 +39,12 @@ namespace TalentGo
         [Required]
         public string Recruitment { get; set; }
 
-        /// <summary>
-        /// 年度。
-        /// </summary>
-        public int Year { get; set; }
 
         /// <summary>
         /// 创建时间。
         /// </summary>
-        public DateTime WhenCreated { get; set; }
+        public DateTime WhenCreated { get; protected set; }
 
-        /// <summary>
-        /// 过期时间。
-        /// </summary>
-        public DateTime ExpirationDate { get; set; }
-
-        /// <summary>
-        /// 是否公开。
-        /// </summary>
-        public bool IsPublic { get; set; }
 
         /// <summary>
         /// 发布人。
@@ -101,11 +89,6 @@ namespace TalentGo
         [StringLength(100)]
         public string ExamLocation { get; set; }
 
-        /// <summary>
-        /// gets archive requirements of this Recruitment plan.
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ArchiveRequirement> ArchiveRequirements { get; protected set; }
 
         internal void CompleteAudit()
         {
@@ -124,5 +107,10 @@ namespace TalentGo
         /// Get jobs of this plan.
         /// </summary>
         public virtual ICollection<Job> Jobs { get; protected set; }
+
+        /// <summary>
+        /// 通知公告。
+        /// </summary>
+        public virtual ICollection<Notification> Notifications { get; protected set; }
     }
 }

@@ -78,6 +78,7 @@
     <Compile Include="InvalidNumberException.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="JobExtensions.cs" />
+    <Compile Include="Notification.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="ArchiveCategory.cs" />
     <Compile Include="ArchiveRequirement.cs" />
