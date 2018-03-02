@@ -8,11 +8,6 @@
 else
 {
 	<span class="label label-success"><abbr title="发布时间 @Model.WhenPublished.Value">已发布</abbr></span>
-	if (Model.ExpirationDate < DateTime.Now)
-	{
-		<span class="label label-default">已结束</span>
-		return;
-	}
 	if (Model.EnrollExpirationDate > DateTime.Now)
 	{
 		<span class="label label-primary"><abbr title="截止日期 @Model.EnrollExpirationDate.Value.ToString("yyyy-MM-dd HH:mm")">正在报名（@Model.EnrollExpirationDate.Value.SmartShow() 到期）</abbr></span>

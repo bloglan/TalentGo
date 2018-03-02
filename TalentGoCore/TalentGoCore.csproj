@@ -94,6 +94,7 @@
     <Compile Include="ApplicationForm.cs" />
     <Compile Include="RecruitmentPlan.cs" />
     <Compile Include="ClaimDefinition.cs" />
+    <Compile Include="RecruitmentPlanExtensions.cs" />
     <Compile Include="RegisterationDelegate.cs" />
     <Compile Include="Linq\OrderedExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

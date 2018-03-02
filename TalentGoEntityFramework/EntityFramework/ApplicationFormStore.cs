@@ -50,12 +50,11 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="PlanId"></param>
-        /// <param name="UserId"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
-        public async Task<ApplicationForm> FindByIdAsync(int PlanId, Guid UserId)
+        public async Task<ApplicationForm> FindByIdAsync(int Id)
         {
-            return this.set.FirstOrDefault(e => e.JobId == PlanId && e.PersonId == UserId);
+            return await this.set.FindAsync(Id);
         }
 
         /// <summary>
@@ -65,9 +64,6 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task CreateAsync(ApplicationForm Enrollment)
         {
-            Enrollment.WhenCreated = DateTime.Now;
-            Enrollment.WhenChanged = DateTime.Now;
-
             this.set.Add(Enrollment);
             await this.dbContext.SaveChangesAsync();
         }

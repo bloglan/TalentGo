@@ -18,7 +18,6 @@ namespace TalentGoWebApp.Controllers
     {
         RecruitmentPlanManager recruitManager;
         ApplicationFormManager applicationFormManager;
-        RecruitmentContextBase recruitmentContext;
         ApplicationUserManager targetUserManager;
         IJobStore jobStore;
 
@@ -64,13 +63,13 @@ namespace TalentGoWebApp.Controllers
         /// <returns></returns>
         public async Task<ActionResult> Index()
         {
-            return View(this.recruitManager.GetPlansForUser(this.user));
+            return View(this.recruitManager.RecruitmentPlans.Published());
         }
 
         public async Task<ActionResult> Detail(int id)
         {
-            var current = (this.recruitManager.GetPlansForUser(this.user)).First(plan => plan.Id == id);
-            if (current == null)
+            var current = await this.recruitManager.FindByIdAsync(id);
+            if (!current.WhenPublished.HasValue)
                 return HttpNotFound();
 
             return View(current);
@@ -157,45 +156,42 @@ namespace TalentGoWebApp.Controllers
 
         }
 
-        public async Task<ActionResult> UploadArchives()
-        {
-            //返回报名需求项列表。
-            //实际的报名资料项由子方法给出。
-            if (!this.recruitmentContext.SelectedPlanId.HasValue)
-                throw new NotSupportedException();
+        //public async Task<ActionResult> UploadArchives()
+        //{
+        //    //返回报名需求项列表。
+        //    //实际的报名资料项由子方法给出。
+        //    if (!this.recruitmentContext.SelectedPlanId.HasValue)
+        //        throw new NotSupportedException();
 
-            var plan = await this.recruitManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
-            var archReqSet = await this.recruitManager.GetArchiveRequirements(plan);
-            return View(archReqSet);
-        }
+        //    var plan = await this.recruitManager.FindByIdAsync(this.recruitmentContext.SelectedPlanId.Value);
+        //    var archReqSet = await this.recruitManager.GetArchiveRequirements(plan);
+        //    return View(archReqSet);
+        //}
 
-        [ChildActionOnly]
-        public async Task<ActionResult> ArchiveListOfEnrollment(ArchiveRequirement requirement)
-        {
-            ApplicationForm enrollmentData = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
+        //[ChildActionOnly]
+        //public async Task<ActionResult> ArchiveListOfEnrollment(ArchiveRequirement requirement)
+        //{
+        //    ApplicationForm enrollmentData = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
 
-            var CurrentUserEnrollmentArchivesByRequired = from arch in await this.applicationFormManager.GetEnrollmentArchives(enrollmentData)
-                                                          where arch.ArchiveCategoryID == requirement.ArchiveCategoryID
-                                                          select arch;
+        //    var CurrentUserEnrollmentArchivesByRequired = from arch in await this.applicationFormManager.GetEnrollmentArchives(enrollmentData)
+        //                                                  where arch.ArchiveCategoryID == requirement.ArchiveCategoryID
+        //                                                  select arch;
 
-            this.ViewData["user"] = this.user;
-            return PartialView(CurrentUserEnrollmentArchivesByRequired);
-        }
+        //    this.ViewData["user"] = this.user;
+        //    return PartialView(CurrentUserEnrollmentArchivesByRequired);
+        //}
 
         /// <summary>
         /// 浏览待提交的报名表，并执行提交。
         /// </summary>
         /// <returns></returns>
-        public ActionResult CommitEnrollment()
+        public async Task<ActionResult> CommitEnrollment(int id)
         {
             //
-            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == this.user.Id && e.JobId == this.recruitmentContext.SelectedPlanId.Value);
+            var enrollment = await this.applicationFormManager.FindByIdAsync(id);
             if (enrollment == null)
                 return HttpNotFound();
 
-
-            if (enrollment.HasCommited)
-                return View("OperationResult", new OperationResult(ResultStatus.Warning, "您的报名资料已提交，不能重复提交。您可以查看您所提交的报名资料。", this.Url.Action("PreviewEnrollment", new { id = enrollment.JobId }), 5));
             return View(enrollment);
         }
 
@@ -205,10 +201,9 @@ namespace TalentGoWebApp.Controllers
         /// <param name="obj"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> CommitEnrollment(bool Agreement)
+        public async Task<ActionResult> CommitEnrollment(int id, bool Agreement)
         {
-            var plan = await this.recruitManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
-            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = await this.applicationFormManager.FindByIdAsync(id);
             try
             {
 
@@ -249,7 +244,7 @@ namespace TalentGoWebApp.Controllers
             if (!id.HasValue)
                 return HttpNotFound();
 
-            var plan = await this.recruitManager.FindByIDAsync(id.Value);
+            var plan = await this.recruitManager.FindByIdAsync(id.Value);
 
             var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
             return View(enrollment);
@@ -259,16 +254,13 @@ namespace TalentGoWebApp.Controllers
         /// <summary>
         /// 声明是否参加考试。
         /// </summary>
+        /// <param name="id">报名表</param>
         /// <returns></returns>
-        public async Task<ActionResult> AnnounceForExam(int? id)
+        public async Task<ActionResult> AnnounceForExam(int id)
         {
-            if (!id.HasValue)
-                return HttpNotFound();
+            var form = await this.applicationFormManager.FindByIdAsync(id);
 
-            var plan = await this.recruitManager.FindByIDAsync(id.Value);
-
-            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
-            return View(enrollment);
+            return View(form);
         }
 
         /// <summary>
@@ -277,15 +269,12 @@ namespace TalentGoWebApp.Controllers
         /// <param name="obj"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> AnnounceForExam(int? id, bool IsTakeExam)
+        public async Task<ActionResult> AnnounceForExam(int id, bool IsTakeExam)
         {
             try
             {
-                if (!id.HasValue)
-                    return HttpNotFound();
-
-                var plan = await this.recruitManager.FindByIDAsync(id.Value);
-                await this.applicationFormManager.AnnounceForExamAsync(this.user, plan, IsTakeExam);
+                var form = await this.applicationFormManager.FindByIdAsync(id);
+                await this.applicationFormManager.AnnounceForExamAsync(form, IsTakeExam);
             }
             catch (Exception ex)
             {
@@ -358,17 +347,9 @@ namespace TalentGoWebApp.Controllers
                 }
             };
 
-            if (plan.IsPublic)
-            {
-                ViewData["EducationBackgroundTable"] = from e in eduSet
-                                                       where e.IsPublic
-                                                       select new SelectListItem() { Text = e.nid, Value = e.nid };
-            }
-            else
-            {
-                ViewData["EducationBackgroundTable"] = from e in eduSet
-                                                       select new SelectListItem() { Text = e.nid, Value = e.nid };
-            }
+
+            ViewData["EducationBackgroundTable"] = from e in eduSet
+                                                   select new SelectListItem() { Text = e.nid, Value = e.nid };
 
             //学位选择表
             ViewData["DegreeTable"] = new List<SelectListItem>()
@@ -418,8 +399,7 @@ namespace TalentGoWebApp.Controllers
             //年份选择表
             List<SelectListItem> GraduatedYears = new List<SelectListItem>();
             GraduatedYears.Add(new SelectListItem() { Value = DateTime.Now.Year.ToString(), Text = DateTime.Now.Year.ToString() });
-            if (!plan.IsPublic)
-                GraduatedYears.Add(new SelectListItem() { Value = (DateTime.Now.Year - 1).ToString(), Text = (DateTime.Now.Year - 1).ToString() });
+            GraduatedYears.Add(new SelectListItem() { Value = (DateTime.Now.Year - 1).ToString(), Text = (DateTime.Now.Year - 1).ToString() });
             ViewData["GraduatedYears"] = GraduatedYears;
 
             List<string> nationalityStrList = new List<string>()

@@ -35,6 +35,15 @@ namespace TalentGo
         }
 
         /// <summary>
+        /// Find application form by id.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        public async Task<ApplicationForm> FindByIdAsync(int Id)
+        {
+            return await this.store.FindByIdAsync(Id);
+        }
+        /// <summary>
         /// 获取已提交的报名表。
         /// </summary>
         public IQueryable<ApplicationForm> CommitedForms
@@ -247,7 +256,7 @@ namespace TalentGo
                 //currentplan.ExamEndTime = ExamEndTime;
                 //currentplan.ExamLocation = ExamLocation;
 
-                await this.recruitManager.UpdateRecruitmentPlan(plan);
+                await this.recruitManager.UpdateAsync(plan);
 
                 transScope.Complete();
             }

@@ -15,7 +15,7 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-6">
-						<p>发布日期：@plan.WhenPublished.Value.ToShortDateString() 有效期至：@plan.ExpirationDate.ToShortDateString()</p>
+						<p>发布日期：@plan.WhenPublished.Value.ToShortDateString()</p>
 						<p>报名截止日期：@plan.EnrollExpirationDate.Value.ToString("yyyy-MM-dd HH:mm")（@plan.EnrollExpirationDate.Value.SmartShow()）</p>
 						@if (plan.AnnounceExpirationDate.HasValue)
 						{

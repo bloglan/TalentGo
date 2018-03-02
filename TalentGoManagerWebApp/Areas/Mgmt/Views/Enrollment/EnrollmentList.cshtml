@@ -205,18 +205,18 @@
 		@foreach (var item in Model.EnrollmentList)
 		{
 			<tr>
-				<td><img src="@Url.Action("HeadImage", "ArchiveData", new { planid = item.Job.PlanId, userid = item.UserId, area = "" })" style="max-width: 100px; max-height: 150px;" class="img-responsive" /></td>
+				<td><img src="@Url.Action("HeadImage", "ArchiveData", new { planid = item.Job.PlanId, userid = item.PersonId, area = "" })" style="max-width: 100px; max-height: 150px;" class="img-responsive" /></td>
 				<td>
 					<p>
 						@*<a href="@Url.Action("Detail", new { planid = item.RecruitPlanID, userid = item.UserID, retrunParam = this.Request.Url.Query })">@item.Name</a>*@
-						<a href="@Url.Action("Detail", this.Request.QueryString.ToRouteValues(new { UserID = item.UserId, id = item.JobId }))">@item.Name</a>
+						<a href="@Url.Action("Detail", this.Request.QueryString.ToRouteValues(new { UserID = item.PersonId, id = item.JobId }))">@item.Name</a>
 					</p>
-					<p>@item.User.IDCardNumber</p>
-					<p>@item.User.Mobile</p>
+					<p>@item.Person.IDCardNumber</p>
+					<p>@item.Person.Mobile</p>
 				</td>
 				<td>
-					<p>@item.User.Sex</p>
-					<p>@item.User.DateOfBirth.ToShortDateString() @item.User.DateOfBirth.Age() 岁</p>
+					<p>@item.Person.Sex</p>
+					<p>@item.Person.DateOfBirth.ToShortDateString() @item.Person.DateOfBirth.Age() 岁</p>
 				</td>
 				<td>
 					<p>@item.NativePlace</p>
@@ -257,16 +257,16 @@
 				<td>
 					<p>
 						<label>
-							<input type="checkbox" id="chk_@(item.JobId)_@(item.UserId)_approved" data-planid="@item.JobId" data-usrid="@item.UserId" value="Approved" onclick="SetAuditFlag(this)" @((item.Approved.HasValue && item.Approved.Value) ? "checked=\"checked\"" : string.Empty ) @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />通过
+							<input type="checkbox" id="chk_@(item.JobId)_@(item.PersonId)_approved" data-planid="@item.JobId" data-usrid="@item.PersonId" value="Approved" onclick="SetAuditFlag(this)" @((item.Approved.HasValue && item.Approved.Value) ? "checked=\"checked\"" : string.Empty ) @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />通过
 						</label>
 
 						<label>
 
-							<input type="checkbox" id="chk_@(item.JobId)_@(item.UserId)_rejective" data-planid="@item.JobId" data-usrid="@item.UserId" value="Rejective" onclick="SetAuditFlag(this)" @((item.Approved.HasValue && !item.Approved.Value) ? "checked=\"checked\"" : string.Empty ) @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />不通过
+							<input type="checkbox" id="chk_@(item.JobId)_@(item.PersonId)_rejective" data-planid="@item.JobId" data-usrid="@item.PersonId" value="Rejective" onclick="SetAuditFlag(this)" @((item.Approved.HasValue && !item.Approved.Value) ? "checked=\"checked\"" : string.Empty ) @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />不通过
 						</label>
 					</p>
 					<p>
-						<label>附加消息</label><input type="text" data-planid="@item.JobId" value="@item.AuditMessage" data-usrid="@item.UserId" onchange="SetAuditMessage(this)" @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />
+						<label>附加消息</label><input type="text" data-planid="@item.JobId" value="@item.AuditMessage" data-usrid="@item.PersonId" onchange="SetAuditMessage(this)" @((Model.IsAudit || !this.User.IsInRole("QJYC\\招聘管理员")) ? "disabled" : "") />
 					</p>
 				</td>
 

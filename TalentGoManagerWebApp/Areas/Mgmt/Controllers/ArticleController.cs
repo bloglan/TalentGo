@@ -40,7 +40,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 		// GET: Mgmt/Article/Create
 		public ActionResult Create()
 		{
-			this.PrepareViewData();
 			Article model = new Article()
 			{
 				Visible = true,
@@ -66,7 +65,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			}
 			catch (Exception ex)
 			{
-				this.PrepareViewData();
 				this.ModelState.AddModelError("", ex.Message);
 				return View(model);
 			}
@@ -79,7 +77,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			if (model == null)
 				return RedirectToAction("Index");
 
-			this.PrepareViewData();
 			return View(model);
 		}
 
@@ -96,7 +93,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			catch (Exception ex)
 			{
 				this.ModelState.AddModelError("", ex.Message);
-				this.PrepareViewData();
 				return View(model);
 			}
 		}
@@ -126,18 +122,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 			{
 				return View();
 			}
-		}
-
-		void PrepareViewData()
-		{
-			DateTime now = DateTime.Now;
-			ViewData["RecruitmentPlanList"] = from recruitment in this.recruitmentPlanManager.AvailableRecruitmentPlans
-											  where recruitment.ExpirationDate > now
-											  select new SelectListItem()
-											  {
-												  Text = recruitment.Title,
-												  Value = recruitment.Id.ToString()
-											  };
 		}
 	}
 }

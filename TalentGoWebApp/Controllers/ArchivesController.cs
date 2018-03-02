@@ -57,7 +57,7 @@ namespace TalentGoWebApp.Controllers
 
 			var file = this.Request.Files[0];
 
-            var plan = await this.recruitmentPlanManager.FindByIDAsync(this.recruitmentContext.SelectedPlanId.Value);
+            var plan = await this.recruitmentPlanManager.FindByIdAsync(this.recruitmentContext.SelectedPlanId.Value);
 
             var currentArchReq = (await this.recruitmentPlanManager.GetArchiveRequirements(plan)).FirstOrDefault(a => a.ArchiveCategoryID == acid);
 			if (currentArchReq == null)

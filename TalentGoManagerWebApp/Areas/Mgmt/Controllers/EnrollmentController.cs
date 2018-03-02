@@ -35,7 +35,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         /// <returns></returns>
         public async Task<ActionResult> EnrollmentList(int id, EnrollmentListViewModel model)
         {
-            var recruitmentPlan = await this.recruitmentPlanManager.FindByIDAsync(id);
+            var recruitmentPlan = await this.recruitmentPlanManager.FindByIdAsync(id);
             if (recruitmentPlan == null)
                 return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到报名计划。", this.Url.Action("Index", "RecruitmentPlan"), 3));
 
@@ -83,7 +83,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         public async Task<ActionResult> ExportAuditList(int id, EnrollmentListViewModel model)
         {
-            var recruitmentPlan = await this.recruitmentPlanManager.FindByIDAsync(id);
+            var recruitmentPlan = await this.recruitmentPlanManager.FindByIdAsync(id);
             if (recruitmentPlan == null)
                 return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到报名计划。", this.Url.Action("Index", "RecruitmentPlan"), 3));
 
@@ -154,25 +154,18 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             //return File(new byte[0], "text/csv");
         }
 
-        public async Task<ActionResult> SetAuditFlag(int planid, Guid userid, bool? Audit)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planid"></param>
+        /// <param name="userid"></param>
+        /// <param name="Audit"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> SetAuditFlag(int formId, bool? Audit)
         {
-            SetAuditResult result = new SetAuditResult(planid, userid);
-            var user = await this.targetUserManager.FindByIdAsync(userid);
-            if (user == null)
-            {
-                result.Code = 404;
-                result.Message = "找不到用户";
-                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
-            }
-            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.Id == planid);
-            if (plan == null)
-            {
-                result.Code = 404;
-                result.Message = "找不到招聘计划";
-                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
-            }
+            SetAuditResult result = new SetAuditResult(formId);
 
-            var enrollment = (this.enrollmentManager.GetEnrollmentsOfPlan(plan)).SingleOrDefault(e => e.PersonId == user.Id);
+            var enrollment = await this.enrollmentManager.FindByIdAsync(formId);
             if (enrollment == null)
             {
                 result.Code = 404;
@@ -205,25 +198,19 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         }
 
-        public async Task<ActionResult> SetAuditMessage(int planid, Guid userid, string message)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="planid"></param>
+        /// <param name="userid"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> SetAuditMessage(int formId, string message)
         {
-            SetAuditResult result = new SetAuditResult(planid, userid);
-            var user = await this.targetUserManager.FindByIdAsync(userid);
-            if (user == null)
-            {
-                result.Code = 404;
-                result.Message = "找不到用户";
-                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
-            }
-            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).SingleOrDefault(e => e.Id == planid);
-            if (plan == null)
-            {
-                result.Code = 404;
-                result.Message = "找不到招聘计划";
-                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
-            }
+            SetAuditResult result = new SetAuditResult(formId);
+            
 
-            var enrollment = this.enrollmentManager.CommitedForms.FirstOrDefault(e => e.PersonId == user.Id && e.JobId == plan.Id);
+            var enrollment = await this.enrollmentManager.FindByIdAsync(formId);
             if (enrollment == null)
             {
                 result.Code = 404;
@@ -239,12 +226,13 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         async Task UpdateStatistics(SetAuditResult result)
         {
-            result.Statistics = await this.GetStatistics(result.PlanID);
+            var form = await this.enrollmentManager.FindByIdAsync(result.FormId);
+            result.Statistics = await this.GetStatistics(form.Job.PlanId);
         }
 
         async Task<EnrollmentStatisticsViewModel> GetStatistics(int PlanID)
         {
-            var plan = await this.recruitmentPlanManager.FindByIDAsync(PlanID);
+            var plan = await this.recruitmentPlanManager.FindByIdAsync(PlanID);
             var enrollmentSet = from enroll in this.enrollmentManager.ApplicationForms
                                 where enroll.JobId == PlanID && enroll.WhenCommited.HasValue
                                 select enroll;
@@ -284,8 +272,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         [HttpPost]
         public async Task<ActionResult> Detail(EnrollmentDetailViewModel model)
         {
-            var user = await this.targetUserManager.FindByIdAsync(model.UserID);
-            var plan = (this.recruitmentPlanManager.GetAvariableRecruitPlan(user)).Single(p => p.Id == model.ID);
 
             var enrollmentData = this.enrollmentManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.PersonId == model.UserID && e.WhenCommited.HasValue);
 

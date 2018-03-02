@@ -25,14 +25,10 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
 
         // GET: Mgmt/RecruitmentPlan
-        public ActionResult Index(int? id)
+        public ActionResult Index()
         {
             //id: Year of recruitment plan.
-            var plans = this.recruitmentManager.AllRecruitmentPlans;
-            if (id.HasValue)
-            {
-                return View(plans.Where(p => p.Year == id.Value));
-            }
+            var plans = this.recruitmentManager.RecruitmentPlans;
             return View(plans);
         }
 
@@ -46,7 +42,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             if (!id.HasValue)
                 return HttpNotFound();
 
-            return View(await this.recruitmentManager.FindByIDAsync(id.Value));
+            return View(await this.recruitmentManager.FindByIdAsync(id.Value));
         }
 
         public ActionResult Create()
@@ -63,12 +59,10 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 {
                     Title = model.Title,
                     Recruitment = model.Recruitment,
-                    IsPublic = model.IsPublic,
-                    ExpirationDate = model.ExpirationDate,
                     Publisher = model.Publisher
                 };
 
-                await this.recruitmentManager.CreateRecruitmentPlan(newplan);
+                await this.recruitmentManager.CreateAsync(newplan);
                 return RedirectToAction("ArchiveRequirements", new { id = newplan.Id });
             }
             return View(model);
@@ -78,7 +72,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         public async Task<ActionResult> Delete(int id)
         {
 
-            var current = await this.recruitmentManager.FindByIDAsync(id);
+            var current = await this.recruitmentManager.FindByIdAsync(id);
             if (current == null)
             {
                 return RedirectToAction("Index");
@@ -91,7 +85,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            RecruitmentPlan plan = await this.recruitmentManager.FindByIDAsync(id);
+            RecruitmentPlan plan = await this.recruitmentManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
 
@@ -99,8 +93,6 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             {
                 Title = plan.Title,
                 Recruitment = plan.Recruitment,
-                ExpirationDate = plan.ExpirationDate,
-                IsPublic = plan.IsPublic,
                 Publisher = plan.Publisher
             };
             return View(vmodel);
@@ -111,15 +103,13 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         {
             if (ModelState.IsValid)
             {
-                var plan = await this.recruitmentManager.FindByIDAsync(id);
+                var plan = await this.recruitmentManager.FindByIdAsync(id);
                 plan.Title = model.Title;
                 plan.Recruitment = model.Recruitment;
-                plan.ExpirationDate = model.ExpirationDate;
-                plan.IsPublic = model.IsPublic;
                 plan.Publisher = model.Publisher;
 
 
-                await this.recruitmentManager.UpdateRecruitmentPlan(plan);
+                await this.recruitmentManager.UpdateAsync(plan);
                 return RedirectToAction("ArchiveRequirements", new { id = id });
             }
             return View(model);
@@ -129,7 +119,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         {
             PublishRecruitmentPlanViewModel model = new PublishRecruitmentPlanViewModel()
             {
-                Plan = await this.recruitmentManager.FindByIDAsync(id)
+                Plan = await this.recruitmentManager.FindByIdAsync(id)
             };
             return View(model);
         }
@@ -143,7 +133,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
 
         public async Task<ActionResult> CommitAudit(int id)
         {
-            var plan = await this.recruitmentManager.FindByIDAsync(id);
+            var plan = await this.recruitmentManager.FindByIdAsync(id);
             if (plan == null)
             {
                 return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到计划。", this.Url.Action("Index"), 3));
@@ -169,7 +159,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         [HttpPost]
         public async Task<ActionResult> CommitAudit(int id, CommitAuditViewModel model)
         {
-            var plan = await this.recruitmentManager.FindByIDAsync(id);
+            var plan = await this.recruitmentManager.FindByIdAsync(id);
             if (plan == null)
             {
                 return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到计划。", this.Url.Action("Index"), 3));
