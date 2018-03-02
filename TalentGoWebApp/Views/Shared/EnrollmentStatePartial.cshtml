@@ -8,7 +8,7 @@
 		{
 			if (Model.Job.Plan.EnrollExpirationDate >= DateTime.Now)
 			{
-				<span class="label label-warning"><abbr title="请在 @Model.Job.Plan.EnrollExpirationDate.Value.ToShortDateString() 前提交报名表。">报名尚未提交</abbr></span>
+				<span class="label label-warning"><abbr title="请在 @Model.Job.Plan.EnrollExpirationDate.ToShortDateString() 前提交报名表。">报名尚未提交</abbr></span>
 			}
 			else
 			{

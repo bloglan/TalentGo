@@ -37,6 +37,22 @@ namespace TalentGo
 		public string IDCardNumber { get; set; }
 
         /// <summary>
+        /// 姓氏
+        /// </summary>
+        public string Surname { get; set; }
+
+        /// <summary>
+        /// 名字
+        /// </summary>
+        public string GivenName { get; set; }
+
+        /// <summary>
+        /// 显示名称，真实姓名。
+        /// </summary>
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public string DisplayName { get; protected set; }
+
+        /// <summary>
         /// 性别
         /// </summary>
         public Sex Sex { get; set; }
@@ -77,6 +93,21 @@ namespace TalentGo
         public string NativePlace { get; set; }
 
         /// <summary>
+        /// 指示身份证是否成功验证。
+        /// </summary>
+        public bool? IDCardValid { get; set; }
+
+        /// <summary>
+        /// 验证时间。
+        /// </summary>
+        public DateTime? WhenIDCardValid { get; set; }
+
+        /// <summary>
+        /// 验证人。
+        /// </summary>
+        public string IDCardValidBy { get; set; }
+
+        /// <summary>
         /// 移动电话号码。
         /// </summary>
 		[Required]
@@ -95,12 +126,6 @@ namespace TalentGo
 		public DateTime WhenChanged { get; set; }
 
 
-        /// <summary>
-        /// 显示名称，真实姓名。
-        /// </summary>
-		[Required]
-		[StringLength(10)]
-		public string DisplayName { get; set; }
 
 
         /// <summary>

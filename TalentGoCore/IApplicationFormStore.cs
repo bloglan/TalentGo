@@ -7,7 +7,7 @@ namespace TalentGo
     /// <summary>
     /// An interface definition for support read/write enrollment from base data store.
     /// </summary>
-    public interface IApplicationFormStore : IDisposable
+    public interface IApplicationFormStore
     {
         /// <summary>
         /// Gets an queryable collection of enrollment.

@@ -70,12 +70,11 @@
     <Compile Include="ExaminationRoomManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="File.cs" />
-    <Compile Include="FileManager.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExaminationRoomStore.cs" />
-    <Compile Include="IFileStoreProvider.cs" />
     <Compile Include="IJobStore.cs" />
     <Compile Include="InvalidNumberException.cs" />
+    <Compile Include="IPersonStore.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="JobExtensions.cs" />
     <Compile Include="Notification.cs" />
@@ -86,9 +85,9 @@
     <Compile Include="EducationBackground.cs" />
     <Compile Include="IArchiveCategoryStore.cs" />
     <Compile Include="IArchiveRequirementStore.cs" />
-    <Compile Include="IEnrollmentArchiveStore.cs" />
     <Compile Include="IApplicationFormStore.cs" />
     <Compile Include="IRecruitmentPlanStore.cs" />
+    <Compile Include="PersonManager.cs" />
     <Compile Include="RecruitmentContextBase.cs" />
     <Compile Include="EnrollmentArchive.cs" />
     <Compile Include="ApplicationForm.cs" />

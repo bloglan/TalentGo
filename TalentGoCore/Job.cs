@@ -13,6 +13,25 @@ namespace TalentGo
     public class Job
     {
         /// <summary>
+        /// Default ctor.
+        /// </summary>
+        protected Job()
+        {
+            this.ApplicationForms = new HashSet<ApplicationForm>();
+        }
+
+        /// <summary>
+        /// Create job that attach to the plan.
+        /// </summary>
+        /// <param name="plan"></param>
+        public Job(RecruitmentPlan plan)
+            : this()
+        {
+            this.Plan = plan;
+            this.PlanId = plan.Id;
+        }
+
+        /// <summary>
         /// Id
         /// </summary>
         public int Id { get; protected set; }
@@ -52,5 +71,10 @@ namespace TalentGo
         /// Requirements.
         /// </summary>
         public string Requirements { get; set; }
+
+        /// <summary>
+        /// 获取与此职位相关联的报名表。
+        /// </summary>
+        public virtual ICollection<ApplicationForm> ApplicationForms { get; protected set; }
     }
 }

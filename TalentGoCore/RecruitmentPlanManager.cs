@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace TalentGo
 {
@@ -120,6 +122,65 @@ namespace TalentGo
         {
             return await this.store.FindByIdAsync(id);
         }
+
+        /// <summary>
+        /// 完成审核。
+        /// </summary>
+        /// <param name="plan"></param>
+        /// <returns></returns>
+        public async Task CompleteAudit(RecruitmentPlan plan)
+        {
+            if (plan == null)
+                throw new ArgumentNullException(nameof(plan));
+
+            if (DateTime.Now < plan.EnrollExpirationDate)
+                throw new ArgumentException("审核的提交早于报名截止日期。");
+
+            if (plan.WhenAuditCommited.HasValue)
+                return;
+
+            var forms = new HashSet<ApplicationForm>();
+            foreach(var job in plan.Jobs)
+            {
+                forms.UnionWith(job.ApplicationForms);
+            }
+            if (forms.Any(e => !e.Approved.HasValue))
+                throw new InvalidOperationException("操作失败，还有未设置审核标记的报名表。");
+
+            
+
+            using (TransactionScope transScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                foreach (ApplicationForm data in forms)
+                {
+                    //若没有提交，或提交日期晚于报名截止日期的，直接设定为不通过。
+                    if (!data.WhenCommited.HasValue || data.WhenCommited > plan.EnrollExpirationDate)
+                    {
+                        data.Refuse();
+                        data.SetAuditMessage("未在指定的报名截止时间内提交");
+                    }
+
+                    data.CompleteAudit();
+                }
+
+
+                //每项提交完成后，修改currentPlan的标记，表示已提交审核。
+                plan.CompleteAudit();
+
+                //设定考试时间和地点
+                //currentplan.ExamStartTime = ExamStartTime;
+                //currentplan.ExamEndTime = ExamEndTime;
+                //currentplan.ExamLocation = ExamLocation;
+
+                await this.store.UpdateAsync(plan);
+
+                transScope.Complete();
+            }
+
+            //开始每项提交并发送短信。
+
+        }
+
 
         /// <summary>
         /// 

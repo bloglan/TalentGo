@@ -12,15 +12,13 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
     [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
     public class RecruitmentPlanController : Controller
     {
-        RecruitmentPlanManager recruitmentManager;
-        ArchiveCategoryManager archiveCategoryManager;
-        ApplicationFormManager enrollmentManager;
+        RecruitmentPlanManager planManager;
+        ApplicationFormManager formManager;
 
-        public RecruitmentPlanController(RecruitmentPlanManager recruitmentManager, ArchiveCategoryManager archiveCategoryManager, ApplicationFormManager enrollmentManager)
+        public RecruitmentPlanController(RecruitmentPlanManager planManager, ApplicationFormManager formManager)
         {
-            this.recruitmentManager = recruitmentManager;
-            this.archiveCategoryManager = archiveCategoryManager;
-            this.enrollmentManager = enrollmentManager;
+            this.planManager = planManager;
+            this.formManager = formManager;
         }
 
 
@@ -28,7 +26,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         public ActionResult Index()
         {
             //id: Year of recruitment plan.
-            var plans = this.recruitmentManager.RecruitmentPlans;
+            var plans = this.planManager.RecruitmentPlans;
             return View(plans);
         }
 
@@ -42,7 +40,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
             if (!id.HasValue)
                 return HttpNotFound();
 
-            return View(await this.recruitmentManager.FindByIdAsync(id.Value));
+            return View(await this.planManager.FindByIdAsync(id.Value));
         }
 
         public ActionResult Create()
@@ -62,7 +60,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                     Publisher = model.Publisher
                 };
 
-                await this.recruitmentManager.CreateAsync(newplan);
+                await this.planManager.CreateAsync(newplan);
                 return RedirectToAction("ArchiveRequirements", new { id = newplan.Id });
             }
             return View(model);
@@ -72,20 +70,20 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         public async Task<ActionResult> Delete(int id)
         {
 
-            var current = await this.recruitmentManager.FindByIdAsync(id);
+            var current = await this.planManager.FindByIdAsync(id);
             if (current == null)
             {
                 return RedirectToAction("Index");
             }
 
-            await this.recruitmentManager.DeleteRecruitmentPlan(current);
+            await this.planManager.DeleteRecruitmentPlan(current);
             return RedirectToAction("Index");
 
         }
 
         public async Task<ActionResult> Edit(int id)
         {
-            RecruitmentPlan plan = await this.recruitmentManager.FindByIdAsync(id);
+            RecruitmentPlan plan = await this.planManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
 
@@ -103,13 +101,13 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         {
             if (ModelState.IsValid)
             {
-                var plan = await this.recruitmentManager.FindByIdAsync(id);
+                var plan = await this.planManager.FindByIdAsync(id);
                 plan.Title = model.Title;
                 plan.Recruitment = model.Recruitment;
                 plan.Publisher = model.Publisher;
 
 
-                await this.recruitmentManager.UpdateAsync(plan);
+                await this.planManager.UpdateAsync(plan);
                 return RedirectToAction("ArchiveRequirements", new { id = id });
             }
             return View(model);
@@ -119,7 +117,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         {
             PublishRecruitmentPlanViewModel model = new PublishRecruitmentPlanViewModel()
             {
-                Plan = await this.recruitmentManager.FindByIdAsync(id)
+                Plan = await this.planManager.FindByIdAsync(id)
             };
             return View(model);
         }
@@ -127,13 +125,13 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         [HttpPost]
         public async Task<ActionResult> Publish(int id, PublishRecruitmentPlanViewModel model)
         {
-            await this.recruitmentManager.PublishRecruitmentPlan(id, model.EnrollExpirationDate);
+            await this.planManager.PublishRecruitmentPlan(id, model.EnrollExpirationDate);
             return RedirectToAction("Index");
         }
 
         public async Task<ActionResult> CommitAudit(int id)
         {
-            var plan = await this.recruitmentManager.FindByIdAsync(id);
+            var plan = await this.planManager.FindByIdAsync(id);
             if (plan == null)
             {
                 return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到计划。", this.Url.Action("Index"), 3));
@@ -159,7 +157,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
         [HttpPost]
         public async Task<ActionResult> CommitAudit(int id, CommitAuditViewModel model)
         {
-            var plan = await this.recruitmentManager.FindByIdAsync(id);
+            var plan = await this.planManager.FindByIdAsync(id);
             if (plan == null)
             {
                 return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到计划。", this.Url.Action("Index"), 3));
@@ -197,7 +195,7 @@ namespace TalentGoWebApp.Areas.Mgmt.Controllers
                 plan.ExamEndTime = model.ExamEndTime;
                 plan.ExamLocation = model.ExamLocation;
                 //await this.recruitmentManager.CommitAudit(plan, model.AnnounceExpirationDate, model.ExamStartTime, model.ExamEndTime, model.ExamLocation);
-                await this.enrollmentManager.CompleteAudit(plan);
+                await this.planManager.CompleteAudit(plan);
                 //return RedirectToAction("Index");
                 return View("OperationResult", new OperationResult(ResultStatus.Success, "该计划已成功结束审核，审核结果将自动通过短信和邮件顺次通知应聘者本人。接下来，应聘者将提交是否参加考试的声明。在声明截止时间过后，您将能获得本次招聘计划参加考试的人员名单及统计信息。", this.Url.Action("Index"), 20));
             }

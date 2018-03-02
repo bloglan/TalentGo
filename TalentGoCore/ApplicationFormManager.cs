@@ -67,14 +67,7 @@ namespace TalentGo
         /// <returns></returns>
         public async Task<IEnumerable<EnrollmentArchive>> GetEnrollmentArchives(ApplicationForm enrollment)
         {
-            //获取报名表
-            //获取报名表对应的资料
-            //
-            var enrollmentArchiveStore = this.store as IEnrollmentArchiveStore;
-            if (enrollmentArchiveStore == null)
-                throw new NotSupportedException("不支持");
-
-            return await enrollmentArchiveStore.GetEnrollmentArchives(enrollment);
+            return null;
 
         }
 
@@ -85,11 +78,7 @@ namespace TalentGo
         /// <returns></returns>
         public EnrollmentArchive FindEnrollmentArchiveByIdAsync(int Id)
         {
-            var store = this.store as IEnrollmentArchiveStore;
-            if (store == null)
-                throw new NotSupportedException();
-
-            return store.EnrollmentArchives.FirstOrDefault(ea => ea.Id == Id);
+            return null;
         }
 
 
@@ -167,103 +156,6 @@ namespace TalentGo
             await this.ModifyAsync(form);
         }
 
-        /// <summary>
-        /// 完成审核。
-        /// </summary>
-        /// <param name="plan"></param>
-        /// <returns></returns>
-        public async Task CompleteAudit(RecruitmentPlan plan)
-        {
-            if (plan == null)
-                throw new ArgumentNullException(nameof(plan));
-
-            if (plan.WhenAuditCommited.HasValue)
-                return;
-
-            var enrollments = this.GetEnrollmentsOfPlan(plan);
-            if (enrollments.Any(e => !e.Approved.HasValue))
-                throw new InvalidOperationException("操作失败，还有未设置审核标记的报名表。");
-
-            //if (AnnounceExamExpirationDate < DateTime.Now)
-            //    throw new ArgumentException("声明参考的截止日期不能晚于当前日期。");
-
-            if (DateTime.Now < plan.EnrollExpirationDate)
-                throw new ArgumentException("审核的提交早于报名截止日期。");
-
-            //if (AnnounceExamExpirationDate < currentplan.EnrollExpirationDate)
-            //    throw new ArgumentException("声明参考的截止日期不能早于报名截止日期。");
-
-
-
-            //检查与此招聘计划关联的报名表。
-            //如果报名表未提交，则直接设置不通过，附加说明为未在报名截止日期内提交。
-            //如果审核状态Approved值未设置，则回退，报告人力资源管理员必须为已提交的报名表设置审核状态。
-            //如果以上检查都符合条件，为Plan设置提交日期，为每份报名表设置提交日期，并将审核结果提交短信发送队列进行发送。
-            //
-            //检查提交日期在规定截止日期内的，尚未设置Approved的报名表。若存在，则审核提交操作无效。
-            //var checkSet = from enroll in currentplan.EnrollmentData
-            //               where enroll.WhenCommited < currentplan.EnrollExpirationDate && !enroll.Approved.HasValue
-            //               select enroll;
-            //if (checkSet.Any())
-            //    throw new InvalidOperationException("还有未设定审核结果的报名表。请全部设定后，再进行提交。");
-
-            //设置声明考试的截止日期。
-            //currentplan.AnnounceExpirationDate = AnnounceExamExpirationDate;
-
-
-            using (TransactionScope transScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-            {
-                foreach (ApplicationForm data in enrollments)
-                {
-                    //若没有提交，或提交日期晚于报名截止日期的，直接设定为不通过。
-                    if (!data.WhenCommited.HasValue || data.WhenCommited > plan.EnrollExpirationDate)
-                    {
-                        data.Refuse();
-                        data.SetAuditMessage("未在指定的报名截止时间内提交");
-                    }
-
-                    data.CompleteAudit();
-
-                    //提交发送短信
-                    //string smsMsg;
-                    //if (data.Approved.Value)
-                    //    smsMsg = string.Format(smsApprovedMsg, data.Name, plan.Title, plan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
-                    //else
-                    //    smsMsg = string.Format(smsRejectiveMsg, data.Name, plan.Title, plan.AnnounceExpirationDate.Value.ToString("yyyy-MM-dd HH:mm"));
-
-                    //await smsClient.SendMessageAsync(new string[] { data.Mobile }, smsMsg, new SMSSvc.SendMessageOption());
-
-                    //提交发送邮件
-                    //if (data.Users.EmailValid)
-                    //{
-                    //	MailMessage mail = new MailMessage();
-                    //	mail.From = new MailAddress("job@qjyc.cn", "曲靖烟草招聘");
-                    //	mail.To.Add(new MailAddress(data.Users.Email, data.Name));
-                    //	mail.Subject = "曲靖烟草招聘报名审核通知";
-                    //	mail.Body = smsMsg;
-                    //	await smtpClient.SendMailAsync(mail);
-                    //	await Task.Delay(800);
-                    //}
-                    await this.ModifyAsync(data);
-                }
-
-
-                //每项提交完成后，修改currentPlan的标记，表示已提交审核。
-                plan.CompleteAudit();
-
-                //设定考试时间和地点
-                //currentplan.ExamStartTime = ExamStartTime;
-                //currentplan.ExamEndTime = ExamEndTime;
-                //currentplan.ExamLocation = ExamLocation;
-
-                await this.recruitManager.UpdateAsync(plan);
-
-                transScope.Complete();
-            }
-
-            //开始每项提交并发送短信。
-
-        }
         //string smsRejectiveMsg = "{0}，您好，您所填报的{1}报名资料，经初审未通过，感谢您的参与！";
         //string smsApprovedMsg = "{0}，您好，您所填报的{1}报名资料，经初审通过，请于{2}前登陆网站声明是否参加考试，逾期未声明是否参加考试的不予参加考试。谢谢您的合作。";
 
@@ -311,11 +203,7 @@ namespace TalentGo
         /// <returns></returns>
         public async Task AddEnrollmentArchive(ApplicationForm enrollment, EnrollmentArchive archive)
         {
-            var store = this.store as IEnrollmentArchiveStore;
-            if (store == null)
-                throw new NotSupportedException();
-
-            await store.AddArchiveToEnrollment(enrollment, archive);
+            
         }
 
         /// <summary>
@@ -326,11 +214,7 @@ namespace TalentGo
         /// <returns></returns>
         public async Task RemoveEnrollmentArchive(ApplicationForm enrollment, EnrollmentArchive archive)
         {
-            var store = this.store as IEnrollmentArchiveStore;
-            if (store == null)
-                throw new NotSupportedException();
-
-            await store.RemoveArchiveFromEnrollment(enrollment, archive);
+            
         }
 
         #endregion

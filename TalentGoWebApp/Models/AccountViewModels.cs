@@ -81,10 +81,15 @@ namespace TalentGoWebApp.Models
         [Display(Name = "电子邮件")]
         public string Email { get; set; }
 
-		[Required]
-		[Display(Name = "真实姓名")]
-		[StringLength(5, MinimumLength = 2)]
-		public string RealName { get; set; }
+        [Required]
+        [Display(Name = "姓氏")]
+        [StringLength(10)]
+        public string Surname { get; set; }
+
+        [Required]
+        [Display(Name = "名字")]
+        [StringLength(10)]
+        public string GivenName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

@@ -6,7 +6,7 @@
 <h2>@Model.Title</h2>
 
 <p>发布日期：@Model.WhenPublished.Value.ToShortDateString() </p>
-<p>报名截止日期：@Model.EnrollExpirationDate.Value.ToShortDateString()</p>
+<p>报名截止日期：@Model.EnrollExpirationDate.ToShortDateString()</p>
 @if (Model.AnnounceExpirationDate.HasValue)
 {
 	<p>确认参加考试截止日期：@Model.AnnounceExpirationDate.Value.ToShortDateString()</p>

@@ -56,7 +56,7 @@ namespace TalentGo
         /// <summary>
         /// 设置报名截止时间。
         /// </summary>
-        public DateTime? EnrollExpirationDate { get; set; }
+        public DateTime EnrollExpirationDate { get; set; }
 
         /// <summary>
         /// 获取审核提交的时间。

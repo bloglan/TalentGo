@@ -182,7 +182,7 @@ namespace TalentGoWebApp.Controllers
             {
                 Errors.Add(new KeyValuePair<string, string>("IDCardNumber", "不是一个有效的身份证号码。"));
             }
-            
+
 
             Person currentuser = null;
             currentuser = await this.UserManager.FindByNameAsync(model.IDCardNumber);
@@ -213,7 +213,18 @@ namespace TalentGoWebApp.Controllers
             }
 
 
-            var user = new WebUser { UserName = cardnumber.ToString(), Email = model.Email, Mobile = model.Mobile, MobileValid = true, EmailValid = false, IDCardNumber = cardnumber.ToString(), DisplayName = model.RealName };
+            var user = new WebUser
+            {
+                UserName = cardnumber.ToString(),
+                Email = model.Email,
+                Mobile = model.Mobile,
+                MobileValid = true,
+                EmailValid = false,
+                IDCardNumber = cardnumber.ToString(),
+                Surname = model.Surname,
+                GivenName = model.GivenName,
+            };
+
             var result = await UserManager.CreateAsync(user, model.Password);
             //
             if (result.Succeeded)
@@ -619,7 +630,7 @@ namespace TalentGoWebApp.Controllers
                 return View("ResetPasswordConfirmation");
             }
             DateTime now = DateTime.Now;
-            if(!await this.phoneNumberValidationService.ValidateAsync(model.Mobile, model.ValidateCode))
+            if (!await this.phoneNumberValidationService.ValidateAsync(model.Mobile, model.ValidateCode))
                 return View("ResetPasswordConfirmation");
 
             //重置密码

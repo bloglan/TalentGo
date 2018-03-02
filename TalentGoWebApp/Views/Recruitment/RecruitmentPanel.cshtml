@@ -19,7 +19,7 @@
 	}
 	else
 	{
-		if (Model.Plan.EnrollExpirationDate.Value >= DateTime.Now)
+		if (Model.Plan.EnrollExpirationDate >= DateTime.Now)
 		{
 			@Html.ActionLink("修改我的报名表", "Enroll", null, new { @class = "btn btn-default" })
 			@Html.ActionLink("管理报名资料", "UploadArchives", null, new { @class = "btn btn-default" })
