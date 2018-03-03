@@ -16,7 +16,7 @@ namespace TalentGo
         /// <summary>
         /// Protected Initlalize File.
         /// </summary>
-        protected File()
+        public File()
         {
             this.Id = Guid.NewGuid();
             this.WhenCreated = DateTime.Now;

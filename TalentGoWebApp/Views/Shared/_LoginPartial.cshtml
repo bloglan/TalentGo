@@ -1,38 +1,15 @@
-﻿@using System.Security.Principal
-@using System.Security.Claims
-@model TalentGoWebApp.Models.LoginPartialViewModel
-@if (Model.identity != null)
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
         @Html.AntiForgeryToken()
 
         <ul class="nav navbar-nav navbar-right">
-            @if (Model.identity is WindowsIdentity)
-            {
-                <li>
-                    <a href="#">
-                        你好，@Model.DisplayName
-                        @if (Model.TargetUser != null)
-                        {
-                            @("! 正代表【" + Model.TargetUser.DisplayName+"】报名。")
-                        }
-                    </a>
-                        
-                </li>
-                <li>@Html.ActionLink("[切换]", "AssignTargetUser", "TargetUser")</li>
-            }
-            else
-            {
-                <li>@Html.ActionLink("你好，" + Model.DisplayName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
-            }
-
-            @if (!(Model.identity is WindowsIdentity))
-            {
-                <li>
-                    <a href="javascript:document.getElementById('logoutForm').submit()">注销</a>
-                </li>
-            }
+            <li>
+                @Html.ActionLink("你好，" + Html.CurrentUser() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">注销</a></li>
         </ul>
     }
 }

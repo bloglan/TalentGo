@@ -32,8 +32,6 @@ namespace TalentGo
         /// <summary>
         /// 身份证号码。
         /// </summary>
-        [Required]
-		[StringLength(25)]
 		public string IDCardNumber { get; set; }
 
         /// <summary>
@@ -95,25 +93,22 @@ namespace TalentGo
         /// <summary>
         /// 指示身份证是否成功验证。
         /// </summary>
-        public bool? IDCardValid { get; set; }
+        public bool? IDCardValid { get; internal set; }
 
         /// <summary>
         /// 验证时间。
         /// </summary>
-        public DateTime? WhenIDCardValid { get; set; }
+        public DateTime? WhenIDCardValid { get; internal set; }
 
         /// <summary>
         /// 验证人。
         /// </summary>
-        public string IDCardValidBy { get; set; }
+        public string IDCardValidBy { get; internal set; }
 
         /// <summary>
         /// 移动电话号码。
         /// </summary>
-		[Required]
-		[StringLength(15)]
 		public string Mobile { get; set; }
-
 
         /// <summary>
         /// 创建时间。
@@ -125,18 +120,15 @@ namespace TalentGo
         /// </summary>
 		public DateTime WhenChanged { get; set; }
 
-
-
-
         /// <summary>
         /// 电子邮件地址。
         /// </summary>
-		[StringLength(150)]
 		public string Email { get; set; }
 
         /// <summary>
         /// IDCard Front File Id.
         /// </summary>
+        [ForeignKey(nameof(IDCardFrontFile))]
         public Guid? IDCardFrontFileId { get; internal set; }
 
         /// <summary>
@@ -147,22 +139,13 @@ namespace TalentGo
         /// <summary>
         /// IDCard Back File Id.
         /// </summary>
+        [ForeignKey(nameof(IDCardBackFile))]
         public Guid? IDCardBackFileId { get; internal set; }
 
         /// <summary>
         /// IDCard Back File
         /// </summary>
         public virtual File IDCardBackFile { get; internal set; }
-
-        /// <summary>
-        /// 证件照片Id。
-        /// </summary>
-        public Guid? HeadImageId { get; set; }
-
-        /// <summary>
-        /// HeadImage
-        /// </summary>
-        public virtual File HeadImage { get; set; }
 
         /// <summary>
         /// 获取与用户关联的报名表。

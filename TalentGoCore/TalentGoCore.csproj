@@ -45,6 +45,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
@@ -88,7 +89,6 @@
     <Compile Include="IApplicationFormStore.cs" />
     <Compile Include="IRecruitmentPlanStore.cs" />
     <Compile Include="PersonManager.cs" />
-    <Compile Include="RecruitmentContextBase.cs" />
     <Compile Include="EnrollmentArchive.cs" />
     <Compile Include="ApplicationForm.cs" />
     <Compile Include="RecruitmentPlan.cs" />

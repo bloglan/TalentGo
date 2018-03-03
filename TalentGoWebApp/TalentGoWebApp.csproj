@@ -234,13 +234,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\CreateTargetUserViewModel.cs" />
-    <Compile Include="Models\EnrollmentStateViewModel.cs" />
     <Compile Include="Models\EnrollViewModel.cs" />
-    <Compile Include="Models\LoginPartialViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RecruitmentPanelStateModel.cs" />
-    <Compile Include="Models\UserDelegateFilterType.cs" />
+    <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\ControllerExtension.cs" />
@@ -706,8 +703,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -752,7 +747,6 @@
     <Content Include="Views\Article\Detail.cshtml" />
     <Content Include="Views\Article\Index.cshtml" />
     <Content Include="Views\Home\BeforeAuthPartial.cshtml" />
-    <Content Include="Views\Home\WindowsAuthPartial.cshtml" />
     <Content Include="Views\Home\FormsAuthPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeDay.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeMinute.cshtml" />

@@ -23,7 +23,6 @@ namespace TalentGoWebApp.Controllers
 		// GET: ArchiveData
 		public async Task<ActionResult> HeadImage(int planid, Guid userid)
         {
-            var recruitmentContext = this.HttpContext.GetRecruitmentContext();
             var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(e => e.JobId == planid && e.PersonId == userid);
 
             if (this.User.IsInRole("QJYC\\招聘管理员") || this.User.IsInRole("QJYC\\招聘监督人"))

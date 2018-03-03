@@ -21,7 +21,6 @@ namespace TalentGoWebApp.Controllers
 		ArchiveCategoryManager archiveManager;
         ApplicationFormManager enrollmentManager;
         RecruitmentPlanManager recruitmentPlanManager;
-        RecruitmentContextBase recruitmentContext;
 
         public ArchivesController(ArchiveCategoryManager archiveManager, ApplicationFormManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager)
         {
@@ -30,11 +29,6 @@ namespace TalentGoWebApp.Controllers
             this.recruitmentPlanManager = recruitmentPlanManager;
         }
 
-        protected override void Initialize(RequestContext requestContext)
-        {
-            base.Initialize(requestContext);
-            this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
-        }
 
         // GET: Archives
         public ActionResult Index()
@@ -57,7 +51,7 @@ namespace TalentGoWebApp.Controllers
 
 			var file = this.Request.Files[0];
 
-            var plan = await this.recruitmentPlanManager.FindByIdAsync(this.recruitmentContext.SelectedPlanId.Value);
+            var plan = await this.recruitmentPlanManager.FindByIdAsync(planid);
 
             var currentArchReq = (await this.recruitmentPlanManager.GetArchiveRequirements(plan)).FirstOrDefault(a => a.ArchiveCategoryID == acid);
 			if (currentArchReq == null)
@@ -149,7 +143,7 @@ namespace TalentGoWebApp.Controllers
 				EnrollmentArchive enrollmentArch = new EnrollmentArchive();
 				enrollmentArch.ArchiveCategoryID = archiveCategory.Id;
 				enrollmentArch.RecruitPlanID = plan.Id;
-				enrollmentArch.UserID = this.recruitmentContext.TargetUserId.Value;
+				enrollmentArch.UserID = 0;
 				enrollmentArch.Title = string.Empty; //Keep Title as empty string. this property shold be used in the future.
 
 				//从MemoryStream输出字节序列
@@ -172,7 +166,7 @@ namespace TalentGoWebApp.Controllers
 
 		public async Task<ActionResult> RemoveFile(int eaid)
 		{
-            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == this.recruitmentContext.SelectedPlanId.Value && enroll.PersonId == this.CurrentUser().Id);
+            var enrollment = this.enrollmentManager.ApplicationForms.FirstOrDefault(enroll => enroll.JobId == 0 && enroll.PersonId == this.CurrentUser().Id);
             var enrollmentArchives = await this.enrollmentManager.GetEnrollmentArchives(enrollment);
             var current = enrollmentArchives.FirstOrDefault(e => e.Id == eaid);
 
