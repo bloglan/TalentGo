@@ -23,18 +23,14 @@ namespace TalentGoWebApp.Controllers
     {
         ApplicationSignInManager _signInManager;
         ApplicationUserManager _userManager;
+        PersonManager personManager;
         //MobileValidationSessionManager mvsManager;
-        IPhoneNumberValidationService phoneNumberValidationService;
 
-        public AccountController()
-        {
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IPhoneNumberValidationService phoneNumberValidationService)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, PersonManager personManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
-            this.phoneNumberValidationService = phoneNumberValidationService;
+            this.personManager = personManager;
         }
 
 
@@ -145,6 +141,12 @@ namespace TalentGoWebApp.Controllers
             }
         }
 
+        [AllowAnonymous]
+        public ActionResult RegisterAgreement()
+        {
+            return View();
+        }
+
         //
         // GET: /Account/Register
         [AllowAnonymous]
@@ -167,18 +169,28 @@ namespace TalentGoWebApp.Controllers
 
             //先测试验证码
             //再进行其他合规测试，这样可以充分利用验证码测试的复杂性，延缓自动程序利用验证错误条件进行猜测和攻击。
-            if (!await this.phoneNumberValidationService.ValidateAsync(model.Mobile, model.ValidateCode))
+            using (var client = new TalentGo.ValidationCodeSvc.VerificationCodeClient())
             {
-                this.ModelState.AddModelError("ValidateCode", "验证码错误或失效。");
-                return View(model);
+                try
+                {
+                    if (!await client.VerifyAsync(model.Mobile, model.ValidateCode))
+                    {
+                        this.ModelState.AddModelError(nameof(model.ValidateCode), "手机验证码错误或已失效。");
+                        return View(model);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    this.ModelState.AddModelError(nameof(model.ValidateCode), "验证手机号码遇到异常：" + ex.Message);
+                    return View(model);
+                }
             }
 
             List<KeyValuePair<string, string>> Errors = new List<KeyValuePair<string, string>>();
 
 
             ///为了防止利用自动程序测试条件导致隐私泄露，我们首先进行验证码测试。只有验证码合格后，才进行唯一性判别
-            ChineseIDCardNumber cardnumber;
-            if (!ChineseIDCardNumber.TryParse(model.IDCardNumber, out cardnumber))
+            if (!ChineseIDCardNumber.TryParse(model.IDCardNumber, out ChineseIDCardNumber cardNumber))
             {
                 Errors.Add(new KeyValuePair<string, string>("IDCardNumber", "不是一个有效的身份证号码。"));
             }
@@ -215,14 +227,15 @@ namespace TalentGoWebApp.Controllers
 
             var user = new WebUser
             {
-                UserName = cardnumber.ToString(),
-                Email = model.Email,
-                Mobile = model.Mobile,
-                MobileValid = true,
-                EmailValid = false,
-                IDCardNumber = cardnumber.ToString(),
+                UserName = cardNumber.ToString(),
+                IDCardNumber = cardNumber.ToString(),
+                Sex = cardNumber.IsMale ? Sex.Male : Sex.Female,
+                DateOfBirth = cardNumber.DateOfBirth,
                 Surname = model.Surname,
                 GivenName = model.GivenName,
+                Mobile = model.Mobile,
+                Email = model.Email,
+                MobileValid = true,
             };
 
             var result = await UserManager.CreateAsync(user, model.Password);
@@ -233,11 +246,11 @@ namespace TalentGoWebApp.Controllers
 
                 // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
                 // 发送包含此链接的电子邮件
-                //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                //await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击 <a href=\"" + callbackUrl + "\">这里</a>来确认你的帐户");
+                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击 <a href=\"" + callbackUrl + "\">这里</a>来确认你的帐户");
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("EditPersonInfo", "Account");
             }
 
             AddErrors(result);
@@ -246,12 +259,47 @@ namespace TalentGoWebApp.Controllers
 
         }
 
+        public ActionResult EditPersonInfo()
+        {
+            var person = this.CurrentUser();
+            var model = new EditPersonInfoModel()
+            {
+                Ethnicity = person.Ethnicity,
+                Address = person.Address,
+                Issuer = person.Issuer,
+                IssueDate = person.IssueDate,
+                ExpiresAt = person.ExpiresAt,
+            };
+            return View(model);
+        }
+
+        public async Task<ActionResult> EditPersonInfo(EditPersonInfoModel model)
+        {
+            if (!this.ModelState.IsValid)
+                return View(model);
+
+            var user = this.CurrentUser();
+            try
+            {
+                await this.personManager.UpdateRealNameInfo(user, user.IDCardNumber, user.Surname, user.GivenName, user.Sex, model.Ethnicity, user.DateOfBirth, model.Address, model.Issuer, model.IssueDate, model.ExpiresAt);
+
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
         /// <summary>
         /// 发送验证码。
         /// </summary>
         /// <param name="mobile"></param>
         /// <returns></returns>
         [AllowAnonymous]
+        [HttpPost]
         public async Task<ActionResult> SendMobileValidateCode(string mobile)
         {
             //验证传入的是否是有效的手机号。
@@ -259,24 +307,28 @@ namespace TalentGoWebApp.Controllers
             Regex reg = new Regex(@"^[1]+[3,4,5,7,8]+\d{9}$");
             if (!reg.IsMatch(mobile))
             {
-                return Json(new { code = 401, msg = "无效的手机号码。" }, "text/plain", JsonRequestBehavior.AllowGet);
+                return Json(new { code = 401, msg = "无效的手机号码。" }, "text/plain");
             }
 
             var current = await this.UserManager.FindByMobileAsync(mobile);
             if (current != null)
             {
-                return Json(new { code = 450, msg = "该手机号码已被使用。" }, "text/plain", JsonRequestBehavior.AllowGet);
+                return Json(new { code = 450, msg = "该手机号码已被使用。" }, "text/plain");
             }
-
-            try
+            using (var client = new TalentGo.ValidationCodeSvc.VerificationCodeClient())
             {
-                await this.phoneNumberValidationService.SendValidationCodeAsync(mobile);
+                try
+                {
+                    var result = await client.SendAsync(mobile);
+                    if (result.StatusCode == 0)
+                        return Json(new { code = 0, msg = "" }, "text/plain");
+                    return Json(new { code = result.StatusCode, msg = result.Message }, "text/plain");
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { code = 500, msg = ex.Message }, "text/plain");
+                }
             }
-            catch (Exception ex)
-            {
-                return Json(new { code = 500, msg = ex.Message }, "text/plain", JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { code = 0, msg = "" }, "text/plain", JsonRequestBehavior.AllowGet);
         }
 
         //
@@ -516,32 +568,6 @@ namespace TalentGoWebApp.Controllers
             return View();
         }
 
-
-        [AllowAnonymous]
-        public ActionResult SendVCodeByEmail(string Email, string Mobile)
-        {
-            //验证电话号码和邮箱的格式有效性。
-            Regex regMobile = new Regex(@"^[1]+[3,4,5,7,8]+\d{9}$");
-            if (!regMobile.IsMatch(Mobile))
-            {
-                return Json(new { code = 401, msg = "无效的手机号码。" }, "text/plain", JsonRequestBehavior.AllowGet);
-            }
-
-            //这里使用的是JQuery Validate中的电子邮件验证的正则表达式。
-            Regex regMail = new Regex(@"^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
-            if (!regMail.IsMatch(Email))
-            {
-                return Json(new { code = 401, msg = "无效的电子邮件地址。" }, "text/plain", JsonRequestBehavior.AllowGet);
-            }
-
-            DateTime now = DateTime.Now;
-
-            return Json(new { code = 999, msg = "不再支持。" }, "text/plain", JsonRequestBehavior.AllowGet);
-
-
-            //返回成功。
-        }
-
         void SendValidationCodeByEmail(string To, string Code)
         {
             using (var smtpClient = new SmtpClient("mail.qjyc.cn"))
@@ -600,7 +626,7 @@ namespace TalentGoWebApp.Controllers
             }
 
             //创建验证码并发送
-            await this.phoneNumberValidationService.SendValidationCodeAsync(model.Mobile);
+            //await this.phoneNumberValidationService.SendValidationCodeAsync(model.Mobile);
 
             return RedirectToAction("ResetPasswordViaMobile", "Account", new { code = token });
 
@@ -630,8 +656,8 @@ namespace TalentGoWebApp.Controllers
                 return View("ResetPasswordConfirmation");
             }
             DateTime now = DateTime.Now;
-            if (!await this.phoneNumberValidationService.ValidateAsync(model.Mobile, model.ValidateCode))
-                return View("ResetPasswordConfirmation");
+            //if (!await this.phoneNumberValidationService.ValidateAsync(model.Mobile, model.ValidateCode))
+            //    return View("ResetPasswordConfirmation");
 
             //重置密码
             var result = await this.UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);

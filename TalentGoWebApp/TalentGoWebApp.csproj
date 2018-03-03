@@ -234,6 +234,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\EditPersonInfoModel.cs" />
     <Compile Include="Models\EnrollViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RecruitmentPanelStateModel.cs" />
@@ -767,6 +768,7 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Job\JobList.cshtml" />
     <Content Include="Views\Account\RegisterAgreement.cshtml" />
+    <Content Include="Views\Account\EditPersonInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
