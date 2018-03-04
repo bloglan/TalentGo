@@ -255,7 +255,7 @@ namespace TalentGo
 
         static char CalculateCheckCode(int regionCode, DateTime dateOfBirth, int serialNumber)
         {
-            if (regionCode < 100000 || regionCode > 999999)
+            if (regionCode < 0 || regionCode > 999999)
                 throw new ArgumentOutOfRangeException("Region code out of range.");
             if (serialNumber < 0 || serialNumber > 999)
                 throw new ArgumentOutOfRangeException("Serial number out of range.");

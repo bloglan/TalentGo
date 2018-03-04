@@ -110,25 +110,18 @@
 		var vctimer = null;
 		var dcount = 0;
 		var vcbtn = null;
-		var btnClickCount = 0;
 
 		function SendValidateCode(ele) {
 			var mobile = $("#Mobile").val();
             vcbtn = ele;
             $.post("@Url.Action("SendMobileValidateCode", "Account")", { mobile: mobile }, function (data, status, xhr) {
-				if (data.code != 0) {
+				if (!data) {
 					alert(data.msg);
 				}
-				else {
-					btnClickCount++;
-				}
-
 			});
 			ChangeButtonState();
 
 		}
-
-
 
 		function ChangeButtonState() {
 			$(vcbtn).prop("disabled", "disabled");
@@ -142,9 +135,7 @@
 					$(vcbtn).removeAttr("disabled");
 					$(vcbtn).text("发送验证码");
 
-					if (btnClickCount >= 2) {
-						$("#CanNotReciveValidateCodeBtn").css("display", "inline-block");
-					}
+					
 					window.clearInterval(vctimer);
 				}
 			}, 1000);

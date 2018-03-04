@@ -71,6 +71,9 @@ namespace TalentGo.EntityFramework
         /// <param name="modelBuilder"></param>
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
+            modelBuilder.Entity<ApplicationForm>()
+                .ToTable("ApplicationForm");
+
             modelBuilder.Entity<Person>()
                 .ToTable("People");
 

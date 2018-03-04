@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin.Security;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
-using TalentGoWebApp.Models;
-using TalentGo.Identity;
-using TalentGo.EntityFramework;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Net.Mail;
-using TalentGo.Web;
 using TalentGo;
+using TalentGo.Identity;
+using TalentGo.Web;
+using TalentGoWebApp.Models;
 
 namespace TalentGoWebApp.Controllers
 {
@@ -26,10 +24,8 @@ namespace TalentGoWebApp.Controllers
         PersonManager personManager;
         //MobileValidationSessionManager mvsManager;
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, PersonManager personManager)
+        public AccountController(PersonManager personManager)
         {
-            UserManager = userManager;
-            SignInManager = signInManager;
             this.personManager = personManager;
         }
 
@@ -79,13 +75,21 @@ namespace TalentGoWebApp.Controllers
                 return View(model);
             }
 
+            var person = this.UserManager.Users.FirstOrDefault(u => u.IDCardNumber == model.UserId || u.Mobile == model.UserId || u.Email == model.UserId);
+
+            if (person == null)
+            {
+                ModelState.AddModelError("", "登陆失败。用户名或密码有误，或由于锁定阻止了登陆。");
+                return View(model);
+            }
+            
             // 这不会计入到为执行帐户锁定而统计的登录失败次数中
             // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.IDCardNumber, model.Password, model.RememberMe, shouldLockout: true);
+            var result = await SignInManager.PasswordSignInAsync(person.UserName, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
-                    var user = await this.UserManager.FindByNameAsync(model.IDCardNumber);
+                    var user = await this.UserManager.FindByNameAsync(model.UserId);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -196,19 +200,16 @@ namespace TalentGoWebApp.Controllers
             }
 
 
-            Person currentuser = null;
-            currentuser = await this.UserManager.FindByNameAsync(model.IDCardNumber);
-            if (currentuser != null)
+            if (await this.UserManager.FindByNameAsync(model.IDCardNumber) != null)
             {
                 Errors.Add(new KeyValuePair<string, string>("IDCardNumber", "此身份证号码已被注册。"));
             }
-            currentuser = await this.UserManager.FindByEmailAsync(model.Email);
-            if (currentuser != null)
+            if (await this.UserManager.FindByEmailAsync(model.Email) != null)
             {
                 Errors.Add(new KeyValuePair<string, string>("Email", "此电子邮件地址已被注册。"));
             }
-            currentuser = await this.UserManager.FindByMobileAsync(model.Mobile);
-            if (currentuser != null)
+            
+            if (await this.personManager.FindByMobileAsync(model.Mobile) != null)
             {
                 Errors.Add(new KeyValuePair<string, string>("Mobile", "此手机号码已被注册。"));
             }
@@ -273,6 +274,7 @@ namespace TalentGoWebApp.Controllers
             return View(model);
         }
 
+        [HttpPost]
         public async Task<ActionResult> EditPersonInfo(EditPersonInfoModel model)
         {
             if (!this.ModelState.IsValid)
@@ -281,7 +283,7 @@ namespace TalentGoWebApp.Controllers
             var user = this.CurrentUser();
             try
             {
-                await this.personManager.UpdateRealNameInfo(user, user.IDCardNumber, user.Surname, user.GivenName, user.Sex, model.Ethnicity, user.DateOfBirth, model.Address, model.Issuer, model.IssueDate, model.ExpiresAt);
+                await this.personManager.UpdateRealNameInfo(user, user.IDCardNumber, user.Surname, user.GivenName, model.Ethnicity, model.Address, model.Issuer, model.IssueDate, model.ExpiresAt);
 
             }
             catch (Exception ex)
@@ -310,18 +312,13 @@ namespace TalentGoWebApp.Controllers
                 return Json(new { code = 401, msg = "无效的手机号码。" }, "text/plain");
             }
 
-            var current = await this.UserManager.FindByMobileAsync(mobile);
-            if (current != null)
-            {
-                return Json(new { code = 450, msg = "该手机号码已被使用。" }, "text/plain");
-            }
             using (var client = new TalentGo.ValidationCodeSvc.VerificationCodeClient())
             {
                 try
                 {
                     var result = await client.SendAsync(mobile);
                     if (result.StatusCode == 0)
-                        return Json(new { code = 0, msg = "" }, "text/plain");
+                        return Json(true);
                     return Json(new { code = result.StatusCode, msg = result.Message }, "text/plain");
                 }
                 catch (Exception ex)
@@ -608,7 +605,7 @@ namespace TalentGoWebApp.Controllers
             //为了隐藏，构造一个假的token
             string token = "EbzHFOl%2BLSZ%2B3NjS1tgZyL10hmrXA78SfDgKmU%2Fxl5sAXPsfyrsEflP3k%2FBFRL%2BUXNBNtI2XuEQLJi7GiFlMEuUtp%2FCuvgyysDuN6Us3EaVf1kyKNHdyJpx8VkwKc0BwuJ0b1pjfJKITt5UExXTidehh0%2BlyK2NuAFwouA0lVwQ%55";
 
-            var user = await this.UserManager.FindByMobileAsync(model.Mobile);
+            var user = await this.personManager.FindByMobileAsync(model.Mobile) as WebUser;
             if (user == null)
             {
                 //不要提示用户找不到用户对象，以免被自动程序测试。
@@ -649,7 +646,18 @@ namespace TalentGoWebApp.Controllers
                 return View(model);
             }
 
-            var user = await this.UserManager.FindByMobileAsync(model.Mobile);
+            WebUser user;
+
+            try
+            {
+                user = await this.personManager.FindByMobileAsync(model.Mobile) as WebUser;
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
             if (user == null)
             {
                 //不要显示找不到用户。

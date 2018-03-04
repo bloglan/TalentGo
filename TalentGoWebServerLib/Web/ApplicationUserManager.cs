@@ -21,21 +21,5 @@ namespace TalentGo.Web
         {
 
         }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Mobile"></param>
-        /// <returns></returns>
-        public Task<WebUser> FindByMobileAsync(string Mobile)
-        {
-            var store = this.Store as IQueryableUserStore<WebUser, Guid>;
-            if (store == null)
-                throw new NotSupportedException();
-
-            return Task.FromResult(store.Users.FirstOrDefault(u => u.Mobile == Mobile));
-        }
-
-
     }
 }

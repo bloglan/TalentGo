@@ -46,20 +46,6 @@ namespace TalentGoWebApp.Models
         public string Email { get; set; }
     }
 
-    public class LoginViewModel
-    {
-        [Required]
-        [Display(Name = "身份证号码")]
-        public string IDCardNumber { get; set; }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "密码")]
-        public string Password { get; set; }
-
-        [Display(Name = "记住我?")]
-        public bool RememberMe { get; set; }
-    }
 
 
     public class ResetPasswordViaEmailViewModel

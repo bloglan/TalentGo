@@ -29,21 +29,35 @@ namespace TalentGo
         protected IPersonStore Store { get; set; }
 
         /// <summary>
+        /// Find user by Phone Number.
+        /// </summary>
+        /// <param name="mobile"></param>
+        /// <returns></returns>
+        public Task<Person> FindByMobileAsync(string mobile)
+        {
+            var user = this.Store.People.FirstOrDefault(p => p.Mobile == mobile);
+            return Task.FromResult(user);
+        }
+
+        /// <summary>
+        /// Gets all people.
+        /// </summary>
+        public IQueryable<Person> People => this.Store.People;
+
+        /// <summary>
         /// 修改身份信息。
         /// </summary>
         /// <param name="person"></param>
         /// <param name="idCardNumber"></param>
         /// <param name="surname"></param>
         /// <param name="givenName"></param>
-        /// <param name="sex"></param>
         /// <param name="ethnicity"></param>
-        /// <param name="dateofBirth"></param>
         /// <param name="address"></param>
         /// <param name="issuer"></param>
         /// <param name="issueDate"></param>
         /// <param name="expiresAt"></param>
         /// <returns></returns>
-        public async Task UpdateRealNameInfo(Person person, string idCardNumber, string surname, string givenName, Sex sex, string ethnicity, DateTime dateofBirth, string address, string issuer, DateTime issueDate, DateTime? expiresAt)
+        public async Task UpdateRealNameInfo(Person person, string idCardNumber, string surname, string givenName, string ethnicity, string address, string issuer, DateTime issueDate, DateTime? expiresAt)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
@@ -51,7 +65,20 @@ namespace TalentGo
             if (person.IDCardValid.HasValue && person.IDCardValid.Value)
                 throw new InvalidOperationException("已通过身份证验证后不能修改身份信息。");
 
+            var cardNumber = ChineseIDCardNumber.Parse(idCardNumber);
+
             //TODO：填充字段
+            person.IDCardNumber = cardNumber.ToString();
+            person.Surname = surname;
+            person.GivenName = givenName;
+            person.Sex = cardNumber.IsMale?Sex.Male:Sex.Female;
+            person.Ethnicity = ethnicity;
+            person.DateOfBirth = cardNumber.DateOfBirth;
+            person.Address = address;
+            person.Issuer = issuer;
+            person.IssueDate = issueDate;
+            person.ExpiresAt = expiresAt;
+
             person.IDCardValid = null;
             //TODO：调用接口尝试验证。
             //如果验证通过，则设定IDCardValid = true

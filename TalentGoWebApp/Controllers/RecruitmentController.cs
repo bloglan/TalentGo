@@ -21,40 +21,12 @@ namespace TalentGoWebApp.Controllers
         ApplicationUserManager targetUserManager;
         IJobStore jobStore;
 
-        Person user = null;
-
         public RecruitmentController(RecruitmentPlanManager recruitmentPlanManager, ApplicationFormManager enrollmentManager, ApplicationUserManager userManager, IJobStore jobStore)
         {
             this.recruitManager = recruitmentPlanManager;
             this.applicationFormManager = enrollmentManager;
             this.targetUserManager = userManager;
             this.jobStore = jobStore;
-        }
-
-        protected override void Initialize(RequestContext requestContext)
-        {
-            //base.Initialize(requestContext);
-            //this.recruitmentContext = this.HttpContext.GetRecruitmentContext();
-            //if (this.recruitmentContext.TargetUserId.HasValue)
-            //    user = this.targetUserManager.Users.FirstOrDefault(t => t.Id == this.recruitmentContext.TargetUserId.Value);
-        }
-
-        //protected override void OnException(ExceptionContext filterContext)
-        //{
-        //    base.OnException(filterContext);
-        //    //?
-
-        //}
-
-        protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-            //验证如果目标用户为null，则跳转绑定目标用户页。
-            if (user == null)
-            {
-                filterContext.Result = RedirectToAction("AssignTargetUser", "TargetUser");
-                return;
-            }
         }
 
         /// <summary>
@@ -123,6 +95,8 @@ namespace TalentGoWebApp.Controllers
         {
             if (!this.ModelState.IsValid)
                 return View(model);
+
+            var user = this.CurrentUser();
 
             var job = this.jobStore.Jobs.EnrollableJobs().FirstOrDefault(j => j.Id == id);
             if (job == null)
@@ -245,8 +219,9 @@ namespace TalentGoWebApp.Controllers
                 return HttpNotFound();
 
             var plan = await this.recruitManager.FindByIdAsync(id.Value);
+            var user = this.CurrentUser();
 
-            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
+            var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == user.Id && e.JobId == plan.Id);
             return View(enrollment);
 
         }
@@ -295,7 +270,8 @@ namespace TalentGoWebApp.Controllers
         {
             RecruitmentPanelStateModel viewModel = new RecruitmentPanelStateModel();
             viewModel.Plan = plan;
-            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == this.user.Id && e.JobId == plan.Id);
+            var user = this.CurrentUser();
+            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == user.Id && e.JobId == plan.Id);
             if (enrollment != null)
             {
                 viewModel.HasEnrollment = true;

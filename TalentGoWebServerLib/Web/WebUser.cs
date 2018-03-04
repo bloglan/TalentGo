@@ -20,7 +20,7 @@ namespace TalentGo.Web
         public WebUser()
             : base()
         {
-            UserLogins = new HashSet<UserLogin>();
+            this.Id = Guid.NewGuid();
         }
 
         /// <summary>

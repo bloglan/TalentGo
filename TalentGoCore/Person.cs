@@ -86,11 +86,6 @@ namespace TalentGo
         public DateTime? ExpiresAt { get; set; }
 
         /// <summary>
-        /// 出生地。
-        /// </summary>
-        public string NativePlace { get; set; }
-
-        /// <summary>
         /// 指示身份证是否成功验证。
         /// </summary>
         public bool? IDCardValid { get; internal set; }
