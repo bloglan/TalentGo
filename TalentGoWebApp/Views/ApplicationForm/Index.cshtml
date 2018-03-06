@@ -1,0 +1,36 @@
+﻿@model IQueryable<ApplicationForm>
+@{
+    ViewBag.Title = "报名表";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Job</th>
+                <th>Status</th>
+                <th>Operations</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var form in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(form.Id.ToString(), "Detail", "ApplicationForm", new { id = form.Id })</td>
+                    <td>@Html.ActionLink(form.Job.Name, "Detail", "Job", new { id = form.JobId }, new { target = "_blank" })</td>
+                    <td>@Html.Partial("_ApplicationStatus")</td>
+                    <td>@Html.ActionLink("Detail", "Detail", "ApplicationForm", new { id = form.Id })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>您目前没有报名表。请转到@(Html.ActionLink("职位", "Index", "Recruitment"))版块，选择合适的职位来报名。</p>
+}

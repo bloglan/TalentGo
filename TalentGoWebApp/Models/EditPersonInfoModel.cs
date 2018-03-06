@@ -9,6 +9,11 @@ namespace TalentGoWebApp.Models
 {
     public class EditPersonInfoModel
     {
+        public EditPersonInfoModel()
+        {
+            this.IssueDate = DateTime.Now;
+        }
+
         [Display(Name = "民族")]
         [Required]
         [StringLength(50)]
@@ -25,9 +30,11 @@ namespace TalentGoWebApp.Models
         public string Issuer { get; set; }
 
         [Display(Name = "有效期起")]
+        [DataType(DataType.Date)]
         public DateTime IssueDate { get; set; }
 
         [Display(Name = "有效期至", Description = "长期有效的，此项留空。")]
+        [DataType(DataType.Date)]
         public DateTime? ExpiresAt { get; set; }
     }
 }

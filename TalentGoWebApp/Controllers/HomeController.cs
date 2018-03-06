@@ -33,14 +33,28 @@ namespace TalentGoWebApp.Controllers
         [ChildActionOnly]
         public ActionResult HomeLoginPartial()
         {
+            var person = this.CurrentUser();
 
             if (!this.User.Identity.IsAuthenticated)
-            {
                 return PartialView("BeforeAuthPartial");
+
+            if (!person.WhenRealIdCommited.HasValue || !person.IDCardFrontFileId.HasValue || !person.IDCardBackFileId.HasValue)
+            {
+                //实名信息未提交，或身份证照片未传送。
+                return PartialView("RealIdRequired");
             }
             else
             {
-                return PartialView("FormsAuthPartial");
+                if (!person.RealIdValid.HasValue)
+                    return PartialView("RealIdValidating");
+                else
+                {
+                    if (!person.RealIdValid.Value)
+                        return PartialView("RealIdValidFailed"); //验证失败。
+                    else
+                        return PartialView("FormsAuthPartial");
+
+                }
             }
         }
 

@@ -90,7 +90,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="form"></param>
         /// <returns></returns>
-        public async Task CreateAsync(ApplicationForm form)
+        public async Task EnrollAsync(ApplicationForm form)
         {
             //根据要求，一个用户只能参与一个报名。
             var currentPlanId = form.Job.PlanId;
@@ -137,6 +137,25 @@ namespace TalentGo
         }
 
         /// <summary>
+        /// 将报名表退回给求职者。
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public async Task ReturnBackAsync(ApplicationForm form)
+        {
+            if (form == null)
+                throw new ArgumentNullException();
+
+            form.Approved = null;
+            form.WhenAudit = null;
+            form.AuditMessage = null;
+            form.WhenCommited = null;
+            form.Log("退回报名表。");
+
+            await this.store.UpdateAsync(form);
+        }
+
+        /// <summary>
         /// 提交报名资料。
         /// </summary>
         /// <returns></returns>
@@ -146,7 +165,7 @@ namespace TalentGo
                 throw new ArgumentNullException();
 
             if (form.Id == 0)
-                await this.CreateAsync(form);
+                await this.EnrollAsync(form);
 
             //TODO:检查传送资料是否齐全并满足规则。
 
@@ -154,6 +173,42 @@ namespace TalentGo
                 form.WhenCommited = DateTime.Now;
 
             await this.ModifyAsync(form);
+        }
+
+        /// <summary>
+        /// 设置审核标记。
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="approved"></param>
+        /// <param name="auditMessage"></param>
+        /// <returns></returns>
+        public async Task MarkAuditAsync(ApplicationForm form, bool approved, string auditMessage = null)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+
+            form.Approved = approved;
+            form.WhenAudit = DateTime.Now;
+            form.AuditMessage = auditMessage;
+
+            await this.store.UpdateAsync(form);
+        }
+
+        /// <summary>
+        /// 清除审核标记。
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public async Task ClearAuditAsync(ApplicationForm form)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+
+            form.Approved = null;
+            form.WhenAudit = null;
+            form.AuditMessage = null;
+
+            await this.store.UpdateAsync(form);
         }
 
         //string smsRejectiveMsg = "{0}，您好，您所填报的{1}报名资料，经初审未通过，感谢您的参与！";
@@ -193,38 +248,6 @@ namespace TalentGo
 
         #endregion
 
-        #region Method for enrollment archives
-
-        /// <summary>
-        /// 为报名表添加文档。
-        /// </summary>
-        /// <param name="enrollment"></param>
-        /// <param name="archive"></param>
-        /// <returns></returns>
-        public async Task AddEnrollmentArchive(ApplicationForm enrollment, EnrollmentArchive archive)
-        {
-            
-        }
-
-        /// <summary>
-        /// 为报名表移除文档。
-        /// </summary>
-        /// <param name="enrollment"></param>
-        /// <param name="archive"></param>
-        /// <returns></returns>
-        public async Task RemoveEnrollmentArchive(ApplicationForm enrollment, EnrollmentArchive archive)
-        {
-            
-        }
-
-        #endregion
-
-
-
-
-
-
-
         #region 管理板块的方法
 
         /// <summary>
@@ -245,7 +268,7 @@ namespace TalentGo
 
             if (!string.IsNullOrEmpty(Keywords))
                 initSet = initSet.Where(e =>
-                    e.Name.StartsWith(Keywords) ||
+                    e.Person.DisplayName.StartsWith(Keywords) ||
                     e.Person.IDCardNumber.StartsWith(Keywords) ||
                     e.Person.Mobile.StartsWith(Keywords) ||
                     e.NativePlace.StartsWith(Keywords) ||

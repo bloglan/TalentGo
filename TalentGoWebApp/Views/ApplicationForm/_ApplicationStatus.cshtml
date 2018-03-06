@@ -1,0 +1,49 @@
+﻿@model ApplicationForm
+
+@if(!Model.WhenCommited.HasValue)
+{
+    <span class="label label-warning">草稿</span>
+}
+else
+{
+    if(!Model.WhenFileReview.HasValue)
+    {
+        <span class="label label-default">资料审查中</span>
+    }
+    else
+    {
+        if(!Model.FileReviewAccepted.Value)
+        {
+            <span class="label label-danger">资料审查未通过</span>
+        }
+        else
+        {
+            if (!Model.WhenAudit.HasValue)
+            {
+                <span class="label label-default">审核中</span>
+            }
+            else
+            {
+                if(!Model.Approved.Value)
+                {
+                    <span class="label label-danger">审核未通过</span>
+                }
+                else
+                {
+                    <span class="label label-success">审核通过</span>
+                    if(Model.WhenAnnounced.HasValue)
+                    {
+                        if(Model.IsTakeExam.Value)
+                        {
+                            <span class="label label-success">参加考试</span>
+                        }
+                        else
+                        {
+                            <span class="label label-danger">放弃应聘</span>
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

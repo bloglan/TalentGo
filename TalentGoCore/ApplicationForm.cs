@@ -66,14 +66,6 @@ namespace TalentGo
 
 
         /// <summary>
-        /// user's full name.
-        /// </summary>
-		[Display(Name = "姓名")]
-		[Required]
-		[StringLength(5, MinimumLength = 2)]
-		public string Name { get; set; }
-
-        /// <summary>
         /// Place of birth.
         /// </summary>
 		[Display(Name = "籍贯")]
@@ -155,36 +147,26 @@ namespace TalentGo
         /// <summary>
         /// Resume.
         /// </summary>
-		[Display(Name = "简历")]
-		[Required]
-		[StringLength(200)]
-		[DataType(DataType.MultilineText)]
 		public string Resume { get; set; }
 
         /// <summary>
         /// Accomplishments.
         /// </summary>
-		[Display(Name = "特长及自我介绍")]
-		[StringLength(1000)]
-		[DataType(DataType.MultilineText)]
 		public string Accomplishments { get; set; }
 
         /// <summary>
         /// When created.
         /// </summary>
-		[Display(Name = "创建时间")]
 		public DateTime WhenCreated { get; protected set; }
 
         /// <summary>
         /// When changed.
         /// </summary>
-		[Display(Name = "修改时间")]
 		public DateTime? WhenChanged { get; internal set; }
 
         /// <summary>
         /// When enrollment commited. if value of null, means uncommited.
         /// </summary>
-		[Display(Name = "提交时间")]
 		public DateTime? WhenCommited { get; internal set; }
 
         /// <summary>
@@ -200,32 +182,27 @@ namespace TalentGo
         /// <summary>
         /// When enrollment pass the audit. if value of null, means not audit yet.
         /// </summary>
-		[Display(Name = "审核时间")]
-		public DateTime? WhenAudit { get; protected set; }
+		public DateTime? WhenAudit { get; internal set; }
 
         /// <summary>
         /// A value indicate wheather enrollment accepted or refused.
         /// </summary>
-		[Display(Name = "已批准")]
-		public bool? Approved { get; protected set; }
+		public bool? Approved { get; internal set; }
 
         /// <summary>
         /// Message of audit.
         /// </summary>
-		[Display(Name = "审核消息")]
 		[StringLength(50)]
-		public string AuditMessage { get; protected set; }
+		public string AuditMessage { get; internal set; }
 
         /// <summary>
         /// When user announced take exam. if value of null, means not announced yet.
         /// </summary>
-		[Display(Name = "声明时间")]
 		public DateTime? WhenAnnounced { get; internal set; }
 
         /// <summary>
         /// A value indicate wheather user determined to take exam or not.
         /// </summary>
-		[Display(Name = "参加考试")]
 		public bool? IsTakeExam { get; internal set; }
 
         /// <summary>
@@ -241,75 +218,6 @@ namespace TalentGo
         public bool HasCommited
         {
             get { return this.WhenCommited.HasValue; }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="IsAccept"></param>
-        protected virtual void SetAudit(bool IsAccept)
-        {
-            if (!this.HasCommited)
-                throw new InvalidOperationException("未提交的报名不能设置审核标记。");
-
-            if (this.WhenAudit.HasValue)
-                throw new InvalidOperationException("已完成审核后不能再进行设置。");
-            this.Approved = IsAccept;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Accept()
-        {
-            this.SetAudit(true);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void Refuse()
-        {
-            this.SetAudit(false);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public void UnsetAudit()
-        {
-            if (!this.WhenCommited.HasValue)
-                throw new InvalidOperationException("未提交的报名不能设置审核标记。");
-
-            if (this.WhenAudit.HasValue)
-                throw new InvalidOperationException("已完成审核后不能再进行设置。");
-            this.Approved = null;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Message"></param>
-        public void SetAuditMessage(string Message)
-        {
-            if (!this.WhenCommited.HasValue)
-                throw new InvalidOperationException("未提交的报名不能设置审核标记。");
-
-            if (this.WhenAudit.HasValue)
-                throw new InvalidOperationException("已完成审核后不能再进行设置。");
-
-            this.AuditMessage = Message;
-        }
-
-        internal void CompleteAudit()
-        {
-            if (!this.Approved.HasValue)
-                throw new InvalidOperationException("未设置审核标记的不能完成审核。");
-
-            if (this.WhenAudit.HasValue)
-                throw new InvalidOperationException("已完成审核的不能再次完成审核。");
-
-            this.WhenAudit = DateTime.Now;
         }
 
         /// <summary>

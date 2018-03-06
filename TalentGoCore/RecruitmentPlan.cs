@@ -8,7 +8,6 @@ namespace TalentGo
     /// <summary>
     /// 表示一个招聘计划。
     /// </summary>
-	[Table("RecruitmentPlan")]
     public partial class RecruitmentPlan
     {
         /// <summary>
@@ -29,14 +28,11 @@ namespace TalentGo
         /// <summary>
         /// 招聘计划名称。
         /// </summary>
-        [Required]
-        [StringLength(50)]
         public string Title { get; set; }
 
         /// <summary>
         /// 招聘简章
         /// </summary>
-        [Required]
         public string Recruitment { get; set; }
 
 
@@ -49,8 +45,6 @@ namespace TalentGo
         /// <summary>
         /// 发布人。
         /// </summary>
-        [Required]
-        [StringLength(20)]
         public string Publisher { get; set; }
 
         /// <summary>
@@ -86,7 +80,6 @@ namespace TalentGo
         /// <summary>
         /// 设置考试地点。
         /// </summary>
-        [StringLength(100)]
         public string ExamLocation { get; set; }
 
 

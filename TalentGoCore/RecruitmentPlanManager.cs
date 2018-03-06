@@ -156,11 +156,10 @@ namespace TalentGo
                     //若没有提交，或提交日期晚于报名截止日期的，直接设定为不通过。
                     if (!data.WhenCommited.HasValue || data.WhenCommited > plan.EnrollExpirationDate)
                     {
-                        data.Refuse();
-                        data.SetAuditMessage("未在指定的报名截止时间内提交");
+                        data.Approved = false;
+                        data.WhenAudit = DateTime.Now;
+                        data.AuditMessage = "未在指定的报名截止时间内提交";
                     }
-
-                    data.CompleteAudit();
                 }
 
 

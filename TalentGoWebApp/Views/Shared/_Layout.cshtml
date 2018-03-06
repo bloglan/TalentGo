@@ -8,9 +8,10 @@
 
     <title>@ViewBag.Title - 曲靖烟草招聘</title>
     @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/jqueryuicss")
     @Styles.Render("~/Content/bootstrapDatetimePicker")
 
-    @RenderSection("HeadScripts", required: false)
+    @RenderSection("header", required: false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -21,17 +22,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="@Url.Action("Index", "Home", new { area = "" })" class="navbar-brand">
+                <a href="@Url.Action("Index", "Home")" class="navbar-brand">
                     曲靖烟草招聘
                 </a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("首页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("招聘报名", "Index", "Recruitment")</li>
+                    <li>@Html.ActionLink("职位", "Index", "Recruitment")</li>
+                    <li>@Html.ActionLink("报名表", "Index", "ApplicationForm")</li>
                     <li>@Html.ActionLink("通知公告", "Index", "Article")</li>
                 </ul>
-                @Html.Action("LoginPartial", "Home", new { area = "" });
+                @Html.Action("LoginPartial", "Home");
             </div>
         </div>
     </div>
@@ -53,6 +55,7 @@
 
     @Scripts.Render("~/bundles/modernizr")
     @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
     @Scripts.Render("~/bundles/jqueryval")
     @Scripts.Render("~/bundles/bootstrap")
 

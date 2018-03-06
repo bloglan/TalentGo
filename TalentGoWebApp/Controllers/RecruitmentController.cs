@@ -16,14 +16,14 @@ namespace TalentGoWebApp.Controllers
     [Authorize]
     public class RecruitmentController : Controller
     {
-        RecruitmentPlanManager recruitManager;
+        RecruitmentPlanManager recruitmentManager;
         ApplicationFormManager applicationFormManager;
         ApplicationUserManager targetUserManager;
         IJobStore jobStore;
 
         public RecruitmentController(RecruitmentPlanManager recruitmentPlanManager, ApplicationFormManager enrollmentManager, ApplicationUserManager userManager, IJobStore jobStore)
         {
-            this.recruitManager = recruitmentPlanManager;
+            this.recruitmentManager = recruitmentPlanManager;
             this.applicationFormManager = enrollmentManager;
             this.targetUserManager = userManager;
             this.jobStore = jobStore;
@@ -35,12 +35,16 @@ namespace TalentGoWebApp.Controllers
         /// <returns></returns>
         public async Task<ActionResult> Index()
         {
-            return View(this.recruitManager.RecruitmentPlans.Published());
+            var person = this.CurrentUser();
+            if (!person.RealIdValid.HasValue || !person.RealIdValid.Value)
+                return HttpNotFound();
+
+            return View(this.recruitmentManager.RecruitmentPlans.Enrollable());
         }
 
         public async Task<ActionResult> Detail(int id)
         {
-            var current = await this.recruitManager.FindByIdAsync(id);
+            var current = await this.recruitmentManager.FindByIdAsync(id);
             if (!current.WhenPublished.HasValue)
                 return HttpNotFound();
 
@@ -48,87 +52,6 @@ namespace TalentGoWebApp.Controllers
         }
 
 
-        /// <summary>
-        /// 报名（填写和编辑报名表）
-        /// </summary>
-        /// <param name="id">JobId</param>
-        /// <returns></returns>
-        public ActionResult Enroll(int id)
-        {
-            var user = this.CurrentUser();
-
-            var job = this.jobStore.Jobs.EnrollableJobs().FirstOrDefault(j => j.Id == id);
-            if (job == null)
-                return HttpNotFound();
-
-            if (user.ApplicationForms.Any(a => a.Job.PlanId == job.PlanId))
-                return HttpNotFound("您已在此招聘计划中填写过报名表。");
-
-
-            ChineseIDCardNumber number = ChineseIDCardNumber.Parse(user.IDCardNumber);
-
-            //准备下拉框及相关数据
-            this.InitModelSelectionData(job.Plan, this.ViewData);
-
-            EnrollViewModel model = new EnrollViewModel()
-            {
-                Name = user.DisplayName,
-                Sex = number.IsMale ? "男" : "女",
-                DateOfBirth = number.DateOfBirth,
-                IDCardNumber = number.ToString(),
-                Mobile = user.Mobile,
-                Resume = "格式：\r\n 高中  1995.07-1998.09  曲靖一中   学生\r\n",
-                Accomplishments = "",
-            };
-
-            return View(model);
-        }
-
-        /// <summary>
-        /// 报名的Post
-        /// </summary>
-        /// <param name="id">JobId</param>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public async Task<ActionResult> Enroll(int id, EnrollViewModel model)
-        {
-            if (!this.ModelState.IsValid)
-                return View(model);
-
-            var user = this.CurrentUser();
-
-            var job = this.jobStore.Jobs.EnrollableJobs().FirstOrDefault(j => j.Id == id);
-            if (job == null)
-                return HttpNotFound();
-
-            if (user.ApplicationForms.Any(a => a.Job.PlanId == job.PlanId))
-                return HttpNotFound("您已在此招聘计划中填写过报名表。");
-
-            this.InitModelSelectionData(job.Plan, this.ViewData);
-
-            var form = new ApplicationForm(job, user)
-            {
-                Name = model.Name,
-                NativePlace = model.PlaceOfBirth,
-                Source = model.Source,
-                PoliticalStatus = model.PoliticalStatus,
-                Health = model.Health,
-                Marriage = model.Marriage,
-                School = model.School,
-                Major = model.Major,
-                YearOfGraduated = model.YearOfGraduated,
-                EducationBackground = model.EducationBackground,
-                Degree = model.Degree,
-                Resume = model.Resume,
-                Accomplishments = model.Accomplishments,
-            };
-
-            await this.applicationFormManager.CreateAsync(form);
-
-            return RedirectToAction("UploadArchives");
-
-        }
 
         //public async Task<ActionResult> UploadArchives()
         //{
@@ -218,7 +141,7 @@ namespace TalentGoWebApp.Controllers
             if (!id.HasValue)
                 return HttpNotFound();
 
-            var plan = await this.recruitManager.FindByIdAsync(id.Value);
+            var plan = await this.recruitmentManager.FindByIdAsync(id.Value);
             var user = this.CurrentUser();
 
             var enrollment = this.applicationFormManager.ApplicationForms.First(e => e.PersonId == user.Id && e.JobId == plan.Id);
@@ -286,114 +209,6 @@ namespace TalentGoWebApp.Controllers
 
         #region 帮助方法
 
-        void InitModelSelectionData(RecruitmentPlan plan, ViewDataDictionary ViewData)
-        {
-            //学历选择表
-            var eduSet = new List<EducationBackground>()
-            {
-                new EducationBackground()
-                {
-                    nid = "全日制博士研究生",
-                    IsPublic = true,
-                },
-                new EducationBackground()
-                {
-                    nid = "全日制硕士研究生",
-                    IsPublic = true,
-                },
-                new EducationBackground()
-                {
-                    nid = "全日制一本",
-                    IsPublic = true,
-                },
-                new EducationBackground()
-                {
-                    nid = "全日制二本",
-                    IsPublic = true,
-                },
-                new EducationBackground()
-                {
-                    nid = "全日制三本",
-                    IsPublic = true,
-                },
-                new EducationBackground()
-                {
-                    nid = "全日制专升本",
-                    IsPublic = true,
-                }
-            };
-
-
-            ViewData["EducationBackgroundTable"] = from e in eduSet
-                                                   select new SelectListItem() { Text = e.nid, Value = e.nid };
-
-            //学位选择表
-            ViewData["DegreeTable"] = new List<SelectListItem>()
-            {
-                new SelectListItem()
-                {
-                    Text = "学士",
-                    Value = "学士"
-                },
-                new SelectListItem()
-                {
-                    Text = "硕士研究生",
-                    Value = "硕士研究生"
-                },
-                new SelectListItem()
-                {
-                    Text = "博士研究生",
-                    Value = "博士研究生"
-                }
-            };
-
-            //报考专业类别选择表
-            ViewData["MajorTable"] = new List<SelectListItem>()
-            {
-                new SelectListItem()
-                {
-                    Text = "财务会计",
-                    Value = "财务会计"
-                },
-                new SelectListItem()
-                {
-                    Text = "计算机",
-                    Value = "计算机"
-                },
-                new SelectListItem()
-                {
-                    Text = "农学",
-                    Value = "农学"
-                },
-                new SelectListItem()
-                {
-                    Text = "综合",
-                    Value = "综合"
-                }
-            };
-
-            //年份选择表
-            List<SelectListItem> GraduatedYears = new List<SelectListItem>();
-            GraduatedYears.Add(new SelectListItem() { Value = DateTime.Now.Year.ToString(), Text = DateTime.Now.Year.ToString() });
-            GraduatedYears.Add(new SelectListItem() { Value = (DateTime.Now.Year - 1).ToString(), Text = (DateTime.Now.Year - 1).ToString() });
-            ViewData["GraduatedYears"] = GraduatedYears;
-
-            List<string> nationalityStrList = new List<string>()
-            {
-                "汉", "蒙古", "回", "藏", "维吾尔", "苗"
-,               "彝", "壮", "布依", "朝鲜", "满", "侗"
-,               "瑶", "白", "土家", "哈尼", "哈萨克", "傣"
-,               "黎", "傈僳", "佤", "畲", "高山", "拉祜"
-,               "水", "东乡", "纳西", "景颇", "柯尔克孜", "土", "达翰尔"
-,               "仫佬", "羌", "布朗", "撒拉", "毛南", "仡佬", "锡伯"
-,               "阿昌", "普米", "塔吉克", "怒", "乌孜别克", "俄罗斯", "鄂温克"
-,               "德昂", "保安", "裕固", "京", "塔塔尔", "独龙", "鄂伦春"
-,               "赫哲", "门巴", "珞巴", "基诺", "其他"
-            };
-            //民族列表
-            ViewData["Nationality"] = from nat in nationalityStrList
-                                      select new SelectListItem() { Text = nat, Value = nat };
-        }
 
         #endregion
     }

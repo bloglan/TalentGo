@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Notification>
+
+@if (Model.Any())
+{
+    <ul>
+        @foreach(var note in Model)
+        {
+            <li>@Html.ActionLink(note.Title, "Notice", "Recruitment", new { id = note.Id })</li>
+        }
+    </ul>
+}
+else
+{
+    <p>暂无通知消息</p>
+}

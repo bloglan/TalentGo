@@ -154,7 +154,7 @@ namespace TalentGoWebApp.Controllers
 				enrollmentArch.MimeType = file.ContentType;
 				enrollmentArch.ArchiveData = FileDataBytes;
 
-				await this.enrollmentManager.AddEnrollmentArchive(enrollment, enrollmentArch);
+				//await this.enrollmentManager.AddEnrollmentArchive(enrollment, enrollmentArch);
 
 				ms.Flush();
 				ms.Close();
@@ -174,7 +174,7 @@ namespace TalentGoWebApp.Controllers
 			{
 				return Json(new { code = 404, msg = "找不到指定文档" }, "text/plain", JsonRequestBehavior.AllowGet);
 			}
-            await this.enrollmentManager.RemoveEnrollmentArchive(enrollment, current);
+            //await this.enrollmentManager.RemoveEnrollmentArchive(enrollment, current);
 			return Json(new { code = 0, msg = "操作成功" }, "text/plain", JsonRequestBehavior.AllowGet);
 		}
 

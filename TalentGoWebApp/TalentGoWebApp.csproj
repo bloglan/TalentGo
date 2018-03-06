@@ -222,6 +222,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ApplicationFormController.cs" />
     <Compile Include="Controllers\ArchiveDataController.cs" />
     <Compile Include="Controllers\ArchivesController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
@@ -309,8 +310,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Properties\DataSources\TalentGo.SMSSvc.ReceivedMessage.datasource" />
-    <Content Include="Properties\DataSources\TalentGo.SMSSvc.SendMessageResult.datasource" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -730,7 +729,7 @@
     <Content Include="Views\Common\Index.cshtml" />
     <Content Include="Views\Recruitment\RecruitmentPanel.cshtml" />
     <Content Include="Views\Recruitment\ViewEnrollPanel.cshtml" />
-    <Content Include="Views\Recruitment\Enroll.cshtml" />
+    <Content Include="Views\ApplicationForm\Enroll.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Sex.cshtml" />
     <Content Include="Views\Recruitment\EnrollmentArchives.cshtml" />
@@ -771,6 +770,12 @@
     <Content Include="Views\Account\RegisterAgreement.cshtml" />
     <Content Include="Views\Account\EditPersonInfo.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
+    <Content Include="Views\Home\RealIdRequired.cshtml" />
+    <Content Include="Views\Home\RealIdValidFailed.cshtml" />
+    <Content Include="Views\Home\RealIdValidating.cshtml" />
+    <Content Include="Views\ApplicationForm\Index.cshtml" />
+    <Content Include="Views\ApplicationForm\_ApplicationStatus.cshtml" />
+    <Content Include="Views\Recruitment\_NotificationPanel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

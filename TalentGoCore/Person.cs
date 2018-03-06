@@ -11,22 +11,23 @@ namespace TalentGo
     /// 表示一个用户
     /// </summary>
 	public abstract class Person
-	{
+    {
         /// <summary>
         /// 
         /// </summary>
 		protected Person()
-		{
+        {
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
+            this.IssueDate = new DateTime(1900, 1, 1);
             this.ApplicationForms = new HashSet<ApplicationForm>();
-		}
+        }
 
         /// <summary>
         /// 用户ID
         /// </summary>
         [Key]
-		public Guid Id { get; protected set; }
+        public Guid Id { get; protected set; }
 
 
         /// <summary>
@@ -86,19 +87,24 @@ namespace TalentGo
         public DateTime? ExpiresAt { get; set; }
 
         /// <summary>
-        /// 指示身份证是否成功验证。
+        /// 指示什么时候提交了实名信息。
         /// </summary>
-        public bool? IDCardValid { get; internal set; }
+        public DateTime? WhenRealIdCommited { get; internal set; }
 
         /// <summary>
         /// 验证时间。
         /// </summary>
-        public DateTime? WhenIDCardValid { get; internal set; }
+        public DateTime? WhenRealIdValid { get; internal set; }
+
+        /// <summary>
+        /// 指示身份证是否成功验证。
+        /// </summary>
+        public bool? RealIdValid { get; internal set; }
 
         /// <summary>
         /// 验证人。
         /// </summary>
-        public string IDCardValidBy { get; internal set; }
+        public string RealIdValidBy { get; internal set; }
 
         /// <summary>
         /// 移动电话号码。
@@ -146,5 +152,5 @@ namespace TalentGo
         /// 获取与用户关联的报名表。
         /// </summary>
         public virtual ICollection<ApplicationForm> ApplicationForms { get; protected set; }
-	}
+    }
 }

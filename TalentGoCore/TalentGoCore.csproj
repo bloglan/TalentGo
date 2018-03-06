@@ -73,6 +73,7 @@
     <Compile Include="File.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExaminationRoomStore.cs" />
+    <Compile Include="IFileStore.cs" />
     <Compile Include="IJobStore.cs" />
     <Compile Include="InvalidNumberException.cs" />
     <Compile Include="IPersonStore.cs" />

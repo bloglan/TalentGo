@@ -58,19 +58,24 @@ namespace TalentGo
         public string Description { get; set; }
 
         /// <summary>
-        /// Work Direction.
-        /// </summary>
-        public string WorkDirection { get; set; }
-
-        /// <summary>
         /// Work Location.
         /// </summary>
         public string WorkLocation { get; set; }
 
         /// <summary>
-        /// Requirements.
+        /// 学历要求。
         /// </summary>
-        public string Requirements { get; set; }
+        public string EducationBackgroundRequirement { get; set; }
+
+        /// <summary>
+        /// 学位要求。
+        /// </summary>
+        public string DegreeRequirement { get; set; }
+
+        /// <summary>
+        /// 专业要求。
+        /// </summary>
+        public string MajorRequirement { get; set; }
 
         /// <summary>
         /// 获取与此职位相关联的报名表。

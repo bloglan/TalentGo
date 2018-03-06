@@ -80,22 +80,14 @@ namespace TalentGo.EntityFramework
             modelBuilder.Entity<WebUser>()
                 .ToTable("WebUser");
 
+            modelBuilder.Entity<RecruitmentPlan>()
+                .ToTable("RecruitmentPlan");
 
-			modelBuilder.Entity<Person>()
-				.Property(e => e.IDCardNumber)
-				.IsUnicode(false);
+            modelBuilder.Entity<Notification>()
+                .ToTable("Notification");
 
-			modelBuilder.Entity<Person>()
-				.Property(e => e.Mobile)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<WebUser>()
-				.Property(e => e.HashPassword)
-				.IsUnicode(false);
-
-			modelBuilder.Entity<WebUser>()
-				.Property(e => e.UserName)
-				.IsUnicode(false);
+            modelBuilder.Entity<Job>()
+                .ToTable("Job");
 		}
 	}
 }

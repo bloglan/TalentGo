@@ -62,7 +62,7 @@ namespace TalentGo
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
 
-            if (person.IDCardValid.HasValue && person.IDCardValid.Value)
+            if (person.RealIdValid.HasValue && person.RealIdValid.Value)
                 throw new InvalidOperationException("已通过身份证验证后不能修改身份信息。");
 
             var cardNumber = ChineseIDCardNumber.Parse(idCardNumber);
@@ -78,8 +78,8 @@ namespace TalentGo
             person.Issuer = issuer;
             person.IssueDate = issueDate;
             person.ExpiresAt = expiresAt;
-
-            person.IDCardValid = null;
+            person.WhenRealIdCommited = DateTime.Now;
+            person.RealIdValid = null;
             //TODO：调用接口尝试验证。
             //如果验证通过，则设定IDCardValid = true
             //否则留空。
@@ -100,14 +100,14 @@ namespace TalentGo
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            if (person.IDCardValid.HasValue && person.IDCardValid.Value)
+            if (person.RealIdValid.HasValue && person.RealIdValid.Value)
                 throw new InvalidOperationException("已通过身份验证不能修改身份信息");
 
             if (person.IDCardFrontFile == null)
                 person.IDCardFrontFile = new File();
             person.IDCardFrontFile.MimeType = mimeType;
             await person.IDCardFrontFile.ReadAsync(stream);
-            person.IDCardValid = null;
+            person.RealIdValid = null;
             //TODO：调用接口尝试验证。
             //如果验证通过，则设定IDCardValid = true
             //否则留空。
@@ -129,14 +129,14 @@ namespace TalentGo
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            if (person.IDCardValid.HasValue && person.IDCardValid.Value)
+            if (person.RealIdValid.HasValue && person.RealIdValid.Value)
                 throw new InvalidOperationException("已通过身份验证不能修改身份信息");
 
             if (person.IDCardBackFile == null)
                 person.IDCardBackFile = new File();
             person.IDCardBackFile.MimeType = mimeType;
             await person.IDCardBackFile.ReadAsync(stream);
-            person.IDCardValid = null;
+            person.RealIdValid = null;
             //TODO：调用接口尝试验证。
             //如果验证通过，则设定IDCardValid = true
             //否则留空。
