@@ -155,6 +155,46 @@ namespace TalentGo
 		public string Accomplishments { get; set; }
 
         /// <summary>
+        /// 证件照。
+        /// </summary>
+        public string HeadImageFile { get; internal set; }
+
+        /// <summary>
+        /// 学历证书文件0
+        /// </summary>
+        public string AcademicCertFile0 { get; internal set; }
+
+        /// <summary>
+        /// 学历证书文件1
+        /// </summary>
+        public string AcademicCertFile1 { get; internal set; }
+
+        /// <summary>
+        /// 学历证书文件2
+        /// </summary>
+        public string AcademicCertFile2 { get; internal set; }
+
+        /// <summary>
+        /// 学历证书文件3
+        /// </summary>
+        public string AcademicCertFile3 { get; internal set; }
+
+        /// <summary>
+        /// 学历证书文件4
+        /// </summary>
+        public string AcademicCertFile4 { get; internal set; }
+
+        /// <summary>
+        /// 学位证书文件0
+        /// </summary>
+        public string DegreeCertFile0 { get; internal set; }
+
+        /// <summary>
+        /// 学位证书文件1
+        /// </summary>
+        public string DegreeCertFile1 { get; internal set; }
+
+        /// <summary>
         /// When created.
         /// </summary>
 		public DateTime WhenCreated { get; protected set; }

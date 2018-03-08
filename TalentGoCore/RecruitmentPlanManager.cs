@@ -79,7 +79,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task DeleteRecruitmentPlan(RecruitmentPlan plan)
+        public async Task DeleteAsync(RecruitmentPlan plan)
         {
             var toRemove = await this.FindByIdAsync(plan.Id);
             if (plan.WhenPublished.HasValue)

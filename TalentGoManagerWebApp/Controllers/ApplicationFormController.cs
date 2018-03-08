@@ -12,13 +12,13 @@ using TalentGoManagerWebApp.Models;
 
 namespace TalentGoManagerWebApp.Controllers
 {
-    public class EnrollmentController : Controller
+    public class ApplicationFormController : Controller
     {
         ApplicationFormManager applicationFormManager;
         RecruitmentPlanManager recruitmentPlanManager;
         ApplicationUserManager targetUserManager;
 
-        public EnrollmentController(ApplicationFormManager applicationFormManager, RecruitmentPlanManager recruitmentPlanManager, ApplicationUserManager userManager)
+        public ApplicationFormController(ApplicationFormManager applicationFormManager, RecruitmentPlanManager recruitmentPlanManager, ApplicationUserManager userManager)
         {
             this.applicationFormManager = applicationFormManager;
             this.recruitmentPlanManager = recruitmentPlanManager;
@@ -48,33 +48,7 @@ namespace TalentGoManagerWebApp.Controllers
             model.RecruitmentPlanTitle = recruitmentPlan.Title;
             model.IsAudit = recruitmentPlan.WhenAuditCommited.HasValue;
 
-            //准备ViewData
-            ViewData["MajorCategoryList"] = new List<SelectListItem>()
-            {
-                new SelectListItem()
-                {
-                    Text = "财务会计",
-                    Value = "财务会计"
-                },
-                new SelectListItem()
-                {
-                    Text = "计算机",
-                    Value = "计算机"
-                },
-                new SelectListItem()
-                {
-                    Text = "农学",
-                    Value = "农学"
-                },
-                new SelectListItem()
-                {
-                    Text = "综合",
-                    Value = "综合"
-                }
-            };
-
-            int allCount;
-            model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
+            model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out int allCount);
             model.AllCount = allCount;
             return View(model);
         }
@@ -93,8 +67,7 @@ namespace TalentGoManagerWebApp.Controllers
                 };
             }
 
-            int allCount;
-            model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, true, out allCount);
+            model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, true, out int allCount);
             model.AllCount = allCount;
 
             MemoryStream ms = new MemoryStream();

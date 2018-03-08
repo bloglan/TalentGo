@@ -33,10 +33,9 @@ namespace TalentGoManagerWebApp.Controllers
 					PageIndex = 0
 				};
 			}
-			int allCount;
-			model.AppUserList = this.GetSelectedUsers(model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out allCount);
+            model.AppUserList = this.GetSelectedUsers(model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out int allCount);
 
-			model.AllCount = allCount;
+            model.AllCount = allCount;
 
 			return View(model);
 		}

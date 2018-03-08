@@ -4,9 +4,9 @@ using System.Web.Mvc;
 
 namespace TalentGoManagerWebApp.Models
 {
-	public class RecruitmentPlanPrimaryViewModel
+	public class RecruitmentPlanEditViewModel
 	{
-		public RecruitmentPlanPrimaryViewModel()
+		public RecruitmentPlanEditViewModel()
 		{
 			this.ExpirationDate = DateTime.Now.AddMonths(3);
 		}

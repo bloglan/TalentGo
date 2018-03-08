@@ -12,12 +12,10 @@ namespace TalentGoManagerWebApp.Controllers
     public class RecruitmentPlanController : Controller
     {
         RecruitmentPlanManager planManager;
-        ApplicationFormManager formManager;
 
-        public RecruitmentPlanController(RecruitmentPlanManager planManager, ApplicationFormManager formManager)
+        public RecruitmentPlanController(RecruitmentPlanManager planManager)
         {
             this.planManager = planManager;
-            this.formManager = formManager;
         }
 
 
@@ -44,11 +42,11 @@ namespace TalentGoManagerWebApp.Controllers
 
         public ActionResult Create()
         {
-            return View(new RecruitmentPlanPrimaryViewModel());
+            return View(new RecruitmentPlanEditViewModel());
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(RecruitmentPlanPrimaryViewModel model)
+        public async Task<ActionResult> Create(RecruitmentPlanEditViewModel model)
         {
             if (!this.ModelState.IsValid)
                 return View(model);
@@ -65,16 +63,31 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> Delete(int id)
         {
+            var plan = await this.planManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
 
-            var current = await this.planManager.FindByIdAsync(id);
-            if (current == null)
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id, FormCollection collection)
+        {
+
+            var plan = await this.planManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
+
+            try
             {
-                return RedirectToAction("Index");
+            await this.planManager.DeleteAsync(plan);
             }
-
-            await this.planManager.DeleteRecruitmentPlan(current);
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View();
+            }
             return RedirectToAction("Index");
-
         }
 
         public async Task<ActionResult> Edit(int id)
@@ -83,7 +96,7 @@ namespace TalentGoManagerWebApp.Controllers
             if (plan == null)
                 return HttpNotFound();
 
-            RecruitmentPlanPrimaryViewModel vmodel = new RecruitmentPlanPrimaryViewModel()
+            RecruitmentPlanEditViewModel vmodel = new RecruitmentPlanEditViewModel()
             {
                 Title = plan.Title,
                 Recruitment = plan.Recruitment,
@@ -93,7 +106,7 @@ namespace TalentGoManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(int id, RecruitmentPlanPrimaryViewModel model)
+        public async Task<ActionResult> Edit(int id, RecruitmentPlanEditViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -240,7 +253,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> Publish(int id)
         {
-            PublishRecruitmentPlanViewModel model = new PublishRecruitmentPlanViewModel()
+            RecruitmentPlanPublishViewModel model = new RecruitmentPlanPublishViewModel()
             {
                 Plan = await this.planManager.FindByIdAsync(id)
             };
@@ -248,7 +261,7 @@ namespace TalentGoManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Publish(int id, PublishRecruitmentPlanViewModel model)
+        public async Task<ActionResult> Publish(int id, RecruitmentPlanPublishViewModel model)
         {
             await this.planManager.PublishRecruitmentPlan(id, model.EnrollExpirationDate);
             return RedirectToAction("Index");

@@ -4,9 +4,9 @@ using TalentGo;
 
 namespace TalentGoManagerWebApp.Models
 {
-    public class PublishRecruitmentPlanViewModel
+    public class RecruitmentPlanPublishViewModel
 	{
-		public PublishRecruitmentPlanViewModel()
+		public RecruitmentPlanPublishViewModel()
 		{
 			this.EnrollExpirationDate = DateTime.Now.AddDays(15);
 		}
