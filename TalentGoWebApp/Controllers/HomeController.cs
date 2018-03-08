@@ -38,7 +38,7 @@ namespace TalentGoWebApp.Controllers
             if (!this.User.Identity.IsAuthenticated)
                 return PartialView("BeforeAuthPartial");
 
-            if (!person.WhenRealIdCommited.HasValue || !person.IDCardFrontFileId.HasValue || !person.IDCardBackFileId.HasValue)
+            if (!person.WhenRealIdCommited.HasValue || !string.IsNullOrEmpty(person.IDCardFrontFile) || !string.IsNullOrEmpty(person.IDCardBackFile))
             {
                 //实名信息未提交，或身份证照片未传送。
                 return PartialView("RealIdRequired");

@@ -15,47 +15,41 @@ namespace TalentGo
         /// <summary>
         /// 将文件流写入到指定的key。
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="mimeType"></param>
-        /// <param name="stream"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        Task SaveAsync(string key, string mimeType, Stream stream);
+        Task CreateAsync(File file);
 
         /// <summary>
-        /// 将指定key的文件写入指定流。
+        /// 
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="stream"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        Task LoadAsync(string key, Stream stream);
-
-        /// <summary>
-        /// 获取一个值，指示指定的文件是否存在。
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns></returns>
-        Task<bool> ExistsAsync(string key);
+        Task UpdateAsync(File file);
 
         /// <summary>
         /// 删除指定的文件。
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="file"></param>
         /// <returns></returns>
-        Task DeleteAsync(string key);
+        Task DeleteAsync(File file);
 
         /// <summary>
-        /// 获取指定文件的MIME类型。
+        /// 获取一个值，指示指定的文件是否存在。
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        Task<string> GetMimeTypeAsync(string key);
+        Task<bool> ExistsAsync(string id);
 
         /// <summary>
-        /// 设置指定文件的MIME类型。
+        /// Find file by id.
         /// </summary>
-        /// <param name="key"></param>
-        /// <param name="mimeType"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        Task SetMimeTypeAsync(string key, string mimeType);
+        Task<File> FindByIdAsync(string id);
+
+        /// <summary>
+        /// Get all files.
+        /// </summary>
+        IQueryable<File> Files { get; }
     }
 }

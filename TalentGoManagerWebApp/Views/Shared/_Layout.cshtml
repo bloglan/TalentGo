@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
+    <title>@ViewBag.Title - 曲靖烟草招聘管理中心</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 </head>
@@ -22,8 +22,12 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("主页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("关于", "About", "Home")</li>
-                    <li>@Html.ActionLink("联系方式", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("招聘计划", "Index", "RecruitmentPlan")</li>
+                    <li>@Html.ActionLink("报名表", "Index", "ApplicationForm")</li>
+                    <li>@Html.ActionLink("招聘考试", "Index", "EmploymentTesting")</li>
+                    <li>@Html.ActionLink("注册用户", "Index", "Person")</li>
+                    <li>@Html.ActionLink("网站公告", "Index", "Article")</li>
+                    <li>@Html.ActionLink("系统设置", "Index", "System")</li>
                 </ul>
                 <p class="nav navbar-text navbar-right">你好，@User.Identity.Name!</p>
             </div>

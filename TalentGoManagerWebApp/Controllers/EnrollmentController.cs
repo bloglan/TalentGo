@@ -12,7 +12,6 @@ using TalentGoManagerWebApp.Models;
 
 namespace TalentGoManagerWebApp.Controllers
 {
-    [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
     public class EnrollmentController : Controller
     {
         ApplicationFormManager applicationFormManager;
@@ -261,7 +260,7 @@ namespace TalentGoManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Detail(EnrollmentDetailViewModel model)
+        public ActionResult Detail(EnrollmentDetailViewModel model)
         {
 
             //var enrollmentData = this.applicationFormManager.ApplicationForms.SingleOrDefault(e => e.JobId == model.ID && e.PersonId == model.UserID && e.WhenCommited.HasValue);
@@ -292,7 +291,7 @@ namespace TalentGoManagerWebApp.Controllers
         }
 
         [ChildActionOnly]
-        public async Task<ActionResult> SmartStatistics(RecruitmentPlan plan)
+        public ActionResult SmartStatistics(RecruitmentPlan plan)
         {
             var enrollmentSet = this.applicationFormManager.GetEnrollmentsOfPlan(plan);
             EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()

@@ -64,27 +64,27 @@ namespace TalentGo
         /// <summary>
         /// 民族
         /// </summary>
-        public string Ethnicity { get; set; }
+        public string Ethnicity { get; internal set; }
 
         /// <summary>
         /// 住址。
         /// </summary>
-        public string Address { get; set; }
+        public string Address { get; internal set; }
 
         /// <summary>
         /// 签发机关。
         /// </summary>
-        public string Issuer { get; set; }
+        public string Issuer { get; internal set; }
 
         /// <summary>
         /// 签发日期。
         /// </summary>
-        public DateTime IssueDate { get; set; }
+        public DateTime? IssueDate { get; internal set; }
 
         /// <summary>
         /// 失效日期。
         /// </summary>
-        public DateTime? ExpiresAt { get; set; }
+        public DateTime? ExpiresAt { get; internal set; }
 
         /// <summary>
         /// 指示什么时候提交了实名信息。
@@ -129,24 +129,12 @@ namespace TalentGo
         /// <summary>
         /// IDCard Front File Id.
         /// </summary>
-        [ForeignKey(nameof(IDCardFrontFile))]
-        public Guid? IDCardFrontFileId { get; internal set; }
-
-        /// <summary>
-        /// IDCard Front File.
-        /// </summary>
-        public virtual File IDCardFrontFile { get; internal set; }
+        public string IDCardFrontFile { get; internal set; }
 
         /// <summary>
         /// IDCard Back File Id.
         /// </summary>
-        [ForeignKey(nameof(IDCardBackFile))]
-        public Guid? IDCardBackFileId { get; internal set; }
-
-        /// <summary>
-        /// IDCard Back File
-        /// </summary>
-        public virtual File IDCardBackFile { get; internal set; }
+        public string IDCardBackFile { get; internal set; }
 
         /// <summary>
         /// 获取与用户关联的报名表。

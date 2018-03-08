@@ -53,12 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityFramework\ArchiveCategoryStore.cs" />
     <Compile Include="EntityFramework\ArticleStore.cs" />
     <Compile Include="EntityFramework\ApplicationFormStore.cs" />
+    <Compile Include="EntityFramework\FileStore.cs" />
     <Compile Include="EntityFramework\JobStore.cs" />
     <Compile Include="EntityFramework\PersonStore.cs" />
-    <Compile Include="EntityFramework\RecruitmentStore.cs" />
+    <Compile Include="EntityFramework\RecruitmentPlanStore.cs" />
     <Compile Include="EntityFramework\TalentGoDbContext.cs" />
     <Compile Include="EntityFramework\UserStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

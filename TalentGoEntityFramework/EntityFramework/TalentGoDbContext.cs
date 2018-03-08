@@ -20,16 +20,6 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-		public virtual DbSet<ArchiveCategory> ArchiveCategory { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public virtual DbSet<ArchiveRequirement> ArchiveRequirements { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
 		public virtual DbSet<Article> Article { get; set; }
 
 
@@ -44,10 +34,6 @@ namespace TalentGo.EntityFramework
 		public virtual DbSet<ApplicationForm> EnrollmentData { get; set; }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<MobilePhoneValidationSession> MobilePhoneValidationSession { get; set; }
 
 
         /// <summary>
@@ -55,10 +41,6 @@ namespace TalentGo.EntityFramework
         /// </summary>
 		public virtual DbSet<RecruitmentPlan> RecruitmentPlan { get; set; }
         
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<UserLogin> UserLogins { get; set; }
 
         /// <summary>
         /// 
@@ -88,6 +70,9 @@ namespace TalentGo.EntityFramework
 
             modelBuilder.Entity<Job>()
                 .ToTable("Job");
+
+            modelBuilder.Entity<File>()
+                .ToTable("File");
 		}
 	}
 }

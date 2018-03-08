@@ -63,11 +63,6 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        public virtual ArchiveCategory ArchiveCategory { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
         public virtual ApplicationForm EnrollmentData { get; set; }
     }
 }

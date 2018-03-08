@@ -61,15 +61,6 @@ namespace TalentGo
             return this.CommitedForms.Where(en => en.JobId == plan.Id);
         }
 
-        /// <summary>
-        /// 获取报名对应的上传的文档集合。
-        /// </summary>
-        /// <returns></returns>
-        public async Task<IEnumerable<EnrollmentArchive>> GetEnrollmentArchives(ApplicationForm enrollment)
-        {
-            return null;
-
-        }
 
         /// <summary>
         /// 根据指定的ArchiveId获取报名表对应的文档。

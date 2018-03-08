@@ -9,7 +9,6 @@ using TalentGoManagerWebApp.Models;
 
 namespace TalentGoManagerWebApp.Controllers
 {
-    [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
     public class RecruitmentPlanController : Controller
     {
         RecruitmentPlanManager planManager;
@@ -108,6 +107,135 @@ namespace TalentGoManagerWebApp.Controllers
                 return RedirectToAction("ArchiveRequirements", new { id = id });
             }
             return View(model);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">Recruitment plan id.</param>
+        /// <returns></returns>
+        public async Task<ActionResult> CreateJob(int id)
+        {
+            var plan = await this.planManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
+
+            var model = new JobEditViewModel
+            {
+                WorkLocation = "聘用时分配",
+                EducationBakcgroundRequirement = "本科\r\n硕士研究生\r\n博士研究生",
+                DegreeRequirement = "学士\r\n硕士\r\n博士\r\n",
+            };
+            return View(model);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">Recruitment Plan Id.</param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> CreateJob(int id, JobEditViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+                return View(model);
+
+            var plan = await this.planManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
+
+            var job = new Job
+            {
+                Name = model.Name,
+                Description = model.Description,
+                WorkLocation = model.WorkLocation,
+                EducationBackgroundRequirement = model.EducationBakcgroundRequirement,
+                DegreeRequirement = model.DegreeRequirement,
+                MajorRequirement = model.MajorRequirement,
+            };
+
+            plan.Jobs.Add(job);
+            await this.planManager.UpdateAsync(plan);
+
+            return RedirectToAction("Detail", new { id = plan.Id });
+        }
+
+        public async Task<ActionResult> EditJob(int planid, int jobid)
+        {
+            var plan = await this.planManager.FindByIdAsync(planid);
+            if (plan == null)
+                return HttpNotFound();
+            var job = plan.Jobs.FirstOrDefault(j => j.Id == jobid);
+            if (job == null)
+                return HttpNotFound();
+
+            var model = new JobEditViewModel
+            {
+                Name = job.Name,
+                Description = job.Description,
+                WorkLocation = job.WorkLocation,
+                EducationBakcgroundRequirement = job.EducationBackgroundRequirement,
+                DegreeRequirement = job.DegreeRequirement,
+                MajorRequirement = job.MajorRequirement,
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditJob(int planid, int jobid, JobEditViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+                return View(model);
+
+            var plan = await this.planManager.FindByIdAsync(planid);
+            if (plan == null)
+                return HttpNotFound();
+
+            var job = plan.Jobs.FirstOrDefault(j => j.Id == jobid);
+            if (job == null)
+                return HttpNotFound();
+
+            job.Name = model.Name;
+            job.Description = model.Description;
+            job.WorkLocation = model.WorkLocation;
+            job.EducationBackgroundRequirement = model.EducationBakcgroundRequirement;
+            job.DegreeRequirement = model.DegreeRequirement;
+            job.MajorRequirement = model.MajorRequirement;
+
+            await this.planManager.UpdateAsync(plan);
+
+            return RedirectToAction("Detail", new { id = planid });
+        }
+
+        public async Task<ActionResult> DeleteJob(int id, int planid)
+        {
+            var plan = await this.planManager.FindByIdAsync(planid);
+            if (plan == null)
+                return HttpNotFound();
+
+            var job = plan.Jobs.FirstOrDefault(j => j.Id == id);
+            if (job == null)
+                return HttpNotFound();
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> DeleteJob(int id, int planid, FormCollection collection)
+        {
+            var plan = await this.planManager.FindByIdAsync(planid);
+            if (plan == null)
+                return HttpNotFound();
+
+            var job = plan.Jobs.FirstOrDefault(j => j.Id == id);
+            if (job == null)
+                return HttpNotFound();
+
+            plan.Jobs.Remove(job);
+            await this.planManager.UpdateAsync(plan);
+            return RedirectToAction("Detail", new { id = planid });
         }
 
         public async Task<ActionResult> Publish(int id)

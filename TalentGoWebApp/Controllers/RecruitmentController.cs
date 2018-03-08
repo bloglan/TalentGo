@@ -33,7 +33,7 @@ namespace TalentGoWebApp.Controllers
         /// 显示招聘首页，招聘首页应显示可用的报名计划以及相关操作按钮。
         /// </summary>
         /// <returns></returns>
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
             var person = this.CurrentUser();
             if (!person.RealIdValid.HasValue || !person.RealIdValid.Value)

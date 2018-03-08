@@ -16,17 +16,27 @@ namespace TalentGo
         /// <summary>
         /// Protected Initlalize File.
         /// </summary>
-        public File()
+        protected File()
         {
-            this.Id = Guid.NewGuid();
             this.WhenCreated = DateTime.Now;
+        }
+
+        /// <summary>
+        /// 使用一个Id和MimeType初始化File.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="mimeType"></param>
+        public File(string id, string mimeType)
+            : this()
+        {
+            this.Id = id;
+            this.MimeType = mimeType;
         }
 
         /// <summary>
         /// Id
         /// </summary>
-        [Key]
-        public Guid Id { get; protected set; }
+        public string Id { get; protected set; }
 
         /// <summary>
         /// MIME Type
@@ -36,7 +46,7 @@ namespace TalentGo
         /// <summary>
         /// Data
         /// </summary>
-        public byte[] Data { get; set; }
+        protected virtual byte[] Data { get; set; }
 
         /// <summary>
         /// WhenCreated

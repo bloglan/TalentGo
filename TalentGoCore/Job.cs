@@ -15,20 +15,9 @@ namespace TalentGo
         /// <summary>
         /// Default ctor.
         /// </summary>
-        protected Job()
+        public Job()
         {
             this.ApplicationForms = new HashSet<ApplicationForm>();
-        }
-
-        /// <summary>
-        /// Create job that attach to the plan.
-        /// </summary>
-        /// <param name="plan"></param>
-        public Job(RecruitmentPlan plan)
-            : this()
-        {
-            this.Plan = plan;
-            this.PlanId = plan.Id;
         }
 
         /// <summary>
@@ -45,7 +34,7 @@ namespace TalentGo
         /// <summary>
         /// The job belongs to plan.
         /// </summary>
-        public RecruitmentPlan Plan { get; set; }
+        public RecruitmentPlan Plan { get; protected set; }
 
         /// <summary>
         /// Name

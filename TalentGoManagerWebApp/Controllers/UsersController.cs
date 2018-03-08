@@ -9,7 +9,6 @@ using TalentGoManagerWebApp.Models;
 
 namespace TalentGoManagerWebApp.Controllers
 {
-    [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class UsersController : Controller
 	{
         ApplicationUserManager targetUserManager;

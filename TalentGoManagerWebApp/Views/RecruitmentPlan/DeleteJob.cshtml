@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "DeleteJob";
+}
+
+<div class="page-header">
+    <h1>删除职位/类别</h1>
+</div>
+<p>确实要删除此职位/类别吗？</p>
+<p>如果招聘计划已发布，有求职者填写了此职位/类别的报名表，删除将会失败。</p>
+@using (Html.BeginForm())
+{
+    <button type="submit" class="btn btn-danger">确认删除</button>
+    @Html.ActionLink("取消", "Detail", new { id = Html.ViewContext.RouteData.Values["planid"] }, new { @class = "btn btn-default" })
+}

@@ -283,7 +283,7 @@ namespace TalentGoWebApp.Controllers
             var user = this.CurrentUser();
             try
             {
-                await this.personManager.UpdateRealNameInfo(user, user.IDCardNumber, user.Surname, user.GivenName, model.Ethnicity, model.Address, model.Issuer, model.IssueDate, model.ExpiresAt);
+                await this.personManager.UpdateRealNameInfo(user, user.IDCardNumber, user.Surname, user.GivenName, model.Ethnicity, model.Address, model.Issuer, model.IssueDate.Value, model.ExpiresAt);
 
             }
             catch (Exception ex)

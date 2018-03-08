@@ -81,12 +81,8 @@
     <Compile Include="JobExtensions.cs" />
     <Compile Include="Notification.cs" />
     <Compile Include="Person.cs" />
-    <Compile Include="ArchiveCategory.cs" />
-    <Compile Include="ArchiveRequirement.cs" />
     <Compile Include="Degree.cs" />
     <Compile Include="EducationBackground.cs" />
-    <Compile Include="IArchiveCategoryStore.cs" />
-    <Compile Include="IArchiveRequirementStore.cs" />
     <Compile Include="IApplicationFormStore.cs" />
     <Compile Include="IRecruitmentPlanStore.cs" />
     <Compile Include="PersonManager.cs" />
@@ -98,7 +94,6 @@
     <Compile Include="RegisterationDelegate.cs" />
     <Compile Include="Linq\OrderedExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ArchiveCategoryManager.cs" />
     <Compile Include="CommitEnrollmentException.cs" />
     <Compile Include="RequirementType.cs" />
     <Compile Include="ApplicationFormManager.cs" />

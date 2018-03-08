@@ -7,10 +7,7 @@
 <h2>公告管理</h2>
 
 <p>
-    @if (this.User.IsInRole("QJYC\\招聘管理员"))
-    {
         @Html.ActionLink("创建新公告", "Create", null, new { @class = "btn btn-default" })
-    }
 
 </p>
 <table class="table">
@@ -59,13 +56,10 @@
                 @(item.Visible ? "是" : "否")
             </td>
             <td>
-                @if (this.User.IsInRole("QJYC\\招聘管理员"))
-                {
                     <p>
                         @Html.ActionLink("编辑", "Edit", new { id = item.id }) |
                         @Html.ActionLink("删除", "Delete", new { id = item.id })
                     </p>
-                }
             </td>
         </tr>
     }

@@ -29,9 +29,10 @@ namespace TalentGoWebApp.Models
         [StringLength(50)]
         public string Issuer { get; set; }
 
+        [Required]
         [Display(Name = "有效期起")]
         [DataType(DataType.Date)]
-        public DateTime IssueDate { get; set; }
+        public DateTime? IssueDate { get; set; }
 
         [Display(Name = "有效期至", Description = "长期有效的，此项留空。")]
         [DataType(DataType.Date)]

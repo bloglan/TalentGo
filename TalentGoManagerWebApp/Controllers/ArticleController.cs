@@ -8,7 +8,6 @@ using TalentGo.Web;
 
 namespace TalentGoManagerWebApp.Controllers
 {
-    [Authorize(Roles = "QJYC\\招聘管理员,QJYC\\招聘监督人")]
 	public class ArticleController : Controller
 	{
 		ArticleManager articleManager;

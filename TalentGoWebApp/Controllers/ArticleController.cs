@@ -24,14 +24,6 @@ namespace TalentGoWebApp.Controllers
 		}
 
 
-		[ChildActionOnly]
-		public async Task<ActionResult> ArticlePart(bool IsPublic, RecruitmentPlan plan, int MaxCount, string ViewName)
-		{
-			if (string.IsNullOrEmpty(ViewName))
-				ViewName = "ArticlePart";
-			var articleList = this.articleManager.GetAvaiableArticles(IsPublic, plan);
-			return PartialView(ViewName, articleList.Take(MaxCount));
-		}
 
 		public ActionResult Detail(int id)
 		{

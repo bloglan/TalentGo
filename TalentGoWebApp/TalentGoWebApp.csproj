@@ -223,7 +223,6 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ApplicationFormController.cs" />
-    <Compile Include="Controllers\ArchiveDataController.cs" />
     <Compile Include="Controllers\ArchivesController.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\HelpController.cs" />
@@ -736,7 +735,6 @@
     <Content Include="Views\Recruitment\CommitEnrollment.cshtml" />
     <Content Include="Views\Recruitment\OperationResult.cshtml" />
     <Content Include="Views\Recruitment\UploadArchives.cshtml" />
-    <Content Include="Views\Recruitment\ArchiveListOfEnrollment.cshtml" />
     <Content Include="Views\Recruitment\PreviewEnrollment.cshtml" />
     <Content Include="Views\Shared\_EnrollmentDataViewer.cshtml" />
     <Content Include="Views\Shared\_EnrollmentArchiveDataViewer.cshtml" />
@@ -798,8 +796,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\" />
-    <Folder Include="Views\ArchiveData\" />
-    <Folder Include="Views\Archives\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

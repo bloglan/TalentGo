@@ -1,37 +1,29 @@
-﻿@model IEnumerable<RecruitmentPlan>
+﻿@model IQueryable<RecruitmentPlan>
 @{
-	ViewBag.Title = "招聘管理首页";
+    ViewBag.Title = "招聘计划";
 }
 
-<h2>招聘计划</h2>
-@if (this.User.IsInRole("QJYC\\招聘管理员"))
-{
-	@Html.ActionLink("创建招聘计划", "Create", null, new { @class = "btn btn-default" })
-}
-
-<div class="row">
-	<div class="col-md-12">
-		<table class="table">
-			<thead>
-				<tr>
-					<td>名称</td>
-					<td>创建时间</td>
-					<td>有效期至</td>
-					<td>状态</td>
-					<td>提交/通过/确认</td>
-					<td>操作</td>
-				</tr>
-			</thead>
-			@foreach (RecruitmentPlan plan in Model)
-			{
-				<tr>
-					<td>@plan.Title</td>
-					<td><abbr title="@plan.WhenCreated">@plan.WhenCreated.ToShortDateString()</abbr></td>
-					<td>@Html.Partial("RecruitmentPlanState", @plan)</td>
-					<td>@Html.Action("SmartStatistics", "Enrollment", new { plan = plan })</td>
-					<td>@Html.Partial("RecruitmentPlanOperation", @plan)</td>
-				</tr>
-			}
-		</table>
-	</div>
+<div class="page-header">
+    <h1>招聘计划</h1>
 </div>
+@Html.ActionLink("新建招聘计划", "Create", null, new { @class = "btn btn-default" })
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>名称</td>
+            <td>创建时间</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    @foreach (RecruitmentPlan plan in Model)
+    {
+        <tr>
+            <td>@Html.ActionLink(plan.Title, "Detail", new { id = plan.Id })</td>
+            <td><abbr title="@plan.WhenCreated">@plan.WhenCreated.ToShortDateString()</abbr></td>
+            <td>@Html.Partial("RecruitmentPlanState", @plan)</td>
+            <td>@Html.ActionLink("详情", "Detail", new { id = plan.Id })</td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,27 @@
+﻿@model IEnumerable<Job>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>名称</th>
+            <th>工作地点</th>
+            <th>学历要求</th>
+            <th>学位要求</th>
+            <th>专业要求</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Name</td>
+                <td>@job.WorkLocation</td>
+                <td>@job.EducationBackgroundRequirement</td>
+                <td>@job.DegreeRequirement</td>
+                <td>@job.MajorRequirement</td>
+                <td>@Html.ActionLink("Edit", "EditJob", new { id = job.Id }) @Html.ActionLink("Delete", "DeleteJob", new { id = job.Id })</td>
+            </tr>
+        }
+    </tbody>
+</table>
