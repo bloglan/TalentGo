@@ -46,7 +46,7 @@ namespace TalentGo
         /// <summary>
         /// Data
         /// </summary>
-        protected virtual byte[] Data { get; set; }
+        public virtual byte[] Data { get; set; }
 
         /// <summary>
         /// WhenCreated

@@ -1,0 +1,42 @@
+﻿@model IQueryable<ApplicationForm>
+
+<table class="table">
+    <thead>
+        <tr>
+            <td>#</td>
+            <td>Person</td>
+            <td>Job</td>
+            <td>Plan</td>
+            <td>EduBackground</td>
+            <td>Degree</td>
+            <td>WhenCommited</td>
+            <td>Status</td>
+            <td>Operation</td>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var form in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(form.Id.ToString(), "Detail", new { id = form.Id }, new { target = "_blank" })
+                </td>
+                <td>
+                    @Html.ActionLink(form.Person.DisplayName, "Detail", "User", new { id = form.PersonId }, new { target = "_blank" })
+                </td>
+                <td>
+                    @Html.ActionLink(form.Job.Name, "JobDetail", "RecruitmentPlan", new { id = form.JobId }, new { target = "_blank" })
+                </td>
+                <td>
+                    @Html.ActionLink(form.Job.Plan.Title, "Detail", "RecruitmentPlan", new { id = form.Job.PlanId }, new { target = "_blank" })
+                </td>
+                <td>
+                    @form.EducationBackground
+                </td>
+                <td>@form.Degree</td>
+                <td>@form.WhenCommited.Value.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@Html.ActionLink("审查", "FileReview", new { id = form.Id }, new { target = "_blank" })</td>
+            </tr>
+        }
+    </tbody>
+</table>

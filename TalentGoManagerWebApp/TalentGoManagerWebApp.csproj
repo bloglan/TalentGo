@@ -182,6 +182,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ArticleController.cs" />
     <Compile Include="Controllers\ApplicationFormController.cs" />
+    <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RecruitmentPlanController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Models\CommitAuditViewModel.cs" />
@@ -647,9 +648,16 @@
     <Content Include="Views\RecruitmentPlan\EditJob.cshtml" />
     <Content Include="Views\RecruitmentPlan\DeleteJob.cshtml" />
     <Content Include="Views\RecruitmentPlan\Delete.cshtml" />
+    <Content Include="Views\ApplicationForm\Index.cshtml" />
+    <Content Include="Views\ApplicationForm\PendingFileReviewList.cshtml" />
+    <Content Include="Views\ApplicationForm\_StatusLabels.cshtml" />
+    <Content Include="Views\ApplicationForm\FileReviewComplete.cshtml" />
+    <Content Include="Views\ApplicationForm\FileReview.cshtml" />
+    <Content Include="Views\ApplicationForm\NoPendingFileReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\File\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

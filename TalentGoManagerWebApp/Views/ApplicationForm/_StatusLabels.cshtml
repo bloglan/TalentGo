@@ -1,0 +1,25 @@
+﻿@model ApplicationForm
+
+@if(Model.FileReviewAccepted.HasValue)
+{
+    if(Model.FileReviewAccepted.Value)
+    {
+        <span class="label label-success">资料通过</span>
+    }
+    else
+    {
+        <span class="label label-danger">资料审查未通过</span>
+    }
+}
+
+@if(Model.Approved.HasValue)
+{
+    if (Model.Approved.Value)
+    {
+        <span class="label label-success">资格通过</span>
+    }
+    else
+    {
+        <span class="label label-danger">资格未通过</span>
+    }
+}

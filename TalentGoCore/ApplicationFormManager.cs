@@ -43,38 +43,6 @@ namespace TalentGo
         {
             return await this.store.FindByIdAsync(Id);
         }
-        /// <summary>
-        /// 获取已提交的报名表。
-        /// </summary>
-        public IQueryable<ApplicationForm> CommitedForms
-        {
-            get { return this.ApplicationForms.Where(e => e.WhenCommited.HasValue); }
-        }
-
-        /// <summary>
-        /// 获取隶属于指定招聘计划的报名表。
-        /// </summary>
-        /// <param name="plan"></param>
-        /// <returns></returns>
-        public IQueryable<ApplicationForm> GetEnrollmentsOfPlan(RecruitmentPlan plan)
-        {
-            return this.CommitedForms.Where(en => en.JobId == plan.Id);
-        }
-
-
-        /// <summary>
-        /// 根据指定的ArchiveId获取报名表对应的文档。
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        public EnrollmentArchive FindEnrollmentArchiveByIdAsync(int Id)
-        {
-            return null;
-        }
-
-
-
-        #region Operations for enrollment
 
         /// <summary>
         /// 为指定的用户和招聘计划创建报名表。
@@ -91,7 +59,7 @@ namespace TalentGo
             {
                 throw new InvalidOperationException("在一个招聘计划内只能创建一份报名表。");
             }
-            
+
             await this.store.CreateAsync(form);
         }
 
@@ -109,6 +77,49 @@ namespace TalentGo
                 throw new InvalidOperationException("已提交的报名表不能修改。");
 
             form.WhenChanged = DateTime.Now;
+
+            await this.store.UpdateAsync(form);
+        }
+
+        /// <summary>
+        /// 提交报名资料。
+        /// </summary>
+        /// <returns></returns>
+        public async Task CommitAsync(ApplicationForm form)
+        {
+            if (form == null)
+                throw new ArgumentNullException();
+
+            if (form.Id == 0)
+                await this.EnrollAsync(form);
+
+            //TODO:检查传送资料是否齐全并满足规则。
+
+            if (!form.WhenCommited.HasValue)
+                form.WhenCommited = DateTime.Now;
+
+            await this.ModifyAsync(form);
+        }
+
+        /// <summary>
+        /// File review.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="accepted"></param>
+        /// <returns></returns>
+        public async Task FileReviewAsync(ApplicationForm form, bool accepted)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+
+            if (!form.WhenCommited.HasValue)
+                throw new InvalidOperationException("Form not commited.");
+
+            if (form.WhenFileReview.HasValue)
+                throw new InvalidOperationException("File has been reviewed.");
+
+            form.FileReviewAccepted = accepted;
+            form.WhenFileReview = DateTime.Now;
 
             await this.store.UpdateAsync(form);
         }
@@ -137,74 +148,75 @@ namespace TalentGo
             if (form == null)
                 throw new ArgumentNullException();
 
+            form.WhenCommited = null;
+            form.FileReviewAccepted = null;
+            form.WhenFileReview = null;
             form.Approved = null;
             form.WhenAudit = null;
             form.AuditMessage = null;
-            form.WhenCommited = null;
             form.Log("退回报名表。");
 
             await this.store.UpdateAsync(form);
         }
 
-        /// <summary>
-        /// 提交报名资料。
-        /// </summary>
-        /// <returns></returns>
-        public async Task CommitAsync(ApplicationForm form)
-        {
-            if (form == null)
-                throw new ArgumentNullException();
-
-            if (form.Id == 0)
-                await this.EnrollAsync(form);
-
-            //TODO:检查传送资料是否齐全并满足规则。
-
-            if (!form.WhenCommited.HasValue)
-                form.WhenCommited = DateTime.Now;
-
-            await this.ModifyAsync(form);
-        }
 
         /// <summary>
         /// 设置审核标记。
         /// </summary>
         /// <param name="form"></param>
         /// <param name="approved"></param>
-        /// <param name="auditMessage"></param>
         /// <returns></returns>
-        public async Task MarkAuditAsync(ApplicationForm form, bool approved, string auditMessage = null)
+        public async Task SetAuditFlagAsync(ApplicationForm form, bool? approved)
         {
             if (form == null)
                 throw new ArgumentNullException(nameof(form));
 
             form.Approved = approved;
-            form.WhenAudit = DateTime.Now;
-            form.AuditMessage = auditMessage;
 
             await this.store.UpdateAsync(form);
         }
 
         /// <summary>
-        /// 清除审核标记。
+        /// 设置审核消息。
         /// </summary>
         /// <param name="form"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        public async Task ClearAuditAsync(ApplicationForm form)
+        public async Task SetAuditMessageAsync(ApplicationForm form, string message)
         {
             if (form == null)
                 throw new ArgumentNullException(nameof(form));
 
-            form.Approved = null;
-            form.WhenAudit = null;
-            form.AuditMessage = null;
+            form.AuditMessage = message;
 
             await this.store.UpdateAsync(form);
         }
 
-        //string smsRejectiveMsg = "{0}，您好，您所填报的{1}报名资料，经初审未通过，感谢您的参与！";
-        //string smsApprovedMsg = "{0}，您好，您所填报的{1}报名资料，经初审通过，请于{2}前登陆网站声明是否参加考试，逾期未声明是否参加考试的不予参加考试。谢谢您的合作。";
+        /// <summary>
+        /// 完成审核。
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public async Task CompleteAuditAsync(ApplicationForm form)
+        {
+            if (form == null)
+                throw new ArgumentNullException();
 
+            if (form.WhenAudit.HasValue)
+                return;
+
+            if (!form.WhenFileReview.HasValue)
+                throw new InvalidOperationException("Can not complete audit before file review");
+
+            if (form.FileReviewAccepted.HasValue && !form.FileReviewAccepted.Value)
+                form.Approved = false; //前置条件 资料审查未通过，直接拒绝审核。
+
+            if (!form.Approved.HasValue)
+                form.Approved = false; //如果没有指定审核标记，完成时默认拒绝。
+
+            form.WhenAudit = DateTime.Now;
+            await this.store.UpdateAsync(form);
+        }
 
         /// <summary>
         /// 声明是否参加考试。
@@ -236,11 +248,6 @@ namespace TalentGo
             await this.store.UpdateAsync(form);
         }
 
-
-        #endregion
-
-        #region 管理板块的方法
-
         /// <summary>
         /// 根据关键字、标记、获取满足条件的报名表。
         /// </summary>
@@ -254,7 +261,7 @@ namespace TalentGo
             //带分页
             //
             //先获得符合初始条件的集合
-            var initSet = this.CommitedForms.Where(e => e.JobId == PlanID);
+            var initSet = this.ApplicationForms.Commited().Where(e => e.JobId == PlanID);
 
 
             if (!string.IsNullOrEmpty(Keywords))
@@ -372,8 +379,6 @@ namespace TalentGo
             //返回指定分页的条目
             return result.Skip(PageIndex * PageSize).Take(PageSize);
         }
-
-        #endregion
 
     }
 }
