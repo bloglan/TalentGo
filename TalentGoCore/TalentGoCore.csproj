@@ -71,6 +71,7 @@
     <Compile Include="ExaminationRoomManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="File.cs" />
+    <Compile Include="FileCategory.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExaminationRoomStore.cs" />
     <Compile Include="IFileStore.cs" />

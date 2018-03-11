@@ -1,0 +1,17 @@
+﻿@model ApplicationForm
+@{
+    ViewBag.Title = "报名表" + Model.Id.ToString();
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+
+
+@if (!Model.WhenCommited.HasValue)
+{
+    @Html.ActionLink("修改报名表", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+    @Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" })
+    @Html.ActionLink("提交报名表", "Commit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("删除报名表", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+}

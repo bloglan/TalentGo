@@ -1,0 +1,214 @@
+﻿@model ApplicationForm
+@{
+    ViewBag.Title = "报名资料";
+}
+
+@section header
+{
+    @Styles.Render("~/Content/jqueryfileupload")
+}
+
+<div class="page-header">
+    <h1>报名资料</h1>
+</div>
+<p>要完成报名，我们需要收集证件资料。使用扫描仪（推荐）或拍照方式获得证件图片，根据提示对应上传。</p>
+<p>只接受jpg和png图片格式。文件大小不超过3MB（兆字节）。</p>
+<p></p>
+<hr />
+<h2>证件照</h2>
+<p>近期免冠白底证件照</p>
+@using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { id = "headImageUpload", enctype = "multipart/form-data" }))
+{
+    <p>
+        <span class="btn btn-success btn-sm fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files[]">
+        </span>
+    </p>
+    <div class="row">
+        <div class="col-md-2 img-thumbnail">
+            <button type="button" class="close" aria-label="Close" onclick="RemoveHeadImage()"><span aria-hidden="true">&times;</span></button>
+            <img id="headimg" src="@(string.IsNullOrEmpty(Model.HeadImageFile) ? "/Content/WebRes/NoHeadImage.jpg" : Url.Action("Index", "File", new { id = Model.HeadImageFile }))" class="img-responsive" />
+        </div>
+    </div>
+}
+
+
+<hr />
+<h2>学历证明文件</h2>
+<ul>
+    <li>本年毕业尚未取得毕业证的，上传《就业推荐表》</li>
+    <li>次年毕业的，上传《毕业证》</li>
+    <li>留学生须提供《国外学历证明》</li>
+</ul>
+@{
+    var academicFileArray = this.Model.AcademicCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+@using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data" }))
+{
+    <p>
+        <span class="btn btn-success btn-sm fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files[]">
+        </span>
+    </p>
+    <div class="row">
+        @foreach (var item in academicFileArray)
+        {
+            <div class="col-md-2 img-thumbnail">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img src="@Url.Action("Index", "File", new { id = item })" class="img-responsive" />
+
+            </div>
+        }
+    </div>
+}
+
+
+<hr />
+<h2>学位证书</h2>
+
+@{
+    var degreeCertFileArray = this.Model.DegreeCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+@using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { id = "headImageUpload", enctype = "multipart/form-data" }))
+{
+    <p>
+        <span class="btn btn-success btn-sm fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files[]">
+        </span>
+    </p>
+    <div class="row">
+        @foreach (var item in degreeCertFileArray)
+        {
+            <div class="col-md-2 img-thumbnail">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img src="@Url.Action("Index", "File", new { id = item })" class="img-responsive" />
+
+            </div>
+        }
+    </div>
+}
+
+<hr />
+<h2>其他资料</h2>
+<p>其他您认为有必要提供的资料，如技能证书、奖状等。</p>
+@{
+    var otherFileArray = this.Model.OtherFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+@using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { id = "headImageUpload", enctype = "multipart/form-data" }))
+{
+    <p>
+        <span class="btn btn-success btn-sm fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files[]">
+        </span>
+    </p>
+    <div class="row">
+        @foreach (var item in otherFileArray)
+        {
+            <div class="col-md-2 img-thumbnail">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img src="@Url.Action("Index", "File", new { id = item })" class="img-responsive" />
+            </div>
+        }
+    </div>
+}
+
+
+<hr />
+@Html.ActionLink("预览报名资料", "Detail", new { id = Model.Id }, new { @class = "btn btn-primary" })
+@Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryfileupload")
+    @Scripts.Render("~/bundles/jquerytmpl")
+
+    <script type="text/template" id="fileItem">
+        <div class="row">
+            <div class="col-md-2 img-thumbnail">
+                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <img src="${src}" class="img-responsive" />
+            </div>
+        </div>
+    </script>
+    <script>
+
+        $(function () {
+            'use strict';
+
+            $("#headImageUpload").fileupload({
+                //url: url,
+                dataType: 'json',
+                progress: function (e, data) {
+                    $(this).prevAll("span").text("正在传送...");
+                },
+                done: function (e, data) {
+                    //当传送完成时，应如何显示。
+                    //alert("FileUpload");
+                    $(this).prevAll("span").text("上传");
+                    var $uploadCtrl = $(this).parents("div.uploadCtrl").first(); //引发上传文件控件
+
+                    if (data.result.Result != 0) {
+                        alert("传送错误。" + data.result.Message);
+                        return;
+                    }
+
+                    $("img#headimg").attr("src", "/File/" + data.result.FileId);
+
+                },
+                fail: function (e, data) {
+                    $(this).prevAll("span").text("上传");
+                    alert("传送文件遇到错误，可能文件过大。");
+                }
+            }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+        });
+
+        function RemoveFile(catagory, formid, source) {
+            $.post("./" + prop, { id: formid }, function (data, status, xhr) {
+                if (data != true) {
+                    alert(data.message);
+                    return;
+                }
+                else {
+                    var $uploadCtrl = $(source).parents("div.uploadCtrl").first();
+                    $uploadCtrl.children("img").attr("src", "/Content/WebRes/NoHeadImage.jpg");
+                }
+            });
+        }
+
+        function RemoveHeadImage() {
+            if ($("img#headimg").attr("src") == "/Content/WebRes/NoHeadImage.jpg")
+                return;
+
+            if (confirm("确实要删除此文件吗？"))
+            {
+                $.post("@Url.Action("RemoveHeadImage", new { id = Model.Id })", null, function (data, status, xhr)
+                {
+                    if (data != true)
+                    {
+                        alert(data.message);
+                        return;
+                    }
+                    else
+                    {
+                        $("img#headimg").attr("src", "/Content/WebRes/NoHeadImage.jpg");
+                    }
+                });
+            }
+
+        }
+    </script>
+
+}

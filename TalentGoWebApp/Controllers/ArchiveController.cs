@@ -16,12 +16,12 @@ using TalentGo;
 namespace TalentGoWebApp.Controllers
 {
     [Authorize]
-	public class ArchivesController : Controller
+	public class ArchiveController : Controller
 	{
         ApplicationFormManager enrollmentManager;
         RecruitmentPlanManager recruitmentPlanManager;
 
-        public ArchivesController( ApplicationFormManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager)
+        public ArchiveController( ApplicationFormManager enrollmentManager, RecruitmentPlanManager recruitmentPlanManager)
         {
             this.enrollmentManager = enrollmentManager;
             this.recruitmentPlanManager = recruitmentPlanManager;

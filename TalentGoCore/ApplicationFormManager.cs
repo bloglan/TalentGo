@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using TalentGo.Linq;
 using System.Transactions;
+using System.IO;
+using System.Drawing.Imaging;
+using System.Drawing;
+using System.Text;
 
 namespace TalentGo
 {
@@ -12,18 +16,18 @@ namespace TalentGo
     /// </summary>
     public class ApplicationFormManager
     {
-        RecruitmentPlanManager recruitManager;
-        IApplicationFormStore store;
+        IApplicationFormStore applicationFormStore;
+        IFileStore fileStore;
 
         /// <summary>
         /// 构造函数。使用给定的报名表存储、招聘计划管理器和目标用户管理器初始化报名管理器。
         /// </summary>
-        /// <param name="Store"></param>
-        /// <param name="recruitmentPlanManager"></param>
-		public ApplicationFormManager(IApplicationFormStore Store, RecruitmentPlanManager recruitmentPlanManager)
+        /// <param name="applicationFormStore"></param>
+        /// <param name="fileStore"></param>
+		public ApplicationFormManager(IApplicationFormStore applicationFormStore, IFileStore fileStore)
         {
-            this.store = Store;
-            this.recruitManager = recruitmentPlanManager;
+            this.applicationFormStore = applicationFormStore;
+            this.fileStore = fileStore;
         }
 
         /// <summary>
@@ -31,7 +35,7 @@ namespace TalentGo
         /// </summary>
         public IQueryable<ApplicationForm> ApplicationForms
         {
-            get { return this.store.ApplicationForms; }
+            get { return this.applicationFormStore.ApplicationForms; }
         }
 
         /// <summary>
@@ -41,7 +45,7 @@ namespace TalentGo
         /// <returns></returns>
         public async Task<ApplicationForm> FindByIdAsync(int Id)
         {
-            return await this.store.FindByIdAsync(Id);
+            return await this.applicationFormStore.FindByIdAsync(Id);
         }
 
         /// <summary>
@@ -55,13 +59,286 @@ namespace TalentGo
             var currentPlanId = form.Job.PlanId;
             var currentPersonId = form.PersonId;
 
-            if (this.store.ApplicationForms.Any(a => a.Job.PlanId == currentPlanId && a.PersonId == currentPersonId))
+            if (this.applicationFormStore.ApplicationForms.Any(a => a.Job.PlanId == currentPlanId && a.PersonId == currentPersonId))
             {
                 throw new InvalidOperationException("在一个招聘计划内只能创建一份报名表。");
             }
 
-            await this.store.CreateAsync(form);
+            await this.applicationFormStore.CreateAsync(form);
         }
+
+        /// <summary>
+        /// Upload head image.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public async Task<string> UploadHeadImageAsync(ApplicationForm form, Stream data)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            if (!string.IsNullOrEmpty(form.HeadImageFile))
+                throw new InvalidOperationException("Head image file exists.");
+
+            this.EnsureImage(data, out string mimeType);
+
+            var file = new File(Guid.NewGuid().ToString(), mimeType);
+            data.Position = 0;
+            await file.ReadAsync(data);
+            await this.fileStore.CreateAsync(file);
+
+            form.HeadImageFile = file.Id;
+            await this.applicationFormStore.UpdateAsync(form);
+
+            return file.Id;
+        }
+
+
+        /// <summary>
+        /// Remove HeadImage.
+        /// </summary>
+        /// <param name="form"></param>
+        /// <returns></returns>
+        public async Task RemoveHeadImageAsync(ApplicationForm form)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+
+            if (string.IsNullOrEmpty(form.HeadImageFile))
+                return;
+
+            var file = await this.fileStore.FindByIdAsync(form.HeadImageFile);
+            await this.fileStore.DeleteAsync(file);
+            form.HeadImageFile = null;
+            await this.applicationFormStore.UpdateAsync(form);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public async Task<string> UploadAcademicCertFileAsync(ApplicationForm form, Stream data)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("Cannot upload file to application form that commited.");
+
+            this.EnsureImage(data, out string mimeType);
+
+            var file = new File(Guid.NewGuid().ToString(), mimeType);
+            await file.ReadAsync(data);
+            await this.fileStore.CreateAsync(file);
+
+            var list = this.GetFileList(form.AcademicCertFiles);
+            list.Add(file.Id);
+            form.AcademicCertFiles = this.GetFilesProperty(list);
+
+            await this.applicationFormStore.UpdateAsync(form);
+            return file.Id;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        public async Task RemoveAcademicFileAsync(ApplicationForm form, string fileId)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+            if (string.IsNullOrEmpty(fileId))
+                throw new ArgumentException("fileId is null or empty.");
+
+            var list = this.GetFileList(form.AcademicCertFiles);
+
+            if (list.Contains(fileId))
+            {
+                list.Remove(fileId);
+                var file = await this.fileStore.FindByIdAsync(fileId);
+                if (file != null)
+                {
+                    await this.fileStore.DeleteAsync(file);
+                }
+            }
+            form.AcademicCertFiles = this.GetFilesProperty(list);
+            await this.applicationFormStore.UpdateAsync(form);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public async Task<string> UploadDegreeCertFileAsync(ApplicationForm form, Stream data)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("Cannot upload file to application form that commited.");
+
+            this.EnsureImage(data, out string mimeType);
+
+            var file = new File(Guid.NewGuid().ToString(), mimeType);
+            await file.ReadAsync(data);
+            await this.fileStore.CreateAsync(file);
+
+            var list = this.GetFileList(form.DegreeCertFiles);
+            list.Add(file.Id);
+            form.DegreeCertFiles = this.GetFilesProperty(list);
+
+            await this.applicationFormStore.UpdateAsync(form);
+            return file.Id;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        public async Task RemoveDegreeCertFileAsync(ApplicationForm form, string fileId)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+            if (string.IsNullOrEmpty(fileId))
+                throw new ArgumentException("fileId is null or empty.");
+
+            var list = this.GetFileList(form.DegreeCertFiles);
+
+            if (list.Contains(fileId))
+            {
+                list.Remove(fileId);
+                var file = await this.fileStore.FindByIdAsync(fileId);
+                if (file != null)
+                {
+                    await this.fileStore.DeleteAsync(file);
+                }
+            }
+            form.DegreeCertFiles = this.GetFilesProperty(list);
+            await this.applicationFormStore.UpdateAsync(form);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        public async Task<string> UploadOtherFileAsync(ApplicationForm form, Stream data)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
+
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("Cannot upload file to application form that commited.");
+
+            this.EnsureImage(data, out string mimeType);
+
+            var file = new File(Guid.NewGuid().ToString(), mimeType);
+            await file.ReadAsync(data);
+            await this.fileStore.CreateAsync(file);
+
+            var list = this.GetFileList(form.OtherFiles);
+            list.Add(file.Id);
+            form.OtherFiles = this.GetFilesProperty(list);
+
+            await this.applicationFormStore.UpdateAsync(form);
+            return file.Id;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="form"></param>
+        /// <param name="fileId"></param>
+        /// <returns></returns>
+        public async Task RemoveOtherFileAsync(ApplicationForm form, string fileId)
+        {
+            if (form == null)
+                throw new ArgumentNullException(nameof(form));
+            if (string.IsNullOrEmpty(fileId))
+                throw new ArgumentException("fileId is null or empty.");
+
+            var list = this.GetFileList(form.OtherFiles);
+
+            if (list.Contains(fileId))
+            {
+                list.Remove(fileId);
+                var file = await this.fileStore.FindByIdAsync(fileId);
+                if (file != null)
+                {
+                    await this.fileStore.DeleteAsync(file);
+                }
+            }
+            form.OtherFiles = this.GetFilesProperty(list);
+            await this.applicationFormStore.UpdateAsync(form);
+        }
+
+
+        void EnsureImage(Stream data, out string mimeType)
+        {
+            using (var image = Image.FromStream(data))
+            {
+                if (image.RawFormat.Equals(ImageFormat.Jpeg))
+                    mimeType = "image/jpeg";
+                else if (image.RawFormat.Equals(ImageFormat.Png))
+                    mimeType = "image/png";
+                else
+                    throw new NotSupportedException("File format not support.");
+
+                if (image.Size.Width * image.Size.Height < 800 * 800)
+                    throw new ArgumentException("Image size is small!");
+            }
+        }
+
+        /// <summary>
+        /// Get file list from files property.
+        /// </summary>
+        /// <param name="filesProperty"></param>
+        /// <returns></returns>
+        public List<string> GetFileList(string filesProperty)
+        {
+            if (string.IsNullOrEmpty(filesProperty))
+                return new List<string>();
+            var array = filesProperty.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+            return new List<string>(array);
+        }
+
+        /// <summary>
+        /// Get files property from file list.
+        /// </summary>
+        /// <param name="list"></param>
+        /// <returns></returns>
+        public string GetFilesProperty(List<string> list)
+        {
+            if (list == null)
+                return null;
+            var builder = new StringBuilder();
+            foreach (var item in list)
+            {
+                builder.Append(item + "|");
+            }
+            return builder.ToString();
+        }
+
+
 
         /// <summary>
         /// 
@@ -78,7 +355,7 @@ namespace TalentGo
 
             form.WhenChanged = DateTime.Now;
 
-            await this.store.UpdateAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
         /// <summary>
@@ -94,11 +371,17 @@ namespace TalentGo
                 await this.EnrollAsync(form);
 
             //TODO:检查传送资料是否齐全并满足规则。
+            if (string.IsNullOrEmpty(form.HeadImageFile))
+                throw new InvalidOperationException("Head image required.");
+
+            var academicFileList = this.GetFileList(form.AcademicCertFiles);
+            if (!academicFileList.Any())
+                throw new InvalidOperationException("At least one academic file required.");
 
             if (!form.WhenCommited.HasValue)
                 form.WhenCommited = DateTime.Now;
 
-            await this.ModifyAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
         /// <summary>
@@ -121,7 +404,7 @@ namespace TalentGo
             form.FileReviewAccepted = accepted;
             form.WhenFileReview = DateTime.Now;
 
-            await this.store.UpdateAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
         /// <summary>
@@ -135,7 +418,21 @@ namespace TalentGo
             if (form.WhenCommited.HasValue)
                 throw new InvalidOperationException("已提交的报名表不能删除。");
 
-            await this.store.DeleteAsync(form);
+            //与此报名表关联的文件。
+            var fileList = new List<string>();
+            fileList.Union(this.GetFileList(form.AcademicCertFiles));
+            fileList.Union(this.GetFileList(form.DegreeCertFiles));
+            fileList.Union(this.GetFileList(form.OtherFiles));
+            if (!string.IsNullOrEmpty(form.HeadImageFile))
+                fileList.Add(form.HeadImageFile);
+
+            foreach(var fileId in fileList)
+            {
+                var file = await this.fileStore.FindByIdAsync(fileId);
+                if (file != null)
+                    await this.fileStore.DeleteAsync(file);
+            }
+            await this.applicationFormStore.DeleteAsync(form);
         }
 
         /// <summary>
@@ -156,7 +453,7 @@ namespace TalentGo
             form.AuditMessage = null;
             form.Log("退回报名表。");
 
-            await this.store.UpdateAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
 
@@ -173,7 +470,7 @@ namespace TalentGo
 
             form.Approved = approved;
 
-            await this.store.UpdateAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
         /// <summary>
@@ -189,7 +486,7 @@ namespace TalentGo
 
             form.AuditMessage = message;
 
-            await this.store.UpdateAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
         /// <summary>
@@ -215,7 +512,7 @@ namespace TalentGo
                 form.Approved = false; //如果没有指定审核标记，完成时默认拒绝。
 
             form.WhenAudit = DateTime.Now;
-            await this.store.UpdateAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
         /// <summary>
@@ -245,7 +542,7 @@ namespace TalentGo
             form.IsTakeExam = IsTakeExam;
             form.WhenAnnounced = DateTime.Now;
 
-            await this.store.UpdateAsync(form);
+            await this.applicationFormStore.UpdateAsync(form);
         }
 
         /// <summary>

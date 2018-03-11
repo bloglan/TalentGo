@@ -7,62 +7,63 @@ namespace TalentGo.Web
     /// <summary>
     /// 表示一个文章。
     /// </summary>
-    [Table("Article")]
-    public partial class Article
+    public partial class Notice
     {
         /// <summary>
         /// Default ctor.
         /// </summary>
-        public Article()
+        protected Notice()
         {
+            this.WhenCreated = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Initialize a new notice with title, main content and created by.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="mainContent"></param>
+        /// <param name="createdBy"></param>
+        public Notice(string title, string mainContent, string createdBy)
+            : this()
+        {
+            this.Title = title;
+            this.MainContent = mainContent;
+            this.CreatedBy = createdBy;
         }
 
         /// <summary>
         /// 文章id
         /// </summary>
-        public int id { get; protected set; }
+        public int Id { get; protected set; }
 
         /// <summary>
         /// Article title.
         /// </summary>
-		[Display(Name = "标题")]
-        [Required]
-        [StringLength(50)]
         public string Title { get; set; }
 
         /// <summary>
         /// Primary content of Article.
         /// </summary>
-		[Display(Name = "正文")]
-		[Required]
-		[UIHint("CKEditor")]
         public string MainContent { get; set; }
 
         /// <summary>
         /// Creator of this article.
         /// </summary>
-		[Display(Name = "创建者")]
-		[Required]
-        [StringLength(50)]
         public string CreatedBy { get; set; }
 
         /// <summary>
         /// When created.
         /// </summary>
-		[Display(Name = "创建时间")]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
 		public DateTime WhenCreated { get; protected set; }
 
         /// <summary>
         /// When changed.
         /// </summary>
-		[Display(Name = "修改时间")]
 		public DateTime WhenChanged { get; set; }
 
         /// <summary>
         /// Is visible.
         /// </summary>
-		[Display(Name = "显示")]
 		public bool Visible { get; set; }
 
         /// <summary>

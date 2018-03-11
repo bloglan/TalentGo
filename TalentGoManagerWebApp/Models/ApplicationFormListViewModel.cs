@@ -4,9 +4,9 @@ using TalentGo;
 
 namespace TalentGoManagerWebApp.Models
 {
-    public class EnrollmentListViewModel
+    public class ApplicationFormListViewModel
 	{
-		public EnrollmentListViewModel()
+		public ApplicationFormListViewModel()
 		{
 			this.OrderColumn = "WhenCommited";
 			this.DownDirection = true;

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Article>
+﻿@model IEnumerable<Notice>
 
 @{
     ViewBag.Title = "Index";
@@ -57,8 +57,8 @@
             </td>
             <td>
                     <p>
-                        @Html.ActionLink("编辑", "Edit", new { id = item.id }) |
-                        @Html.ActionLink("删除", "Delete", new { id = item.id })
+                        @Html.ActionLink("编辑", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("删除", "Delete", new { id = item.Id })
                     </p>
             </td>
         </tr>

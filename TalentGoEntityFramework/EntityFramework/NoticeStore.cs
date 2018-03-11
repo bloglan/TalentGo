@@ -9,25 +9,25 @@ namespace TalentGo.EntityFramework
     /// <summary>
     /// Article data store via EF
     /// </summary>
-    public class ArticleStore : IArticleStore
+    public class NoticeStore : INoticeStore
     {
         DbContext dbContext;
-        DbSet<Article> set;
+        DbSet<Notice> set;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="DbContext"></param>
-        public ArticleStore(DbContext DbContext)
+        public NoticeStore(DbContext DbContext)
         {
             this.dbContext = DbContext;
-            this.set = this.dbContext.Set<Article>();
+            this.set = this.dbContext.Set<Notice>();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IQueryable<Article> Articles
+        public IQueryable<Notice> Articles
         {
             get
             {
@@ -40,7 +40,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-        public async Task CreateAsync(Article article)
+        public async Task CreateAsync(Notice article)
         {
             //article.WhenCreated = DateTime.Now;
             //article.WhenChanged = DateTime.Now;
@@ -54,7 +54,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-        public async Task RemoveAsync(Article article)
+        public async Task RemoveAsync(Notice article)
         {
             this.set.Remove(article);
             await this.dbContext.SaveChangesAsync();
@@ -65,7 +65,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(Article article)
+        public async Task UpdateAsync(Notice article)
         {
             this.dbContext.Entry(article).State = EntityState.Modified;
             await this.dbContext.SaveChangesAsync();

@@ -1,20 +1,18 @@
-﻿@model Article
+﻿@model NoticeEditViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "新建通知公告";
 }
 
-<h2>编辑公告</h2>
+<h2>创建公告</h2>
 
-@using (Html.BeginForm())
+<hr />
+@using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.id)
-
         <div class="form-group">
             @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -41,41 +39,12 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.WhenCreated, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.WhenCreated, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.WhenCreated, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.WhenChanged, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.WhenChanged, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.WhenChanged, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Visible, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.EditorFor(model => model.Visible)
-                    @Html.ValidationMessageFor(model => model.Visible, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="保存" class="btn btn-default" />
+                <input type="submit" value="创建" class="btn btn-default" />
             </div>
         </div>
     </div>
 }
-
 <div>
     @Html.ActionLink("返回公告列表", "Index")
 </div>

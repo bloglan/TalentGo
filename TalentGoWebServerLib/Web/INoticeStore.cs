@@ -7,32 +7,32 @@ namespace TalentGo.Web
     /// <summary>
     /// Defined interface for store Article.
     /// </summary>
-    public interface IArticleStore : IDisposable
+    public interface INoticeStore : IDisposable
     {
         /// <summary>
         /// Get a qeuryable collection for all articles.
         /// </summary>
-        IQueryable<Article> Articles { get; }
+        IQueryable<Notice> Articles { get; }
 
         /// <summary>
         /// insert an article into data store.
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-        Task CreateAsync(Article article);
+        Task CreateAsync(Notice article);
 
         /// <summary>
         /// Update an article.
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-        Task UpdateAsync(Article article);
+        Task UpdateAsync(Notice article);
 
         /// <summary>
         /// Remove an article from data store.
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-        Task RemoveAsync(Article article);
+        Task RemoveAsync(Notice article);
     }
 }

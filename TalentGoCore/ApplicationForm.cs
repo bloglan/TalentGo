@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 
 namespace TalentGo
 {
@@ -11,14 +14,19 @@ namespace TalentGo
     /// </summary>
 	public class ApplicationForm
 	{
+        DataContractJsonSerializer serializer;
         /// <summary>
         /// Default ctor.
         /// </summary>
 		protected ApplicationForm()
 		{
+            this.serializer = new DataContractJsonSerializer(typeof(List<string>));
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
             this.ChangeLog = string.Empty;
+            this.AcademicCertFiles = string.Empty;
+            this.DegreeCertFiles = string.Empty;
+            this.OtherFiles = string.Empty;
 		}
 
         /// <summary>
@@ -160,39 +168,19 @@ namespace TalentGo
         public string HeadImageFile { get; internal set; }
 
         /// <summary>
-        /// 学历证书文件0
+        /// 学历证书文件。
         /// </summary>
-        public string AcademicCertFile0 { get; internal set; }
+        public string AcademicCertFiles { get; internal set; }
 
         /// <summary>
-        /// 学历证书文件1
+        /// 学位证书文件。
         /// </summary>
-        public string AcademicCertFile1 { get; internal set; }
+        public string DegreeCertFiles { get; internal set; }
 
         /// <summary>
-        /// 学历证书文件2
+        /// 其他材料。
         /// </summary>
-        public string AcademicCertFile2 { get; internal set; }
-
-        /// <summary>
-        /// 学历证书文件3
-        /// </summary>
-        public string AcademicCertFile3 { get; internal set; }
-
-        /// <summary>
-        /// 学历证书文件4
-        /// </summary>
-        public string AcademicCertFile4 { get; internal set; }
-
-        /// <summary>
-        /// 学位证书文件0
-        /// </summary>
-        public string DegreeCertFile0 { get; internal set; }
-
-        /// <summary>
-        /// 学位证书文件1
-        /// </summary>
-        public string DegreeCertFile1 { get; internal set; }
+        public string OtherFiles { get; internal set; }
 
         /// <summary>
         /// When created.
@@ -249,16 +237,6 @@ namespace TalentGo
         /// 更改日志。
         /// </summary>
         public string ChangeLog { get; protected set; }
-
-
-        /// <summary>
-        /// Gets a bool value indicate wheather this enrollment has commited or not.
-        /// </summary>
-        [NotMapped]
-        public bool HasCommited
-        {
-            get { return this.WhenCommited.HasValue; }
-        }
 
         /// <summary>
         /// Log message with current datetime.

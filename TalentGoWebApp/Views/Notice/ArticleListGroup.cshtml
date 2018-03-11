@@ -1,10 +1,10 @@
-﻿@model IEnumerable<Article>
+﻿@model IEnumerable<Notice>
 
 <div class="list-group">
-	@foreach (Article art in Model)
+	@foreach (var art in Model)
 	{
 		@*<li>@Html.ActionLink(art.Title, "Detail", "Article", new { id = art.id }, null)</li>*@
-		<a class="list-group-item" href="@Url.Action("Detail", "Article", new { id = art.id })">
+		<a class="list-group-item" href="@Url.Action("Detail", "Article", new { id = art.Id })">
 			<h4 class="list-group-item-heading">@art.Title</h4>
 		</a>
 	}

@@ -34,7 +34,7 @@ namespace TalentGo
         /// <summary>
         /// The job belongs to plan.
         /// </summary>
-        public RecruitmentPlan Plan { get; protected set; }
+        public virtual RecruitmentPlan Plan { get; protected set; }
 
         /// <summary>
         /// Name

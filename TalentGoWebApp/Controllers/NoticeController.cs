@@ -8,13 +8,13 @@ using TalentGo.Web;
 
 namespace TalentGoWebApp.Controllers
 {
-    public class ArticleController : Controller
+    public class NoticeController : Controller
 	{
-		ArticleManager articleManager;
+		NoticeManager manager;
 
-        public ArticleController(ArticleManager manager)
+        public NoticeController(NoticeManager manager)
         {
-            this.articleManager = manager;
+            this.manager = manager;
         }
 
 		// GET: Article
@@ -27,7 +27,7 @@ namespace TalentGoWebApp.Controllers
 
 		public ActionResult Detail(int id)
 		{
-			var article = this.articleManager.FindByID(id);
+			var article = this.manager.FindByID(id);
 			if (article.WhenPublished.HasValue)
             {
 				return View(article);

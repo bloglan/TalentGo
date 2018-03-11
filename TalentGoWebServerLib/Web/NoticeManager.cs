@@ -8,15 +8,15 @@ namespace TalentGo.Web
     /// <summary>
     /// 
     /// </summary>
-    public class ArticleManager
+    public class NoticeManager
 	{
-        IArticleStore store;
+        INoticeStore store;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="Store"></param>
-		public ArticleManager(IArticleStore Store)
+		public NoticeManager(INoticeStore Store)
 		{
             this.store = Store;
 		}
@@ -24,7 +24,7 @@ namespace TalentGo.Web
         /// <summary>
         /// 
         /// </summary>
-        public IQueryable<Article> Articles { get { return this.store.Articles; } }
+        public IQueryable<Notice> Articles { get { return this.store.Articles; } }
 
         
 
@@ -34,7 +34,7 @@ namespace TalentGo.Web
 		/// <param name="IsPublic">指示一个值，表示要取得适用于外网还是内网的文章。</param>
 		/// <param name="plan">可以为null，则表示列表与招聘计划无关。若不为null，则显示与招聘计划关联的文章列表。忽略IsPublic参数。</param>
 		/// <returns></returns>
-		public IEnumerable<Article> GetAvaiableArticles(bool IsPublic, RecruitmentPlan plan)
+		public IEnumerable<Notice> GetAvaiableArticles(bool IsPublic, RecruitmentPlan plan)
 		{
 			if (plan == null || plan.Id == 0)
 			{
@@ -59,9 +59,9 @@ namespace TalentGo.Web
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-		public Article FindByID(int id)
+		public Notice FindByID(int id)
 		{
-			return this.store.Articles.SingleOrDefault(e => e.id == id);
+			return this.store.Articles.SingleOrDefault(e => e.Id == id);
 		}
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace TalentGo.Web
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-		public async Task CreateArticle(Article article)
+		public async Task CreateAsync(Notice article)
 		{
 			//article.WhenCreated = DateTime.Now;
 			article.WhenChanged = DateTime.Now;
@@ -82,7 +82,7 @@ namespace TalentGo.Web
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-		public async Task UpdateArticle(Article article)
+		public async Task UpdateAsync(Notice article)
 		{
             await this.store.UpdateAsync(article);
 		}
@@ -92,7 +92,7 @@ namespace TalentGo.Web
         /// </summary>
         /// <param name="article"></param>
         /// <returns></returns>
-		public async Task RemoveArticle(Article article)
+		public async Task DeleteAsync(Notice article)
 		{
             await this.store.RemoveAsync(article);
 		}
@@ -105,7 +105,7 @@ namespace TalentGo.Web
 		/// <param name="PageSize">每页项数</param>
 		/// <param name="ItemCount">返回一个总文章计数</param>
 		/// <returns>返回指定页上的文章列表</returns>
-		public IEnumerable<Article> GetArticles(string Keywords, int PageIndex, int PageSize, out int ItemCount)
+		public IEnumerable<Notice> GetArticles(string Keywords, int PageIndex, int PageSize, out int ItemCount)
 		{
 			if (string.IsNullOrEmpty(Keywords))
 				Keywords = string.Empty;

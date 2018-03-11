@@ -12,19 +12,22 @@
         <thead>
             <tr>
                 <th>#</th>
-                <th>Job</th>
-                <th>Status</th>
-                <th>Operations</th>
+                <th>职位/计划</th>
+                <th>状态</th>
+                <th>操作</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var form in Model)
             {
                 <tr>
-                    <td>@Html.ActionLink(form.Id.ToString(), "Detail", "ApplicationForm", new { id = form.Id })</td>
-                    <td>@Html.ActionLink(form.Job.Name, "Detail", "Job", new { id = form.JobId }, new { target = "_blank" })</td>
-                    <td>@Html.Partial("_ApplicationStatus")</td>
-                    <td>@Html.ActionLink("Detail", "Detail", "ApplicationForm", new { id = form.Id })</td>
+                    <td>@Html.ActionLink(form.Id.ToString(), "Detail", new { id = form.Id })</td>
+                    <td>
+                        <p>@Html.ActionLink(form.Job.Name, "Detail", "Job", new { id = form.JobId }, new { target = "_blank" })</p>
+                        <p>@Html.ActionLink(form.Job.Plan.Title, "Detail", "RecruitmentPlan", new { id = form.Job.PlanId }, new { target = "_blank" })</p>
+                    </td>
+                    <td>@Html.Partial("_ApplicationStatus", form)</td>
+                    <td>@Html.ActionLink("详细", "Detail", new { id = form.Id })</td>
                 </tr>
             }
         </tbody>

@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "错误：每个招聘计划只允许填写一份报名表";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>您已经在此招聘计划中填写了报名表。转到@(Html.ActionLink("报名表", "Index", "ApplicationForm"))，浏览你填写的报名表。</p>
+<p>如果你打算应聘其他职位，必须删除目前已填写的报名表。</p>

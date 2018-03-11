@@ -20,7 +20,7 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-		public virtual DbSet<Article> Article { get; set; }
+		public virtual DbSet<Notice> Article { get; set; }
 
 
             /// <summary>
@@ -73,6 +73,9 @@ namespace TalentGo.EntityFramework
 
             modelBuilder.Entity<File>()
                 .ToTable("File");
+
+            modelBuilder.Entity<Notice>()
+                .ToTable("Notice");
 		}
 	}
 }

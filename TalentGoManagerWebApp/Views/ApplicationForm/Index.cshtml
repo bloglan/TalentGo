@@ -1,22 +1,33 @@
 ﻿
 @{
-    ViewBag.Title = "报名表";
+    ViewBag.Title = "报名表管理";
 }
 
 <div class="page-header">
-    <h1>报名表管理中心</h1>
+    <h1>@ViewBag.Title</h1>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">查询和搜索</div>
+    <div class="panel-body">
+        <p>根据报名表号，报名人相关信息查找报名表。</p>
+        <p>浏览报名表</p>
+    </div>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">资料审查</div>
     <div class="panel-body">
+        <p>资料审查的目的是检查报名表及关联资料是否一致、填写是否正确。</p>
+        <p>未通过资料审查的，将会立即通知报名者。</p>
         @Html.ActionLink("待审查报名表", "PendingFileReview", null, new { @class = "btn btn-default" })
         @Html.ActionLink("执行资料审查", "FileReview", null, new { @class = "btn btn-default", target = "_blank" })
     </div>
 </div>
 <div class="panel panel-default">
-    <div class="panel-heading">资格审查</div>
+    <div class="panel-heading">资格审核</div>
     <div class="panel-body">
-        @Html.ActionLink("待审查报名表", "PendingAudit", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("执行资料审查", "Audit", null, new { @class = "btn btn-default", target = "_blank" })
+        <p>资格审核时，您可以为报名表填写审核标记。只有完成资格审核后，审核结果才会通知报名者。</p>
+        @Html.ActionLink("待审核报名表", "PendingAudit", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("审核...", "Audit", null, new { @class = "btn btn-default", target = "_blank" })
+        @Html.ActionLink("完成资格审核", "CompleteAudit", null, new { @class = "btn btn-default" })
     </div>
 </div>

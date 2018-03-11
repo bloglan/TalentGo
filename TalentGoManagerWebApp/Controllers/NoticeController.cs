@@ -5,24 +5,23 @@ using System.Web.Mvc;
 using TalentGo;
 using TalentGo.EntityFramework;
 using TalentGo.Web;
+using TalentGoManagerWebApp.Models;
 
 namespace TalentGoManagerWebApp.Controllers
 {
-	public class ArticleController : Controller
+	public class NoticeController : Controller
 	{
-		ArticleManager articleManager;
-        RecruitmentPlanManager recruitmentPlanManager;
+		NoticeManager manager;
 
-        public ArticleController(ArticleManager articleManager, RecruitmentPlanManager recruitmentPlanManager)
+        public NoticeController(NoticeManager manager)
         {
-            this.articleManager = articleManager;
-            this.recruitmentPlanManager = recruitmentPlanManager;
+            this.manager = manager;
         }
 
         // GET: Mgmt/Article
         public ActionResult Index()
 		{
-			var articleSet = from article in this.articleManager.Articles
+			var articleSet = from article in this.manager.Articles
 							 orderby article.WhenChanged descending
 							 select article;
 
@@ -39,27 +38,21 @@ namespace TalentGoManagerWebApp.Controllers
 		// GET: Mgmt/Article/Create
 		public ActionResult Create()
 		{
-			Article model = new Article()
-			{
-				Visible = true,
-				CreatedBy = "云南省烟草公司曲靖市公司"
-			};
-
-			return View(model);
+			return View();
 		}
 
 		// POST: Mgmt/Article/Create
 		[HttpPost]
-		public async Task<ActionResult> Create(Article model)
+		public async Task<ActionResult> Create(NoticeEditViewModel model)
 		{
+            var notice = new Notice(model.Title, model.MainContent, model.CreatedBy)
+            {
+                Visible = model.Visible,
+            };
+
 			try
 			{
-				// TODO: Add insert logic here
-				//
-				model.WhenChanged = DateTime.Now;
-				model.Visible = true;
-
-                await this.articleManager.CreateArticle(model);
+                await this.manager.CreateAsync(notice);
 				return RedirectToAction("Index");
 			}
 			catch (Exception ex)
@@ -72,7 +65,7 @@ namespace TalentGoManagerWebApp.Controllers
 		// GET: Mgmt/Article/Edit/5
 		public ActionResult Edit(int id)
 		{
-			var model = this.articleManager.Articles.SingleOrDefault(e => e.id == id);
+			var model = this.manager.Articles.SingleOrDefault(e => e.Id == id);
 			if (model == null)
 				return RedirectToAction("Index");
 
@@ -81,11 +74,20 @@ namespace TalentGoManagerWebApp.Controllers
 
 		// POST: Mgmt/Article/Edit/5
 		[HttpPost]
-		public async Task<ActionResult> Edit(int id, Article model)
+		public async Task<ActionResult> Edit(int id, NoticeEditViewModel model)
 		{
+            var notice = this.manager.FindByID(id);
+            if (notice == null)
+                return HttpNotFound();
+
+            notice.Title = model.Title;
+            notice.MainContent = model.MainContent;
+            notice.CreatedBy = model.CreatedBy;
+            notice.Visible = model.Visible;
+
 			try
 			{
-                await this.articleManager.UpdateArticle(model);
+                await this.manager.UpdateAsync(notice);
 
 				return RedirectToAction("Index");
 			}
@@ -99,10 +101,10 @@ namespace TalentGoManagerWebApp.Controllers
 		// GET: Mgmt/Article/Delete/5
 		public async Task<ActionResult> Delete(int id)
 		{
-			var current = this.articleManager.Articles.SingleOrDefault(e => e.id == id);
+			var current = this.manager.Articles.SingleOrDefault(e => e.Id == id);
 			if (current != null)
 			{
-				await this.articleManager.RemoveArticle(current);
+				await this.manager.DeleteAsync(current);
 			}
 			return RedirectToAction("Index");
 		}

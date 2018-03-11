@@ -83,7 +83,7 @@ namespace TalentGoManagerWebApp.Controllers
         /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ActionResult> EnrollmentList(int id, EnrollmentListViewModel model)
+        public async Task<ActionResult> EnrollmentList(int id, ApplicationFormListViewModel model)
         {
             var recruitmentPlan = await this.recruitmentPlanManager.FindByIdAsync(id);
             if (recruitmentPlan == null)
@@ -91,7 +91,7 @@ namespace TalentGoManagerWebApp.Controllers
 
             if (model == null)
             {
-                model = new EnrollmentListViewModel()
+                model = new ApplicationFormListViewModel()
                 {
                     PageIndex = 0
                 };
@@ -105,7 +105,7 @@ namespace TalentGoManagerWebApp.Controllers
             return View(model);
         }
 
-        public async Task<ActionResult> ExportAuditList(int id, EnrollmentListViewModel model)
+        public async Task<ActionResult> ExportAuditList(int id, ApplicationFormListViewModel model)
         {
             var recruitmentPlan = await this.recruitmentPlanManager.FindByIdAsync(id);
             if (recruitmentPlan == null)
@@ -113,7 +113,7 @@ namespace TalentGoManagerWebApp.Controllers
 
             if (model == null)
             {
-                model = new EnrollmentListViewModel()
+                model = new ApplicationFormListViewModel()
                 {
                     PageIndex = 0
                 };
