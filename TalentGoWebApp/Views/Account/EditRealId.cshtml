@@ -1,4 +1,4 @@
-﻿@model EditPersonInfoModel
+﻿@model ReadIdEditViewModel
 @{
     ViewBag.Title = "编辑实名身份信息";
 }
@@ -6,7 +6,8 @@
 <div class="page-header">
     <h1>编辑实名身份信息</h1>
 </div>
-
+<p>您的账户已经注册成功，我们需要您完成实名身份认证。在完成实名身份认证之前，您无法继续报名。</p>
+<p>请对照您的身份证，如实填写下列信息。下一步，我们需要您上传身份证照片，然后进行实名身份验证。</p>
 @using (Html.BeginForm())
 {
     <div class="form-group">
@@ -40,7 +41,8 @@
         @Html.ValidationMessageFor(m => m.ExpiresAt, "", new { @class = "text-danger" })
     </div>
     @Html.ValidationSummary()
-    <button type="submit" class="btn btn-primary">提交</button>
+    <button type="submit" class="btn btn-primary">下一步</button>
+    @Html.ActionLink("暂时跳过", "Index", "Home")
 }
 
 @section scripts

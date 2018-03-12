@@ -238,7 +238,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\EditPersonInfoModel.cs" />
+    <Compile Include="Models\ReadIdEditViewModel.cs" />
     <Compile Include="Models\ApplicationFormEditViewModel.cs" />
     <Compile Include="Models\FileUploadResultModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
@@ -770,7 +770,7 @@
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Job\JobList.cshtml" />
     <Content Include="Views\Account\RegisterAgreement.cshtml" />
-    <Content Include="Views\Account\EditPersonInfo.cshtml" />
+    <Content Include="Views\Account\EditRealId.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\Home\RealIdRequired.cshtml" />
     <Content Include="Views\Home\RealIdValidFailed.cshtml" />

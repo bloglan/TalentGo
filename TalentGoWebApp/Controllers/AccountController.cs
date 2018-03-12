@@ -247,11 +247,11 @@ namespace TalentGoWebApp.Controllers
 
                 // 有关如何启用帐户确认和密码重置的详细信息，请访问 http://go.microsoft.com/fwlink/?LinkID=320771
                 // 发送包含此链接的电子邮件
-                string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击 <a href=\"" + callbackUrl + "\">这里</a>来确认你的帐户");
+                //string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                //await UserManager.SendEmailAsync(user.Id, "确认你的帐户", "请通过单击 <a href=\"" + callbackUrl + "\">这里</a>来确认你的帐户");
 
-                return RedirectToAction("EditPersonInfo", "Account");
+                return RedirectToAction("EditRealId");
             }
 
             AddErrors(result);
@@ -260,10 +260,10 @@ namespace TalentGoWebApp.Controllers
 
         }
 
-        public ActionResult EditPersonInfo()
+        public ActionResult EditRealId()
         {
             var person = this.CurrentUser();
-            var model = new EditPersonInfoModel()
+            var model = new ReadIdEditViewModel()
             {
                 Ethnicity = person.Ethnicity,
                 Address = person.Address,
@@ -275,7 +275,7 @@ namespace TalentGoWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditPersonInfo(EditPersonInfoModel model)
+        public async Task<ActionResult> EditRealId(ReadIdEditViewModel model)
         {
             if (!this.ModelState.IsValid)
                 return View(model);

@@ -7,14 +7,14 @@ using TalentGo;
 
 namespace TalentGoWebApp.Models
 {
-    public class EditPersonInfoModel
+    public class ReadIdEditViewModel
     {
-        public EditPersonInfoModel()
+        public ReadIdEditViewModel()
         {
             this.IssueDate = DateTime.Now;
         }
 
-        [Display(Name = "民族")]
+        [Display(Name = "民族", Description = "不用填写\"族\"字")]
         [Required]
         [StringLength(50)]
         public string Ethnicity { get; set; }
