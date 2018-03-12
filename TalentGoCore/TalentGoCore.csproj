@@ -72,9 +72,13 @@
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileCategory.cs" />
+    <Compile Include="IDCardBackOCRResult.cs" />
+    <Compile Include="IDCardFrontOCRResult.cs" />
+    <Compile Include="IDCardRecognizeException.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExaminationRoomStore.cs" />
     <Compile Include="IFileStore.cs" />
+    <Compile Include="IIDCardOCRService.cs" />
     <Compile Include="IJobStore.cs" />
     <Compile Include="InvalidNumberException.cs" />
     <Compile Include="IPersonStore.cs" />

@@ -116,6 +116,7 @@
     <Compile Include="Models\OperationResult.cs" />
     <Compile Include="Mvc\MvcHtmlHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\AliyunIDCardOCRService.cs" />
     <Compile Include="Web\ApplicationUserManager.cs" />
     <Compile Include="Web\Notice.cs" />
     <Compile Include="Web\NoticeManager.cs" />

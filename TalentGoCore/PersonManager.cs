@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -34,6 +35,11 @@ namespace TalentGo
         /// FileStore.
         /// </summary>
         protected IFileStore FileStore { get; set; }
+
+        /// <summary>
+        /// 获取或设置身份证图像OCR识别服务。
+        /// </summary>
+        public virtual IIDCardOCRService IDCardOCRService { get; set; }
 
         /// <summary>
         /// Find user by Phone Number.
@@ -78,7 +84,7 @@ namespace TalentGo
             person.IDCardNumber = cardNumber.ToString();
             person.Surname = surname;
             person.GivenName = givenName;
-            person.Sex = cardNumber.IsMale?Sex.Male:Sex.Female;
+            person.Sex = cardNumber.IsMale ? Sex.Male : Sex.Female;
             person.Ethnicity = ethnicity;
             person.DateOfBirth = cardNumber.DateOfBirth;
             person.Address = address;
@@ -97,24 +103,35 @@ namespace TalentGo
         /// 传送身份证个人信息面。
         /// </summary>
         /// <param name="person"></param>
-        /// <param name="mimeType"></param>
-        /// <param name="stream"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
-        public async Task UploadIDCardFrontFileAsync(Person person, string mimeType, Stream stream)
+        public async Task UploadIDCardFrontFileAsync(Person person, Stream data)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
 
             if (person.WhenRealIdCommited.HasValue)
                 throw new InvalidOperationException("已提交身份验证不能修改身份信息。");
 
-            var newFile = new File(Guid.NewGuid().ToString(), mimeType);
-            await newFile.ReadAsync(stream);
+            File newFile;
+            using (var ms = new MemoryStream())
+            {
+                data.CopyTo(ms);
+                if (data.Length > 1024 * 1024)
+                    throw new ArgumentException("Image file too big.");
+
+                ms.Position = 0;
+                this.EnsureImage(ms, out string mimeType);
+
+                ms.Position = 0;
+                newFile = new File(Guid.NewGuid().ToString(), mimeType);
+                await newFile.ReadAsync(ms);
+            }
             await this.FileStore.CreateAsync(newFile);
 
-
+            //删除旧的身份证（如果有）。
             if (!string.IsNullOrEmpty(person.IDCardFrontFile))
             {
                 var oldFile = await this.FileStore.FindByIdAsync(person.IDCardFrontFile);
@@ -125,30 +142,39 @@ namespace TalentGo
             person.IDCardFrontFile = newFile.Id;
             person.RealIdValid = null;
             await this.Store.UpdateAsync(person);
-
         }
 
         /// <summary>
         /// 传送身份证国徽面。
         /// </summary>
         /// <param name="person"></param>
-        /// <param name="mimeType"></param>
-        /// <param name="stream"></param>
+        /// <param name="data"></param>
         /// <returns></returns>
-        public async Task UploadIDCardBackFileAsync(Person person, string mimeType, Stream stream)
+        public async Task UploadIDCardBackFileAsync(Person person, Stream data)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
+            if (data == null)
+                throw new ArgumentNullException(nameof(data));
 
             if (person.WhenRealIdCommited.HasValue)
                 throw new InvalidOperationException("已提交身份验证不能修改身份信息。");
 
-            var newFile = new File(Guid.NewGuid().ToString(), mimeType);
-            await newFile.ReadAsync(stream);
-            await this.FileStore.CreateAsync(newFile);
+            File newFile;
+            using (var ms = new MemoryStream())
+            {
+                data.CopyTo(ms);
+                if (data.Length > 1024 * 1024)
+                    throw new ArgumentException("Image file too big.");
 
+                ms.Position = 0;
+                this.EnsureImage(ms, out string mimeType);
+
+                ms.Position = 0;
+                newFile = new File(Guid.NewGuid().ToString(), mimeType);
+                await newFile.ReadAsync(ms);
+            }
+            await this.FileStore.CreateAsync(newFile);
 
             if (!string.IsNullOrEmpty(person.IDCardBackFile))
             {
@@ -160,7 +186,19 @@ namespace TalentGo
             person.IDCardBackFile = newFile.Id;
             person.RealIdValid = null;
             await this.Store.UpdateAsync(person);
+        }
 
+        void EnsureImage(Stream data, out string mimeType)
+        {
+            using (var img = Image.FromStream(data))
+            {
+                if (img.RawFormat.Equals(ImageFormat.Jpeg))
+                    mimeType = "image/jpeg";
+                else if (img.RawFormat.Equals(ImageFormat.Png))
+                    mimeType = "image/png";
+                else
+                    throw new NotSupportedException("Image format not supported");
+            }
         }
 
         /// <summary>
@@ -188,9 +226,70 @@ namespace TalentGo
 
             person.WhenRealIdCommited = DateTime.Now;
             //使用自动验证器尝试验证。
-            //如果验证通过，则设置RealIdValid=true
-            //否则不设置，转人工服务。
+            try
+            {
+                if (await this.ValidateRealIdByOCRService(person))
+                {
+                    //如果验证通过，则设置RealIdValid=true
+                    person.RealIdValid = true;
+                    person.WhenRealIdValid = DateTime.Now;
+                    person.RealIdValidBy = "云识别";
+                }
+                //否则不设置，转人工服务。
+            }
+            catch (IDCardRecognizeException recognizeException)
+            {
+                Trace.TraceError("身份证识别异常：" + recognizeException.Message);
+                //Do Nothing.
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                //Do nothing here.
+            }
+
             await this.Store.UpdateAsync(person);
+        }
+
+        /// <summary>
+        /// 通过OCR验证实名制信息。
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns>若验证成功，返回true，否则返回false.</returns>
+        protected virtual async Task<bool> ValidateRealIdByOCRService(Person person)
+        {
+            if (this.IDCardOCRService == null)
+                return false;
+
+            var frontFile = await this.FileStore.FindByIdAsync(person.IDCardFrontFile);
+            IDCardFrontOCRResult frontResult;
+            using (var ms = new MemoryStream())
+            {
+                await frontFile.WriteAsync(ms);
+                frontResult = await this.IDCardOCRService.RecognizeIDCardFront(ms);
+            }
+
+            var backFile = await this.FileStore.FindByIdAsync(person.IDCardBackFile);
+            IDCardBackOCRResult backResult;
+            using (var ms = new MemoryStream())
+            {
+                await backFile.WriteAsync(ms);
+                backResult = await this.IDCardOCRService.RecognizeIDCardBack(ms);
+            }
+            if (person.DisplayName != frontResult.Name)
+                return false;
+            if (person.Ethnicity != frontResult.Nationality)
+                return false;
+            if (person.IDCardNumber != frontResult.IDCardNumber)
+                return false;
+            if (person.Issuer != backResult.Issuer)
+                return false;
+            if (person.IssueDate != backResult.IssueDate)
+                return false;
+            if (person.ExpiresAt != backResult.ExpiresDate)
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -198,8 +297,9 @@ namespace TalentGo
         /// </summary>
         /// <param name="person"></param>
         /// <param name="accepted"></param>
+        /// <param name="validateBy"></param>
         /// <returns></returns>
-        public async Task ValidateRealId(Person person, bool accepted)
+        public async Task ValidateRealId(Person person, bool accepted, string validateBy)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
@@ -209,7 +309,7 @@ namespace TalentGo
 
             person.RealIdValid = accepted;
             person.WhenRealIdValid = DateTime.Now;
-            person.RealIdValidBy = "Manual";
+            person.RealIdValidBy = validateBy;
 
             await this.Store.UpdateAsync(person);
         }
