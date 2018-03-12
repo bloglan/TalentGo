@@ -1,208 +1,49 @@
-﻿@model EnrollViewModel
+﻿@model ApplicationFormEditViewModel
 
 @{
     ViewBag.Title = "报名";
 }
-
-<h2>填写报名表</h2>
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<h2>职位/类别</h2>
+<table class="table">
+    <colgroup>
+        <col class="col-md-2" />
+        <col class="col-md-10" />
+    </colgroup>
+    <tr>
+        <td>名称</td>
+        <td>@Model.Job.Name</td>
+    </tr>
+    <tr>
+        <td>详细说明</td>
+        <td>@Model.Job.Description</td>
+    </tr>
+    <tr>
+        <td>工作地点</td>
+        <td>@Model.Job.WorkLocation</td>
+    </tr>
+    <tr>
+        <td>学历要求</td>
+        <td>@Model.Job.EducationBackgroundRequirement</td>
+    </tr>
+    <tr>
+        <td>学位要求</td>
+        <td>@Model.Job.DegreeRequirement</td>
+    </tr>
+    <tr>
+        <td>专业要求</td>
+        <td>@Model.Job.MajorRequirement</td>
+    </tr>
+</table>
 <hr />
+<h2>报名信息</h2>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.NativePlace, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.NativePlace, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">XX省XX市</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.NativePlace, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Source, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.Source, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">街道/村</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.Source, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PoliticalStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @*@Html.EditorFor(model => model.PoliticalStatus, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.DropDownListFor(m => m.PoliticalStatus, new List<SelectListItem>() {
-               new SelectListItem() { Text = "中共党员", Value = "中共党员" },
-               new SelectListItem() { Text = "共青团员", Value = "共青团员" },
-               new SelectListItem() { Text = "群众", Value = "群众" },
-               new SelectListItem() { Text = "其他", Value = "其他" }
-           }, new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.PoliticalStatus, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Health, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @*@Html.EditorFor(model => model.Health, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.DropDownListFor(m => m.Health, new List<SelectListItem>() {
-               new SelectListItem() { Text = "良好", Value = "良好" },
-               new SelectListItem() { Text = "其他", Value = "其他" }
-           }, new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.Health, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Marriage, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @*@Html.EditorFor(model => model.Marriage, new { htmlAttributes = new { @class = "form-control" } })*@
-                @Html.DropDownListFor(m => m.Marriage, new List<SelectListItem>() {
-               new SelectListItem() { Text = "未婚", Value = "未婚" },
-               new SelectListItem() { Text = "已婚", Value = "已婚" },
-               new SelectListItem() { Text = "其他", Value = "其他" }
-           }, new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.Marriage, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.School, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.School, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.School, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Major, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.Major, new { htmlAttributes = new { @class = "form-control" } })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.Major, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.YearOfGraduated, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.DropDownList("YearOfGraduated", (IEnumerable<SelectListItem>)ViewData["GraduatedYears"], "请选择", htmlAttributes: new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.YearOfGraduated, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.EducationBackground, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.DropDownList("EducationBackground", (IEnumerable<SelectListItem>)ViewData["EducationBackgroundTable"], "请选择", htmlAttributes: new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.EducationBackground, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Degree, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.DropDownList("Degree", (IEnumerable<SelectListItem>)ViewData["DegreeTable"], "请选择", htmlAttributes: new { @class = "form-control" })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">*</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.Degree, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Resume, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.Resume, new { htmlAttributes = new { @class = "form-control", rows = 8 } })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">参考格式</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.Resume, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Accomplishments, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-6">
-                @Html.EditorFor(model => model.Accomplishments, new { htmlAttributes = new { @class = "form-control", rows = 10 } })
-            </div>
-            <div class="col-md-1">
-                <span class="text-danger">500字内.</span>
-            </div>
-            <div clasee="col-md-3">
-                @Html.ValidationMessageFor(model => model.Accomplishments, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <div class="col-md-4">
-                    @Html.ActionLink("放弃并返回", "Index", null, new { @class = "btn btn-default" })
-                </div>
-                <div class="col-md-1">
-                    <span></span>
-                </div>
-                <div>
-                    <input type="submit" value="下一步" class="btn btn-primary" />
-                </div>
-            </div>
-        </div>
-    </div>
+    @Html.Partial("Editor")
+    @Html.ActionLink("放弃并返回", "Index", null, new { @class = "btn btn-default" })
+    <button type="submit" class="btn btn-primary">下一步</button>
 }

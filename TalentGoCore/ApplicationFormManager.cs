@@ -135,6 +135,7 @@ namespace TalentGo
             this.EnsureImage(data, out string mimeType);
 
             var file = new File(Guid.NewGuid().ToString(), mimeType);
+            data.Position = 0;
             await file.ReadAsync(data);
             await this.fileStore.CreateAsync(file);
 
@@ -193,6 +194,7 @@ namespace TalentGo
             this.EnsureImage(data, out string mimeType);
 
             var file = new File(Guid.NewGuid().ToString(), mimeType);
+            data.Position = 0;
             await file.ReadAsync(data);
             await this.fileStore.CreateAsync(file);
 
@@ -252,6 +254,7 @@ namespace TalentGo
             this.EnsureImage(data, out string mimeType);
 
             var file = new File(Guid.NewGuid().ToString(), mimeType);
+            data.Position = 0;
             await file.ReadAsync(data);
             await this.fileStore.CreateAsync(file);
 
@@ -291,7 +294,11 @@ namespace TalentGo
             await this.applicationFormStore.UpdateAsync(form);
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="mimeType"></param>
         void EnsureImage(Stream data, out string mimeType)
         {
             using (var image = Image.FromStream(data))
@@ -338,8 +345,6 @@ namespace TalentGo
             return builder.ToString();
         }
 
-
-
         /// <summary>
         /// 
         /// </summary>
@@ -370,16 +375,28 @@ namespace TalentGo
             if (form.Id == 0)
                 await this.EnrollAsync(form);
 
-            //TODO:检查传送资料是否齐全并满足规则。
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("Application form has been commited.");
+
+            //如果没有FileReview标记，则不允许在超过报名时间提交。
+            if (!form.FileReviewAccepted.HasValue && form.Job.Plan.EnrollExpirationDate < DateTime.Now)
+            {
+                throw new InvalidOperationException("报名截止时间已过，不能再提交。");
+            }
+
+            //检查传送资料是否齐全并满足规则。
             if (string.IsNullOrEmpty(form.HeadImageFile))
-                throw new InvalidOperationException("Head image required.");
+                throw new InvalidOperationException("需要证件照。");
 
             var academicFileList = this.GetFileList(form.AcademicCertFiles);
             if (!academicFileList.Any())
-                throw new InvalidOperationException("At least one academic file required.");
+                throw new InvalidOperationException("至少需要上传一份学历证明文件。");
 
-            if (!form.WhenCommited.HasValue)
-                form.WhenCommited = DateTime.Now;
+            //设置提交时间。
+            form.WhenCommited = DateTime.Now;
+            //清除资料审查标记，以便将此报名表自再次加入资料审查列表中。
+            form.WhenFileReview = null;
+            form.FileReviewAccepted = null;
 
             await this.applicationFormStore.UpdateAsync(form);
         }
@@ -426,7 +443,7 @@ namespace TalentGo
             if (!string.IsNullOrEmpty(form.HeadImageFile))
                 fileList.Add(form.HeadImageFile);
 
-            foreach(var fileId in fileList)
+            foreach (var fileId in fileList)
             {
                 var file = await this.fileStore.FindByIdAsync(fileId);
                 if (file != null)
@@ -446,11 +463,11 @@ namespace TalentGo
                 throw new ArgumentNullException();
 
             form.WhenCommited = null;
-            form.FileReviewAccepted = null;
-            form.WhenFileReview = null;
-            form.Approved = null;
-            form.WhenAudit = null;
-            form.AuditMessage = null;
+            //form.FileReviewAccepted = null;
+            //form.WhenFileReview = null;
+            //form.Approved = null;
+            //form.WhenAudit = null;
+            //form.AuditMessage = null;
             form.Log("退回报名表。");
 
             await this.applicationFormStore.UpdateAsync(form);
@@ -544,138 +561,5 @@ namespace TalentGo
 
             await this.applicationFormStore.UpdateAsync(form);
         }
-
-        /// <summary>
-        /// 根据关键字、标记、获取满足条件的报名表。
-        /// </summary>
-        /// <param name="PlanID">指定的招聘计划。</param>
-        /// <param name="AuditFilter">审核标记，null表示未审核，通过标记为true，false标记为未通过</param>
-        /// <param name="AnounceFilter"></param>
-        /// <param name="Keywords">关键字，若提供，可对姓名、身份证号码、移动电话号码、籍贯、生源地、学校、填写专业字段进行匹配搜索。否则查询全部。</param>
-        /// <returns></returns>
-        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, AuditFilterType AuditFilter, AnnounceFilterType AnounceFilter, string Keywords)
-        {
-            //带分页
-            //
-            //先获得符合初始条件的集合
-            var initSet = this.ApplicationForms.Commited().Where(e => e.JobId == PlanID);
-
-
-            if (!string.IsNullOrEmpty(Keywords))
-                initSet = initSet.Where(e =>
-                    e.Person.DisplayName.StartsWith(Keywords) ||
-                    e.Person.IDCardNumber.StartsWith(Keywords) ||
-                    e.Person.Mobile.StartsWith(Keywords) ||
-                    e.NativePlace.StartsWith(Keywords) ||
-                    e.School.StartsWith(Keywords) ||
-                    e.Major.StartsWith(Keywords)
-                );
-
-            switch (AuditFilter)
-            {
-                case AuditFilterType.All:
-                    //DoNothing
-                    break;
-                case AuditFilterType.Approved:
-                    initSet = initSet.Where(e => e.Approved.HasValue && e.Approved.Value);
-                    break;
-                case AuditFilterType.Rejective:
-                    initSet = initSet.Where(e => e.Approved.HasValue && !e.Approved.Value);
-                    break;
-                case AuditFilterType.NotSet:
-                    initSet = initSet.Where(e => !e.Approved.HasValue);
-                    break;
-            }
-
-            switch (AnounceFilter)
-            {
-                case AnnounceFilterType.All:
-                    //Do Nothing
-                    break;
-                case AnnounceFilterType.TakeExam:
-                    initSet = initSet.Where(e => e.IsTakeExam.HasValue && e.IsTakeExam.Value);
-                    break;
-                case AnnounceFilterType.NotTakeExam:
-                    initSet = initSet.Where(e => e.IsTakeExam.HasValue && !e.IsTakeExam.Value);
-                    break;
-                case AnnounceFilterType.NotAnnounced:
-                    initSet = initSet.Where(e => !e.IsTakeExam.HasValue);
-                    break;
-            }
-
-            return initSet;
-
-        }
-
-        /// <summary>
-        /// 根据关键字、标记、排序指示获取满足条件的报名表。
-        /// </summary>
-        /// <param name="PlanID"></param>
-        /// <param name=" AuditFilter"></param>
-        /// <param name="AnnounceFilter"></param>
-        /// <param name="Keywords"></param>
-        /// <param name="OrderColumn"></param>
-        /// <param name="DownDirection"></param>
-        /// <param name="ItemCount"></param>
-        /// <returns></returns>
-		public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, out int ItemCount)
-        {
-            var resultSet = this.GetCommitedEnrollmentData(PlanID, AuditFilter, AnnounceFilter, Keywords);
-
-            ItemCount = resultSet.Count();
-            if (ItemCount == 0)
-                return resultSet;
-
-            //按字段排序
-            if (string.IsNullOrEmpty(OrderColumn))
-                OrderColumn = "WhenCommited";
-
-            IOrderedQueryable<ApplicationForm> OrderedSet;
-            if (DownDirection)
-                OrderedSet = resultSet.OrderByDescending(OrderColumn);
-            else
-                OrderedSet = resultSet.OrderBy(OrderColumn);
-
-            return OrderedSet;
-        }
-
-        /// <summary>
-        /// 根据关键字、标记、排序指示和分页参数获取满足条件的指定页的报名表。
-        /// </summary>
-        /// <param name="PlanID"></param>
-        /// <param name="AuditFilter"></param>
-        /// <param name="AnnounceFilter"></param>
-        /// <param name="Keywords"></param>
-        /// <param name="OrderColumn"></param>
-        /// <param name="DownDirection"></param>
-        /// <param name="PageIndex"></param>
-        /// <param name="PageSize"></param>
-        /// <param name="ItemCount"></param>
-        /// <returns></returns>
-        public IQueryable<ApplicationForm> GetCommitedEnrollmentData(int PlanID, AuditFilterType AuditFilter, AnnounceFilterType AnnounceFilter, string Keywords, string OrderColumn, bool DownDirection, int PageIndex, int PageSize, out int ItemCount)
-        {
-            var result = this.GetCommitedEnrollmentData(PlanID, AuditFilter, AnnounceFilter, Keywords, OrderColumn, DownDirection, out ItemCount);
-            if (ItemCount == 0)
-            {
-                return result;
-            }
-
-            //检查PageIndex和PageSize是否符合要求
-            if (PageSize <= -1)
-                PageSize = int.MaxValue;
-            if (PageSize >= 0 && PageSize < 5)
-                PageSize = 5;
-
-            int PageCount = (int)Math.Ceiling((double)ItemCount / (double)PageSize);
-
-            if (PageIndex < 0)
-                PageIndex = 0;
-            if (PageIndex >= PageCount)
-                PageIndex = PageCount - 1;
-
-            //返回指定分页的条目
-            return result.Skip(PageIndex * PageSize).Take(PageSize);
-        }
-
     }
 }

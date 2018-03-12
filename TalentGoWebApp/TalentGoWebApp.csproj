@@ -239,7 +239,7 @@
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\EditPersonInfoModel.cs" />
-    <Compile Include="Models\EnrollViewModel.cs" />
+    <Compile Include="Models\ApplicationFormEditViewModel.cs" />
     <Compile Include="Models\FileUploadResultModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -785,6 +785,7 @@
     <Content Include="Views\ApplicationForm\Edit.cshtml" />
     <Content Include="Views\ApplicationForm\Commit.cshtml" />
     <Content Include="Views\ApplicationForm\CommitSuccess.cshtml" />
+    <Content Include="Views\ApplicationForm\Editor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

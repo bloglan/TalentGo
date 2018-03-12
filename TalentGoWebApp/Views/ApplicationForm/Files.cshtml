@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col-md-2 img-thumbnail">
             <button type="button" class="close" aria-label="Close" onclick="RemoveHeadImage()"><span aria-hidden="true">&times;</span></button>
-            <img id="headimg" src="@(string.IsNullOrEmpty(Model.HeadImageFile) ? "/Content/WebRes/NoHeadImage.jpg" : Url.Action("Index", "File", new { id = Model.HeadImageFile }))" class="img-responsive" />
+            <img id="headimg" src="@(string.IsNullOrEmpty(Model.HeadImageFile) ? "/Content/WebRes/NoHeadImage.jpg" : Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile }))" class="img-responsive" />
         </div>
     </div>
 }
@@ -46,7 +46,7 @@
 @{
     var academicFileArray = this.Model.AcademicCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 }
-@using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UploadAcademicCertFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "academiccert" }))
 {
     <p>
         <span class="btn btn-success btn-sm fileinput-button">
@@ -60,9 +60,8 @@
         @foreach (var item in academicFileArray)
         {
             <div class="col-md-2 img-thumbnail">
-                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <img src="@Url.Action("Index", "File", new { id = item })" class="img-responsive" />
-
+                <button type="button" class="close" aria-label="Close" onclick="RemoveFile(this)" data-category="academiccert" data-formid="@Model.Id" data-fileid="@item"><span aria-hidden="true">&times;</span></button>
+                <img src="@Url.Action("Thumbnail", "File", new { id = item })" class="img-responsive" />
             </div>
         }
     </div>
@@ -75,7 +74,7 @@
 @{
     var degreeCertFileArray = this.Model.DegreeCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 }
-@using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { id = "headImageUpload", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UploadDegreeCertFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "degreecert" }))
 {
     <p>
         <span class="btn btn-success btn-sm fileinput-button">
@@ -89,8 +88,8 @@
         @foreach (var item in degreeCertFileArray)
         {
             <div class="col-md-2 img-thumbnail">
-                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <img src="@Url.Action("Index", "File", new { id = item })" class="img-responsive" />
+                <button type="button" class="close" aria-label="Close" onclick="RemoveFile(this)" data-category="degreecert" data-formid="@Model.Id" data-fileid="@item"><span aria-hidden="true">&times;</span></button>
+                <img src="@Url.Action("Thumbnail", "File", new { id = item })" class="img-responsive" />
 
             </div>
         }
@@ -103,7 +102,7 @@
 @{
     var otherFileArray = this.Model.OtherFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
 }
-@using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { id = "headImageUpload", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UploadOtherFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "other" }))
 {
     <p>
         <span class="btn btn-success btn-sm fileinput-button">
@@ -117,8 +116,8 @@
         @foreach (var item in otherFileArray)
         {
             <div class="col-md-2 img-thumbnail">
-                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <img src="@Url.Action("Index", "File", new { id = item })" class="img-responsive" />
+                <button type="button" class="close" aria-label="Close" onclick="RemoveFile(this)" data-category="other" data-formid="@Model.Id" data-fileid="@item"><span aria-hidden="true">&times;</span></button>
+                <img src="@Url.Action("Thumbnail", "File", new { id = item })" class="img-responsive" />
             </div>
         }
     </div>
@@ -135,57 +134,98 @@
     @Scripts.Render("~/bundles/jquerytmpl")
 
     <script type="text/template" id="fileItem">
-        <div class="row">
-            <div class="col-md-2 img-thumbnail">
-                <button type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <img src="${src}" class="img-responsive" />
-            </div>
+        <div class="col-md-2 img-thumbnail">
+            <button type="button" class="close" aria-label="Close" onclick="RemoveFile(this)" data-category="${category}" data-formid="${formid}" data-fileid="${fileid}"><span aria-hidden="true">&times;</span></button>
+            <img src="${src}" class="img-responsive" />
         </div>
     </script>
     <script>
-
         $(function () {
             'use strict';
 
             $("#headImageUpload").fileupload({
-                //url: url,
+                dropZone: $("#headImageUpload"),
                 dataType: 'json',
                 progress: function (e, data) {
-                    $(this).prevAll("span").text("正在传送...");
+                    $(this).find("span.fileinput-button").children("span").text("正在传送...");
                 },
                 done: function (e, data) {
-                    //当传送完成时，应如何显示。
-                    //alert("FileUpload");
-                    $(this).prevAll("span").text("上传");
+                    $(this).find("span.fileinput-button").children("span").text("上传");
                     var $uploadCtrl = $(this).parents("div.uploadCtrl").first(); //引发上传文件控件
 
                     if (data.result.Result != 0) {
                         alert("传送错误。" + data.result.Message);
                         return;
                     }
-
-                    $("img#headimg").attr("src", "/File/" + data.result.FileId);
-
+                    $("img#headimg").attr("src", "/File/Thumbnail/" + data.result.FileId);
                 },
                 fail: function (e, data) {
+                    $(this).find("span.fileinput-button").children("span").text("上传");
                     $(this).prevAll("span").text("上传");
                     alert("传送文件遇到错误，可能文件过大。");
                 }
             }).prop('disabled', !$.support.fileInput)
                 .parent().addClass($.support.fileInput ? undefined : 'disabled');
+
+            $("form.fileupload").each(function () {
+                $(this).fileupload({
+                    dropZone: $(this),
+                    dataType: 'json',
+                    progress: function (e, data) {
+                        $(this).find("span.fileinput-button").children("span").text("正在传送...");
+                    },
+                    done: function (e, data) {
+                        //当传送完成时，应如何显示。
+                        //alert("FileUpload");
+                        $(this).find("span.fileinput-button").children("span").text("上传");
+
+                        if (data.result.result != 0) {
+                            alert("传送错误。" + data.result.Message);
+                            return;
+                        }
+                        $("#fileItem").tmpl(data.result).appendTo($(this).find("div.row"));
+                    },
+                    fail: function (e, data) {
+                        $(this).find("span.fileinput-button").children("span").text("上传");
+                        alert("传送文件遇到错误，文件过大。" + data.message);
+                    }
+                }).prop('disabled', !$.support.fileInput)
+                    .parent().addClass($.support.fileInput ? undefined : 'disabled');
+            });
+
         });
 
-        function RemoveFile(catagory, formid, source) {
-            $.post("./" + prop, { id: formid }, function (data, status, xhr) {
-                if (data != true) {
-                    alert(data.message);
-                    return;
+        function RemoveFile(source) {
+            if (confirm("确实要删除吗？")) {
+                var category = $(source).data("category");
+                var formid = $(source).data("formid");
+                var fileid = $(source).data("fileid");
+                var url;
+                switch (category) {
+                    case "academiccert":
+                        url = "@Url.Action("RemoveAcademicCertFile")";
+                        break;
+                    case "degreecert":
+                        url = "@Url.Action("RemoveDegreeCertFile")";
+                        break;
+                    case "other":
+                        url = "@Url.Action("RemoveOtherFile")";
+                        break;
+                    default:
+                        return;
                 }
-                else {
-                    var $uploadCtrl = $(source).parents("div.uploadCtrl").first();
-                    $uploadCtrl.children("img").attr("src", "/Content/WebRes/NoHeadImage.jpg");
-                }
-            });
+
+                $.post(url, { id: formid, fileid : fileid }, function (data, status, xhr) {
+                    if (data != true) {
+                        alert(data.message);
+                        return;
+                    }
+                    else {
+                        $(source).parents("div.img-thumbnail").remove();
+                    }
+                });
+            }
+
         }
 
         function RemoveHeadImage() {

@@ -100,8 +100,9 @@ namespace TalentGoManagerWebApp.Controllers
             model.RecruitmentPlanTitle = recruitmentPlan.Title;
             model.IsAudit = recruitmentPlan.WhenAuditCommited.HasValue;
 
-            model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out int allCount);
-            model.AllCount = allCount;
+            model.EnrollmentList = this.applicationFormManager.ApplicationForms;
+            //model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out int allCount);
+            model.AllCount = this.applicationFormManager.ApplicationForms.Count();
             return View(model);
         }
 
@@ -119,8 +120,9 @@ namespace TalentGoManagerWebApp.Controllers
                 };
             }
 
-            model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, true, out int allCount);
-            model.AllCount = allCount;
+            //TODO:导出审核列表，根据查询条件过滤和排序未实现。
+            model.EnrollmentList = this.applicationFormManager.ApplicationForms;
+            model.AllCount = this.applicationFormManager.ApplicationForms.Count();
 
             MemoryStream ms = new MemoryStream();
 
@@ -147,7 +149,7 @@ namespace TalentGoManagerWebApp.Controllers
                 sw.Write(data.Major + "\t");
                 sw.Write(data.YearOfGraduated.ToString() + "\t");
                 sw.Write(data.Job.Name + "\t");
-                sw.Write(data.EducationBackground + "\t");
+                sw.Write(data.EducationalBackground + "\t");
                 sw.Write(data.Degree + "\t");
                 sw.Write(data.WhenCreated + "\t");
                 sw.Write((data.WhenChanged.HasValue ? data.WhenChanged.Value.ToString() : "N/A") + "\t");

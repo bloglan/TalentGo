@@ -193,7 +193,6 @@
     <Compile Include="Models\NoticeEditViewModel.cs" />
     <Compile Include="Models\RecruitmentPlanPublishViewModel.cs" />
     <Compile Include="Models\RecruitmentPlanEditViewModel.cs" />
-    <Compile Include="Models\RequirementTypeItem.cs" />
     <Compile Include="Models\SetAuditResult.cs" />
     <Compile Include="Models\UserListViewModel.cs" />
     <Compile Include="Controllers\HomeController.cs" />

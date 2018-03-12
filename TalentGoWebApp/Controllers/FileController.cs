@@ -19,7 +19,12 @@ namespace TalentGoWebApp.Controllers
         public FileController(IFileStore store)
         {
             this.store = store;
-            thumbnailPreset = new ThumbnailPreset(ImageFormat.Jpeg, new System.Drawing.Size(200, 200), ResizeMode.Fit);
+            thumbnailPreset = new JpegThumbnailPreset(80)
+            {
+                ThumbnailSize = new System.Drawing.Size(200, 200),
+                ThumbnailResizeMode = ResizeMode.Fit,
+                BackgroundColor = System.Drawing.Color.White,
+            };
         }
 
         // GET: File
@@ -43,17 +48,15 @@ namespace TalentGoWebApp.Controllers
             var file = await this.store.FindByIdAsync(id);
             if (file == null)
                 return HttpNotFound();
-
+            var outStream = new MemoryStream();
             using (var stream = new MemoryStream())
             {
                 await file.WriteAsync(stream);
                 stream.Position = 0;
-                using (var outStream = new MemoryStream())
-                {
-                    ThumbnailProcessor.RenderThumbnail(stream, this.thumbnailPreset, outStream);
-                    outStream.Position = 0;
-                    return File(outStream, "image/jpeg");
-                }
+
+                ThumbnailProcessor.RenderThumbnail(stream, this.thumbnailPreset, outStream);
+                outStream.Position = 0;
+                return File(outStream, "image/jpeg");
             }
         }
     }

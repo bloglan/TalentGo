@@ -54,7 +54,7 @@ namespace TalentGoWebApp.Controllers
             //准备下拉框及相关数据
             this.InitModelSelectionData(job, this.ViewData);
 
-            EnrollViewModel model = new EnrollViewModel()
+            ApplicationFormEditViewModel model = new ApplicationFormEditViewModel()
             {
                 Job = job,
                 Resume = "格式：\r\n 高中  1995.07-1998.09  曲靖一中   学生\r\n",
@@ -71,7 +71,7 @@ namespace TalentGoWebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult> Enroll(int id, EnrollViewModel model)
+        public async Task<ActionResult> Enroll(int id, ApplicationFormEditViewModel model)
         {
             var user = this.CurrentUser();
 
@@ -98,8 +98,11 @@ namespace TalentGoWebApp.Controllers
                 Marriage = model.Marriage,
                 School = model.School,
                 Major = model.Major,
+                SelectedMajor = model.SelectedMajor,
                 YearOfGraduated = model.YearOfGraduated,
-                EducationBackground = model.EducationBackground,
+                EducationalBackground = model.EducationalBackground,
+                AcademicCertNumber = model.AcademicCertNumber,
+                DegreeCertNumber = model.DegreeCertNumber,
                 Degree = model.Degree,
                 Resume = model.Resume,
                 Accomplishments = model.Accomplishments,
@@ -119,7 +122,7 @@ namespace TalentGoWebApp.Controllers
 
             this.InitModelSelectionData(form.Job, this.ViewData);
 
-            var model = new EnrollViewModel
+            var model = new ApplicationFormEditViewModel
             {
                 Job = form.Job,
                 NativePlace = form.NativePlace,
@@ -129,9 +132,12 @@ namespace TalentGoWebApp.Controllers
                 Marriage = form.Marriage,
                 School = form.School,
                 Major = form.Major,
+                SelectedMajor = form.SelectedMajor,
                 YearOfGraduated = form.YearOfGraduated,
-                EducationBackground = form.EducationBackground,
+                EducationalBackground = form.EducationalBackground,
+                AcademicCertNumber = form.AcademicCertNumber,
                 Degree = form.Degree,
+                DegreeCertNumber = form.DegreeCertNumber,
                 Resume = form.Resume,
                 Accomplishments = form.Accomplishments,
             };
@@ -140,7 +146,7 @@ namespace TalentGoWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(int id, EnrollViewModel model)
+        public async Task<ActionResult> Edit(int id, ApplicationFormEditViewModel model)
         {
             var form = this.GetEditableFormOfLoginUser(id);
             if (form == null)
@@ -159,9 +165,12 @@ namespace TalentGoWebApp.Controllers
             form.Marriage = model.Marriage;
             form.School = model.School;
             form.Major = model.Major;
+            form.SelectedMajor = model.SelectedMajor;
             form.YearOfGraduated = model.YearOfGraduated;
-            form.EducationBackground = model.EducationBackground;
+            form.EducationalBackground = model.EducationalBackground;
+            form.AcademicCertNumber = model.AcademicCertNumber;
             form.Degree = model.Degree;
+            form.DegreeCertNumber = model.DegreeCertNumber;
             form.Resume = model.Resume;
             form.Accomplishments = model.Accomplishments;
 
@@ -244,7 +253,7 @@ namespace TalentGoWebApp.Controllers
             try
             {
                 var fileId = await this.manager.UploadAcademicCertFileAsync(form, this.Request.Files[0].InputStream);
-                return Json(new { result = 0, fileid = fileId }, "text/plain");
+                return Json(new { result = 0, category = "academiccert", src = Url.Action("Thumbnail", "File", new { id = fileId }), formid = form.Id, fileid = fileId }, "text/plain");
             }
             catch (Exception ex)
             {
@@ -292,7 +301,7 @@ namespace TalentGoWebApp.Controllers
             try
             {
                 var fileId = await this.manager.UploadDegreeCertFileAsync(form, this.Request.Files[0].InputStream);
-                return Json(new { result = 0, fileid = fileId }, "text/plain");
+                return Json(new { result = 0, category = "degreecert", src = Url.Action("Thumbnail", "File", new { id = fileId }), formid = form.Id, fileid = fileId }, "text/plain");
             }
             catch (Exception ex)
             {
@@ -339,7 +348,7 @@ namespace TalentGoWebApp.Controllers
             try
             {
                 var fileId = await this.manager.UploadOtherFileAsync(form, this.Request.Files[0].InputStream);
-                return Json(new { result = 0, fileid = fileId }, "text/plain");
+                return Json(new { result = 0, category = "other", src = Url.Action("Thumbnail", "File", new { id = fileId }), formid = form.Id, fileid = fileId }, "text/plain");
             }
             catch (Exception ex)
             {
@@ -457,9 +466,13 @@ namespace TalentGoWebApp.Controllers
             ViewData["DegreeTable"] = from e in degreeSet
                                       select new SelectListItem { Text = e, Value = e };
 
+            //专业选择表
+            var majorSet = job.MajorRequirement.Trim().Trim('\r', '\n').Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            ViewData["MajorTable"] = from e in majorSet
+                                     select new SelectListItem { Text = e, Value = e };
 
             //年份选择表
-            List<SelectListItem> GraduatedYears = new List<SelectListItem>();
+            List < SelectListItem > GraduatedYears = new List<SelectListItem>();
             GraduatedYears.Add(new SelectListItem() { Value = DateTime.Now.Year.ToString(), Text = DateTime.Now.Year.ToString() });
             GraduatedYears.Add(new SelectListItem() { Value = (DateTime.Now.Year - 1).ToString(), Text = (DateTime.Now.Year - 1).ToString() });
             ViewData["GraduatedYears"] = GraduatedYears;
