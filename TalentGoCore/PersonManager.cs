@@ -91,11 +91,6 @@ namespace TalentGo
             person.Issuer = issuer;
             person.IssueDate = issueDate;
             person.ExpiresAt = expiresAt;
-            person.WhenRealIdCommited = DateTime.Now;
-            person.RealIdValid = null;
-            //TODO：调用接口尝试验证。
-            //如果验证通过，则设定IDCardValid = true
-            //否则留空。
             await this.Store.UpdateAsync(person);
         }
 
@@ -115,6 +110,9 @@ namespace TalentGo
             if (person.WhenRealIdCommited.HasValue)
                 throw new InvalidOperationException("已提交身份验证不能修改身份信息。");
 
+            if (!string.IsNullOrEmpty(person.IDCardFrontFile))
+                throw new InvalidOperationException("已存在身份证图像");
+
             File newFile;
             using (var ms = new MemoryStream())
             {
@@ -130,14 +128,6 @@ namespace TalentGo
                 await newFile.ReadAsync(ms);
             }
             await this.FileStore.CreateAsync(newFile);
-
-            //删除旧的身份证（如果有）。
-            if (!string.IsNullOrEmpty(person.IDCardFrontFile))
-            {
-                var oldFile = await this.FileStore.FindByIdAsync(person.IDCardFrontFile);
-                if (oldFile != null)
-                    await this.FileStore.DeleteAsync(oldFile);
-            }
 
             person.IDCardFrontFile = newFile.Id;
             person.RealIdValid = null;
@@ -160,6 +150,9 @@ namespace TalentGo
             if (person.WhenRealIdCommited.HasValue)
                 throw new InvalidOperationException("已提交身份验证不能修改身份信息。");
 
+            if (!string.IsNullOrEmpty(person.IDCardBackFile))
+                throw new InvalidOperationException("已存在身份证图像");
+
             File newFile;
             using (var ms = new MemoryStream())
             {
@@ -176,15 +169,56 @@ namespace TalentGo
             }
             await this.FileStore.CreateAsync(newFile);
 
-            if (!string.IsNullOrEmpty(person.IDCardBackFile))
-            {
-                var oldFile = await this.FileStore.FindByIdAsync(person.IDCardBackFile);
-                if (oldFile != null)
-                    await this.FileStore.DeleteAsync(oldFile);
-            }
-
             person.IDCardBackFile = newFile.Id;
             person.RealIdValid = null;
+            await this.Store.UpdateAsync(person);
+        }
+
+        /// <summary>
+        /// Remove id card front file.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        public async Task RemoveIDCardFrontFile(Person person)
+        {
+            if (person == null)
+                throw new ArgumentNullException();
+
+            if (person.WhenRealIdCommited.HasValue)
+                throw new InvalidOperationException("已提交身份验证不能修改身份信息。");
+
+            if (string.IsNullOrEmpty(person.IDCardFrontFile))
+                return;
+
+            var file = await this.FileStore.FindByIdAsync(person.IDCardFrontFile);
+            if (file != null)
+                await this.FileStore.DeleteAsync(file);
+
+            person.IDCardFrontFile = null;
+            await this.Store.UpdateAsync(person);
+        }
+
+        /// <summary>
+        /// Remove ID card back file.
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        public async Task RemoveIDCardBackFile(Person person)
+        {
+            if (person == null)
+                throw new ArgumentNullException();
+
+            if (person.WhenRealIdCommited.HasValue)
+                throw new InvalidOperationException("已提交身份验证不能修改身份信息。");
+
+            if (string.IsNullOrEmpty(person.IDCardBackFile))
+                return;
+
+            var file = await this.FileStore.FindByIdAsync(person.IDCardBackFile);
+            if (file != null)
+                await this.FileStore.DeleteAsync(file);
+
+            person.IDCardBackFile = null;
             await this.Store.UpdateAsync(person);
         }
 
@@ -266,7 +300,15 @@ namespace TalentGo
             using (var ms = new MemoryStream())
             {
                 await frontFile.WriteAsync(ms);
-                frontResult = await this.IDCardOCRService.RecognizeIDCardFront(ms);
+                ms.Position = 0;
+                try
+                {
+                    frontResult = await this.IDCardOCRService.RecognizeIDCardFront(ms);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
 
             var backFile = await this.FileStore.FindByIdAsync(person.IDCardBackFile);
@@ -274,7 +316,15 @@ namespace TalentGo
             using (var ms = new MemoryStream())
             {
                 await backFile.WriteAsync(ms);
+                ms.Position = 0;
+                try
+                {
                 backResult = await this.IDCardOCRService.RecognizeIDCardBack(ms);
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
             if (person.DisplayName != frontResult.Name)
                 return false;

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using TalentGo;
 using TalentGo.EntityFramework;
+using TalentGo.Services;
 using TalentGo.Web;
 
 namespace TalentGoWebApp.App_Start
@@ -23,6 +24,12 @@ namespace TalentGoWebApp.App_Start
 
             //Register TalentGoWebServerLib
             builder.RegisterAssemblyTypes(typeof(WebUser).Assembly);
+
+            //注册服务
+            builder.RegisterType<AliyunIDCardOCRService>().AsImplementedInterfaces();
+
+            //PersonManager属性注入
+            builder.RegisterType<PersonManager>().PropertiesAutowired();
         }
     }
 }

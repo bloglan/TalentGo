@@ -1,0 +1,149 @@
+﻿@model Person
+@{
+    ViewBag.Title = "管理身份证图像";
+}
+
+@section header
+{
+    @Styles.Render("~/Content/jqueryfileupload")
+}
+
+
+<div class="page-header">
+    <h1>管理身份证图像</h1>
+</div>
+
+@using (Html.BeginForm("UploadIDCardFrontSideFile", "Account", null, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data" }))
+{
+    <h2>身份证个人信息页</h2>
+    <p>
+        <span class="btn btn-success btn-sm fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files[]">
+        </span>
+    </p>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="img-thumbnail">
+                <img src="~/Content/WebRes/NoHeadImage.jpg" class="img-responsive" />
+                <div class="caption">
+                    <p>示例</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 userfile" data-removeurl="@Url.Action("RemoveIDCardFrontFile")">
+            @if (!string.IsNullOrEmpty(Model.IDCardFrontFile))
+            {
+                <div class="img-thumbnail uploaded">
+                    <img src="@Url.Action("Index", "File", new { id = Model.IDCardFrontFile })" class="img-responsive" />
+                    <div class="caption">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="RemoveFile(this)">移除</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("UploadIDCardBackSideFile", "Account", null, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data" }))
+{
+    <h2>身份证个人国徽页</h2>
+    <p>
+        <span class="btn btn-success btn-sm fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传</span>
+            <!-- The file input field used as target for the file upload widget -->
+            <input id="fileupload" type="file" name="files[]">
+        </span>
+    </p>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="img-thumbnail">
+                <img src="~/Content/WebRes/NoHeadImage.jpg" class="img-responsive" />
+                <div class="caption">
+                    <p>示例</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 userfile" data-removeurl="@Url.Action("RemoveIDCardBackFile")">
+            @if (!string.IsNullOrEmpty(Model.IDCardFrontFile))
+            {
+                <div class="img-thumbnail uploaded">
+                    <img src="@Url.Action("Index", "File", new { id = Model.IDCardBackFile })" class="img-responsive" />
+                    <div class="caption">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="RemoveFile(this)">移除</button>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@using (Html.BeginForm("CommitForRealIdValidate", "Account"))
+{
+    <button type="submit" class="btn btn-primary">提交实名认证</button>
+    @Html.ActionLink("暂时跳过", "Index", "Home", null, null)
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryfileupload")
+    @Scripts.Render("~/bundles/jquerytmpl")
+
+    <script type="text/template" id="UserUploadFileView">
+        <div class="img-thumbnail uploaded">
+            <img src="${src}" class="img-responsive" />
+            <div class="caption">
+                <button type="button" class="btn btn-danger btn-sm" onclick="RemoveFile(this)">移除</button>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        $(function () {
+            $("form.fileupload").each(function () {
+                $(this).fileupload({
+                    dropZone: $(this),
+                    dataType: 'json',
+                    progress: function (e, data) {
+                        $(this).find("span.fileinput-button").children("span").text("正在传送...");
+                    },
+                    done: function (e, data) {
+                        //当传送完成时，应如何显示。
+                        //alert("FileUpload");
+                        $(this).find("span.fileinput-button").children("span").text("上传");
+
+                        if (data.result.result != 0) {
+                            alert("传送错误。" + data.result.Message);
+                            return;
+                        }
+                        $("#UserUploadFileView").tmpl(data.result).appendTo($(this).find("div.userfile"));
+                    },
+                    fail: function (e, data) {
+                        $(this).find("span.fileinput-button").children("span").text("上传");
+                        alert("传送文件遇到错误，文件过大。" + data.message);
+                    }
+                }).prop('disabled', !$.support.fileInput)
+                    .parent().addClass($.support.fileInput ? undefined : 'disabled');
+            });
+        });
+
+        function RemoveFile(source) {
+            if (confirm("确实要删除此文件吗？")) {
+                var container = $(source).parents("div.userfile");
+                var url = container.data("removeurl");
+                $.post(url, null, function (data, status, xhr) {
+                    if (data != true) {
+                        alert(data);
+                        return;
+                    }
+
+                    $(source).parents("div.uploaded").remove();
+                });
+            }
+        }
+
+    </script>
+}

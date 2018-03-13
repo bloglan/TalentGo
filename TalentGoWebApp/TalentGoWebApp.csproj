@@ -786,6 +786,9 @@
     <Content Include="Views\ApplicationForm\Commit.cshtml" />
     <Content Include="Views\ApplicationForm\CommitSuccess.cshtml" />
     <Content Include="Views\ApplicationForm\Editor.cshtml" />
+    <Content Include="Views\Account\IDCardFile.cshtml" />
+    <Content Include="Views\Account\CommitForReadIdSuccess.cshtml" />
+    <Content Include="Views\Account\CommitForReadIdFailed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

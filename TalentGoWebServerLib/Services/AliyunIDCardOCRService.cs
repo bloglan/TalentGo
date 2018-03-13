@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,9 @@ namespace TalentGo.Services
     {
         JsonSerializer serializer;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public AliyunIDCardOCRService()
         {
             this.serializer = new JsonSerializer();
@@ -46,24 +50,26 @@ namespace TalentGo.Services
             request.Headers.Add("Authorization", "APPCODE " + appCode);
             request.ContentType = "application/json; charset=UTF-8";
             var requestStream = await request.GetRequestStreamAsync();
-            var writer = new JsonTextWriter(new StreamWriter(requestStream));
-            this.serializer.Serialize(writer, requestData);
+            var writer = new StreamWriter(requestStream);
+            var jsonWriter = new JsonTextWriter(writer);
+            this.serializer.Serialize(jsonWriter, requestData);
+            jsonWriter.Flush();
 
             var response = await request.GetResponseAsync();
             var responseStream = response.GetResponseStream();
             var result = this.serializer.Deserialize<dynamic>(new JsonTextReader(new StreamReader(responseStream)));
-            if (!result.success)
+            if (!(bool)result.success)
                 throw new IDCardRecognizeException("Can not recognize");
             var returnResult = new IDCardBackOCRResult
             {
-                Issuer = result.issue,
-                IssueDate = this.parseDate(result.start_date),
-                ExpiresDate = this.parseDate(result.end_date),
+                Issuer = (string)result.issue,
+                IssueDate = this.parseDate((string)result.start_date),
+                ExpiresDate = this.parseDate((string)result.end_date),
             };
             return returnResult;
         }
 
-        
+
         /// <summary>
         /// 识别身份证正面（个人信息面）。
         /// </summary>
@@ -90,24 +96,38 @@ namespace TalentGo.Services
             request.Headers.Add("Authorization", "APPCODE " + appCode);
             request.ContentType = "application/json; charset=UTF-8";
             var requestStream = await request.GetRequestStreamAsync();
-            var writer = new JsonTextWriter(new StreamWriter(requestStream));
-            this.serializer.Serialize(writer, requestData);
+            var writer = new StreamWriter(requestStream);
+            var jsonWriter = new JsonTextWriter(writer);
+            this.serializer.Serialize(jsonWriter, requestData);
+            jsonWriter.Flush();
 
-            var response = await request.GetResponseAsync();
+            WebResponse response;
+            try
+            {
+                response = await request.GetResponseAsync();
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                throw;
+            }
             var responseStream = response.GetResponseStream();
             var result = this.serializer.Deserialize<dynamic>(new JsonTextReader(new StreamReader(responseStream)));
-            if (!result.success)
+            response.Close();
+
+            if (!(bool)result.success)
                 throw new IDCardRecognizeException("Can not recognize");
             var returnResult = new IDCardFrontOCRResult
             {
-                Name = result.name,
-                SexString = result.sex,
-                Nationality = result.nationality,
-                DateOfBirth = this.parseDate(result.birth),
-                Address = result.address,
-                IDCardNumber = result.num,
+                Name = (string)result.name,
+                SexString = (string)result.sex,
+                Nationality = (string)result.nationality,
+                DateOfBirth = this.parseDate((string)result.birth),
+                Address = (string)result.address,
+                IDCardNumber = (string)result.num,
             };
             return returnResult;
+
         }
 
         DateTime parseDate(string dateString)

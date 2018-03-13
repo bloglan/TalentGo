@@ -82,7 +82,7 @@ namespace TalentGoWebApp.Controllers
                 ModelState.AddModelError("", "登陆失败。用户名或密码有误，或由于锁定阻止了登陆。");
                 return View(model);
             }
-            
+
             // 这不会计入到为执行帐户锁定而统计的登录失败次数中
             // 若要在多次输入错误密码的情况下触发帐户锁定，请更改为 shouldLockout: true
             var result = await SignInManager.PasswordSignInAsync(person.UserName, model.Password, model.RememberMe, shouldLockout: true);
@@ -208,7 +208,7 @@ namespace TalentGoWebApp.Controllers
             {
                 Errors.Add(new KeyValuePair<string, string>("Email", "此电子邮件地址已被注册。"));
             }
-            
+
             if (await this.personManager.FindByMobileAsync(model.Mobile) != null)
             {
                 Errors.Add(new KeyValuePair<string, string>("Mobile", "此手机号码已被注册。"));
@@ -292,7 +292,12 @@ namespace TalentGoWebApp.Controllers
                 return View(model);
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("IDCardFile", "Account");
+        }
+
+        public ActionResult IDCardFile()
+        {
+            return View(this.CurrentUser());
         }
 
         /// <summary>
@@ -678,6 +683,10 @@ namespace TalentGoWebApp.Controllers
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -696,6 +705,99 @@ namespace TalentGoWebApp.Controllers
             }
 
             base.Dispose(disposing);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> UploadIDCardFrontSideFile()
+        {
+            var person = this.CurrentUser();
+            try
+            {
+                await this.personManager.UploadIDCardFrontFileAsync(person, this.Request.Files[0].InputStream);
+                return Json(new { result = 0, src = Url.Action("Index", "File", new { id = person.IDCardFrontFile }) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { result = -1, ex.Message });
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> UploadIDCardBackSideFile()
+        {
+            var person = this.CurrentUser();
+            try
+            {
+                await this.personManager.UploadIDCardBackFileAsync(person, this.Request.Files[0].InputStream);
+                return Json(new { result = 0, src = Url.Action("Index", "File", new { id = person.IDCardBackFile }) });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { result = -1, ex.Message });
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> RemoveIDCardFrontFile()
+        {
+            var person = this.CurrentUser();
+            try
+            {
+                await this.personManager.RemoveIDCardFrontFile(person);
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<JsonResult> RemoveIDCardBackFile()
+        {
+            var person = this.CurrentUser();
+            try
+            {
+                await this.personManager.RemoveIDCardBackFile(person);
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CommitForRealIdValidate()
+        {
+            var person = this.CurrentUser();
+            try
+            {
+                await this.personManager.CommitForRealIdValidation(person);
+                return View("CommitForReadIdSuccess");
+            }
+            catch (Exception ex)
+            {
+                return View("CommitForReadIdFailed", model: ex.Message);
+            }
         }
 
         #region 帮助程序

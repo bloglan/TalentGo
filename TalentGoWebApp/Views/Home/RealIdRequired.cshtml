@@ -3,4 +3,4 @@
 <h2>您好，@Html.CurrentUser().DisplayName</h2>
 
 <p class="text-danger">您的实名身份尚未验证，请先验证实名身份，再进行报名。</p>
-@Html.ActionLink("验证实名身份", "EditPersonInfo", "Account", null, new { @class = "btn btn-primary" })
+@Html.ActionLink("验证实名身份", "EditRealId", "Account", null, new { @class = "btn btn-primary" })
