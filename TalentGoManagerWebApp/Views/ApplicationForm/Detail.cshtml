@@ -1,68 +1,167 @@
-﻿@model EnrollmentDetailViewModel
+﻿@model ApplicationForm
 @{
-	ViewBag.Title = "Detail";
+    ViewBag.Title = "报名表";
 }
 
-<h2>应聘人员信息</h2>
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>报名表编号：@Model.Id</p>
 
-@Html.Partial("_EnrollmentDataViewer", Model.Enrollment)
-@Html.Partial("_EnrollmentArchiveDataViewer", Model.Enrollment)
-@Html.Partial("_EnrollmentDataPropertiesViewer", Model.Enrollment)
+<table class="table table-bordered">
+    <colgroup>
+        <col class="col-md-2" />
+        <col class="col-md-3" />
+        <col class="col-md-2" />
+        <col class="col-md-3" />
+        <col class="col-md-2" />
+    </colgroup>
+    <tbody>
+        <tr>
+            <th colspan="5">求职者信息</th>
+        </tr>
+        <tr>
+            <td>姓名</td>
+            <td>@Model.Person.DisplayName</td>
+            <td>性别</td>
+            <td>@(Model.Person.Sex == Sex.Male ? "男" : "女")</td>
+            <td rowspan="5">
+                @if (string.IsNullOrEmpty(Model.HeadImageFile))
+                {
+                    <p>没有照片，请到@(Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" }))上传证件照片。</p>
+                }
+                else
+                {
+                    <img src="@Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile })" class="img-responsive" style="max-width:150px; max-height:150px;" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>出生日期</td>
+            <td>@Model.Person.DateOfBirth.ToShortDateString() （@(Model.Person.DateOfBirth.Age())岁）</td>
+            <td>民族</td>
+            <td>@Model.Person.Ethnicity</td>
+        </tr>
+        <tr>
+            <td>身份证号码</td>
+            <td>@Model.Person.IDCardNumber</td>
+            <td>住址</td>
+            <td>@Model.Person.Address</td>
+        </tr>
+        <tr>
+            <td>移动电话</td>
+            <td>@Model.Person.Mobile</td>
+            <td>电子邮件</td>
+            <td>@Model.Person.Email</td>
+        </tr>
+        <tr>
+            <td>籍贯</td>
+            <td>@Model.NativePlace</td>
+            <td>现居地</td>
+            <td>@Model.Source</td>
+        </tr>
+        <tr>
+            <td>政治面貌</td>
+            <td>@Model.PoliticalStatus</td>
+            <td>健康状况</td>
+            <td>@Model.Health</td>
+            <td>婚姻状况：@Model.Marriage</td>
+        </tr>
+        <tr>
+            <th colspan="5">教育经历</th>
+        </tr>
+        <tr>
+            <td>毕业院校</td>
+            <td>@Model.School</td>
+            <td>主修专业</td>
+            <td>@Model.Major</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>学历</td>
+            <td>@Model.EducationalBackground</td>
+            <td>学位</td>
+            <td>@Model.Degree</td>
+            <td></td>
+        </tr>
+        <tr>
+            <th colspan="5">申请职位/类别</th>
+        </tr>
+        <tr>
+            <td>职位/类别</td>
+            <td>@Model.Job.Name</td>
+            <td>招聘计划</td>
+            <td>@Model.Job.Plan.Title</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>自我介绍</td>
+            <td colspan="4">@Model.Accomplishments</td>
+        </tr>
+        <tr>
+            <th colspan="5">审核信息</th>
+        </tr>
+        <tr>
+            <td colspan="5">
+                <p>创建时间：@Model.WhenCreated</p>
+                @if (Model.WhenCommited.HasValue)
+                {
+                    <p>提交时间 @Model.WhenCommited.Value</p>
+                }
+                @if (Model.WhenFileReview.HasValue)
+                {
+                    <p>资料审查：通过，审查人：，审查时间：@Model.WhenFileReview.Value</p>
+                }
+            </td>
+        </tr>
+    </tbody>
+</table>
+<hr />
+<h2>报名资料</h2>
+<h3>学历证明</h3>
+@{
+    var academicCertFileArray = this.Model.AcademicCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+<div class="row">
+    @foreach (var file in academicCertFileArray)
+    {
+        <div class="col-md-2 img-thumbnail">
+            <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
+        </div>
+    }
+</div>
+<hr />
+<h3>学位证明</h3>
+@{
+    var degreeCertFileArray = this.Model.DegreeCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+<div class="row">
+    @foreach (var file in degreeCertFileArray)
+    {
+        <div class="col-md-2 img-thumbnail">
+            <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
+        </div>
+    }
+</div>
+<hr />
+<h3>其他资料</h3>
+@{
+    var otherFileArray = this.Model.OtherFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+<div class="row">
+    @foreach (var file in otherFileArray)
+    {
+        <div class="col-md-2 img-thumbnail">
+            <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
+        </div>
+    }
+</div>
 
-@using (Html.BeginForm())
+@if (!Model.WhenCommited.HasValue)
 {
-	@Html.AntiForgeryToken()
-	<div class="form-horizontal">
-		@if (!Model.Enrollment.Job.Plan.WhenAuditCommited.HasValue)
-		{
-			<div class="form-group">
-				@Html.LabelFor(m => m.Approved, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					<div class="checkbox">
-						@Html.CheckBoxFor(m => m.Approved, new { onclick = "UpdateCheckBox(this)" })
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.Rejective, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					<div class="checkbox">
-						@Html.CheckBoxFor(m => m.Rejective, new { onclick = "UpdateCheckBox(this)" })
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				@Html.LabelFor(m => m.AuditMessage, new { @class = "control-label col-md-2" })
-				<div class="col-md-10">
-					@Html.TextBoxFor(m => m.AuditMessage, new { @class = "form-control" })
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-10 col-md-offset-2">
-					@if (!@Model.Enrollment.Job.Plan.WhenAuditCommited.HasValue)
-					{
-						<input type="submit" class="btn btn-default" value="提交" />
-					}
-				</div>
-			</div>
-		}
-		<a href="@(Url.Action("EnrollmentList", new { id = Model.Enrollment.Job.PlanId }) + this.Server.UrlDecode(this.Request["retrunParam"]))" class="btn btn-default">返回</a>
-	</div>
+    @Html.ActionLink("修改报名表", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+    @Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" })
+    @Html.ActionLink("提交报名表", "Commit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("删除报名表", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
 }
-
-@section Scripts
-{
-	<script>
-
-		function UpdateCheckBox(ele) {
-			if ($(ele).prop("checked")) {
-				//当前值为非选中，此方法后，改为选中，则更改另一个为非选中。
-				if ($(ele).eq(0).attr("id") == "Approved")
-					$("#Rejective").removeAttr("checked");
-				else
-					$("#Approved").removeAttr("checked");
-			}
-		}
-
-	</script>
-}
+@Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })

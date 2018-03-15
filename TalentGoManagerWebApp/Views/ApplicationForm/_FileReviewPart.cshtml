@@ -1,0 +1,100 @@
+﻿@model ApplicationForm
+@{
+    var academicCertList = this.Model.AcademicCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+    var degreeCertList = this.Model.DegreeCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+}
+<h2>证件照审查</h2>
+<div class="row">
+    <div class="col-md-2 thumbnail">
+        <img src="@Url.Action("Index", "File", new { id = Model.HeadImageFile })" class="img-responsive" />
+    </div>
+    <div class="col-md-4 thumbnail">
+        <img src="@Url.Action("Index", "File", new { id = Model.Person.IDCardFrontFile })" class="img-responsive" />
+    </div>
+    <div class="col-sm-2">
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />符合</label>
+        </div>
+    </div>
+</div>
+
+<h2>学历文件审查</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            @foreach (var file in academicCertList)
+            {
+                <div class="col-sm-12 thumbnail">
+                    <img src="@Url.Action("Index", "File", new { id = file })" class="img-responsive" />
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />学生：@Model.Person.DisplayName</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />性别：@(Model.Person.Sex == Sex.Male ? "男" : "女")</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />出生日期：@Model.Person.DateOfBirth.ToShortDateString()</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />专业：@Model.Major</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />学历：@Model.EducationalBackground</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />证书编号：@Model.AcademicCertNumber</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />校名：@Model.School</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />毕业年份：@Model.YearOfGraduated</label>
+        </div>
+    </div>
+</div>
+
+<h2>学位证明文件审查</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            @foreach (var file in degreeCertList)
+            {
+                <div class="col-sm-12 thumbnail">
+                    <img src="@Url.Action("Index", "File", new { id = file })" class="img-responsive" />
+                </div>
+            }
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />学生：@Model.Person.DisplayName</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />性别：@(Model.Person.Sex == Sex.Male ? "男" : "女")</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />出生日期：@Model.Person.DateOfBirth.ToShortDateString()</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />校名：@Model.School</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />专业：@Model.Major</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />学位：@Model.Degree</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />证书编号：@Model.DegreeCertNumber</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="review-item" />毕业年份：@Model.YearOfGraduated</label>
+        </div>
+    </div>
+</div>
+

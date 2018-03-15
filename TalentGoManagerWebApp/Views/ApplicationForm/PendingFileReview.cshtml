@@ -1,21 +1,28 @@
 ﻿@model IQueryable<ApplicationForm>
 
+@{
+    ViewBag.Title = "待审查的报名表";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
 <table class="table">
     <thead>
         <tr>
             <td>#</td>
-            <td>Person</td>
-            <td>Job</td>
-            <td>Plan</td>
-            <td>EduBackground</td>
-            <td>Degree</td>
-            <td>WhenCommited</td>
-            <td>Status</td>
-            <td>Operation</td>
+            <td>姓名</td>
+            <td>职位/类别</td>
+            <td>招聘计划</td>
+            <td>学历</td>
+            <td>学位</td>
+            <td>提交时间</td>
+            <td>状态</td>
+            <td>操作</td>
         </tr>
     </thead>
     <tbody>
-        @foreach(var form in Model)
+        @foreach (var form in Model)
         {
             <tr>
                 <td>
@@ -35,6 +42,7 @@
                 </td>
                 <td>@form.Degree</td>
                 <td>@form.WhenCommited.Value.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td></td>
                 <td>@Html.ActionLink("审查", "FileReview", new { id = form.Id }, new { target = "_blank" })</td>
             </tr>
         }

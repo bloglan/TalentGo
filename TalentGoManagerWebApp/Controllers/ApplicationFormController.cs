@@ -30,7 +30,7 @@ namespace TalentGoManagerWebApp.Controllers
             return View();
         }
 
-        public ActionResult PendingFileReviewList()
+        public ActionResult PendingFileReview()
         {
             return View(this.applicationFormManager.ApplicationForms.PendingFileReview().OrderByDescending(a => a.WhenCommited));
         }
@@ -50,31 +50,70 @@ namespace TalentGoManagerWebApp.Controllers
             if (form == null)
                 return View("NoPendingFileReview");
 
-            return View(form);
+            var model = new ReviewFileModel
+            {
+                FormId = form.Id,
+            };
+
+            return View(model);
         }
 
-
-        public async Task<ActionResult> FileReview(int? id, bool accepted, bool next)
+        [HttpPost]
+        public async Task<ActionResult> FileReview(int? id, ReviewFileModel model)
         {
-            ApplicationForm form;
-            if (id.HasValue)
-            {
-                form = this.applicationFormManager.ApplicationForms.PendingFileReview().FirstOrDefault(a => a.Id == id.Value);
-                if (form == null)
-                    return HttpNotFound();
-            }
-            else
-                form = this.applicationFormManager.ApplicationForms.PendingFileReview().OrderBy(a => a.WhenCommited).FirstOrDefault();
-
+            var form = await this.applicationFormManager.FindByIdAsync(model.FormId);
             if (form == null)
                 return View("NoPendingFileReview");
 
-            await this.applicationFormManager.FileReviewAsync(form, accepted);
+            try
+            {
+                await this.applicationFormManager.FileReviewAsync(form, model.Accepted);
+                if (model.Next)
+                    return RedirectToAction("FileReview");
 
-            if (next)
-                return RedirectToAction("FileReview");
+                return View("FileReviewComplete");
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
 
-            return RedirectToAction("FileReviewComplete");
+        }
+
+        public async Task<ActionResult> FileReviewPart(int id)
+        {
+            var form = await this.applicationFormManager.FindByIdAsync(id);
+            return PartialView("_FileReviewPart", form);
+        }
+
+        public ActionResult Search(string q)
+        {
+            if (string.IsNullOrEmpty(q))
+                return View();
+
+            IQueryable<ApplicationForm> forms;
+
+            if (int.TryParse(q, out int intQ))
+                forms = this.applicationFormManager.ApplicationForms.Where(f => f.Id == intQ);
+            else
+                forms = this.applicationFormManager.ApplicationForms.Where(f => f.Person.DisplayName.StartsWith(q));
+
+            if (forms.Count() == 1)
+            {
+                var form = forms.First();
+                return RedirectToAction("Detail", new { id = form.Id });
+            }
+            return View(forms);
+        }
+
+        public async Task<ActionResult> Detail(int id)
+        {
+            var form = await this.applicationFormManager.FindByIdAsync(id);
+            if (form == null)
+                return HttpNotFound();
+
+            return View(form);
         }
 
         /// <summary>
@@ -217,7 +256,7 @@ namespace TalentGoManagerWebApp.Controllers
         public async Task<ActionResult> SetAuditMessage(int formId, string message)
         {
             SetAuditResult result = new SetAuditResult(formId);
-            
+
 
             var enrollment = await this.applicationFormManager.FindByIdAsync(formId);
             if (enrollment == null)
@@ -259,13 +298,5 @@ namespace TalentGoManagerWebApp.Controllers
         }
 
 
-        public async Task<ActionResult> Detail(int id)
-        {
-            var form = await this.applicationFormManager.FindByIdAsync(id);
-            if (form == null)
-                return HttpNotFound();
-
-            return View(form);
-        }
     }
 }

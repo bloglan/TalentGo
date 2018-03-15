@@ -82,6 +82,7 @@
     <Compile Include="IJobStore.cs" />
     <Compile Include="InvalidNumberException.cs" />
     <Compile Include="IPersonStore.cs" />
+    <Compile Include="ITalentGoSMSService.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="JobExtensions.cs" />
     <Compile Include="Notification.cs" />

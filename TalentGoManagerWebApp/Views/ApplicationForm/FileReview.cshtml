@@ -1,24 +1,54 @@
-﻿@model ApplicationForm
+﻿@model ReviewFileModel
 @{
-    ViewBag.Title = "资料审查#" + Model.Id;
+    ViewBag.Title = "资料审查#" + Model.FormId;
+
 }
 
 <div class="page-header">
     <h1>@ViewBag.Title</h1>
 </div>
-<div class="row">
-    <div class="col-md-6">
-        File Viewer
-    </div>
-    <div class="col-md-6">
-        Properties Viewer
-    </div>
-</div>
+<p>逐项核对求职者上传的资料和填写的报名表相关字段是否相符。若相符，在通过审查复选框上打钩并提交。</p>
+
+@Html.Action("FileReviewPart", new { id = Model.FormId })
+
 @using (Html.BeginForm())
 {
-    <p></p>
-    <label>@Html.CheckBox("accepted", false) 通过审查</label>
-    <label>@Html.CheckBox("next", true) 继续审查下一个</label>
-    <button type="submit" class="btn btn-primary">提交</button>
+    @Html.HiddenFor(m => m.FormId)
+    @Html.HiddenFor(m => m.Accepted)
+    <h2>审查结论</h2>
+    <div id="review-result" class="alert alert-danger">未通过！</div>
+    <hr />
+    <button type="submit" class="btn btn-primary">完成审查</button>
+    <button type="button" id="reset-checkstate" class="btn btn-default">重置</button>
+    <button type="button" class="btn btn-default" onclick="window.close();">关闭</button>
+    <div class="checkbox">
+        <label>@Html.CheckBoxFor(m => m.Next) 继续审查下一个</label>
+    </div>
+}
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            $("input.review-item").click(function () {
+                var result = $("input.review-item:unchecked").length ==0;
+                $("#@Html.NameFor(m => m.Accepted)").attr("value", result);
+                if (result) {
+                    $("#review-result").removeClass("alert-danger").addClass("alert-success").text("通过！");
+                }
+                else {
+                    $("#review-result").removeClass("alert-success").addClass("alert-danger").text("未通过！");
+                }
+            });
+
+            $("#reset-checkstate").click(function () {
+                $("#@Html.NameFor(m => m.Accepted)").attr("value", false);
+                $("input.review-item").prop("checked", false);
+                $("#review-result").removeClass("bg-success").addClass("bg-danger").text("未通过！");
+            });
+        });
+
+    </script>
 
 }

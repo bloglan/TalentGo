@@ -10,16 +10,26 @@
     <div class="panel-heading">查询和搜索</div>
     <div class="panel-body">
         <p>根据报名表号，报名人相关信息查找报名表。</p>
+        @using (Html.BeginForm("Search", "ApplicationForm", FormMethod.Get))
+        {
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" placeholder="输入报名表号、姓名以检索报名表">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </span>
+            </div><!-- /input-group -->
+
+        }
         <p>浏览报名表</p>
     </div>
 </div>
 <div class="panel panel-default">
     <div class="panel-heading">资料审查</div>
     <div class="panel-body">
-        <p>资料审查的目的是检查报名表及关联资料是否一致、填写是否正确。</p>
+        <p>资料审查的目的是检查报名表及关联资料是否相符。</p>
         <p>未通过资料审查的，将会立即通知报名者。</p>
-        @Html.ActionLink("待审查报名表", "PendingFileReview", null, new { @class = "btn btn-default" })
-        @Html.ActionLink("执行资料审查", "FileReview", null, new { @class = "btn btn-default", target = "_blank" })
+        <p>？份报名表待审查。@Html.ActionLink("查看", "PendingFileReview")</p>
+        @Html.ActionLink("审查...", "FileReview", null, new { @class = "btn btn-default", target = "_blank" })
     </div>
 </div>
 <div class="panel panel-default">
