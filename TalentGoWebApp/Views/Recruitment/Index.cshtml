@@ -33,11 +33,11 @@
                 </caption>
                 <colgroup>
                     <col class="col-md-2" />
+                    <col class="col-md-1" />
+                    <col class="col-md-1" />
+                    <col class="col-md-5" />
                     <col class="col-md-2" />
-                    <col class="col-md-2" />
-                    <col class="col-md-2" />
-                    <col class="col-md-2" />
-                    <col class="col-md-2" />
+                    <col class="col-md-1" />
                 </colgroup>
                 <thead>
                     <tr>
@@ -59,7 +59,7 @@
                             <td>@job.MajorRequirement</td>
                             <td>@job.WorkLocation</td>
                             <td>
-                                @Html.ActionLink("详细", "Detail", "Job", new { id = job.Id }, new { @class = "btn btn-sm btn-default" })
+                                @*@Html.ActionLink("详细", "Detail", "Job", new { id = job.Id }, new { @class = "btn btn-sm btn-default" })*@
                                 @Html.ActionLink("报名", "Enroll", "ApplicationForm", new { id = job.Id }, new { @class = "btn btn-sm btn-primary" })
                             </td>
                         </tr>

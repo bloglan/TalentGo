@@ -1,0 +1,38 @@
+﻿@model JobEditViewModel
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Name, new { @class = "label-content" })
+    @Html.DescriptionFor(m => m.Name)
+    @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(m => m.Name)
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.Description, new { @class = "label-content" })
+    @Html.DescriptionFor(m => m.Description)
+    @Html.EditorFor(m => m.Description, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(m => m.Description)
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.WorkLocation, new { @class = "label-content" })
+    @Html.DescriptionFor(m => m.WorkLocation)
+    @Html.EditorFor(m => m.WorkLocation, new { htmlAttributes = new { @class = "form-control", rows = "10" } })
+    @Html.ValidationMessageFor(m => m.WorkLocation)
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.EducationBakcgroundRequirement, new { @class = "label-content" })
+    @Html.DescriptionFor(m => m.EducationBakcgroundRequirement)
+    @Html.EditorFor(m => m.EducationBakcgroundRequirement, new { htmlAttributes = new { @class = "form-control", rows = "8" } })
+    @Html.ValidationMessageFor(m => m.EducationBakcgroundRequirement)
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.DegreeRequirement, new { @class = "label-content" })
+    @Html.DescriptionFor(m => m.DegreeRequirement)
+    @Html.EditorFor(m => m.DegreeRequirement, new { htmlAttributes = new { @class = "form-control", rows = "8" } })
+    @Html.ValidationMessageFor(m => m.DegreeRequirement)
+</div>
+<div class="form-group">
+    @Html.LabelFor(m => m.MajorRequirement, new { @class = "label-content" })
+    @Html.DescriptionFor(m => m.MajorRequirement)
+    @Html.EditorFor(m => m.MajorRequirement, new { htmlAttributes = new { @class = "form-control", rows = "15" } })
+    @Html.ValidationMessageFor(m => m.MajorRequirement)
+</div>

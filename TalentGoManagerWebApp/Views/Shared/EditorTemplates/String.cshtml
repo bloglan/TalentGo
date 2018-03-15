@@ -1,0 +1,15 @@
+﻿@model string
+
+@{
+    var htmlAttrs = ViewData["htmlAttributes"] as IDictionary<string, object> ?? HtmlHelper.AnonymousObjectToHtmlAttributes(ViewData["htmlAttributes"]);
+
+    var placeholder = string.Empty;
+    if (!string.IsNullOrEmpty(ViewData.ModelMetadata.Watermark))
+    {
+        htmlAttrs.Add("placeholder", ViewData.ModelMetadata.Watermark);
+    }
+
+}
+
+@Html.TextBox("", ViewData.TemplateInfo.FormattedModelValue, htmlAttrs)
+

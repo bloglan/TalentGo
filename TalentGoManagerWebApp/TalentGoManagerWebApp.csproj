@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -216,6 +216,17 @@
     <Content Include="Content\jQuery.FileUpload\css\jquery.fileupload.css" />
     <Content Include="Content\jQuery.FileUpload\img\loading.gif" />
     <Content Include="Content\jQuery.FileUpload\img\progressbar.gif" />
+    <Content Include="Content\smalot-datetimepicker\bootstrap-datetimepicker.css" />
+    <Content Include="Content\smalot-datetimepicker\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -226,56 +237,28 @@
     <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
     <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\base\jquery-ui.css" />
-    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
-    <Content Include="Content\themes\base\jquery.ui.all.css" />
-    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
-    <Content Include="Content\themes\base\jquery.ui.base.css" />
-    <Content Include="Content\themes\base\jquery.ui.button.css" />
-    <Content Include="Content\themes\base\jquery.ui.core.css" />
-    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
-    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
-    <Content Include="Content\themes\base\jquery.ui.menu.css" />
-    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
-    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
-    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
-    <Content Include="Content\themes\base\jquery.ui.slider.css" />
-    <Content Include="Content\themes\base\jquery.ui.spinner.css" />
-    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
-    <Content Include="Content\themes\base\jquery.ui.theme.css" />
-    <Content Include="Content\themes\base\jquery.ui.tooltip.css" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
-    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
-    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.menu.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.spinner.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
-    <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -542,12 +525,8 @@
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
     <Content Include="Scripts\esm\popper.min.js" />
-    <Content Include="Scripts\esm\popper.min.js.map" />
-    <Content Include="Scripts\esm\popper.js.map" />
-    <Content Include="Scripts\esm\popper-utils.min.js.map" />
-    <Content Include="Scripts\esm\popper-utils.js.map" />
-    <Content Include="Scripts\jquery-ui-1.9.0.js" />
-    <Content Include="Scripts\jquery-ui-1.9.0.min.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.js" />
+    <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="Scripts\jQuery.FileUpload\cors\jquery.postmessage-transport.js" />
     <Content Include="Scripts\jQuery.FileUpload\cors\jquery.xdr-transport.js" />
     <Content Include="Scripts\jQuery.FileUpload\jquery.fileupload-angular.js" />
@@ -560,6 +539,64 @@
     <Content Include="Scripts\jQuery.FileUpload\jquery.fileupload-video.js" />
     <Content Include="Scripts\jQuery.FileUpload\jquery.fileupload.js" />
     <Content Include="Scripts\jQuery.FileUpload\jquery.iframe-transport.js" />
+    <Content Include="Scripts\jQuery.tmpl.js" />
+    <Content Include="Scripts\jQuery.tmpl.min.js" />
+    <Content Include="Scripts\JQuery.tmpl\jquery.tmpl.js" />
+    <Content Include="Scripts\JQuery.tmpl\jquery.tmpl.min.js" />
+    <Content Include="Scripts\JQuery.tmpl\jquery.tmplPlus.js" />
+    <Content Include="Scripts\JQuery.tmpl\jquery.tmplPlus.min.js" />
+    <Content Include="Scripts\popper-utils.js" />
+    <Content Include="Scripts\popper-utils.min.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\smalot-datetimepicker\bootstrap-datetimepicker.js" />
+    <Content Include="Scripts\smalot-datetimepicker\bootstrap-datetimepicker.min.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ar.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.bg.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ca.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.cs.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.da.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.de.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ee.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.el.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.es.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.fi.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.fr.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.he.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.hr.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.hu.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.id.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.is.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.it.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ja.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ko.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.lt.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.lv.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ms.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.nb.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.nl.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.no.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.pl.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.pt-BR.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.pt.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ro.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.rs-latin.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.rs.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ru.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.sk.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.sl.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.sv.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.sw.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.th.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.tr.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.ua.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.uk.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.zh-CN.js" />
+    <Content Include="Scripts\smalot-datetimepicker\locales\bootstrap-datetimepicker.zh-TW.js" />
+    <Content Include="Scripts\umd\popper-utils.js" />
+    <Content Include="Scripts\umd\popper-utils.min.js" />
+    <Content Include="Scripts\umd\popper.js" />
+    <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Views\Notice\Create.cshtml" />
     <Content Include="Views\Notice\Delete.cshtml" />
     <Content Include="Views\Notice\Edit.cshtml" />
@@ -597,6 +634,11 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="Properties\PublishProfiles\ProductionPublish.pubxml" />
+    <Content Include="Scripts\esm\popper.min.js.map" />
+    <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Scripts\esm\popper-utils.js.map" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -608,18 +650,10 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Scripts\popper-utils.js" />
-    <Content Include="Scripts\popper-utils.min.js" />
-    <Content Include="Scripts\popper.js" />
-    <Content Include="Scripts\popper.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
-    <Content Include="Scripts\umd\popper-utils.js" />
-    <Content Include="Scripts\umd\popper-utils.min.js" />
-    <Content Include="Scripts\umd\popper.js" />
-    <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -634,15 +668,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Scripts\umd\popper.min.js.map" />
-    <Content Include="Scripts\umd\popper.js.map" />
-    <Content Include="Scripts\umd\popper-utils.min.js.map" />
-    <Content Include="Scripts\umd\popper-utils.js.map" />
-    <Content Include="Scripts\README.md" />
-    <Content Include="Scripts\popper.min.js.map" />
-    <Content Include="Scripts\popper.js.map" />
-    <Content Include="Scripts\popper-utils.min.js.map" />
-    <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\EditorTemplates\CKEditor.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\PublicFlag.cshtml" />
     <Content Include="Views\RecruitmentPlan\JobList.cshtml" />
@@ -662,6 +687,18 @@
     <Content Include="Views\Person\_RealIdValidationPart.cshtml" />
     <Content Include="Views\Person\ValidateRealIdComplete.cshtml" />
     <Content Include="Views\Person\PendingValidNotFound.cshtml" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Shared\EditorTemplates\DateTimeMinute.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
+    <Content Include="Views\RecruitmentPlan\JobEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -671,9 +708,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -691,6 +725,9 @@
       <Project>{8b634ddb-fd91-474f-a292-5825322713d5}</Project>
       <Name>TalentGoWebServerLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -721,16 +758,27 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Target Name="BuildViews" Condition="'$(MvcBuildViews)'=='true'" AfterTargets="Build">
+  <Target Name="MvcBuildViews" Condition="'$(MvcBuildViews)'=='true'" AfterTargets="Build">
     <Message Importance="normal" Text="Precompiling views" />
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <Target Name="CleanupForBuildMvcViews" Condition="'$(MVCBuildViews)'=='true'" BeforeTargets="MvcBuildViews">
+    <ItemGroup>
+      <_TempWebConfigToDelete Include="$(BaseIntermediateOutputPath)**\AspnetCompileMerge\**\*" />
+      <_TempWebConfigToDelete Include="$(BaseIntermediateOutputPath)**\AssemblyInfo\**\*" />
+      <_TempWebConfigToDelete Include="$(BaseIntermediateOutputPath)**\CSAutoParameterize\**\*" />
+      <_TempWebConfigToDelete Include="$(BaseIntermediateOutputPath)**\Package\**\*" />
+      <_TempWebConfigToDelete Include="$(BaseIntermediateOutputPath)**\ProfileTransformWebConfig\**\*" />
+      <_TempWebConfigToDelete Include="$(BaseIntermediateOutputPath)**\TransformWebConfig\**\*" />
+    </ItemGroup>
+    <Delete Files="@(_TempWebConfigToDelete)" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.6.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.7.0\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.

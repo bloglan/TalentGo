@@ -11,7 +11,7 @@ namespace TalentGoManagerWebApp.Models
 			this.ExpirationDate = DateTime.Now.AddMonths(3);
 		}
 
-		[Display(Name = "计划标题")]
+		[Display(Name = "标题")]
 		[Required]
 		public string Title { get; set; }
 
@@ -21,12 +21,8 @@ namespace TalentGoManagerWebApp.Models
 		[AllowHtml]
 		public string Recruitment { get; set; }
 
-		[Display(Name = "是否外部招聘计划")]
-		public bool IsPublic { get; set; }
-
-		[Display(Name = "有效期至")]
-		[DataType(DataType.Date)]
-		[Required]
+		[Display(Name = "报名截止时间")]
+        [UIHint("DateTimeMinute")]
 		public DateTime ExpirationDate { get; set; }
 
 		[Display(Name = "发布者")]

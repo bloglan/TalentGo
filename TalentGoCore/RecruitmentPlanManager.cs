@@ -92,23 +92,24 @@ namespace TalentGo
         /// 发布招聘计划。招聘计划发布后，将可被所有符合条件的用户看到。
         /// </summary>
         /// <returns></returns>
-        public async Task PublishRecruitmentPlan(int PlanID, DateTime EnrollExpirationDate)
+        public async Task PublishAsync(RecruitmentPlan plan, DateTime EnrollExpirationDate)
         {
+            if (plan == null)
+                throw new ArgumentNullException(nameof(plan));
             //当State处于Created时，将其设置为Normal.
             //当State处于Normal时，不做任何操作。
             //
-            RecruitmentPlan plan = await this.FindByIdAsync(PlanID);
-            if (plan == null)
-                return;
-
-            if (!plan.WhenPublished.HasValue)
+            if (plan.WhenPublished.HasValue)
             {
-                //plan.State = RecruitmentPlanState.Normal.ToString();
-                plan.WhenPublished = DateTime.Now;
-
-                //所指定的截止日期当日全天都算作有效。
-                plan.EnrollExpirationDate = EnrollExpirationDate;
+                throw new InvalidOperationException("招聘计划已发布");
             }
+
+            if (EnrollExpirationDate <= DateTime.Now)
+                throw new ArgumentException("报名截止时间早于当前时间。");
+
+            plan.WhenPublished = DateTime.Now;
+            //所指定的截止日期当日全天都算作有效。
+            plan.EnrollExpirationDate = EnrollExpirationDate;
 
             await this.store.UpdateAsync(plan);
         }
@@ -140,14 +141,14 @@ namespace TalentGo
                 return;
 
             var forms = new HashSet<ApplicationForm>();
-            foreach(var job in plan.Jobs)
+            foreach (var job in plan.Jobs)
             {
                 forms.UnionWith(job.ApplicationForms);
             }
             if (forms.Any(e => !e.Approved.HasValue))
                 throw new InvalidOperationException("操作失败，还有未设置审核标记的报名表。");
 
-            
+
 
             using (TransactionScope transScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
