@@ -85,6 +85,7 @@
     <Compile Include="Job.cs" />
     <Compile Include="JobExtensions.cs" />
     <Compile Include="Notification.cs" />
+    <Compile Include="PeopleExtensions.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Degree.cs" />
     <Compile Include="EducationBackground.cs" />

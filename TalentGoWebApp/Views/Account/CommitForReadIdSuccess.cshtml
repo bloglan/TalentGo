@@ -1,9 +1,18 @@
-﻿
+﻿@model bool
 @{
-    ViewBag.Title = "提交实名认证成功";
+    ViewBag.Title = "提交实名认证";
 }
 
 <div class="page-header">
     <h1>@ViewBag.Title</h1>
 </div>
-<p>您的实名身份信息已经提交，并等待审核。请稍后查看您的实名审核状态。</p>
+@if (Model)
+{
+    <p>认证成功！</p>
+    <p>@Html.ActionLink("浏览招聘职位/类别", "Index", "Recruitment")</p>
+}
+else
+{
+    <p>您的实名身份信息已经提交，请等待认证。认证通过后，您才能继续浏览招聘职位并进行报名。</p>
+    <p>@Html.ActionLink("返回", "Index", "Home")</p>
+}

@@ -11,7 +11,7 @@
     @Styles.Render("~/Content/jqueryuicss")
     @Styles.Render("~/Content/bootstrapDatetimePicker")
 
-    @RenderSection("header", required: false)
+    @RenderSection("head", required: false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -29,7 +29,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("首页", "Index", "Home")</li>
-                    <li>@Html.ActionLink("职位", "Index", "Recruitment")</li>
+                    <li>@Html.ActionLink("招聘职位", "Index", "Recruitment")</li>
                     <li>@Html.ActionLink("报名表", "Index", "ApplicationForm")</li>
                     <li>@Html.ActionLink("通知公告", "Index", "Article")</li>
                 </ul>
@@ -41,7 +41,6 @@
         @RenderBody()
         <hr />
         <footer>
-
             <p>&copy; @DateTime.Now.Year - 云南省烟草公司曲靖市公司</p>
             <p>警告：本站点含有烟草内容，谢绝十八岁以下人士进入！</p>
             <ul class="list-inline">

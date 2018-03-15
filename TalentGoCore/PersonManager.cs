@@ -42,6 +42,16 @@ namespace TalentGo
         public virtual IIDCardOCRService IDCardOCRService { get; set; }
 
         /// <summary>
+        /// Find person by it's id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Person> FindByIdAsync(Guid id)
+        {
+            return await this.Store.FindByIdAsync(id);
+        }
+
+        /// <summary>
         /// Find user by Phone Number.
         /// </summary>
         /// <param name="mobile"></param>

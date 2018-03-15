@@ -1,0 +1,48 @@
+﻿@model WebUser
+@{
+    /**/
+
+    ViewBag.Title = "用户配置中心";
+}
+
+<h2>概要</h2>
+<hr />
+<h3>账户</h3>
+<p>用户名（身份证号码）：@Model.UserName</p>
+<h3>实名认证</h3>
+@if (!Model.RealIdValid.HasValue)
+{
+    if (Model.WhenRealIdCommited.HasValue)
+    {
+        <p><span class="label label-default">实名认证信息已提交</span></p>
+    }
+    else
+    {
+        <p><span class="label label-warning">未实名认证</span></p>
+        <p>@Html.ActionLink("去认证", "EditRealId", "Account")</p>
+    }
+}
+else
+{
+    if (Model.RealIdValid.Value)
+    {
+        <p><span class="label label-success">已认证</span></p>
+    }
+    else
+    {
+        <p><span class="label label-danger">未通过认证</span></p>
+    }
+}
+
+<p>姓氏：@Model.Surname 名字：@Model.GivenName 显示为：@Model.DisplayName</p>
+<p>性别：@(Model.Sex == Sex.Male ? "男" : "女")</p>
+<p>出生时间：@Model.DateOfBirth.ToShortDateString()</p>
+<p>民族：@Model.Ethnicity</p>
+<p>住址：@Model.Address</p>
+<p>签发机关：@Model.Issuer</p>
+<p>有效期限：@(Model.IssueDate.HasValue ? Model.IssueDate.Value.ToShortDateString() : "") - @(Model.ExpiresAt.HasValue ? Model.ExpiresAt.Value.ToShortDateString() : "长期")</p>
+
+<h3>联系方式</h3>
+<p>移动电话号码：@Model.Mobile</p>
+<p>电子邮件地址：@Model.Email</p>
+

@@ -1,0 +1,51 @@
+﻿@model Person
+@{
+    ViewBag.Title = Model.DisplayName + "的详细信息";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title <small>@Model.Id</small></h1>
+</div>
+
+<h2>RealId Information</h2>
+<p>Surname: @Model.Surname</p>
+<p>Given Name: @Model.GivenName</p>
+<p>ID Card Number: @Model.IDCardNumber</p>
+<p>Sex: @(Model.Sex == Sex.Male ? "Male" : "Female")</p>
+<p>Date of Birth: @Model.DateOfBirth</p>
+<p>Ethnicity: @Model.Ethnicity</p>
+<p>Address: @Model.Address</p>
+<p>Issuer: @Model.Issuer</p>
+<p>IssueDate: @Model.IssueDate</p>
+<p>Expires At: @Model.ExpiresAt</p>
+<p>When RealId Commited: @Model.WhenRealIdCommited</p>
+<p>RealId Valid: @Model.RealIdValid</p>
+<p>When RealId Valid: @Model.WhenRealIdValid</p>
+<p>RealId Valid By: @Model.RealIdValidBy</p>
+<div class="row">
+    <div class="col-md-3 img-thumbnail">
+        <img src="@Url.Action("Index", "File", new { id = Model.IDCardFrontFile })" class="img-responsive" />
+        <div class="caption">
+            ID Card Front Side
+        </div>
+    </div>
+    <div class="col-md-3 img-thumbnail">
+        <img src="@Url.Action("Index", "File", new { id = Model.IDCardBackFile })" class="img-responsive" />
+        <div class="caption">
+            ID Card Back Side
+        </div>
+    </div>
+</div>
+
+<h2>Contact Information</h2>
+<p>Mobile: @Model.Mobile</p>
+<p>Email: @Model.Email</p>
+
+<h2>Properties</h2>
+<p>Registeration Time: @Model.WhenCreated</p>
+<p>When Changed: @Model.WhenChanged</p>
+
+<h2>Operations</h2>
+<p>@Html.ActionLink("Validate RealID", "ValidateRealId", new { id = Model.Id })</p>
+<p>@Html.ActionLink("Reset RealID Validation State", "ResetRealIdState", new { id = Model.Id })</p>
+<p>@Html.ActionLink("Delete Account", "Delete", new { id = Model.Id })</p>

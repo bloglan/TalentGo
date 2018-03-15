@@ -232,7 +232,7 @@
     <Compile Include="Controllers\HelpController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobController.cs" />
-    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\UserProfileController.cs" />
     <Compile Include="Controllers\RecruitmentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -242,7 +242,7 @@
     <Compile Include="Models\ApplicationFormEditViewModel.cs" />
     <Compile Include="Models\FileUploadResultModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ChangePasswordViewModel.cs" />
     <Compile Include="Models\RecruitmentPanelStateModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -708,24 +708,16 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Account\ResetPasswordViaEmail.cshtml" />
     <Content Include="Views\Account\RegisterComplete.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
     <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\UserProfile\ChangePassword.cshtml" />
+    <Content Include="Views\UserProfile\Index.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Recruitment\Index.cshtml" />
@@ -754,7 +746,6 @@
     <Content Include="Views\Shared\EditorTemplates\DateTimeDay.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeMinute.cshtml" />
     <Content Include="Views\Notice\ArticleListGroup.cshtml" />
-    <Content Include="Views\Home\AccessDeny.cshtml" />
     <Content Include="Views\Shared\_LayoutBlank.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\EnrollmentStatePartial.cshtml" />
@@ -766,7 +757,6 @@
     <Content Include="Views\Account\FindPasswordViaEmail.cshtml" />
     <Content Include="Views\Account\FindPasswordViaMobile.cshtml" />
     <Content Include="Views\Account\ResetPasswordViaMobile.cshtml" />
-    <Content Include="Views\Manage\Rename.cshtml" />
     <Content Include="Views\Job\Index.cshtml" />
     <Content Include="Views\Job\JobList.cshtml" />
     <Content Include="Views\Account\RegisterAgreement.cshtml" />
@@ -789,6 +779,8 @@
     <Content Include="Views\Account\IDCardFile.cshtml" />
     <Content Include="Views\Account\CommitForReadIdSuccess.cshtml" />
     <Content Include="Views\Account\CommitForReadIdFailed.cshtml" />
+    <Content Include="Views\Shared\_UserProfileLayout.cshtml" />
+    <Content Include="Views\UserProfile\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

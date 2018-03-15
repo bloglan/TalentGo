@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewBag.Title = "用户管理";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">查找用户</div>
+    <div class="panel-body">
+        @using (Html.BeginForm("Search", "Person", FormMethod.Get))
+        {
+            <div class="input-group">
+                <input type="text" class="form-control" name="q" placeholder="输入身份证号、移动电话号码、电子邮件地址或姓名以搜索">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">搜索</button>
+                </span>
+            </div><!-- /input-group -->
+        }
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">实名身份认证</div>
+    <div class="panel-body">
+        <p>@Html.ActionLink("待认证用户", "PendingRealIdValid", null, new { @class = "btn btn-default" })</p>
+        <p>@Html.ActionLink("认证...", "ValidateRealId", null, new { @class = "btn btn-default" })</p>
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">用户分析</div>
+    <div class="panel-body">
+        <p>暂无内容。</p>
+    </div>
+</div>

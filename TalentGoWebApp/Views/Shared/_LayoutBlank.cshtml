@@ -10,7 +10,7 @@
     @Styles.Render("~/Content/css")
 	@Styles.Render("~/Content/bootstrapDatetimePicker")
     
-    @RenderSection("HeadScripts", required: false)
+    @RenderSection("head", required: false)
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -35,12 +35,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <!-- @if (this.User.IsInRole("QJYC\\招聘管理员") || this.User.IsInRole("QJYC\\招聘审核员") || this.User.IsInRole("QJYC\\企业域管理员"))
-             {
-                 <p><h3>@Html.ActionLink("后台管理", "Index", "Home", new { area = "Mgmt" }, null)</h3></p>
-             }-->
             <p>&copy; @DateTime.Now.Year - 云南省烟草公司曲靖市公司</p>
-            <p>警告：本站点含有烟草内容，谢绝十八岁以下人士进入！</p>
         </footer>
     </div>
 

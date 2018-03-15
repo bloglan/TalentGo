@@ -439,116 +439,6 @@ namespace TalentGoWebApp.Controllers
         }
 
         //
-        // POST: /Account/ExternalLogin
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            // 请求重定向到外部登录提供程序
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
-        }
-
-        //
-        // GET: /Account/SendCode
-        [AllowAnonymous]
-        public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
-        {
-            var userId = await SignInManager.GetVerifiedUserIdAsync();
-            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        }
-
-        //
-        // POST: /Account/SendCode
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SendCode(SendCodeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
-            // 生成令牌并发送该令牌
-            if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
-            {
-                return View("Error");
-            }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
-        }
-
-        //
-        // GET: /Account/ExternalLoginCallback
-        [AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
-        {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
-                return RedirectToAction("Login");
-            }
-
-            // 如果用户已具有登录名，则使用此外部登录提供程序将该用户登录
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
-                default:
-                    // 如果用户没有帐户，则提示该用户创建帐户
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
-            }
-        }
-
-        //
-        // POST: /Account/ExternalLoginConfirmation
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Manage");
-            }
-
-            if (ModelState.IsValid)
-            {
-                // 从外部登录提供程序获取有关用户的信息
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new WebUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user);
-                if (result.Succeeded)
-                {
-                    result = await UserManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
-                    }
-                }
-                AddErrors(result);
-            }
-
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
-        }
-
-        //
         // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -562,34 +452,7 @@ namespace TalentGoWebApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //
-        // GET: /Account/ExternalLoginFailure
-        [AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
-        }
 
-        void SendValidationCodeByEmail(string To, string Code)
-        {
-            using (var smtpClient = new SmtpClient("mail.qjyc.cn"))
-            {
-                smtpClient.UseDefaultCredentials = true;
-
-                MailMessage mail = new MailMessage(new MailAddress("job@qjyc.cn", "曲靖烟草招聘"), new MailAddress(To));
-                //mail.IsBodyHtml = true;
-                mail.Subject = "注册验证码";
-                mail.Body = "您好，欢迎访问曲靖烟草招聘网站。\r\n"
-                    + "我们已留意到您无法通过手机收取验证码短信，因此，我们通过此邮件向您发送验证码。\r\n"
-                    + "您的验证码是：" + Code + "。\r\n"
-                    + "请在注册用户时，填入您曾用于获取此验证码的手机号码和收取此验证码的电子邮件地址。若填入其他的手机号码或电子邮件地址，验证将会失败。\r\n"
-                    + "请在收到此验证码6个小时以内使用它，过期失效。\r\n"
-                    + "若您在访问网站中遇到问题，请回复此邮件与我们联系。、\r\n"
-                    + "若对招聘公告有疑问，请按招聘公告公布的联系方式与主管单位取得联系。谢谢，祝您使用愉快。";
-
-                smtpClient.Send(mail);
-            }
-        }
 
 
         [AllowAnonymous]
@@ -792,7 +655,7 @@ namespace TalentGoWebApp.Controllers
             try
             {
                 await this.personManager.CommitForRealIdValidation(person);
-                return View("CommitForReadIdSuccess");
+                return View("CommitForReadIdSuccess", model: person.RealIdValid.HasValue && person.RealIdValid.Value);
             }
             catch (Exception ex)
             {
