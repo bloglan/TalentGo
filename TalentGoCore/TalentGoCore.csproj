@@ -71,7 +71,7 @@
     <Compile Include="ExaminationRoomManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="File.cs" />
-    <Compile Include="FileCategory.cs" />
+    <Compile Include="FileIdList.cs" />
     <Compile Include="IDCardBackOCRResult.cs" />
     <Compile Include="IDCardFrontOCRResult.cs" />
     <Compile Include="IDCardRecognizeException.cs" />

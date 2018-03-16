@@ -43,9 +43,6 @@
     <li>次年毕业的，上传《毕业证》</li>
     <li>留学生须提供《国外学历证明》</li>
 </ul>
-@{
-    var academicFileArray = this.Model.AcademicCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-}
 @using (Html.BeginForm("UploadAcademicCertFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "academiccert" }))
 {
     <p>
@@ -57,7 +54,7 @@
         </span>
     </p>
     <div class="row">
-        @foreach (var item in academicFileArray)
+        @foreach (var item in this.Model.AcademicCertFileList)
         {
             <div class="col-md-2 img-thumbnail">
                 <button type="button" class="close" aria-label="Close" onclick="RemoveFile(this)" data-category="academiccert" data-formid="@Model.Id" data-fileid="@item"><span aria-hidden="true">&times;</span></button>
@@ -70,10 +67,6 @@
 
 <hr />
 <h2>学位证书</h2>
-
-@{
-    var degreeCertFileArray = this.Model.DegreeCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-}
 @using (Html.BeginForm("UploadDegreeCertFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "degreecert" }))
 {
     <p>
@@ -85,7 +78,7 @@
         </span>
     </p>
     <div class="row">
-        @foreach (var item in degreeCertFileArray)
+        @foreach (var item in this.Model.DegreeCertFileList)
         {
             <div class="col-md-2 img-thumbnail">
                 <button type="button" class="close" aria-label="Close" onclick="RemoveFile(this)" data-category="degreecert" data-formid="@Model.Id" data-fileid="@item"><span aria-hidden="true">&times;</span></button>
@@ -99,9 +92,6 @@
 <hr />
 <h2>其他资料</h2>
 <p>其他您认为有必要提供的资料，如技能证书、奖状等。</p>
-@{
-    var otherFileArray = this.Model.OtherFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-}
 @using (Html.BeginForm("UploadOtherFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "other" }))
 {
     <p>
@@ -113,7 +103,7 @@
         </span>
     </p>
     <div class="row">
-        @foreach (var item in otherFileArray)
+        @foreach (var item in this.Model.OtherFileList)
         {
             <div class="col-md-2 img-thumbnail">
                 <button type="button" class="close" aria-label="Close" onclick="RemoveFile(this)" data-category="other" data-formid="@Model.Id" data-fileid="@item"><span aria-hidden="true">&times;</span></button>

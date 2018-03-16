@@ -1,0 +1,11 @@
+﻿
+<div class="panel panel-default">
+    <div class="panel-heading">资料审查</div>
+    <div class="panel-body">
+        <p>资料审查的目的是检查报名表及关联资料是否相符。</p>
+        <p>未通过资料审查的，将会立即通知报名者。</p>
+        <p>@ViewBag.PendingFileReviewCount 份报名表待审查。@Html.ActionLink("查看", "PendingFileReview")</p>
+        @Html.ActionLink("审查...", "FileReview", null, new { @class = "btn btn-default", target = "_blank" })
+    </div>
+</div>
+

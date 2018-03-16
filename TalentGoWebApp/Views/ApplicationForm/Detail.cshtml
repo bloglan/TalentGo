@@ -119,11 +119,8 @@
 <hr />
 <h2>报名资料</h2>
 <h3>学历证明</h3>
-@{
-    var academicCertFileArray = this.Model.AcademicCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-}
 <div class="row">
-    @foreach (var file in academicCertFileArray)
+    @foreach (var file in this.Model.AcademicCertFileList)
     {
         <div class="col-md-2 img-thumbnail">
             <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
@@ -132,11 +129,8 @@
 </div>
 <hr />
 <h3>学位证明</h3>
-@{
-    var degreeCertFileArray = this.Model.DegreeCertFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-}
 <div class="row">
-    @foreach (var file in degreeCertFileArray)
+    @foreach (var file in this.Model.DegreeCertFileList)
     {
         <div class="col-md-2 img-thumbnail">
             <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
@@ -145,11 +139,8 @@
 </div>
 <hr />
 <h3>其他资料</h3>
-@{
-    var otherFileArray = this.Model.OtherFiles.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-}
 <div class="row">
-    @foreach (var file in otherFileArray)
+    @foreach (var file in this.Model.OtherFileList)
     {
         <div class="col-md-2 img-thumbnail">
             <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />

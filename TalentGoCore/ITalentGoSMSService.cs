@@ -8,6 +8,8 @@ namespace TalentGo
 {
     public interface ITalentGoSMSService
     {
+        
+
         Task SendRealIdValidationMessageAsync(Person person);
 
         Task SendFileReviewMessageAsync(ApplicationForm form);

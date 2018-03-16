@@ -1,0 +1,11 @@
+﻿
+<div class="panel panel-default">
+    <div class="panel-heading">资格审核</div>
+    <div class="panel-body">
+        <p>资格审核时，您可以为报名表填写审核标记。只有完成资格审核后，审核结果才会通知报名者。</p>
+        <p>@ViewBag.PendingAuditCount 份报名表等待审核。</p>
+        @Html.ActionLink("待审核报名表", "PendingAudit", null, new { @class = "btn btn-default" })
+        @Html.ActionLink("审核...", "Audit", null, new { @class = "btn btn-default", target = "_blank" })
+        @Html.ActionLink("完成资格审核", "CompleteAudit", null, new { @class = "btn btn-default" })
+    </div>
+</div>

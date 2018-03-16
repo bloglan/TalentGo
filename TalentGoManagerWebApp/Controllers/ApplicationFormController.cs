@@ -16,19 +16,24 @@ namespace TalentGoManagerWebApp.Controllers
     {
         ApplicationFormManager applicationFormManager;
         RecruitmentPlanManager recruitmentPlanManager;
-        ApplicationUserManager targetUserManager;
 
-        public ApplicationFormController(ApplicationFormManager applicationFormManager, RecruitmentPlanManager recruitmentPlanManager, ApplicationUserManager userManager)
+        public ApplicationFormController(ApplicationFormManager applicationFormManager, RecruitmentPlanManager recruitmentPlanManager)
         {
             this.applicationFormManager = applicationFormManager;
             this.recruitmentPlanManager = recruitmentPlanManager;
-            this.targetUserManager = userManager;
         }
 
         public ActionResult Index()
         {
             return View();
         }
+
+        public ActionResult FileReviewOperationPanel()
+        {
+            this.ViewBag.PendingFileReviewCount = this.applicationFormManager.ApplicationForms.PendingFileReview().Count();
+            return PartialView("_FileReviewOperationPanel");
+        }
+
 
         public ActionResult PendingFileReview()
         {
@@ -85,6 +90,12 @@ namespace TalentGoManagerWebApp.Controllers
         {
             var form = await this.applicationFormManager.FindByIdAsync(id);
             return PartialView("_FileReviewPart", form);
+        }
+
+        public ActionResult AuditOperationPanel()
+        {
+            this.ViewBag.PendingAuditCount = this.applicationFormManager.ApplicationForms.PendingAudit().Count();
+            return PartialView("_AuditOperationPanel");
         }
 
         public ActionResult Search(string q)

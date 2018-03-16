@@ -706,6 +706,8 @@
     <Content Include="Views\RecruitmentPlan\JobEditor.cshtml" />
     <Content Include="Views\ApplicationForm\_FileReviewPart.cshtml" />
     <Content Include="Views\ApplicationForm\Search.cshtml" />
+    <Content Include="Views\ApplicationForm\_FileReviewOperationPanel.cshtml" />
+    <Content Include="Views\ApplicationForm\_AuditOperationPanel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

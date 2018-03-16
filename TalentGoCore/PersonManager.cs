@@ -392,5 +392,30 @@ namespace TalentGo
 
             await this.Store.UpdateAsync(person);
         }
+        
+        /// <summary>
+        /// 删除用户。
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        public async Task DeleteAsync(Person person)
+        {
+            if (person == null)
+                throw new ArgumentNullException(nameof(person));
+
+            if(!string.IsNullOrEmpty(person.IDCardFrontFile))
+            {
+                var file = await this.FileStore.FindByIdAsync(person.IDCardFrontFile);
+                if (file != null)
+                    await this.FileStore.DeleteAsync(file);
+            }
+            if (!string.IsNullOrEmpty(person.IDCardBackFile))
+            {
+                var file = await this.FileStore.FindByIdAsync(person.IDCardBackFile);
+                if (file != null)
+                    await this.FileStore.DeleteAsync(file);
+            }
+            await this.Store.DeleteAsync(person);
+        }
     }
 }

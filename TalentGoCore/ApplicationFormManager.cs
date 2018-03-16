@@ -139,9 +139,7 @@ namespace TalentGo
             await file.ReadAsync(data);
             await this.fileStore.CreateAsync(file);
 
-            var list = this.GetFileList(form.AcademicCertFiles);
-            list.Add(file.Id);
-            form.AcademicCertFiles = this.GetFilesProperty(list);
+            form.AcademicCertFileList.Add(file.Id);
 
             await this.applicationFormStore.UpdateAsync(form);
             return file.Id;
@@ -160,7 +158,7 @@ namespace TalentGo
             if (string.IsNullOrEmpty(fileId))
                 throw new ArgumentException("fileId is null or empty.");
 
-            var list = this.GetFileList(form.AcademicCertFiles);
+            var list = form.AcademicCertFileList;
 
             if (list.Contains(fileId))
             {
@@ -171,7 +169,6 @@ namespace TalentGo
                     await this.fileStore.DeleteAsync(file);
                 }
             }
-            form.AcademicCertFiles = this.GetFilesProperty(list);
             await this.applicationFormStore.UpdateAsync(form);
         }
 
@@ -198,9 +195,7 @@ namespace TalentGo
             await file.ReadAsync(data);
             await this.fileStore.CreateAsync(file);
 
-            var list = this.GetFileList(form.DegreeCertFiles);
-            list.Add(file.Id);
-            form.DegreeCertFiles = this.GetFilesProperty(list);
+            form.DegreeCertFileList.Add(file.Id);
 
             await this.applicationFormStore.UpdateAsync(form);
             return file.Id;
@@ -219,7 +214,7 @@ namespace TalentGo
             if (string.IsNullOrEmpty(fileId))
                 throw new ArgumentException("fileId is null or empty.");
 
-            var list = this.GetFileList(form.DegreeCertFiles);
+            var list = form.DegreeCertFileList;
 
             if (list.Contains(fileId))
             {
@@ -230,7 +225,6 @@ namespace TalentGo
                     await this.fileStore.DeleteAsync(file);
                 }
             }
-            form.DegreeCertFiles = this.GetFilesProperty(list);
             await this.applicationFormStore.UpdateAsync(form);
         }
 
@@ -258,9 +252,7 @@ namespace TalentGo
             await file.ReadAsync(data);
             await this.fileStore.CreateAsync(file);
 
-            var list = this.GetFileList(form.OtherFiles);
-            list.Add(file.Id);
-            form.OtherFiles = this.GetFilesProperty(list);
+            form.OtherFileList.Add(file.Id);
 
             await this.applicationFormStore.UpdateAsync(form);
             return file.Id;
@@ -279,7 +271,7 @@ namespace TalentGo
             if (string.IsNullOrEmpty(fileId))
                 throw new ArgumentException("fileId is null or empty.");
 
-            var list = this.GetFileList(form.OtherFiles);
+            var list = form.OtherFileList;
 
             if (list.Contains(fileId))
             {
@@ -290,7 +282,6 @@ namespace TalentGo
                     await this.fileStore.DeleteAsync(file);
                 }
             }
-            form.OtherFiles = this.GetFilesProperty(list);
             await this.applicationFormStore.UpdateAsync(form);
         }
 
@@ -313,36 +304,6 @@ namespace TalentGo
                 if (image.Size.Width * image.Size.Height < 800 * 800)
                     throw new ArgumentException("Image size is small!");
             }
-        }
-
-        /// <summary>
-        /// Get file list from files property.
-        /// </summary>
-        /// <param name="filesProperty"></param>
-        /// <returns></returns>
-        public List<string> GetFileList(string filesProperty)
-        {
-            if (string.IsNullOrEmpty(filesProperty))
-                return new List<string>();
-            var array = filesProperty.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
-            return new List<string>(array);
-        }
-
-        /// <summary>
-        /// Get files property from file list.
-        /// </summary>
-        /// <param name="list"></param>
-        /// <returns></returns>
-        public string GetFilesProperty(List<string> list)
-        {
-            if (list == null)
-                return null;
-            var builder = new StringBuilder();
-            foreach (var item in list)
-            {
-                builder.Append(item + "|");
-            }
-            return builder.ToString();
         }
 
         /// <summary>
@@ -388,8 +349,7 @@ namespace TalentGo
             if (string.IsNullOrEmpty(form.HeadImageFile))
                 throw new InvalidOperationException("需要证件照。");
 
-            var academicFileList = this.GetFileList(form.AcademicCertFiles);
-            if (!academicFileList.Any())
+            if (!form.AcademicCertFileList.Any())
                 throw new InvalidOperationException("至少需要上传一份学历证明文件。");
 
             //设置提交时间。
@@ -437,9 +397,9 @@ namespace TalentGo
 
             //与此报名表关联的文件。
             var fileList = new List<string>();
-            fileList.Union(this.GetFileList(form.AcademicCertFiles));
-            fileList.Union(this.GetFileList(form.DegreeCertFiles));
-            fileList.Union(this.GetFileList(form.OtherFiles));
+            fileList.Union(form.AcademicCertFileList);
+            fileList.Union(form.DegreeCertFileList);
+            fileList.Union(form.OtherFileList);
             if (!string.IsNullOrEmpty(form.HeadImageFile))
                 fileList.Add(form.HeadImageFile);
 

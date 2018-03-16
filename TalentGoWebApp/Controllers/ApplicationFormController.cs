@@ -446,6 +446,7 @@ namespace TalentGoWebApp.Controllers
             return View("CommitSuccess", form.Id);
         }
 
+
         /// <summary>
         /// Initialize dropdownlist and other data for enroll or edit application form.
         /// </summary>

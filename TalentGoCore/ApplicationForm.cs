@@ -13,13 +13,13 @@ namespace TalentGo
     /// 表示一个报名表。
     /// </summary>
 	public class ApplicationForm
-	{
+    {
         DataContractJsonSerializer serializer;
         /// <summary>
         /// Default ctor.
         /// </summary>
 		protected ApplicationForm()
-		{
+        {
             this.serializer = new DataContractJsonSerializer(typeof(List<string>));
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
@@ -27,7 +27,7 @@ namespace TalentGo
             this.AcademicCertFiles = string.Empty;
             this.DegreeCertFiles = string.Empty;
             this.OtherFiles = string.Empty;
-		}
+        }
 
         /// <summary>
         /// 
@@ -65,7 +65,7 @@ namespace TalentGo
         /// related to a target user by its id.
         /// </summary>
         [ForeignKey(nameof(Person))]
-		public Guid PersonId { get; protected set; }
+        public Guid PersonId { get; protected set; }
 
         /// <summary>
         /// Gets target user of this enrollment.
@@ -117,7 +117,7 @@ namespace TalentGo
         /// Year of graduated.
         /// </summary>
 		[Display(Name = "毕业年度")]
-		public int YearOfGraduated { get; set; }
+        public int YearOfGraduated { get; set; }
 
 
         /// <summary>
@@ -159,15 +159,67 @@ namespace TalentGo
         /// </summary>
         public string AcademicCertFiles { get; internal set; }
 
+        FileIdList academicCertFileList;
+
+        /// <summary>
+        /// 学历证书文件列表。
+        /// </summary>
+        [NotMapped]
+        public FileIdList AcademicCertFileList
+        {
+            get
+            {
+                if (academicCertFileList == null)
+                {
+                    this.academicCertFileList = new FileIdList(this.AcademicCertFiles, (s) => this.AcademicCertFiles = s);
+                }
+                return this.academicCertFileList;
+            }
+        }
+
         /// <summary>
         /// 学位证书文件。
         /// </summary>
         public string DegreeCertFiles { get; internal set; }
 
+        FileIdList degreeCertFileList;
+
+        /// <summary>
+        /// 获取学位证书列表。
+        /// </summary>
+        [NotMapped]
+        public FileIdList DegreeCertFileList
+        {
+            get
+            {
+                if (this.degreeCertFileList == null)
+                    this.degreeCertFileList = new FileIdList(this.DegreeCertFiles, (s) => this.DegreeCertFiles = s);
+                return this.degreeCertFileList;
+            }
+        }
+
         /// <summary>
         /// 其他材料。
         /// </summary>
         public string OtherFiles { get; internal set; }
+
+        FileIdList otherFileList;
+
+        /// <summary>
+        /// 获取其他文件列表。
+        /// </summary>
+        [NotMapped]
+        public FileIdList OtherFileList
+        {
+            get
+            {
+                if (this.otherFileList == null)
+                {
+                    this.otherFileList = new FileIdList(this.OtherFiles, (s) => this.OtherFiles = s);
+                }
+                return this.otherFileList;
+            }
+        }
 
         /// <summary>
         /// When created.
@@ -208,7 +260,7 @@ namespace TalentGo
         /// Message of audit.
         /// </summary>
 		[StringLength(50)]
-		public string AuditMessage { get; internal set; }
+        public string AuditMessage { get; internal set; }
 
         /// <summary>
         /// When user announced take exam. if value of null, means not announced yet.

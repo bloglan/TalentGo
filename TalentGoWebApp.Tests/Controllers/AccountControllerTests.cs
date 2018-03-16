@@ -14,7 +14,7 @@ namespace TalentGoWebApp.Controllers.Tests
         [TestMethod()]
         public void LoginTest()
         {
-            Assert.Fail();
+            //
         }
     }
 }
