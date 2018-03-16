@@ -90,6 +90,11 @@ namespace TalentGoManagerWebApp.Controllers
             try
             {
                 await this.manager.ValidateRealId(person, model.Accepted, this.User.Identity.Name);
+
+                //如果审核未通过，退回给用户。
+                if (!model.Accepted)
+                    await this.manager.ReturnBackAsync(person);
+
                 if (model.Next)
                     return RedirectToAction("ValidateRealId");
                 return View("ValidateRealIdComplete");

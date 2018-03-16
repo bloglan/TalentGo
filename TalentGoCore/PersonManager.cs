@@ -68,6 +68,19 @@ namespace TalentGo
         public IQueryable<Person> People => this.Store.People;
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        public async Task CreateAsync(Person person)
+        {
+            if (person == null)
+                throw new ArgumentNullException(nameof(person));
+
+            await this.Store.CreateAsync(person);
+        }
+
+        /// <summary>
         /// 修改身份信息。
         /// </summary>
         /// <param name="person"></param>
@@ -250,7 +263,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="person"></param>
         /// <returns></returns>
-        public async Task CommitForRealIdValidation(Person person)
+        public async Task CommitForRealIdValidationAsync(Person person)
         {
             if (person == null)
                 throw new ArgumentNullException();
@@ -269,6 +282,10 @@ namespace TalentGo
                 throw new InvalidOperationException("未上传身份证图像。");
 
             person.WhenRealIdCommited = DateTime.Now;
+            person.RealIdValid = null;
+            person.WhenRealIdValid = null;
+            person.RealIdValidBy = null;
+
             //使用自动验证器尝试验证。
             try
             {
@@ -329,7 +346,7 @@ namespace TalentGo
                 ms.Position = 0;
                 try
                 {
-                backResult = await this.IDCardOCRService.RecognizeIDCardBack(ms);
+                    backResult = await this.IDCardOCRService.RecognizeIDCardBack(ms);
                 }
                 catch (Exception)
                 {
@@ -392,7 +409,16 @@ namespace TalentGo
 
             await this.Store.UpdateAsync(person);
         }
-        
+
+        public async Task ReturnBackAsync(Person person)
+        {
+            if (person == null)
+                throw new ArgumentNullException(nameof(person));
+
+            person.WhenRealIdCommited = null;
+            await this.Store.UpdateAsync(person);
+        }
+
         /// <summary>
         /// 删除用户。
         /// </summary>
@@ -403,7 +429,7 @@ namespace TalentGo
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
 
-            if(!string.IsNullOrEmpty(person.IDCardFrontFile))
+            if (!string.IsNullOrEmpty(person.IDCardFrontFile))
             {
                 var file = await this.FileStore.FindByIdAsync(person.IDCardFrontFile);
                 if (file != null)

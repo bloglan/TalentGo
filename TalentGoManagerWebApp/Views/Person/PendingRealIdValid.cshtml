@@ -1,0 +1,40 @@
+﻿@model IQueryable<Person>
+@{
+    ViewBag.Title = "等待实名认证用户";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>IDCardNumber</th>
+            <th>DisplayName</th>
+            <th>Sex</th>
+            <th>DateOfBirth</th>
+            <th>Eth</th>
+            <th>Address</th>
+            <th>Issuer</th>
+            <th>IssueDate</th>
+            <th>ExpiresAt</th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    @foreach (var person in Model)
+    {
+        <tr>
+            <td>@person.IDCardNumber</td>
+            <td>@person.DisplayName</td>
+            <td>@(person.Sex == Sex.Male ? "男" : "女")</td>
+            <td>@person.DateOfBirth.ToShortDateString()</td>
+            <td>@person.Ethnicity</td>
+            <td>@person.Address</td>
+            <td>@person.Issuer</td>
+            <td>@person.IssueDate.Value.ToShortDateString()</td>
+            <td>@(person.ExpiresAt.HasValue ? person.ExpiresAt.Value.ToShortDateString() : "长期")</td>
+            <td>@Html.ActionLink("Validate", "ValidateRealId", new { id = person.Id }, new { target = "_blank" })</td>
+        </tr>
+    }
+</table>

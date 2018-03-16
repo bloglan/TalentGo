@@ -57,7 +57,11 @@
   </Choose>
   <ItemGroup>
     <Compile Include="FileIdListTests.cs" />
+    <Compile Include="PersonManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StubFileStore.cs" />
+    <Compile Include="StubPersonStore.cs" />
+    <Compile Include="TestUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

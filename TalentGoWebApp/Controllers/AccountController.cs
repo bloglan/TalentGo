@@ -654,7 +654,7 @@ namespace TalentGoWebApp.Controllers
             var person = this.CurrentUser();
             try
             {
-                await this.personManager.CommitForRealIdValidation(person);
+                await this.personManager.CommitForRealIdValidationAsync(person);
                 return View("CommitForReadIdSuccess", model: person.RealIdValid.HasValue && person.RealIdValid.Value);
             }
             catch (Exception ex)
