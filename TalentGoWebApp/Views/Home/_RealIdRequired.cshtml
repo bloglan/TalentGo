@@ -1,0 +1,6 @@
+﻿
+
+<h2>您好，@Html.CurrentUser().DisplayName</h2>
+
+<p>您的实名认证状态是：@Html.Partial("_RealIdState", Html.CurrentUser())</p>
+<p>@Html.Partial("_RealIdOperation", Html.CurrentUser())</p>

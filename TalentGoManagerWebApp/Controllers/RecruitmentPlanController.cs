@@ -55,16 +55,15 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            RecruitmentPlan newplan = new RecruitmentPlan()
+            RecruitmentPlan plan = new RecruitmentPlan()
             {
                 Title = model.Title,
                 Recruitment = model.Recruitment,
                 EnrollExpirationDate = model.ExpirationDate,
-                Publisher = model.Publisher,
             };
 
-            await this.planManager.CreateAsync(newplan);
-            return RedirectToAction("Detail", new { id = newplan.Id });
+            await this.planManager.CreateAsync(plan);
+            return RedirectToAction("Detail", new { id = plan.Id });
         }
 
         public async Task<ActionResult> Delete(int id)
@@ -98,34 +97,44 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            RecruitmentPlan plan = await this.planManager.FindByIdAsync(id);
+            var plan = await this.planManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
 
-            RecruitmentPlanEditViewModel vmodel = new RecruitmentPlanEditViewModel()
+            var model = new RecruitmentPlanEditViewModel()
             {
                 Title = plan.Title,
                 Recruitment = plan.Recruitment,
-                Publisher = plan.Publisher
+                ExpirationDate = plan.EnrollExpirationDate,
             };
-            return View(vmodel);
+            return View(model);
         }
 
         [HttpPost]
         public async Task<ActionResult> Edit(int id, RecruitmentPlanEditViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var plan = await this.planManager.FindByIdAsync(id);
-                plan.Title = model.Title;
-                plan.Recruitment = model.Recruitment;
-                plan.Publisher = model.Publisher;
-
-
-                await this.planManager.UpdateAsync(plan);
-                return RedirectToAction("ArchiveRequirements", new { id = id });
+                return View(model);
             }
-            return View(model);
+
+            var plan = await this.planManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
+
+            plan.Title = model.Title;
+            plan.Recruitment = model.Recruitment;
+            plan.EnrollExpirationDate = model.ExpirationDate;
+            try
+            {
+                await this.planManager.UpdateAsync(plan);
+                return RedirectToAction("Detail", new { id = plan.Id });
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
         }
 
         /// <summary>
@@ -144,6 +153,7 @@ namespace TalentGoManagerWebApp.Controllers
                 WorkLocation = "聘用时分配",
                 EducationBakcgroundRequirement = "本科\r\n硕士研究生\r\n博士研究生",
                 DegreeRequirement = "学士\r\n硕士\r\n博士\r\n",
+                MajorRequirement = "不限",
             };
             return View(model);
         }
@@ -265,7 +275,8 @@ namespace TalentGoManagerWebApp.Controllers
 
             RecruitmentPlanPublishViewModel model = new RecruitmentPlanPublishViewModel()
             {
-                Plan = plan,
+                PlanId = plan.Id,
+                EnrollExpirationDate = DateTime.Now.AddMonths(1),
             };
             return View(model);
         }
@@ -273,14 +284,11 @@ namespace TalentGoManagerWebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> Publish(int id, RecruitmentPlanPublishViewModel model)
         {
+            if (!this.ModelState.IsValid)
+                return View(model);
             var plan = await this.planManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
-
-            model.Plan = plan;
-
-            if (!this.ModelState.IsValid)
-                return View(model);
 
             try
             {

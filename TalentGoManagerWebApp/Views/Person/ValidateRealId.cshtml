@@ -6,23 +6,59 @@
 <div class="page-header">
     <h1>@ViewBag.Title</h1>
 </div>
-@Html.Action("RealIdValidationPart", new { id = Model.PersonId })
+@Html.Action("RealIdViewPart", new { id = Model.PersonId })
 
 @using (Html.BeginForm())
 {
     @Html.HiddenFor(m => m.PersonId)
-    <p>请逐条核对上述信息是否正确，若正确，请在“通过审核”复选框上打钩</p>
+    @Html.HiddenFor(m => m.Accepted)
+    <h2>审查结论</h2>
+    <div id="review-result" class="alert alert-danger">未通过！</div>
+    <div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ValidationMessage, new { @class = "control-label" })
+            @Html.EditorFor(m => m.ValidationMessage, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DescriptionFor(m => m.ValidationMessage)
+        </div>
+    </div>
     <p>
         <label class="control-label">
-            @Html.CheckBoxFor(m => m.Accepted)
-            通过审核
+            @Html.CheckBoxFor(m => m.ReturnBackIfRefused)
+            未通过审核时退回给用户
         </label>
     </p>
     <p>
-        <button type="submit" class="btn btn-primary">提交</button>
+        <button type="submit" class="btn btn-primary">完成审查</button>
+        <button type="button" id="reset-checkstate" class="btn btn-default">重置</button>
         <label class="control-label">
             @Html.CheckBoxFor(m => m.Next)
-            继续审核下一个
+            继续审查下一个
         </label>
     </p>
+}
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            $("input.validation-item").click(function () {
+                var result = $("input.validation-item:unchecked").length ==0;
+                $("#@Html.NameFor(m => m.Accepted)").attr("value", result);
+                if (result) {
+                    $("#review-result").removeClass("alert-danger").addClass("alert-success").text("通过！");
+                }
+                else {
+                    $("#review-result").removeClass("alert-success").addClass("alert-danger").text("未通过！");
+                }
+            });
+
+            $("#reset-checkstate").click(function () {
+                $("#@Html.NameFor(m => m.Accepted)").attr("value", false);
+                $("input.validation-item").prop("checked", false);
+                $("#review-result").removeClass("bg-success").addClass("bg-danger").text("未通过！");
+            });
+        });
+
+    </script>
 }

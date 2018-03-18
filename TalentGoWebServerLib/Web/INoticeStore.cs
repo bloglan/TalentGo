@@ -15,6 +15,13 @@ namespace TalentGo.Web
         IQueryable<Notice> Articles { get; }
 
         /// <summary>
+        /// Find Notice by its id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<Notice> FindByIdAsync(int id);
+
+        /// <summary>
         /// insert an article into data store.
         /// </summary>
         /// <param name="article"></param>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -23,23 +24,33 @@ namespace TalentGo
         /// <summary>
         /// Id
         /// </summary>
+        [Key]
+        [Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; protected set; }
 
         /// <summary>
         /// Plan Id.
         /// </summary>
-        [ForeignKey(nameof(Plan))]
+        [Key]
+        [Column(Order = 1)]
         public int PlanId { get; protected set; }
 
         /// <summary>
         /// The job belongs to plan.
         /// </summary>
+        [ForeignKey(nameof(PlanId))]
         public virtual RecruitmentPlan Plan { get; protected set; }
 
         /// <summary>
         /// Name
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// 计划招聘人数。
+        /// </summary>
+        public virtual int? ExpectRecruitCount { get; set; }
 
         /// <summary>
         /// Description.

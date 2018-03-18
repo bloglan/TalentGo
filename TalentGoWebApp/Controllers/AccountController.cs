@@ -226,16 +226,8 @@ namespace TalentGoWebApp.Controllers
             }
 
 
-            var user = new WebUser
+            var user = new WebUser(model.IDCardNumber, model.Surname, model.GivenName, model.Mobile, model.Email)
             {
-                UserName = cardNumber.ToString(),
-                IDCardNumber = cardNumber.ToString(),
-                Sex = cardNumber.IsMale ? Sex.Male : Sex.Female,
-                DateOfBirth = cardNumber.DateOfBirth,
-                Surname = model.Surname,
-                GivenName = model.GivenName,
-                Mobile = model.Mobile,
-                Email = model.Email,
                 MobileValid = true,
             };
 
@@ -265,6 +257,8 @@ namespace TalentGoWebApp.Controllers
             var person = this.CurrentUser();
             var model = new ReadIdEditViewModel()
             {
+                Surname = person.Surname,
+                GivenName = person.GivenName,
                 Ethnicity = person.Ethnicity,
                 Address = person.Address,
                 Issuer = person.Issuer,
@@ -283,7 +277,7 @@ namespace TalentGoWebApp.Controllers
             var user = this.CurrentUser();
             try
             {
-                await this.personManager.UpdateRealNameInfo(user, user.IDCardNumber, user.Surname, user.GivenName, model.Ethnicity, model.Address, model.Issuer, model.IssueDate.Value, model.ExpiresAt);
+                await this.personManager.UpdateRealId(user, model.Surname, model.GivenName, model.Ethnicity, model.Address, model.Issuer, model.IssueDate.Value, model.ExpiresAt);
 
             }
             catch (Exception ex)

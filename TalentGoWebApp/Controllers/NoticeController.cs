@@ -20,14 +20,15 @@ namespace TalentGoWebApp.Controllers
 		// GET: Article
 		public ActionResult Index()
 		{
-			return View();
+            var notices = this.manager.Notices.Published().OrderByDescending(n => n.WhenPublished).Take(100);
+			return View(notices);
 		}
 
 
 
-		public ActionResult Detail(int id)
+		public async Task<ActionResult> Detail(int id)
 		{
-			var article = this.manager.FindByID(id);
+			var article = await this.manager.FindByIdAsync(id);
 			if (article.WhenPublished.HasValue)
             {
 				return View(article);

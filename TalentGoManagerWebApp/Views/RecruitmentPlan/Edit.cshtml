@@ -1,8 +1,16 @@
 ﻿@model RecruitmentPlanEditViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "修改招聘计划";
 }
 
-<h2>编辑招聘计划</h2>
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
 
-@Html.Partial("PrimaryInfoEditor")
+@using (Html.BeginForm())
+{
+    @Html.Partial("RecruitmentPlanEditor")
+    <button type="submit" class="btn btn-primary">修改</button>
+    @Html.ActionLink("返回", "Detail", new { id = this.ViewContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })
+}
+

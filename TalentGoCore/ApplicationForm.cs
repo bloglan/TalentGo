@@ -52,12 +52,17 @@ namespace TalentGo
         /// <summary>
         /// related to recruitment plan by it's plan.
         /// </summary>
-        [ForeignKey(nameof(Job))]
         public int JobId { get; protected set; }
+
+        /// <summary>
+        /// PlanId
+        /// </summary>
+        public int PlanId { get; protected set; }
 
         /// <summary>
         /// Gets recruitment plan of this enrollment.
         /// </summary>
+        [ForeignKey(nameof(JobId) + "," + nameof(PlanId))]
         public virtual Job Job { get; protected set; }
 
 

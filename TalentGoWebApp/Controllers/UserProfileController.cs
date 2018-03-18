@@ -61,6 +61,11 @@ namespace TalentGoWebApp.Controllers
             return View(usr);
         }
 
+        public ActionResult ApplicationForm()
+        {
+            return View();
+        }
+
         public ActionResult AdmissionTicket()
         {
             return View();
@@ -95,6 +100,16 @@ namespace TalentGoWebApp.Controllers
             }
             AddErrors(result);
             return View(model);
+        }
+
+        public ActionResult ChangePhoneNumber()
+        {
+            return View();
+        }
+
+        public ActionResult ChangeEmail()
+        {
+            return View();
         }
 
         protected override void Dispose(bool disposing)

@@ -12,30 +12,32 @@
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
             <div class="form-group">
                 @Html.LabelFor(m => m.IDCardNumber, new { @class = "col-md-2 control-label" })
-                <div class="col-md-5">
+                <div class="col-md-4">
                     @Html.TextBoxFor(m => m.IDCardNumber, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.IDCardNumber, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
-                    <span>仅支持中国大陆身份证号码。</span>
+                <div class="col-md-4">
+                    @Html.DescriptionFor(m => m.IDCardNumber)
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 control-label" })
-                <div class="col-md-5">
+                <div class="col-md-4">
                     @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Surname, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
+                    @Html.DescriptionFor(m => m.Surname)
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.GivenName, new { @class = "col-md-2 control-label" })
-                <div class="col-md-5">
+                <div class="col-md-4">
                     @Html.TextBoxFor(m => m.GivenName, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.GivenName, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
+                    @Html.DescriptionFor(m => m.GivenName)
                 </div>
             </div>
             <div class="form-group">
@@ -44,61 +46,59 @@
                     @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-4">
                     <div class="row">
                         <button type="button" id="SendValidateCodeBtn" class="btn btn-default" onclick="return SendValidateCode(this)">发送验证码</button>
                     </div>
-
                 </div>
-                <div class="col-md-3">
-                    <span></span>
+                <div class="col-md-4">
+                    @Html.DescriptionFor(m => m.Mobile)
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.ValidateCode, new { @class = "col-md-2 control-label" })
-                <div class="col-md-5">
+                <div class="col-md-4">
                     @Html.TextBoxFor(m => m.ValidateCode, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.ValidateCode, "", new { @class = "text-danger" })
                     <span class="text-danger">@Html.ValidationMessage("valID")</span>
                 </div>
-                <div class="col-md-3">
-                    <span>* 查看手机短信获取验证码</span>
+                <div class="col-md-4">
+                    @Html.DescriptionFor(m => m.ValidateCode)
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                <div class="col-md-5">
+                <div class="col-md-4">
                     @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
-                    <span>* 请填写一个有效的电子邮件地址，以便接收相关进展和通知</span>
+                <div class="col-md-4">
+                    @Html.DescriptionFor(m => m.Email)
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                <div class="col-md-5">
+                <div class="col-md-4">
                     @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
-                    <span>* 密码至少8位，必须至少包含1位大写、小写、数字</span>
+                <div class="col-md-4">
+                    @Html.DescriptionFor(m => m.Password)
                 </div>
             </div>
             <div class="form-group">
                 @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-                <div class="col-md-5">
+                <div class="col-md-4">
                     @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
                     @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-md-3">
-                    <span>*</span>
+                <div class="col-md-4">
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" class="btn btn-default" value="下一步" />
+                    <button type="submit" class="btn btn-default">下一步</button>
                 </div>
             </div>
         }

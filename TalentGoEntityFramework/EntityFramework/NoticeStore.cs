@@ -36,6 +36,16 @@ namespace TalentGo.EntityFramework
         }
 
         /// <summary>
+        /// Find
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Notice> FindByIdAsync(int id)
+        {
+            return await this.set.FindAsync(id);
+        }
+
+        /// <summary>
         /// 
         /// </summary>
         /// <param name="article"></param>

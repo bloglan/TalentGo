@@ -1,0 +1,13 @@
+﻿@model Person
+
+@if (!Model.WhenRealIdCommited.HasValue)
+{
+    if (Model.WhenRealIdValid.HasValue)
+    {
+        @Html.ActionLink("重新认证", "EditRealId", "Account")
+    }
+    else
+    {
+        @Html.ActionLink("去认证", "EditRealId", "Account")
+    }
+}

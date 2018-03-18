@@ -1,67 +1,42 @@
 ﻿@model IEnumerable<Notice>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "公告管理";
 }
 
-<h2>公告管理</h2>
-
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
 <p>
-        @Html.ActionLink("创建新公告", "Create", null, new { @class = "btn btn-default" })
-
+    @Html.ActionLink("创建", "Create", null, new { @class = "btn btn-default" })
 </p>
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Title)
-        </th>
-        @* <th>
-                @Html.DisplayNameFor(model => model.Summary)
-            </th>
-        *@
-        <th>
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.WhenCreated)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.WhenChanged)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Visible)
-        </th>
-        <th>操作</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+    <thead>
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            @* <td>
-                    @Html.DisplayFor(modelItem => item.Summary)
-                </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedBy)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WhenCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.WhenChanged)
-            </td>
-            <td>
-                @(item.Visible ? "是" : "否")
-            </td>
-            <td>
-                    <p>
-                        @Html.ActionLink("编辑", "Edit", new { id = item.Id }) |
-                        @Html.ActionLink("删除", "Delete", new { id = item.Id })
-                    </p>
-            </td>
+            <th>标题</th>
+            <th>创建时间</th>
+            <th>状态</th>
+            <th>操作</th>
         </tr>
-    }
-
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Title, "Detail", new { id = item.Id })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.WhenCreated)
+                </td>
+                <td>
+                    @(item.WhenPublished.HasValue?"已发布":"")
+                </td>
+                <td>
+                    @Html.ActionLink("编辑", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("删除", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
 </table>

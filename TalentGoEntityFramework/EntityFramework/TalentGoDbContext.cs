@@ -17,35 +17,6 @@ namespace TalentGo.EntityFramework
 		{
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<Notice> Article { get; set; }
-
-
-            /// <summary>
-            /// 
-            /// </summary>
-		public virtual DbSet<EnrollmentArchive> EnrollmentArchives { get; set; }
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<ApplicationForm> EnrollmentData { get; set; }
-
-
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<RecruitmentPlan> RecruitmentPlan { get; set; }
-        
-
-        /// <summary>
-        /// 
-        /// </summary>
-		public virtual DbSet<Person> Person { get; set; }
 
         /// <summary>
         /// fluent api

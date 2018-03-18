@@ -6,8 +6,11 @@
 <h2>@Model.Title</h2>
 
 <p>
-	<span class="glyphicon glyphicon-user" aria-hidden="true"></span><span class="sr-only">作者：</span><span>@Model.CreatedBy</span>
-	<span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span class="sr-only">创建日期：</span><abbr title="@Model.WhenCreated.ToString()">@Model.WhenCreated.ToShortDateString()</abbr>
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span><span class="sr-only">作者：</span><span>@Model.CreatedBy</span>
+    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span class="sr-only">创建日期：</span><abbr title="@Model.WhenCreated.ToString()">@Model.WhenCreated.ToShortDateString()</abbr>
 </p>
 <hr />
-@Html.Raw(Model.MainContent)
+<div class="article">
+    @Html.Raw(Model.MainContent)
+</div>
+<a href="#" onclick="window.close();">关闭</a>

@@ -3,73 +3,93 @@
     ViewBag.Title = "招聘计划/职位";
 }
 
-<div class="page-header">
-    <h1>招聘计划/职位</h1>
-</div>
 @if (Model.Any())
 {
     foreach (RecruitmentPlan plan in Model)
     {
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h2 class="panel-title">@Html.ActionLink(plan.Title, "Detail", new { id = plan.Id })</h2>
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <p>发布日期：@plan.WhenPublished.Value.ToShortDateString()</p>
-                        <p>报名截止日期：@plan.EnrollExpirationDate.ToString("yyyy-MM-dd HH:mm")（@plan.EnrollExpirationDate.SmartShow()）</p>
-                        <p>@Html.ActionLink("查看招聘简章", "Detail", new { id = plan.Id }, new { @class = "btn btn-default" })</p>
+        <h1>@plan.Title</h1>
+        <dl class="dl-horizontal">
+            <dt>发布时间：</dt>
+            <dd>@plan.WhenPublished.Value.ToShortDateString()</dd>
+            <dt>报名截止日期：</dt>
+            <dd>@plan.EnrollExpirationDate.ToString("yyyy-MM-dd HH:mm")（@plan.EnrollExpirationDate.SmartShow()）</dd>
+        </dl>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingOne">
+                    <h2 class="panel-title">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                            招聘简章
+                        </a>
+                    </h2>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                    <div class="panel-body article">
+                        @Html.Raw(plan.Recruitment)
                     </div>
-                    <div class="col-md-6">
-                        <h3>通知消息</h3>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading" role="tab" id="headingTwo">
+                    <h2 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                            通知消息
+                        </a>
+                    </h2>
+                </div>
+                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                    <div class="panel-body">
                         @Html.Partial("_NotificationPanel", plan.Notifications.OrderByDescending(n => n.WhenCreated))
                     </div>
                 </div>
             </div>
-            <table class="table table-striped">
-                <caption>
-                    <h3>职位/方向</h3>
-                </caption>
-                <colgroup>
-                    <col class="col-md-2" />
-                    <col class="col-md-1" />
-                    <col class="col-md-1" />
-                    <col class="col-md-5" />
-                    <col class="col-md-2" />
-                    <col class="col-md-1" />
-                </colgroup>
-                <thead>
-                    <tr>
-                        <th>职位</th>
-                        <th>学历要求</th>
-                        <th>学位要求</th>
-                        <th>专业要求</th>
-                        <th>工作地点</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var job in plan.Jobs)
-                    {
-                        <tr>
-                            <td>@job.Name</td>
-                            <td>@job.EducationBackgroundRequirement</td>
-                            <td>@job.DegreeRequirement</td>
-                            <td>@job.MajorRequirement</td>
-                            <td>@job.WorkLocation</td>
-                            <td>
-                                @*@Html.ActionLink("详细", "Detail", "Job", new { id = job.Id }, new { @class = "btn btn-sm btn-default" })*@
-                                @Html.ActionLink("报名", "Enroll", "ApplicationForm", new { id = job.Id }, new { @class = "btn btn-sm btn-primary" })
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
         </div>
+        <table class="table table-striped table-responsive">
+            <caption>
+                <h2>职位/方向</h2>
+            </caption>
+            <colgroup>
+                <col class="col-md-1" />
+                <col class="col-md-1" />
+                <col class="col-md-1" />
+                <col class="col-md-5" />
+                <col class="col-md-2" />
+                <col class="col-md-1" />
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>职位</th>
+                    <th>学历要求</th>
+                    <th>学位要求</th>
+                    <th>专业要求</th>
+                    <th>工作地点</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var job in plan.Jobs)
+                {
+                    <tr>
+                        <td>@job.Name</td>
+                        <td>@job.EducationBackgroundRequirement</td>
+                        <td>@job.DegreeRequirement</td>
+                        <td>@job.MajorRequirement</td>
+                        <td>@job.WorkLocation</td>
+                        <td>
+                            @*@Html.ActionLink("详细", "Detail", "Job", new { id = job.Id }, new { @class = "btn btn-sm btn-default" })*@
+                            @Html.ActionLink("报名", "Enroll", "ApplicationForm", new { id = job.Id }, new { @class = "btn btn-sm btn-primary" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <hr />
     }
 }
 else
 {
+    <div class="page-header">
+        <h1>暂无招聘计划</h1>
+    </div>
     <p>目前没有可以报名的职位。请等待人力资源部门发布职位信息，谢谢关注！</p>
 }

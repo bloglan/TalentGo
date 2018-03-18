@@ -194,6 +194,7 @@
     <Compile Include="Models\EnrollmentStatisticsViewModel.cs" />
     <Compile Include="Models\JobEditViewModel.cs" />
     <Compile Include="Models\NoticeEditViewModel.cs" />
+    <Compile Include="Models\PeopleSummaryViewModel.cs" />
     <Compile Include="Models\PersonSearchResultModel.cs" />
     <Compile Include="Models\RecruitmentPlanPublishViewModel.cs" />
     <Compile Include="Models\RecruitmentPlanEditViewModel.cs" />
@@ -614,7 +615,7 @@
     <Content Include="Views\RecruitmentPlan\Detail.cshtml" />
     <Content Include="Views\RecruitmentPlan\Edit.cshtml" />
     <Content Include="Views\RecruitmentPlan\Index.cshtml" />
-    <Content Include="Views\RecruitmentPlan\PrimaryInfoEditor.cshtml" />
+    <Content Include="Views\RecruitmentPlan\RecruitmentPlanEditor.cshtml" />
     <Content Include="Views\RecruitmentPlan\Publish.cshtml" />
     <Content Include="Views\RecruitmentPlan\RecruitmentPlanOperation.cshtml" />
     <Content Include="Views\RecruitmentPlan\RecruitmentPlanState.cshtml" />
@@ -689,7 +690,7 @@
     <Content Include="Views\Person\Search.cshtml" />
     <Content Include="Views\Person\Detail.cshtml" />
     <Content Include="Views\Person\ValidateRealId.cshtml" />
-    <Content Include="Views\Person\_RealIdValidationPart.cshtml" />
+    <Content Include="Views\Person\_RealIdViewPart.cshtml" />
     <Content Include="Views\Person\ValidateRealIdComplete.cshtml" />
     <Content Include="Views\Person\PendingValidNotFound.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -709,6 +710,12 @@
     <Content Include="Views\ApplicationForm\_FileReviewOperationPanel.cshtml" />
     <Content Include="Views\ApplicationForm\_AuditOperationPanel.cshtml" />
     <Content Include="Views\Person\PendingRealIdValid.cshtml" />
+    <Content Include="Views\Notice\Detail.cshtml" />
+    <Content Include="Views\Notice\Publish.cshtml" />
+    <Content Include="Views\Notice\CancelPublish.cshtml" />
+    <Content Include="Views\Person\_PeopleSummary.cshtml" />
+    <Content Include="Views\Shared\_RealIdState.cshtml" />
+    <Content Include="Views\Notice\Editor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

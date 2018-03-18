@@ -1,0 +1,23 @@
+﻿@model Person
+
+@if (Model.RealIdValid.HasValue)
+{
+    if (Model.RealIdValid.Value)
+    {
+        <span class="label label-success">实名</span>
+    }
+    else
+    {
+        <span class="label label-danger">未通过实名认证</span>
+    }
+}
+
+@if(Model.WhenRealIdCommited.HasValue && !Model.WhenRealIdValid.HasValue)
+{
+    <span class="label label-info">实名认证中...</span>
+}
+
+@if(!Model.WhenRealIdCommited.HasValue && !Model.WhenRealIdValid.HasValue)
+{
+    <span class="label label-warning">未认证</span>
+}

@@ -1,64 +1,21 @@
 ﻿@model NoticeEditViewModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "编辑通知公告";
 }
 
-<h2>编辑公告</h2>
-
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
-            </div>
-        </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @Html.Partial("Editor")
 
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MainContent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MainContent, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MainContent, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CreatedBy, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CreatedBy, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CreatedBy, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Visible, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Html.EditorFor(model => model.Visible)
-                    @Html.ValidationMessageFor(model => model.Visible, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="保存" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+    <button type="submit" class="btn btn-primary">保存</button>
+    @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })
 }
-
-<div>
-    @Html.ActionLink("返回公告列表", "Index")
-</div>

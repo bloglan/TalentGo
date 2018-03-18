@@ -84,7 +84,6 @@ namespace TalentGo
         /// 修改身份信息。
         /// </summary>
         /// <param name="person"></param>
-        /// <param name="idCardNumber"></param>
         /// <param name="surname"></param>
         /// <param name="givenName"></param>
         /// <param name="ethnicity"></param>
@@ -93,7 +92,7 @@ namespace TalentGo
         /// <param name="issueDate"></param>
         /// <param name="expiresAt"></param>
         /// <returns></returns>
-        public async Task UpdateRealNameInfo(Person person, string idCardNumber, string surname, string givenName, string ethnicity, string address, string issuer, DateTime issueDate, DateTime? expiresAt)
+        public async Task UpdateRealId(Person person, string surname, string givenName, string ethnicity, string address, string issuer, DateTime issueDate, DateTime? expiresAt)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
@@ -101,15 +100,12 @@ namespace TalentGo
             if (person.WhenRealIdCommited.HasValue)
                 throw new InvalidOperationException("已提交身份验证后不能修改身份信息。");
 
-            var cardNumber = ChineseIDCardNumber.Parse(idCardNumber);
+
 
             //TODO：填充字段
-            person.IDCardNumber = cardNumber.ToString();
             person.Surname = surname;
             person.GivenName = givenName;
-            person.Sex = cardNumber.IsMale ? Sex.Male : Sex.Female;
             person.Ethnicity = ethnicity;
-            person.DateOfBirth = cardNumber.DateOfBirth;
             person.Address = address;
             person.Issuer = issuer;
             person.IssueDate = issueDate;
@@ -254,7 +250,10 @@ namespace TalentGo
                 else if (img.RawFormat.Equals(ImageFormat.Png))
                     mimeType = "image/png";
                 else
-                    throw new NotSupportedException("Image format not supported");
+                    throw new NotSupportedException("不支持的文件格式。");
+
+                if (img.Size.Width < 500 || img.Size.Height < 310)
+                    throw new ArgumentException("图片过小。");
             }
         }
 
@@ -355,6 +354,8 @@ namespace TalentGo
             }
             if (person.DisplayName != frontResult.Name)
                 return false;
+            if (person.Address != frontResult.Address)
+                return false;
             if (person.Ethnicity != frontResult.Nationality)
                 return false;
             if (person.IDCardNumber != frontResult.IDCardNumber)
@@ -375,8 +376,9 @@ namespace TalentGo
         /// <param name="person"></param>
         /// <param name="accepted"></param>
         /// <param name="validateBy"></param>
+        /// <param name="validationMessage"></param>
         /// <returns></returns>
-        public async Task ValidateRealId(Person person, bool accepted, string validateBy)
+        public async Task ValidateRealId(Person person, bool accepted, string validateBy, string validationMessage = null)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
@@ -387,6 +389,7 @@ namespace TalentGo
             person.RealIdValid = accepted;
             person.WhenRealIdValid = DateTime.Now;
             person.RealIdValidBy = validateBy;
+            person.RealIdValidationMessage = validationMessage;
 
             await this.Store.UpdateAsync(person);
         }
@@ -410,6 +413,11 @@ namespace TalentGo
             await this.Store.UpdateAsync(person);
         }
 
+        /// <summary>
+        /// 将实名认证信息退回给用户。
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
         public async Task ReturnBackAsync(Person person)
         {
             if (person == null)

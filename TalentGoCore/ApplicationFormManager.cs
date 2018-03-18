@@ -299,10 +299,10 @@ namespace TalentGo
                 else if (image.RawFormat.Equals(ImageFormat.Png))
                     mimeType = "image/png";
                 else
-                    throw new NotSupportedException("File format not support.");
+                    throw new NotSupportedException("不支持的文件格式。");
 
                 if (image.Size.Width * image.Size.Height < 800 * 800)
-                    throw new ArgumentException("Image size is small!");
+                    throw new ArgumentException("图片过小。");
             }
         }
 

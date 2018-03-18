@@ -25,6 +25,19 @@ namespace TalentGoManagerWebApp.Controllers
             return View();
         }
 
+        [ChildActionOnly]
+        public ActionResult PeopleSummary()
+        {
+            var people = this.manager.People;
+            var model = new PeopleSummaryViewModel
+            {
+                AllUserCount = people.Count(),
+                PendingRealIdValidationCount = people.PendingRealIdValid().Count(),
+                RealdIdAcceptedCount = people.Count(p => p.RealIdValid.Value),
+            };
+            return PartialView("_PeopleSummary", model);
+        }
+
         public ActionResult Search(string q)
         {
             if (string.IsNullOrEmpty(q))
@@ -41,7 +54,7 @@ namespace TalentGoManagerWebApp.Controllers
             }
             return View(result.OrderByDescending(p => p.WhenCreated).Take(100));
         }
-        
+
         public async Task<ActionResult> Detail(Guid id)
         {
             var person = await this.manager.FindByIdAsync(id);
@@ -89,11 +102,14 @@ namespace TalentGoManagerWebApp.Controllers
 
             try
             {
-                await this.manager.ValidateRealId(person, model.Accepted, this.User.Identity.Name);
+                await this.manager.ValidateRealId(person, model.Accepted, this.DomainUser().DisplayName, model.ValidationMessage);
 
                 //如果审核未通过，退回给用户。
                 if (!model.Accepted)
-                    await this.manager.ReturnBackAsync(person);
+                {
+                    if (model.ReturnBackIfRefused)
+                        await this.manager.ReturnBackAsync(person);
+                }
 
                 if (model.Next)
                     return RedirectToAction("ValidateRealId");
@@ -106,12 +122,12 @@ namespace TalentGoManagerWebApp.Controllers
             }
         }
 
-        public async Task<ActionResult> RealIdValidationPart(Guid id)
+        public async Task<ActionResult> RealIdViewPart(Guid id)
         {
             var person = await this.manager.FindByIdAsync(id);
             if (person == null)
                 return HttpNotFound();
-            return PartialView("_RealIdValidationPart", person);
+            return PartialView("_RealIdViewPart", person);
         }
 
         public ActionResult UserList(UserListViewModel model)

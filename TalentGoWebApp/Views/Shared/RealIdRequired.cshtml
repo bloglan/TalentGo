@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "需要实名认证";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>您的实名认证状态：@Html.Partial("_RealIdState", Html.CurrentUser())</p>
+<p>要继续操作，您需要通过实名认证。</p>
+<p>@Html.Partial("_RealIdOperation", Html.CurrentUser())</p>
+<p>@Html.ActionLink("返回", "Index", "Home")</p>

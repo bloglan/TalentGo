@@ -17,12 +17,33 @@ namespace TalentGo.Web
         /// <summary>
         /// 
         /// </summary>
-        public WebUser()
+        protected WebUser()
             : base()
         {
             this.Id = Guid.NewGuid();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idCardNumber"></param>
+        /// <param name="surname"></param>
+        /// <param name="givenName"></param>
+        /// <param name="mobile"></param>
+        /// <param name="email"></param>
+        public WebUser(string idCardNumber, string surname, string givenName, string mobile, string email)
+            : this()
+        {
+            var cardnumber = ChineseIDCardNumber.Parse(idCardNumber);
+            this.UserName = cardnumber.ToString();
+            this.IDCardNumber = cardnumber.ToString();
+            this.Sex = cardnumber.IsMale ? Sex.Male : Sex.Female;
+            this.DateOfBirth = cardnumber.DateOfBirth;
+            this.Surname = surname;
+            this.GivenName = givenName;
+            this.Mobile = mobile;
+            this.Email = email;
+        }
         /// <summary>
         /// 用户名/登录名，实现IUser接口
         /// </summary>
@@ -96,11 +117,5 @@ namespace TalentGo.Web
             // 在此处添加自定义用户声明
             return userIdentity;
         }
-
-        /// <summary>
-        /// 目标用户所持有的所有关联登陆（目前未使用）
-        /// </summary>
-        public virtual ICollection<UserLogin> UserLogins { get; set; }
-
     }
 }

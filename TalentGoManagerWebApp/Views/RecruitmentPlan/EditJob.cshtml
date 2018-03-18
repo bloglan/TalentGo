@@ -10,5 +10,5 @@
 {
     @Html.Partial("JobEditor")
     <button type="submit" class="btn btn-primary">保存</button>
-    @Html.ActionLink("取消", "Detail", new { id = Html.ViewContext.RouteData.Values["id"] })
+    @Html.ActionLink("取消", "Detail", new { id = this.Request["planid"] })
 }

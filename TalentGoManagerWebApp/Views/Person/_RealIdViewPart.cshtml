@@ -1,0 +1,44 @@
+﻿@model Person
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="thumbnail">
+            <img src="@Url.Action("Index", "File", new { id = Model.IDCardFrontFile })" class="img-responsive">
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />姓名：@Model.DisplayName</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />性别：@(Model.Sex == Sex.Male ? "男" : "女")</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />民族：@Model.Ethnicity</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />出生：@Model.DateOfBirth.ToShortDateString()</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />住址：@Model.Address</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />公民身份号码：@Model.IDCardNumber</label>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <img src="@Url.Action("Index", "File", new { id = Model.IDCardBackFile })" class="img-responsive">
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />签发机关：@Model.Issuer</label>
+        </div>
+        <div class="checkbox">
+            <label><input type="checkbox" class="validation-item" />有效期限：@Model.IssueDate.Value.ToShortDateString() - @(Model.ExpiresAt.HasValue ? Model.ExpiresAt.Value.ToShortDateString() : "长期")</label>
+        </div>
+    </div>
+</div>

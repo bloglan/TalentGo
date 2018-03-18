@@ -14,6 +14,16 @@ namespace TalentGoWebApp.Models
             this.IssueDate = DateTime.Now;
         }
 
+        [Display(Name = "姓氏")]
+        [Required]
+        [StringLength(50)]
+        public string Surname { get; set; }
+
+        [Display(Name = "名字", Description = "不包括姓氏")]
+        [Required]
+        [StringLength(50)]
+        public string GivenName { get; set; }
+
         [Display(Name = "民族", Description = "不用填写\"族\"字")]
         [Required]
         [StringLength(50)]

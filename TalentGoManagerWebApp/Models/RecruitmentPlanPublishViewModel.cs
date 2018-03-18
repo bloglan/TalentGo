@@ -6,13 +6,9 @@ namespace TalentGoManagerWebApp.Models
 {
     public class RecruitmentPlanPublishViewModel
 	{
-		public RecruitmentPlanPublishViewModel()
-		{
-			this.EnrollExpirationDate = DateTime.Now.AddDays(15);
-		}
-		public RecruitmentPlan Plan { get; set; }
+		public int PlanId { get; set; }
 
-		[Display(Name = "报名截止日期")]
+		[Display(Name = "报名截止时间")]
 		[Required]
 		[UIHint("DateTimeMinute")]
 		public DateTime EnrollExpirationDate { get; set; }

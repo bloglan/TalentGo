@@ -100,9 +100,7 @@ namespace TalentGo
             //当State处于Normal时，不做任何操作。
             //
             if (plan.WhenPublished.HasValue)
-            {
                 throw new InvalidOperationException("招聘计划已发布");
-            }
 
             if (EnrollExpirationDate <= DateTime.Now)
                 throw new ArgumentException("报名截止时间早于当前时间。");

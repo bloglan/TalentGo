@@ -6,15 +6,27 @@
 <div class="page-header">
     <h1>@Model.Title</h1>
 </div>
-<h2>摘要</h2>
-<p>招聘简章：@Html.ActionLink("查看招聘简章", "RecruitmentContent", new { id = Model.Id }, new { @class = "btn btn-default" }) </p>
-<p>发布人：@Model.Publisher</p>
-<p>报名截止时间：@Model.EnrollExpirationDate.ToString("yyyy-MM-dd HH:mm:ss")</p>
-<p>创建时间：@Model.WhenCreated.ToShortDateString()</p>
+<p>报名截止时间：@Model.EnrollExpirationDate.ToString("yyyy-MM-dd HH:mm") （@(Model.EnrollExpirationDate.SmartShow())）</p>
 <p>发布时间：@(Model.WhenPublished.HasValue ? Model.WhenPublished.Value.ToShortDateString() : "未发布")</p>
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingOne">
+        <h2 class="panel-title">
+            <a role="button" href="#collapse" data-toggle="collapse" data-target="#collapse" aria-expanded="false" aria-controls="collapse">
+                招聘简章
+            </a>
+        </h2>
+    </div>
+    <div id="collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body article">
+            @Html.Raw(Model.Recruitment)
+        </div>
+    </div>
+</div>
+
+
 @if (!Model.WhenPublished.HasValue)
 {
-    <p>@Html.ActionLink("编辑", "EditRecruitmentContent", new { id = Model.Id }, new { @class = "btn btn-default" }) @Html.ActionLink("发布此计划", "Publish", new { id = Model.Id }, new { @class = "btn btn-primary" })</p>
+    <p>@Html.ActionLink("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" }) @Html.ActionLink("发布此计划", "Publish", new { id = Model.Id }, new { @class = "btn btn-primary" })</p>
 }
 <h2>职位/类别</h2>
 @if (!Model.WhenPublished.HasValue)
@@ -23,3 +35,4 @@
 }
 @Html.Partial("JobList", Model.Jobs)
 
+<p>创建时间：@Model.WhenCreated</p>

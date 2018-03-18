@@ -23,7 +23,6 @@ namespace TalentGo.EntityFramework
 	{
 		DbContext database;
         DbSet<WebUser> set;
-        DbSet<UserLogin> userLoginSet;
 
         /// <summary>
         /// 
@@ -33,7 +32,6 @@ namespace TalentGo.EntityFramework
 		{
 			this.database = DbContext;
             this.set = this.database.Set<WebUser>();
-            this.userLoginSet = this.database.Set<UserLogin>();
 		}
 
         /// <summary>

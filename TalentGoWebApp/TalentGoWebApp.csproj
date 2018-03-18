@@ -304,6 +304,8 @@
     <Content Include="Content\themes\base\tabs.css" />
     <Content Include="Content\themes\base\theme.css" />
     <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="Content\WebRes\IDCardBackSample.png" />
+    <Content Include="Content\WebRes\IDCardFrontSample.png" />
     <Content Include="Content\WebRes\NoHeadImage.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -736,24 +738,20 @@
     <Content Include="Views\Recruitment\UploadArchives.cshtml" />
     <Content Include="Views\Recruitment\PreviewEnrollment.cshtml" />
     <Content Include="Views\Shared\_EnrollmentDataViewer.cshtml" />
-    <Content Include="Views\Shared\_EnrollmentArchiveDataViewer.cshtml" />
-    <Content Include="Views\Shared\_EnrollmentDataPropertiesViewer.cshtml" />
     <Content Include="Views\Recruitment\Detail.cshtml" />
     <Content Include="Views\Recruitment\AnnounceForExam.cshtml" />
     <Content Include="Views\Shared\OperationResult.cshtml" />
     <Content Include="Views\Notice\ArticlePart.cshtml" />
     <Content Include="Views\Notice\Detail.cshtml" />
     <Content Include="Views\Notice\Index.cshtml" />
-    <Content Include="Views\Home\BeforeAuthPartial.cshtml" />
-    <Content Include="Views\Home\FormsAuthPartial.cshtml" />
+    <Content Include="Views\Home\_BeforeAuthPartial.cshtml" />
+    <Content Include="Views\Home\_FormsAuthPartial.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeDay.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeMinute.cshtml" />
     <Content Include="Views\Notice\ArticleListGroup.cshtml" />
     <Content Include="Views\Shared\_LayoutBlank.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Shared\EnrollmentStatePartial.cshtml" />
-    <Content Include="Views\Shared\_EnrollmentDataPropertiesViewerMamg.cshtml" />
-    <Content Include="Views\Shared\_EnrollmentDataOperationPanel.cshtml" />
     <Content Include="Views\Help\Support.cshtml" />
     <Content Include="Views\Help\FAQ.cshtml" />
     <Content Include="Views\Help\Privacy.cshtml" />
@@ -765,9 +763,7 @@
     <Content Include="Views\Account\RegisterAgreement.cshtml" />
     <Content Include="Views\Account\EditRealId.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
-    <Content Include="Views\Home\RealIdRequired.cshtml" />
-    <Content Include="Views\Home\RealIdValidFailed.cshtml" />
-    <Content Include="Views\Home\RealIdValidating.cshtml" />
+    <Content Include="Views\Home\_RealIdRequired.cshtml" />
     <Content Include="Views\ApplicationForm\Index.cshtml" />
     <Content Include="Views\ApplicationForm\_ApplicationStatus.cshtml" />
     <Content Include="Views\Recruitment\_NotificationPanel.cshtml" />
@@ -784,6 +780,13 @@
     <Content Include="Views\Account\CommitForReadIdFailed.cshtml" />
     <Content Include="Views\Shared\_UserProfileLayout.cshtml" />
     <Content Include="Views\UserProfile\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_RealIdState.cshtml" />
+    <Content Include="Views\Shared\_RealIdOperation.cshtml" />
+    <Content Include="Views\Shared\RealIdRequired.cshtml" />
+    <Content Include="Views\UserProfile\ApplicationForm.cshtml" />
+    <Content Include="Views\UserProfile\AdmissionTicket.cshtml" />
+    <Content Include="Views\UserProfile\ChangeEmail.cshtml" />
+    <Content Include="Views\UserProfile\ChangePhoneNumber.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

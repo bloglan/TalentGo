@@ -1,0 +1,24 @@
+﻿@model Notice
+@{
+    ViewBag.Title = Model.Title;
+}
+<div class="page-header">
+    <h1>@Model.Title</h1>
+</div>
+<p>
+    <span class="glyphicon glyphicon-user" aria-hidden="true"></span><span class="sr-only">作者：</span><span>@Model.CreatedBy</span>
+    <span class="glyphicon glyphicon-calendar" aria-hidden="true"></span><span class="sr-only">创建日期：</span><abbr title="@Model.WhenCreated.ToString()">@Model.WhenCreated.ToShortDateString()</abbr>
+</p>
+@if (Model.WhenPublished.HasValue)
+{
+    <p>发布时间：@Model.WhenPublished.Value.ToString()  @Html.ActionLink("撤回", "CancelPublish", new { id = Model.Id })</p>
+}
+else
+{
+    <p>文章尚未发布。 @Html.ActionLink("发布", "Publish", new { id = Model.Id })</p>
+}
+
+<hr />
+<div class="article">
+    @Html.Raw(Model.MainContent)
+</div>

@@ -62,13 +62,8 @@ namespace TalentGo.Web
 		public DateTime WhenChanged { get; set; }
 
         /// <summary>
-        /// Is visible.
-        /// </summary>
-		public bool Visible { get; set; }
-
-        /// <summary>
         /// 发布时间。
         /// </summary>
-        public DateTime? WhenPublished { get; set; }
+        public DateTime? WhenPublished { get; internal set; }
     }
 }

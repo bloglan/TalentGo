@@ -28,12 +28,10 @@
                     <li>@Html.ActionLink("主页", "Index", "Home")</li>
                     <li>@Html.ActionLink("招聘计划", "Index", "RecruitmentPlan")</li>
                     <li>@Html.ActionLink("报名表", "Index", "ApplicationForm")</li>
-                    <li>@Html.ActionLink("招聘考试", "Index", "EmploymentTesting")</li>
                     <li>@Html.ActionLink("注册用户", "Index", "Person")</li>
-                    <li>@Html.ActionLink("网站公告", "Index", "Article")</li>
-                    <li>@Html.ActionLink("系统设置", "Index", "System")</li>
+                    <li>@Html.ActionLink("网站公告", "Index", "Notice")</li>
                 </ul>
-                <p class="nav navbar-text navbar-right">你好，@User.Identity.Name!</p>
+                <p class="nav navbar-text navbar-right">你好，@Html.DomainUser().DisplayName</p>
             </div>
         </div>
     </div>

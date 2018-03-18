@@ -60,6 +60,7 @@
     <Compile Include="PersonManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StubFileStore.cs" />
+    <Compile Include="StubIDCardOCRService.cs" />
     <Compile Include="StubPersonStore.cs" />
     <Compile Include="TestUser.cs" />
   </ItemGroup>

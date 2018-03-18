@@ -5,19 +5,24 @@
     {
         @Html.AntiForgeryToken()
 
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a href="@Url.Action("Index", "UserProfile", routeValues: null)" target="_blank" title="管理我的配置">
-                    您好，@Html.CurrentUser().DisplayName
-                    @if (Html.CurrentUser().RealIdValid.HasValue && Html.CurrentUser().RealIdValid.Value)
-                    {
-                        <span class="glyphicon glyphicon-certificate" style="color: lightgray;" title="已通过实名身份认证"></span>
-                    }
-                </a>
+        <p class="nav navbar-nav navbar-right navbar-text">
+            <a href="@Url.Action("Index", "UserProfile", routeValues: null)" class="navbar-link" target="_blank" title="管理我的配置">
+                @Html.CurrentUser().DisplayName
+            </a>
+            @if (Html.CurrentUser().RealIdValid.HasValue)
+            {
+                if (Html.CurrentUser().RealIdValid.Value)
+                {
+                    <span class="glyphicon glyphicon-certificate" title="已通过实名身份认证"></span>
+                }
+                else
+                {
+                    <span class="glyphicon glyphicon-warning-sign" style="color: red" title="实名认证失败"></span>
+                }
 
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">注销</a></li>
-        </ul>
+            }
+            <a href="javascript:document.getElementById('logoutForm').submit()" class="navbar-link">注销</a>
+        </p>
     }
 }
 else

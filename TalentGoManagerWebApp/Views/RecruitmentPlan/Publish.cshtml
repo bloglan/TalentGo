@@ -1,34 +1,26 @@
 ﻿@model RecruitmentPlanPublishViewModel
 @{
-	ViewBag.Title = "发布招聘计划";
+    ViewBag.Title = "发布招聘计划";
 }
 
-<h2>发布招聘计划</h2>
-
-<p>若要发布招聘计划，请填入报名截止日期。</p>
-<p>招聘计划一旦发布，即可被符合条件的注册用户看到，注册用户可以获知该招聘计划的报名截止时间，并在此期间内安排报名。</p>
-<p>系统会阻止未在报名截止日期之后的任何更改和提交。</p>
-<p>一旦发布招聘计划，您将不能再修改报名计划的内容，包括报名截止日期和文档需求项。</p>
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>招聘计划发布后，即可接受求职者报名。请指定一个报名截止时间。</p>
+<p class="alert alert-warning">招聘计划发布后，您将不能再修改报名计划。</p>
 
 @using (Html.BeginForm())
 {
-	@Html.AntiForgeryToken()
-	<div class="form-horizontal">
-		<div class="form-group">
-			@Html.LabelFor(m => m.EnrollExpirationDate, new { @class = "control-label col-md-2" })
-			<div class="col-md-10">
-				@Html.EditorFor(m => m.EnrollExpirationDate, new { htmlAttributes = new { @class = "form-control" } })
-				@Html.ValidationMessageFor(m => m.EnrollExpirationDate, "", new { @class = "text-danger" })
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-md-10 col-md-offset-2">
-				<input type="submit" class="btn btn-primary" value="发布" onclick="return confirm('发布招聘计划后，将不能修改和撤销，请再次确认。');" />
-				@Html.ActionLink("修改此招聘计划", "Edit", new { id = Model.Plan.Id }, new { @class = "btn btn-default" })
-				@Html.ActionLink("返回", "Detail", new { id = Model.Plan.Id }, new { @class = "btn btn-default" })
-			</div>
-		</div>
-	</div>
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.PlanId)
+    <div class="form-group">
+        @Html.LabelFor(m => m.EnrollExpirationDate, new { @class = "control-label" })
+        @Html.EditorFor(m => m.EnrollExpirationDate, new { htmlAttributes = new { @class = "form-control" } })
+        @Html.ValidationMessageFor(m => m.EnrollExpirationDate, "", new { @class = "text-danger" })
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('发布招聘计划后，将不能修改，请再次确认!');">发布</button>
+    @Html.ActionLink("修改此招聘计划", "Edit", new { id = Model.PlanId }, new { @class = "btn btn-default" })
+    @Html.ActionLink("返回", "Detail", new { id = Model.PlanId }, new { @class = "btn btn-default" })
 
-	
+
 }

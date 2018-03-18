@@ -37,7 +37,7 @@ namespace TalentGoWebApp.Controllers
         {
             var person = this.CurrentUser();
             if (!person.RealIdValid.HasValue || !person.RealIdValid.Value)
-                return HttpNotFound();
+                return View("RealIdRequired");
 
             return View(this.recruitmentManager.RecruitmentPlans.Enrollable());
         }

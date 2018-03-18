@@ -15,6 +15,9 @@ namespace TalentGoManagerWebApp.Models
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }
 
+        [Display(Name = "计划招聘人数", Description = "该职位/类别计划招聘人数。可不填写。")]
+        public int? ExpectRecruitCount { get; set; }
+
         [Display(Name = "工作地点", Description = "该职位预期的工作地点，若在聘用时分配，请填聘用时分配。")]
         [Required]
         public string WorkLocation { get; set; }

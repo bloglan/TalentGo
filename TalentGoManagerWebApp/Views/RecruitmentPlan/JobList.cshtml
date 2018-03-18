@@ -4,6 +4,7 @@
     <thead>
         <tr>
             <th>名称</th>
+            <th>招聘人数</th>
             <th>工作地点</th>
             <th>学历要求</th>
             <th>学位要求</th>
@@ -16,6 +17,7 @@
         {
             <tr>
                 <td>@job.Name</td>
+                <td>@job.ExpectRecruitCount</td>
                 <td>@job.WorkLocation</td>
                 <td>@job.EducationBackgroundRequirement</td>
                 <td>@job.DegreeRequirement</td>
@@ -23,7 +25,8 @@
                 <td>
                     @if (!job.Plan.WhenPublished.HasValue)
                     {
-                        @Html.ActionLink("Edit", "EditJob", new { id = job.Id, planid = job.PlanId }) @Html.ActionLink("Delete", "DeleteJob", new { id = job.Id, planid = job.PlanId })
+                        @Html.ActionLink("编辑", "EditJob", new { id = job.Id, planid = job.PlanId })
+                        @Html.ActionLink("删除", "DeleteJob", new { id = job.Id, planid = job.PlanId })
                     }
                 </td>
             </tr>

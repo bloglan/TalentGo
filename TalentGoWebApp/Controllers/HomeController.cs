@@ -36,25 +36,17 @@ namespace TalentGoWebApp.Controllers
             var person = this.CurrentUser();
 
             if (!this.User.Identity.IsAuthenticated)
-                return PartialView("BeforeAuthPartial");
+                return PartialView("_BeforeAuthPartial");
 
-            if (!person.WhenRealIdCommited.HasValue || string.IsNullOrEmpty(person.IDCardFrontFile) || string.IsNullOrEmpty(person.IDCardBackFile))
+            if (!person.RealIdValid.HasValue || !person.RealIdValid.Value)
             {
                 //实名信息未提交，或身份证照片未传送。
-                return PartialView("RealIdRequired");
+                return PartialView("_RealIdRequired");
             }
             else
             {
-                if (!person.RealIdValid.HasValue)
-                    return PartialView("RealIdValidating");
-                else
-                {
-                    if (!person.RealIdValid.Value)
-                        return PartialView("RealIdValidFailed"); //验证失败。
-                    else
-                        return PartialView("FormsAuthPartial");
+                return PartialView("_FormsAuthPartial");
 
-                }
             }
         }
 

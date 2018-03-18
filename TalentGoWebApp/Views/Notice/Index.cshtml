@@ -1,9 +1,31 @@
-﻿
+﻿@model IQueryable<Notice>
 @{
     ViewBag.Title = "通知公告";
 }
 
-<h2>通知公告</h2>
-<hr />
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
 
-@Html.Action("ArticlePart", new { IsPublic = !(this.User.Identity is System.Security.Principal.WindowsIdentity), plan = default(RecruitmentPlan), MaxCount = 50 })
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <colgroup>
+            <col class="col-sm-9" />
+            <col class="col-sm-3" />
+        </colgroup>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.ActionLink(item.Title, "Detail", new { id = item.Id }, new { target = "_blank" })</td>
+                    <td>@item.WhenPublished.Value.ToShortDateString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>暂无通知公告</p>
+}

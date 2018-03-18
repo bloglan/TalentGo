@@ -1,0 +1,10 @@
+﻿@model PeopleSummaryViewModel
+
+<div class="panel panel-default">
+    <div class="panel-heading">概要</div>
+    <div class="panel-body">
+        <p>注册用户数：@Model.AllUserCount</p>
+        <p>待认证用户数：@Model.PendingRealIdValidationCount</p>
+        <p>实名认证用户：@Model.RealdIdAcceptedCount</p>
+    </div>
+</div>

@@ -24,9 +24,5 @@ namespace TalentGoManagerWebApp.Models
 		[Display(Name = "报名截止时间")]
         [UIHint("DateTimeMinute")]
 		public DateTime ExpirationDate { get; set; }
-
-		[Display(Name = "发布者")]
-		[Required]
-		public string Publisher { get; set; }
 	}
 }
