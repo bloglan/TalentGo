@@ -4,8 +4,8 @@
 
 <div class="row" style="padding-top: 12em; padding-bottom: 12em;">
 	<div class="col-md-6">
-		<h2>动态</h2>
-		@*@Html.Action("ArticlePart", "Notice")*@
+		<h2>@Html.ActionLink("动态", "Index", "Notice")</h2>
+		@Html.Action("News", "Notice")
 	</div>
 	<div class="col-md-4">
 		<div class="panel panel-default">

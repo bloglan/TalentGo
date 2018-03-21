@@ -12,6 +12,7 @@ namespace TalentGoCore.Tests
         public TestUser(string idCardNumber, string surname, string givenName, string mobile,string email)
             : base()
         {
+            this.Id = Guid.NewGuid();
             var cardNumber = ChineseIDCardNumber.Parse(idCardNumber);
 
             this.IDCardNumber = cardNumber.ToString();

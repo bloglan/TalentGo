@@ -18,6 +18,11 @@ namespace TalentGo
         /// <returns></returns>
         public static IQueryable<ApplicationForm> Commited(this IQueryable<ApplicationForm> source)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
             return source.Where(a => a.WhenCommited.HasValue);
         }
 
@@ -28,8 +33,12 @@ namespace TalentGo
         /// <returns></returns>
         public static IQueryable<ApplicationForm> PendingFileReview(this IQueryable<ApplicationForm> source)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
             //已提交，没有资料审查时间的。
-            return source.Commited().Where(a => !a.WhenFileReview.HasValue);
+            return source.Commited().Where(a => !a.WhenFileReviewed.HasValue);
         }
 
         /// <summary>
@@ -37,9 +46,14 @@ namespace TalentGo
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static IQueryable<ApplicationForm> PendingAudit(this IQueryable<ApplicationForm> source)
+        public static IQueryable<ApplicationForm> Auditable(this IQueryable<ApplicationForm> source)
         {
-            return source.Where(a => a.FileReviewAccepted.Value && !a.WhenAudit.HasValue);
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return source.Commited().Where(a => !a.WhenAuditComplete.HasValue && a.FileReviewAccepted.Value);
         }
 
         /// <summary>
@@ -49,7 +63,28 @@ namespace TalentGo
         /// <returns></returns>
         public static IQueryable<ApplicationForm> Approved(this IQueryable<ApplicationForm> source)
         {
-            return source.Where(a => a.WhenAudit.HasValue && a.Approved.Value);
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return source.Commited().Where(a => a.WhenAuditComplete.HasValue && a.AuditFlag);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="planId"></param>
+        /// <returns></returns>
+        public static IQueryable<ApplicationForm> OfPlan(this IQueryable<ApplicationForm> source, int planId)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return source.Where(f => f.PlanId == planId);
         }
     }
 }

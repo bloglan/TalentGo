@@ -21,6 +21,11 @@ namespace TalentGo.Web
         /// <returns></returns>
         public static DomainUser DomainUser(this Controller controller)
         {
+            if (controller == null)
+            {
+                throw new ArgumentNullException(nameof(controller));
+            }
+
             if (controller.HttpContext.Items[DomainUserKey] == null)
             {
 #if DEBUG

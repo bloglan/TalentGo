@@ -209,6 +209,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\ControllerExtension.cs" />
+    <Compile Include="Utilities\IPaging.cs" />
+    <Compile Include="Utilities\Paging.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -607,7 +609,7 @@
     <Content Include="Views\Notice\Edit.cshtml" />
     <Content Include="Views\Notice\Index.cshtml" />
     <Content Include="Views\ApplicationForm\Detail.cshtml" />
-    <Content Include="Views\ApplicationForm\EnrollmentList.cshtml" />
+    <Content Include="Views\ApplicationForm\AuditList.cshtml" />
     <Content Include="Views\ApplicationForm\SmartStatistics.cshtml" />
     <Content Include="Views\ApplicationForm\Statistics.cshtml" />
     <Content Include="Views\RecruitmentPlan\CommitAudit.cshtml" />
@@ -716,6 +718,8 @@
     <Content Include="Views\Person\_PeopleSummary.cshtml" />
     <Content Include="Views\Shared\_RealIdState.cshtml" />
     <Content Include="Views\Notice\Editor.cshtml" />
+    <Content Include="Views\Shared\_Pager.cshtml" />
+    <Content Include="Views\Shared\_Layout-Fluid.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

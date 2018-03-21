@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TalentGo;
+using TalentGoManagerWebApp.Utilities;
 
 namespace TalentGoManagerWebApp.Models
 {
-    public class ApplicationFormListViewModel
+    public class ApplicationFormListViewModel : IPaging
 	{
 		public ApplicationFormListViewModel()
 		{
@@ -13,20 +14,10 @@ namespace TalentGoManagerWebApp.Models
 			this.AuditFilter = AuditFilterType.All;
 			this.PageSize = 30;
 		}
-		public string RecruitmentPlanTitle { get; set; }
 
-		public int RecruitmentPlanID { get; set; }
-
-		public bool IsAudit { get; set; }
-
-		public string MajorCategory { get; set; }
 
 		public AuditFilterType AuditFilter { get; set; }
 
-		public AnnounceFilterType AnnounceFilter { get; set; }
-
-		public bool? AnnouncedForExam { get; set; }
-		
 		[Display(Name = "搜索")]
 		public string Keywords { get; set; }
 

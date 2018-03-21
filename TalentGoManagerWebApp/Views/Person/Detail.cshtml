@@ -7,21 +7,22 @@
     <h1>@ViewBag.Title</h1>
 </div>
 
-<h2>RealId Information</h2>
-<p>Surname: @Model.Surname</p>
-<p>Given Name: @Model.GivenName</p>
-<p>ID Card Number: @Model.IDCardNumber</p>
-<p>Sex: @(Model.Sex == Sex.Male ? "Male" : "Female")</p>
-<p>Date of Birth: @Model.DateOfBirth</p>
-<p>Ethnicity: @Model.Ethnicity</p>
-<p>Address: @Model.Address</p>
-<p>Issuer: @Model.Issuer</p>
-<p>IssueDate: @Model.IssueDate</p>
-<p>Expires At: @Model.ExpiresAt</p>
-<p>When RealId Commited: @Model.WhenRealIdCommited</p>
-<p>RealId Valid: @Model.RealIdValid</p>
-<p>When RealId Valid: @Model.WhenRealIdValid</p>
-<p>RealId Valid By: @Model.RealIdValidBy</p>
+<h2>实名身份信息</h2>
+<p>姓氏：@Model.Surname</p>
+<p>名字：@Model.GivenName</p>
+<p>显示为：@Model.DisplayName</p>
+<p>身份证号码：@Model.IDCardNumber</p>
+<p>性别：@(Model.Sex == Sex.Male ? "男" : "女")</p>
+<p>出生时间：@Model.DateOfBirth.ToShortDateString()</p>
+<p>民族：@Model.Ethnicity</p>
+<p>住址：@Model.Address</p>
+<p>签发机关：@Model.Issuer</p>
+<p>有效期起：@(Model.IssueDate.HasValue?Model.IssueDate.Value.ToShortDateString():"")</p>
+<p>有效期至：@(Model.ExpiresAt.HasValue?Model.ExpiresAt.Value.ToShortDateString():"长期")</p>
+<p>实名认证提交时间：@Model.WhenRealIdCommited</p>
+<p>通过实名认证：@Model.RealIdValid</p>
+<p>认证时间：@Model.WhenRealIdValid</p>
+<p>认证人：@Model.RealIdValidBy</p>
 <div class="row">
     <div class="col-md-3 img-thumbnail">
         <img src="@Url.Action("Index", "File", new { id = Model.IDCardFrontFile })" class="img-responsive" />
@@ -37,16 +38,16 @@
     </div>
 </div>
 
-<h2>Contact Information</h2>
-<p>Mobile: @Model.Mobile</p>
-<p>Email: @Model.Email</p>
+<h2>联系信息</h2>
+<p>移动电话：@Model.Mobile</p>
+<p>电子邮件：@Model.Email</p>
 
-<h2>Properties</h2>
-<p>User Id: @Model.Id</p>
-<p>Registeration Time: @Model.WhenCreated</p>
-<p>When Changed: @Model.WhenChanged</p>
+<h2>账户属性</h2>
+<p>USER ID：@Model.Id</p>
+<p>注册时间：@Model.WhenCreated</p>
+<p>修改时间：@Model.WhenChanged</p>
 
-<h2>Operations</h2>
-<p>@Html.ActionLink("Validate RealID", "ValidateRealId", new { id = Model.Id })</p>
-<p>@Html.ActionLink("Reset RealID Validation State", "ResetRealIdState", new { id = Model.Id })</p>
-<p>@Html.ActionLink("Delete Account", "Delete", new { id = Model.Id })</p>
+<h2>操作</h2>
+<p>@Html.ActionLink("认证实名信息", "ValidateRealId", new { id = Model.Id })</p>
+<p>@Html.ActionLink("重置认证状态", "ResetRealIdState", new { id = Model.Id })</p>
+<p>@Html.ActionLink("删除账户", "Delete", new { id = Model.Id })</p>

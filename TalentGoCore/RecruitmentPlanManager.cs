@@ -143,8 +143,6 @@ namespace TalentGo
             {
                 forms.UnionWith(job.ApplicationForms);
             }
-            if (forms.Any(e => !e.Approved.HasValue))
-                throw new InvalidOperationException("操作失败，还有未设置审核标记的报名表。");
 
 
 
@@ -155,8 +153,7 @@ namespace TalentGo
                     //若没有提交，或提交日期晚于报名截止日期的，直接设定为不通过。
                     if (!data.WhenCommited.HasValue || data.WhenCommited > plan.EnrollExpirationDate)
                     {
-                        data.Approved = false;
-                        data.WhenAudit = DateTime.Now;
+                        data.AuditFlag = false;
                         data.AuditMessage = "未在指定的报名截止时间内提交";
                     }
                 }

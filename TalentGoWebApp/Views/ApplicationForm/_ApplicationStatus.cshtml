@@ -6,7 +6,7 @@
 }
 else
 {
-    if(!Model.WhenFileReview.HasValue)
+    if(!Model.WhenFileReviewed.HasValue)
     {
         <span class="label label-default">资料审查中</span>
     }
@@ -18,13 +18,13 @@ else
         }
         else
         {
-            if (!Model.WhenAudit.HasValue)
+            if (!Model.WhenAuditComplete.HasValue)
             {
                 <span class="label label-default">审核中</span>
             }
             else
             {
-                if(!Model.Approved.Value)
+                if(!Model.AuditFlag)
                 {
                     <span class="label label-danger">审核未通过</span>
                 }

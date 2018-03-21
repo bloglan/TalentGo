@@ -17,9 +17,5 @@
         /// 
         /// </summary>
 		Approved = 2,
-        /// <summary>
-        /// 
-        /// </summary>
-		NotSet = 3
 	}
 }

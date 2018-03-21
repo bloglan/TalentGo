@@ -71,7 +71,7 @@ namespace TalentGoWebApp.Models
         /// <summary>
         /// Major of education.
         /// </summary>
-		[Display(Name = "报名专业", Description = "如果列表中没有所学专业，请确认是否符合报名要求。要继续报名，请选择一个你认为最符合的报名专业。")]
+		[Display(Name = "报名专业", Description = "如果列表中没有你的主修专业，请确认是否符合报名要求！要继续报名，请选择一个你认为最符合的报名专业。")]
         [Required]
         [StringLength(50)]
         public string SelectedMajor { get; set; }
@@ -93,7 +93,7 @@ namespace TalentGoWebApp.Models
         /// <summary>
         /// Educational background.
         /// </summary>
-		[Display(Name = "学历证书编号", Description = "请填写毕业证、就业推荐表或其他证明文件上的编号。")]
+		[Display(Name = "学历证书编号", Description = "请填写毕业证、就业推荐表或其他证明文件上的编号。没有编号请留空。")]
         [StringLength(50)]
         public string AcademicCertNumber { get; set; }
 

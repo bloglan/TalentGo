@@ -1,0 +1,123 @@
+﻿@model IPaging
+
+@{
+    //For Paging
+    int StartLen = 2;
+    int EndLen = 2;
+    int BeforeIndexLen = 2;
+    int AfterIndexLen = 4;
+
+    int PageCount = (int)Math.Ceiling((double)Model.AllCount / (double)Model.PageSize);
+
+    int renderBegin = StartLen;
+    int renderEnd = PageCount - EndLen;
+    int renderBefore = 0;
+    int renderAfter = 0;
+    bool renderBeforeInd = false;
+    bool renderAfterInd = false;
+
+    if (Model.PageIndex - BeforeIndexLen <= StartLen)
+    {
+        renderBefore = StartLen;
+    }
+    else
+    {
+        renderBefore = Model.PageIndex - BeforeIndexLen;
+        renderBeforeInd = true;
+    }
+
+    if (Model.PageIndex + AfterIndexLen + 1 >= PageCount - EndLen)
+    {
+        renderAfter = PageCount - EndLen;
+    }
+    else
+    {
+        renderAfter = Model.PageIndex + AfterIndexLen + 1;
+        renderAfterInd = true;
+    }
+    if (renderBegin >= PageCount - 1)
+    {
+        renderBegin = PageCount - 1;
+    }
+    if (renderEnd <= renderBegin)
+    {
+        renderEnd = renderBegin;
+    }
+
+}
+
+<nav>
+    <ul class="pagination">
+        @if (Model.PageIndex <= 0)
+        {
+            <li class="disabled"><span aria-hidden="true">«</span></li>
+        }
+        else
+        {
+            <li><a aria-label="Previous" href="javascript:GoTo(@(Model.PageIndex - 1),@Model.PageSize);"><span aria-hidden="true">«</span></a></li>
+        }
+        @for (int a = 0; a < renderBegin; a++)
+        {
+            if (Model.PageIndex == a)
+            {
+                <li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+            }
+            else
+            {
+                <li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+            }
+        }
+        @if (renderBeforeInd)
+        {
+            <li><span>...</span></li>
+        }
+        @for (int a = renderBefore; a < renderAfter; a++)
+        {
+            if (Model.PageIndex == a)
+            {
+                <li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+            }
+            else
+            {
+                <li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+            }
+        }
+        @if (renderAfterInd)
+        {
+            <li><span>...</span></li>
+        }
+        @for (int a = renderEnd; a < PageCount; a++)
+        {
+            if (Model.PageIndex == a)
+            {
+                <li class="active"><span>@(a + 1) <span class="sr-only">(current)</span></span></li>
+            }
+            else
+            {
+                <li><a href="javascript:GoTo(@a, @Model.PageSize);">@(a + 1)</a></li>
+            }
+        }
+        @if (Model.PageIndex >= PageCount - 1)
+        {
+            <li class="disabled"><span aria-hidden="true">»</span></li>
+        }
+        else
+        {
+            <li><a aria-label="Next" href="javascript:GoTo(@(Model.PageIndex + 1),@Model.PageSize);"><span aria-hidden="true">»</span></a></li>
+        }
+    </ul>
+</nav>
+
+@using (Html.BeginScriptContext())
+{
+    Html.AddScriptBlock(
+@<script>
+     function GoTo(PageIndex, PageSize) {
+         $("#PageIndex").val(PageIndex);
+         $("#PageSize").val(PageSize);
+
+         $("form").submit();
+     }
+</script>
+);
+}

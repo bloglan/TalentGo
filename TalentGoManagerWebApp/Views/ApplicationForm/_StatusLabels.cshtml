@@ -12,9 +12,9 @@
     }
 }
 
-@if(Model.Approved.HasValue)
+@if(Model.AuditFlag)
 {
-    if (Model.Approved.Value)
+    if (Model.AuditFlag)
     {
         <span class="label label-success">资格通过</span>
     }

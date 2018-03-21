@@ -17,9 +17,9 @@ namespace TalentGo
         /// <summary>
         /// Finds one enrollment by it's primary key.
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        Task<ApplicationForm> FindByIdAsync(int Id);
+        Task<ApplicationForm> FindByIdAsync(int id);
 
         /// <summary>
         /// Stores an enrollment into base data store.

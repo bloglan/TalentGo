@@ -1,0 +1,20 @@
+﻿@model ApplicationForm
+
+@if(Model.FileReviewAccepted.HasValue && Model.FileReviewAccepted.Value)
+{
+    if(!Model.WhenAuditComplete.HasValue)
+    {
+        <span class="label label-info">资格审核中</span>
+    }
+    else
+    {
+        if(Model.AuditFlag)
+        {
+            <span class="label label-success">审核通过</span>
+        }
+        else
+        {
+            <span class="label label-danger">审核未通过</span>
+        }
+    }
+}

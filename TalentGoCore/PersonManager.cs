@@ -42,6 +42,16 @@ namespace TalentGo
         public virtual IIDCardOCRService IDCardOCRService { get; set; }
 
         /// <summary>
+        /// 获取或设置短信服务。
+        /// </summary>
+        public virtual ITalentGoSMSService SMSService { get; set; }
+
+        /// <summary>
+        /// 获取或设置邮件服务。
+        /// </summary>
+        public virtual ITalentGoEmailService EmailService { get; set; }
+
+        /// <summary>
         /// Find person by it's id.
         /// </summary>
         /// <param name="id"></param>
@@ -100,8 +110,6 @@ namespace TalentGo
             if (person.WhenRealIdCommited.HasValue)
                 throw new InvalidOperationException("已提交身份验证后不能修改身份信息。");
 
-
-
             //TODO：填充字段
             person.Surname = surname;
             person.GivenName = givenName;
@@ -137,7 +145,7 @@ namespace TalentGo
             {
                 data.CopyTo(ms);
                 if (data.Length > 1024 * 1024)
-                    throw new ArgumentException("Image file too big.");
+                    throw new ArgumentException("图片太大，不能超过1MB。");
 
                 ms.Position = 0;
                 this.EnsureImage(ms, out string mimeType);
@@ -177,7 +185,7 @@ namespace TalentGo
             {
                 data.CopyTo(ms);
                 if (data.Length > 1024 * 1024)
-                    throw new ArgumentException("Image file too big.");
+                    throw new ArgumentException("图片太大，不能超过1MB。");
 
                 ms.Position = 0;
                 this.EnsureImage(ms, out string mimeType);
@@ -245,15 +253,15 @@ namespace TalentGo
         {
             using (var img = Image.FromStream(data))
             {
+                if (img.Size.Width < 500 || img.Size.Height < 310)
+                    throw new ArgumentException("图片过小。");
+
                 if (img.RawFormat.Equals(ImageFormat.Jpeg))
                     mimeType = "image/jpeg";
                 else if (img.RawFormat.Equals(ImageFormat.Png))
                     mimeType = "image/png";
                 else
                     throw new NotSupportedException("不支持的文件格式。");
-
-                if (img.Size.Width < 500 || img.Size.Height < 310)
-                    throw new ArgumentException("图片过小。");
             }
         }
 
@@ -291,9 +299,7 @@ namespace TalentGo
                 if (await this.ValidateRealIdByOCRService(person))
                 {
                     //如果验证通过，则设置RealIdValid=true
-                    person.RealIdValid = true;
-                    person.WhenRealIdValid = DateTime.Now;
-                    person.RealIdValidBy = "云识别";
+                    await this.ValidateRealId(person, true, "云识别");
                 }
                 //否则不设置，转人工服务。
             }

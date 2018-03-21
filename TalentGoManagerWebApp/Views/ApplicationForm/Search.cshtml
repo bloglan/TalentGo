@@ -1,7 +1,49 @@
-﻿
+﻿@model IQueryable<ApplicationForm>
 @{
-    ViewBag.Title = "Search";
+    ViewBag.Title = "搜索用户";
 }
 
-<h2>Search</h2>
-
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+@using (Html.BeginForm("Search", "ApplicationForm", FormMethod.Get))
+{
+    <div class="input-group">
+        <input type="text" class="form-control" name="q" placeholder="输入报名表号、姓名以搜索报名表">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="submit">搜索</button>
+        </span>
+    </div><!-- /input-group -->
+}
+@if (Model != null)
+{
+    <p>为您找到以下搜索结果：</p>
+    <p></p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>报名表编号</th>
+                <th>姓名</th>
+                <th>申请职位</th>
+                <th>主修专业</th>
+                <th>报名专业</th>
+                <th>提交时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Person.DisplayName</td>
+                    <td>@item.Job.Name</td>
+                    <td>@item.Major</td>
+                    <td>@item.SelectedMajor</td>
+                    <td>@item.WhenCommited</td>
+                    <td>@Html.ActionLink("Detail", "Detail", new { id = item.Id }, new { target = "_blank" })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

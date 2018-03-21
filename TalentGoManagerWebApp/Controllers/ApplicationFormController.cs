@@ -9,6 +9,7 @@ using TalentGo.Models;
 using TalentGo.Web;
 using System;
 using TalentGoManagerWebApp.Models;
+using System.Linq.Dynamic;
 
 namespace TalentGoManagerWebApp.Controllers
 {
@@ -28,6 +29,7 @@ namespace TalentGoManagerWebApp.Controllers
             return View();
         }
 
+        [ChildActionOnly]
         public ActionResult FileReviewOperationPanel()
         {
             this.ViewBag.PendingFileReviewCount = this.applicationFormManager.ApplicationForms.PendingFileReview().Count();
@@ -72,7 +74,7 @@ namespace TalentGoManagerWebApp.Controllers
 
             try
             {
-                await this.applicationFormManager.FileReviewAsync(form, model.Accepted);
+                await this.applicationFormManager.FileReviewAsync(form, model.Accepted, this.DomainUser().DisplayName);
                 if (model.Next)
                     return RedirectToAction("FileReview");
 
@@ -86,15 +88,17 @@ namespace TalentGoManagerWebApp.Controllers
 
         }
 
+        [ChildActionOnly]
         public async Task<ActionResult> FileReviewPart(int id)
         {
             var form = await this.applicationFormManager.FindByIdAsync(id);
             return PartialView("_FileReviewPart", form);
         }
 
+        [ChildActionOnly]
         public ActionResult AuditOperationPanel()
         {
-            this.ViewBag.PendingAuditCount = this.applicationFormManager.ApplicationForms.PendingAudit().Count();
+            this.ViewBag.PendingAuditCount = this.applicationFormManager.ApplicationForms.Auditable().Count();
             return PartialView("_AuditOperationPanel");
         }
 
@@ -106,9 +110,9 @@ namespace TalentGoManagerWebApp.Controllers
             IQueryable<ApplicationForm> forms;
 
             if (int.TryParse(q, out int intQ))
-                forms = this.applicationFormManager.ApplicationForms.Where(f => f.Id == intQ);
+                forms = this.applicationFormManager.ApplicationForms.Commited().Where(f => f.Id == intQ);
             else
-                forms = this.applicationFormManager.ApplicationForms.Where(f => f.Person.DisplayName.StartsWith(q));
+                forms = this.applicationFormManager.ApplicationForms.Commited().Where(f => f.Person.DisplayName.StartsWith(q));
 
             if (forms.Count() == 1)
             {
@@ -121,11 +125,12 @@ namespace TalentGoManagerWebApp.Controllers
         public async Task<ActionResult> Detail(int id)
         {
             var form = await this.applicationFormManager.FindByIdAsync(id);
-            if (form == null)
+            if (form == null || !form.WhenCommited.HasValue)
                 return HttpNotFound();
 
             return View(form);
         }
+
 
         /// <summary>
         /// 获取审核列表
@@ -133,27 +138,42 @@ namespace TalentGoManagerWebApp.Controllers
         /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ActionResult> EnrollmentList(int id, ApplicationFormListViewModel model)
+        public ActionResult AuditList(int? plan, string q, bool? audit, string order, int? page)
         {
-            var recruitmentPlan = await this.recruitmentPlanManager.FindByIdAsync(id);
-            if (recruitmentPlan == null)
-                return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到报名计划。", this.Url.Action("Index", "RecruitmentPlan"), 3));
+            var forms = this.applicationFormManager.ApplicationForms.Auditable();
+            if (plan.HasValue)
+                forms = forms.OfPlan(plan.Value);
 
-            if (model == null)
+            if (!string.IsNullOrEmpty(q))
             {
-                model = new ApplicationFormListViewModel()
-                {
-                    PageIndex = 0
-                };
+                if (int.TryParse(q, out int intKey))
+                    forms = forms.Where(f => f.Id == intKey);
+                else
+                    forms = forms.Where(f => f.Person.DisplayName.StartsWith(q)
+                    || f.Person.IDCardNumber.StartsWith(q)
+                    || f.Person.Mobile.StartsWith(q)
+                    || f.School.StartsWith(q)
+                    || f.Major.StartsWith(q)
+                    || f.SelectedMajor.StartsWith(q)
+                    || f.Tags.Contains(q));
             }
-            model.RecruitmentPlanID = recruitmentPlan.Id;
-            model.RecruitmentPlanTitle = recruitmentPlan.Title;
-            model.IsAudit = recruitmentPlan.WhenAuditCommited.HasValue;
+            if (audit.HasValue)
+            {
+                forms = forms.Where(f => f.AuditFlag == audit.Value);
+            }
 
-            model.EnrollmentList = this.applicationFormManager.ApplicationForms;
-            //model.EnrollmentList = this.applicationFormManager.GetCommitedEnrollmentData(id, model.AuditFilter, model.AnnounceFilter, model.Keywords, model.OrderColumn, model.DownDirection, model.PageIndex, model.PageSize, out int allCount);
-            model.AllCount = this.applicationFormManager.ApplicationForms.Count();
-            return View(model);
+            var count = forms.Count();
+            this.ViewBag.AllCount = count;
+
+            if (!string.IsNullOrEmpty(order))
+                forms = forms.OrderBy(order);
+            else
+                forms = forms.OrderByDescending(f => f.WhenFileReviewed);
+
+            var pageIndex = page ?? 0;
+            if (count > 0 && count <= pageIndex * 30) //纠正因搜索结果导致页码超范围
+                pageIndex = (int)Math.Ceiling((double)count / 30) - 1;
+            return View(forms.Skip(pageIndex * 30).Take(30));
         }
 
         public async Task<ActionResult> ExportAuditList(int id, ApplicationFormListViewModel model)
@@ -179,7 +199,7 @@ namespace TalentGoManagerWebApp.Controllers
             StreamWriter sw = new StreamWriter(ms, Encoding.Unicode);
 
             //书写标题
-            sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t应聘职位\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
+            sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t应聘职位\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
 
             foreach (ApplicationForm data in model.EnrollmentList)
             {
@@ -204,8 +224,7 @@ namespace TalentGoManagerWebApp.Controllers
                 sw.Write(data.WhenCreated + "\t");
                 sw.Write((data.WhenChanged.HasValue ? data.WhenChanged.Value.ToString() : "N/A") + "\t");
                 sw.Write((data.WhenCommited.HasValue ? data.WhenCommited.Value.ToString() : "N/A") + "\t");
-                sw.Write((data.WhenAudit.HasValue ? data.WhenAudit.Value.ToString() : "N/A") + "\t");
-                sw.Write((data.Approved.HasValue ? (data.Approved.Value ? "是" : "否") : "N/A") + "\t");
+                sw.Write((data.AuditFlag ? "是" : "否") + "\t");
                 sw.Write((string.IsNullOrEmpty(data.AuditMessage) ? "" : data.AuditMessage) + "\t");
                 sw.Write((data.WhenAnnounced.HasValue ? data.WhenAnnounced.Value.ToString() : "N/A") + "\t");
                 sw.Write((data.IsTakeExam.HasValue ? (data.IsTakeExam.Value ? "是" : "否") : "N/A") + "\t");
@@ -234,80 +253,48 @@ namespace TalentGoManagerWebApp.Controllers
         /// </summary>
         /// <param name="planid"></param>
         /// <param name="userid"></param>
-        /// <param name="Audit"></param>
+        /// <param name="audit"></param>
         /// <returns></returns>
-        public async Task<ActionResult> SetAuditFlag(int formId, bool? Audit)
+        [HttpPost]
+        public async Task<ActionResult> SetAuditFlag(int formId, bool audit)
         {
-            SetAuditResult result = new SetAuditResult(formId);
-
             var form = await this.applicationFormManager.FindByIdAsync(formId);
             if (form == null)
             {
-                result.Code = 404;
-                result.Message = "找不到报名表";
-                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
+                return Json("找不到报名表");
             }
 
-            await this.applicationFormManager.SetAuditFlagAsync(form, Audit);
+            try
+            {
+                await this.applicationFormManager.AuditAsync(form, audit, null, this.DomainUser().DisplayName);
 
-            //更新统计
-            await this.UpdateStatistics(result);
-
-            return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
-
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="planid"></param>
-        /// <param name="userid"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public async Task<ActionResult> SetAuditMessage(int formId, string message)
+        [HttpPost]
+        public async Task<ActionResult> SetTags(int formId, string tags)
         {
-            SetAuditResult result = new SetAuditResult(formId);
-
-
-            var enrollment = await this.applicationFormManager.FindByIdAsync(formId);
-            if (enrollment == null)
+            var form = await this.applicationFormManager.FindByIdAsync(formId);
+            if (form == null)
             {
-                result.Code = 404;
-                result.Message = "找不到报名表";
-                return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
+                return Json("找不到报名表");
             }
 
-            await this.applicationFormManager.SetAuditMessageAsync(enrollment, message);
-
-            return Json(result, "text/plain", JsonRequestBehavior.AllowGet);
-        }
-
-        async Task UpdateStatistics(SetAuditResult result)
-        {
-            var form = await this.applicationFormManager.FindByIdAsync(result.FormId);
-            result.Statistics = await this.GetStatistics(form.Job.PlanId);
-        }
-
-        async Task<EnrollmentStatisticsViewModel> GetStatistics(int PlanID)
-        {
-            var plan = await this.recruitmentPlanManager.FindByIdAsync(PlanID);
-            var enrollmentSet = from enroll in this.applicationFormManager.ApplicationForms
-                                where enroll.JobId == PlanID && enroll.WhenCommited.HasValue
-                                select enroll;
-
-            EnrollmentStatisticsViewModel model = new EnrollmentStatisticsViewModel()
+            form.Tags = string.IsNullOrEmpty(tags) ? null : tags;
+            try
             {
-                CommitedEnrollmentCount = enrollmentSet.Count(),
-                ApprovedEnrollmentCount = enrollmentSet.Count(e => e.Approved.Value),
-                RejectiveEnrollmentCount = enrollmentSet.Count(e => !e.Approved.Value),
-                NotAuditEnrollmentCount = enrollmentSet.Count(e => !e.Approved.HasValue && e.WhenCommited.HasValue),
-                NotAnnouncedCount = enrollmentSet.Count(e => !e.WhenAnnounced.HasValue && e.Approved.Value),
-                AnnouncedTakeExamCount = enrollmentSet.Count(e => e.IsTakeExam.HasValue && e.IsTakeExam.Value),
-                AnnouncedNotTakeExamCount = enrollmentSet.Count(e => e.IsTakeExam.HasValue && !e.IsTakeExam.Value)
-            };
-            return model;
+                await this.applicationFormManager.UpdateAsync(form);
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
         }
-
-
     }
 }

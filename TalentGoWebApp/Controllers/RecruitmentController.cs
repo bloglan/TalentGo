@@ -41,40 +41,5 @@ namespace TalentGoWebApp.Controllers
 
             return View(this.recruitmentManager.RecruitmentPlans.Enrollable());
         }
-
-        public async Task<ActionResult> Detail(int id)
-        {
-            var current = await this.recruitmentManager.FindByIdAsync(id);
-            if (!current.WhenPublished.HasValue)
-                return HttpNotFound();
-
-            return View(current);
-        }
-
-        #region 分部视图方法
-        /// <summary>
-        /// 根据RecruitPlan，ApplicationUser来加载操作面板分部视图
-        /// </summary>
-        /// <param name="plan"></param>
-        /// <returns></returns>
-        [ChildActionOnly]
-        public ActionResult RecruitmentPanel(RecruitmentPlan plan)
-        {
-            RecruitmentPanelStateModel viewModel = new RecruitmentPanelStateModel();
-            viewModel.Plan = plan;
-            var user = this.CurrentUser();
-            var enrollment = this.applicationFormManager.ApplicationForms.FirstOrDefault(e => e.PersonId == user.Id && e.JobId == plan.Id);
-            if (enrollment != null)
-            {
-                viewModel.HasEnrollment = true;
-                viewModel.Enrollment = enrollment;
-            }
-
-
-            return PartialView(viewModel);
-        }
-
-        #endregion
-
     }
 }

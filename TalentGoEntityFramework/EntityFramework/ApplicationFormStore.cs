@@ -39,11 +39,11 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ApplicationForm> FindByIdAsync(int Id)
+        public async Task<ApplicationForm> FindByIdAsync(int id)
         {
-            return await this.set.FindAsync(Id);
+            return await this.set.FindAsync(id);
         }
 
         /// <summary>

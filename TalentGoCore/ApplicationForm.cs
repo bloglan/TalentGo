@@ -247,25 +247,40 @@ namespace TalentGo
         public bool? FileReviewAccepted { get; internal set; }
 
         /// <summary>
-        /// 资料审查时间。
+        /// 资料审查人。
         /// </summary>
-        public DateTime? WhenFileReview { get; internal set; }
+        public string FileReviewedBy { get; internal set; }
 
         /// <summary>
-        /// When enrollment pass the audit. if value of null, means not audit yet.
+        /// 资料审查时间。
         /// </summary>
-		public DateTime? WhenAudit { get; internal set; }
+        public DateTime? WhenFileReviewed { get; internal set; }
 
         /// <summary>
         /// A value indicate wheather enrollment accepted or refused.
         /// </summary>
-		public bool? Approved { get; internal set; }
+		public bool AuditFlag { get; internal set; }
 
         /// <summary>
         /// Message of audit.
         /// </summary>
 		[StringLength(50)]
         public string AuditMessage { get; internal set; }
+
+        /// <summary>
+        /// 审核人
+        /// </summary>
+        public string AuditBy { get; internal set; }
+
+        /// <summary>
+        /// 完成审核时间。
+        /// </summary>
+        public DateTime? WhenAuditComplete { get; internal set; }
+
+        /// <summary>
+        /// 标记
+        /// </summary>
+        public string Tags { get; set; }
 
         /// <summary>
         /// When user announced take exam. if value of null, means not announced yet.

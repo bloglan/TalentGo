@@ -28,14 +28,22 @@ namespace TalentGoWebApp.Controllers
 
 		public async Task<ActionResult> Detail(int id)
 		{
-			var article = await this.manager.FindByIdAsync(id);
-			if (article.WhenPublished.HasValue)
+			var notice = await this.manager.FindByIdAsync(id);
+            if (notice == null)
+                return HttpNotFound();
+			if (notice.WhenPublished.HasValue)
             {
-				return View(article);
+				return View(notice);
             }
 
             //其他的所有情况均显示404
             return HttpNotFound();
 		}
+
+        public ActionResult News()
+        {
+            var notices = this.manager.Notices.Published().OrderByDescending(n => n.WhenPublished).Take(5);
+            return PartialView("ArticlePart", notices);
+        }
 	}
 }
