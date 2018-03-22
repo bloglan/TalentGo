@@ -10,9 +10,16 @@
 <h3>账户</h3>
 <p>用户名（身份证号码）：@Model.UserName</p>
 <h3>实名认证</h3>
-@Html.Partial("_RealIdState")
-@Html.Partial("_RealIdOperation")
-
+<p>
+    @Html.Partial("_RealIdState")
+</p>
+@if (!string.IsNullOrEmpty(Model.RealIdValidationMessage))
+{
+    <p>原因是：@Model.RealIdValidationMessage</p>
+}
+<p>
+    @Html.Partial("_RealIdOperation")
+</p>
 <p>姓名：@Model.DisplayName</p>
 <p>性别：@(Model.Sex == Sex.Male ? "男" : "女")</p>
 <p>出生时间：@Model.DateOfBirth.ToShortDateString()</p>

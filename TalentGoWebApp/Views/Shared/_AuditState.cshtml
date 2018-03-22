@@ -1,20 +1,23 @@
 ﻿@model ApplicationForm
 
-@if(Model.FileReviewAccepted.HasValue && Model.FileReviewAccepted.Value)
+@if (Model.WhenCommited.HasValue)
 {
-    if(!Model.WhenAuditComplete.HasValue)
+    if (Model.FileReviewAccepted.HasValue && Model.FileReviewAccepted.Value)
     {
-        <span class="label label-info">资格审核中</span>
-    }
-    else
-    {
-        if(Model.AuditFlag)
+        if (!Model.WhenAuditComplete.HasValue)
         {
-            <span class="label label-success">审核通过</span>
+            <span class="label label-info">资格审核中</span>
         }
         else
         {
-            <span class="label label-danger">审核未通过</span>
+            if (Model.AuditFlag)
+            {
+                <span class="label label-success">审核通过</span>
+            }
+            else
+            {
+                <span class="label label-danger">审核未通过</span>
+            }
         }
     }
 }

@@ -289,9 +289,13 @@ namespace TalentGo
                 throw new InvalidOperationException("未上传身份证图像。");
 
             person.WhenRealIdCommited = DateTime.Now;
+            person.RealIdCommitCount += 1;
+
+            //清理任何审核标记，以便为此次审核做准备
             person.RealIdValid = null;
             person.WhenRealIdValid = null;
             person.RealIdValidBy = null;
+            person.RealIdValidationMessage = null;
 
             //使用自动验证器尝试验证。
             try

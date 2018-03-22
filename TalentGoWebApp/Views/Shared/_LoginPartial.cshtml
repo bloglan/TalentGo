@@ -6,7 +6,7 @@
         @Html.AntiForgeryToken()
 
         <p class="nav navbar-nav navbar-right navbar-text">
-            <a href="@Url.Action("Index", "UserProfile", routeValues: null)" class="navbar-link" target="_blank" title="管理我的配置">
+            <a href="@Url.Action("Index", "UserProfile", routeValues: null)" class="navbar-link" target="_blank" title="访问用户中心">
                 @Html.CurrentUser().DisplayName
             </a>
             @if (Html.CurrentUser().RealIdValid.HasValue)

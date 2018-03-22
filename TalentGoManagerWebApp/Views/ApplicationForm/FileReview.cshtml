@@ -24,6 +24,12 @@
         </div>
     </div>
     <hr />
+    <div class="checkbox">
+        <label>
+            @Html.CheckBoxFor(m => m.ReturnBackToUserIfRefused)
+            未通过审查时退回给用户
+        </label>
+    </div>
     <button type="submit" class="btn btn-primary">完成审查</button>
     <button type="button" id="reset-checkstate" class="btn btn-default">重置</button>
     <button type="button" class="btn btn-default" onclick="window.close();">关闭</button>

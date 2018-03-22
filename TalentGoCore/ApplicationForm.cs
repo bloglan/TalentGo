@@ -242,6 +242,11 @@ namespace TalentGo
 		public DateTime? WhenCommited { get; internal set; }
 
         /// <summary>
+        /// 提交计数器。
+        /// </summary>
+        public virtual int CommitCount { get; internal set; }
+
+        /// <summary>
         /// 资料审查是否通过。
         /// </summary>
         public bool? FileReviewAccepted { get; internal set; }

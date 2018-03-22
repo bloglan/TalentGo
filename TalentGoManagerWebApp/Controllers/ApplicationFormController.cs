@@ -55,7 +55,7 @@ namespace TalentGoManagerWebApp.Controllers
             {
                 var forms = this.applicationFormManager.ApplicationForms.PendingFileReview().OrderBy(a => a.WhenCommited);
                 var pendingCount = forms.Count();
-                if(pendingCount == 0)
+                if (pendingCount == 0)
                     return View("NoPendingFileReview");
                 if (pendingCount > 10)
                     pendingCount = 10;
@@ -83,17 +83,27 @@ namespace TalentGoManagerWebApp.Controllers
             try
             {
                 await this.applicationFormManager.FileReviewAsync(form, model.Accepted, this.DomainUser().DisplayName, model.FileReviewMessage);
-                if (model.Next)
-                    return RedirectToAction("FileReview", routeValues: null);
-
-                return View("FileReviewComplete");
+                if (!model.Accepted)
+                {
+                    //退回报名表。
+                    if (model.ReturnBackToUserIfRefused)
+                        await this.applicationFormManager.ReturnBackAsync(form);
+                }
+            }
+            catch (FileReviewException)
+            {
+                //审查异常，表明可能已经被审查。
+                //DoNothing here.
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
+            if (model.Next)
+                return RedirectToAction("FileReview", routeValues: null);
 
+            return View("FileReviewComplete");
         }
 
         [ChildActionOnly]
@@ -302,6 +312,51 @@ namespace TalentGoManagerWebApp.Controllers
             catch (Exception ex)
             {
                 return Json(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">application form id.</param>
+        /// <returns></returns>
+        public async Task<ActionResult> ReturnBack(int id)
+        {
+            var form = await this.applicationFormManager.FindByIdAsync(id);
+            if (form == null)
+                return HttpNotFound();
+            if (!form.WhenCommited.HasValue)
+                return HttpNotFound();
+            return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> ReturnBack(int id, FormCollection collection)
+        {
+            if (!this.ModelState.IsValid)
+                return View();
+
+            var form = await this.applicationFormManager.FindByIdAsync(id);
+            if (form == null)
+                return HttpNotFound();
+            if (!form.WhenCommited.HasValue)
+                return HttpNotFound();
+
+            try
+            {
+                await this.applicationFormManager.ReturnBackAsync(form);
+                return View("ReturnBackSuccess");
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View();
             }
         }
     }

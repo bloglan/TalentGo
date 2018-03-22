@@ -376,7 +376,7 @@ namespace TalentGo
                 await this.EnrollAsync(form);
 
             if (form.WhenCommited.HasValue)
-                throw new InvalidOperationException("报名表已提交。");
+                return;
 
             //如果没有FileReview标记，则不允许在超过报名时间提交。
             if (!form.FileReviewAccepted.HasValue && form.Job.Plan.EnrollExpirationDate < DateTime.Now)
@@ -393,6 +393,9 @@ namespace TalentGo
 
             //设置提交时间。
             form.WhenCommited = DateTime.Now;
+            form.CommitCount += 1;
+            form.Log("提交报名表。");
+
             //清除资料审查标记，以便将此报名表自再次加入资料审查列表中。
             form.WhenFileReviewed = null;
             form.FileReviewAccepted = null;
@@ -426,7 +429,7 @@ namespace TalentGo
                 throw new InvalidOperationException("报名表尚未提交。");
 
             if (form.WhenFileReviewed.HasValue)
-                throw new InvalidOperationException("报名表已审查。");
+                throw new FileReviewException("报名表已审查。");
 
             form.FileReviewAccepted = accepted;
             form.WhenFileReviewed = DateTime.Now;
@@ -478,6 +481,9 @@ namespace TalentGo
         {
             if (form == null)
                 throw new ArgumentNullException();
+
+            if (!form.WhenCommited.HasValue)
+                return;
 
             form.WhenCommited = null;
             form.Log("退回报名表。");

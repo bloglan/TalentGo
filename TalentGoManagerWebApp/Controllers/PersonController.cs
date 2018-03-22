@@ -46,7 +46,8 @@ namespace TalentGoManagerWebApp.Controllers
             //Search user via condition.
             var result = this.manager.People.Where(p => p.IDCardNumber.StartsWith(q)
             || p.Mobile.StartsWith(q)
-            || p.Email.StartsWith(q));
+            || p.Email.StartsWith(q)
+            || p.DisplayName.StartsWith(q));
             if (result.Count() == 1)
             {
                 var person = result.First();

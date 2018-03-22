@@ -72,6 +72,7 @@
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileIdList.cs" />
+    <Compile Include="FileReviewException.cs" />
     <Compile Include="IDCardBackOCRResult.cs" />
     <Compile Include="IDCardFrontOCRResult.cs" />
     <Compile Include="IDCardRecognizeException.cs" />

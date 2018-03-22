@@ -42,3 +42,8 @@
         </div>
     </div>
 </div>
+
+@if(Model.RealIdCommitCount > 1)
+{
+    <p class="alert alert-warning">此用户是第@(Model.RealIdCommitCount)次提交实名验证。</p>
+}

@@ -92,6 +92,11 @@ namespace TalentGo
         public virtual DateTime? WhenRealIdCommited { get; internal set; }
 
         /// <summary>
+        /// 实名认证提交次数。
+        /// </summary>
+        public virtual int RealIdCommitCount { get; internal set; }
+
+        /// <summary>
         /// 验证时间。
         /// </summary>
         public virtual DateTime? WhenRealIdValid { get; internal set; }

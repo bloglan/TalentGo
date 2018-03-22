@@ -722,6 +722,8 @@
     <Content Include="Views\Shared\_Layout-Fluid.cshtml" />
     <Content Include="Views\Shared\_AuditState.cshtml" />
     <Content Include="Views\Shared\_FileReviewState.cshtml" />
+    <Content Include="Views\ApplicationForm\ReturnBack.cshtml" />
+    <Content Include="Views\ApplicationForm\ReturnBackSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

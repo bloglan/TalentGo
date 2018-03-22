@@ -3,4 +3,9 @@
 <h2>您好，@Html.CurrentUser().DisplayName</h2>
 
 <p>您的实名认证状态是：@Html.Partial("_RealIdState", Html.CurrentUser())</p>
+@if (!string.IsNullOrEmpty(Html.CurrentUser().RealIdValidationMessage))
+{
+    <p>原因是：@Html.CurrentUser().RealIdValidationMessage</p>
+}
 <p>@Html.Partial("_RealIdOperation", Html.CurrentUser())</p>
+<p>@Html.ActionLink("浏览招聘职位/类别", "Index", "Recruitment")</p>

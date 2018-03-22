@@ -20,6 +20,7 @@
 <p>有效期起：@(Model.IssueDate.HasValue?Model.IssueDate.Value.ToShortDateString():"")</p>
 <p>有效期至：@(Model.ExpiresAt.HasValue?Model.ExpiresAt.Value.ToShortDateString():"长期")</p>
 <p>实名认证提交时间：@Model.WhenRealIdCommited</p>
+<p>实名认证提交次数：@Model.RealIdCommitCount</p>
 <p>通过实名认证：@Model.RealIdValid</p>
 <p>认证时间：@Model.WhenRealIdValid</p>
 <p>认证人：@Model.RealIdValidBy</p>

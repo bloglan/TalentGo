@@ -1,12 +1,25 @@
 ﻿@model ApplicationForm
 
 <h2>证件照审查</h2>
+
 <div class="row">
+    @if (string.IsNullOrEmpty(Model.Person.IDCardFrontFile))
+    {
+        <div class="col-md-4">
+            <p class="alert alert-danger">用户尚未进行实名认证，也未提交身份证个人信息页内容。</p>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-4 thumbnail">
+            <img src="@Url.Action("Index", "File", new { id = Model.Person.IDCardFrontFile })" class="img-responsive" />
+            <div class="caption">
+                身份证照片。
+            </div>
+        </div>
+    }
     <div class="col-md-2 thumbnail">
         <img src="@Url.Action("Index", "File", new { id = Model.HeadImageFile })" class="img-responsive" />
-    </div>
-    <div class="col-md-4 thumbnail">
-        <img src="@Url.Action("Index", "File", new { id = Model.Person.IDCardFrontFile })" class="img-responsive" />
     </div>
     <div class="col-sm-2">
         <div class="checkbox">
@@ -30,12 +43,6 @@
     <div class="col-md-6">
         <div class="checkbox">
             <label><input type="checkbox" class="review-item" />学生：@Model.Person.DisplayName</label>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" class="review-item" />性别：@(Model.Person.Sex == Sex.Male ? "男" : "女")</label>
-        </div>
-        <div class="checkbox">
-            <label><input type="checkbox" class="review-item" />出生日期：@Model.Person.DateOfBirth.ToShortDateString()</label>
         </div>
         <div class="checkbox">
             <label><input type="checkbox" class="review-item" />专业：@Model.Major</label>
@@ -74,12 +81,6 @@
                 <label><input type="checkbox" class="review-item" />学生：@Model.Person.DisplayName</label>
             </div>
             <div class="checkbox">
-                <label><input type="checkbox" class="review-item" />性别：@(Model.Person.Sex == Sex.Male ? "男" : "女")</label>
-            </div>
-            <div class="checkbox">
-                <label><input type="checkbox" class="review-item" />出生日期：@Model.Person.DateOfBirth.ToShortDateString()</label>
-            </div>
-            <div class="checkbox">
                 <label><input type="checkbox" class="review-item" />校名：@Model.School</label>
             </div>
             <div class="checkbox">
@@ -100,5 +101,10 @@
 }
 else
 {
-    <p>没有提交学位证明文件。</p>
+    <p>没有学位证明文件。</p>
+}
+
+@if(Model.CommitCount > 1)
+{
+    <p class="alert alert-warning">此报名表是第@(Model.CommitCount)次提交。</p>
 }

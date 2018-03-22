@@ -6,8 +6,8 @@
 <div class="page-header">
     <h1>@ViewBag.Title</h1>
 </div>
+<p>@Html.ActionLink("退回", "ReturnBack", new { id = Model.Id }, new { @class = "btn btn-default" })</p>
 <p>报名表编号：@Model.Id</p>
-
 <table class="table table-bordered">
     <colgroup>
         <col class="col-md-2" />
@@ -113,7 +113,7 @@
             <td>@(Model.WhenCommited.HasValue ? Model.WhenCommited.Value.ToString() : "N/A")</td>
             <td>标签</td>
             <td>@Model.Tags</td>
-            <td></td>
+            <td>第@(Model.CommitCount)次提交</td>
         </tr>
         <tr>
             <th colspan="5">审核信息</th>

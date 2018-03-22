@@ -6,6 +6,17 @@
 <div class="page-header">
     <h1>@ViewBag.Title</h1>
 </div>
+<p>
+    @if (!Model.WhenCommited.HasValue)
+    {
+        @Html.ActionLink("修改报名表", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("提交", "Commit", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("删除", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+    }
+    @Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })
+</p>
+
 <p>报名表编号：@Model.Id</p>
 
 <table class="table table-bordered">
@@ -27,13 +38,13 @@
             <td>@(Model.Person.Sex == Sex.Male ? "男" : "女")</td>
             <td rowspan="5">
                 @if (string.IsNullOrEmpty(Model.HeadImageFile))
-            {
-                <p>没有照片，请到@(Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" }))上传证件照片。</p>
-        }
-        else
-        {
-            <img src="@Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile })" class="img-responsive" style="max-width:150px; max-height:150px;" />
-    }
+                {
+                    <p>没有照片，请到@(Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" }))上传证件照片。</p>
+                }
+                else
+                {
+                    <img src="@Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile })" class="img-responsive" style="max-width:150px; max-height:150px;" />
+                }
             </td>
         </tr>
         <tr>
@@ -130,9 +141,9 @@
             <td></td>
             <td></td>
             <td>附加信息：</td>
-            <td>@Model.FileReviewMessage</td>
+            <td>@(Model.WhenAuditComplete.HasValue ? Model.AuditMessage : "")</td>
         </tr>
-        
+
     </tbody>
 </table>
 <hr />
@@ -167,11 +178,3 @@
     }
 </div>
 
-@if (!Model.WhenCommited.HasValue)
-{
-    @Html.ActionLink("修改报名表", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
-    @Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" })
-    @Html.ActionLink("提交报名表", "Commit", new { id = Model.Id }, new { @class = "btn btn-primary" })
-    @Html.ActionLink("删除报名表", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
-}
-@Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })

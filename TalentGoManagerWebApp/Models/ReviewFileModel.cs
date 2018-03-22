@@ -11,11 +11,14 @@ namespace TalentGoManagerWebApp.Models
         public ReviewFileModel()
         {
             this.Next = true;
+            this.ReturnBackToUserIfRefused = true;
         }
 
         public int FormId { get; set; }
 
         public bool Accepted { get; set; }
+
+        public bool ReturnBackToUserIfRefused { get; set; }
 
         [Display(Name = "附加消息")]
         public string FileReviewMessage { get; set; }
