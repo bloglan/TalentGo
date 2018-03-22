@@ -8,6 +8,7 @@
 <p>提交报名表？</p>
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-primary">提交</button>
     @Html.ActionLink("返回", "Detail", new { id = this.ViewContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })
 }

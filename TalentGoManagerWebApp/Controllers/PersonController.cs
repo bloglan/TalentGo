@@ -77,9 +77,20 @@ namespace TalentGoManagerWebApp.Controllers
             Person forValid;
 
             if (id.HasValue)
+            {
                 forValid = pendingList.FirstOrDefault(p => p.Id == id.Value);
+                if (forValid == null)
+                    return HttpNotFound();
+            }
             else
-                forValid = pendingList.FirstOrDefault();
+            {
+                var count = pendingList.Count();
+                if (count == 0)
+                    return View("PendingValidNotFound");
+                if (count > 10)
+                    count = 10;
+                forValid = pendingList.Skip(new Random().Next(count)).FirstOrDefault();
+            }
 
             if (forValid == null)
                 return View("PendingValidNotFound");
@@ -112,7 +123,7 @@ namespace TalentGoManagerWebApp.Controllers
                 }
 
                 if (model.Next)
-                    return RedirectToAction("ValidateRealId");
+                    return RedirectToAction("ValidateRealId", routeValues: null);
                 return View("ValidateRealIdComplete");
             }
             catch (Exception ex)
@@ -122,6 +133,7 @@ namespace TalentGoManagerWebApp.Controllers
             }
         }
 
+        [ChildActionOnly]
         public async Task<ActionResult> RealIdViewPart(Guid id)
         {
             var person = await this.manager.FindByIdAsync(id);

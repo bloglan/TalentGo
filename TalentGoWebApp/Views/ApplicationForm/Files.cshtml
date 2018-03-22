@@ -16,7 +16,7 @@
 <p></p>
 <hr />
 <h2>证件照</h2>
-<p>近期免冠白底证件照</p>
+<p>近期免冠白底证件照（见示例），仅支持JPG和PNG图片。尺寸标准为2英寸，图像尺寸不小于207*290像素，文件大小不超过1MB。</p>
 @using (Html.BeginForm("UploadHeadImage", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { id = "headImageUpload", enctype = "multipart/form-data" }))
 {
     <p>
@@ -43,6 +43,7 @@
     <li>次年毕业的，上传《毕业证》</li>
     <li>留学生须提供《国外学历证明》</li>
 </ul>
+<p>仅支持JPG和PNG图片。推荐使用扫描仪按不小于150dpi分辨率扫描。图像面积不小于1240*1754像素（以A4纸竖放计算），文件大小不超过1MB。资料份数不超过10份。</p>
 @using (Html.BeginForm("UploadAcademicCertFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "academiccert" }))
 {
     <p>
@@ -67,6 +68,8 @@
 
 <hr />
 <h2>学位证书</h2>
+<p>未取得学位证书时请留空。</p>
+<p>仅支持JPG和PNG图片。推荐使用扫描仪按不小于150dpi分辨率扫描。图像面积不小于1240*1754像素（以A4纸竖放计算），文件大小不超过1MB。资料份数不超过10份。</p>
 @using (Html.BeginForm("UploadDegreeCertFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "degreecert" }))
 {
     <p>
@@ -91,7 +94,7 @@
 
 <hr />
 <h2>其他资料</h2>
-<p>其他您认为有必要提供的资料，如技能证书、奖状等。</p>
+<p>仅支持JPG和PNG图片。其他您认为有必要提供的资料，如技能证书、奖状等。文件大小不超过1MB。资料份数不超过10份。</p>
 @using (Html.BeginForm("UploadOtherFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "other" }))
 {
     <p>

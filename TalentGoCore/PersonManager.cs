@@ -253,8 +253,8 @@ namespace TalentGo
         {
             using (var img = Image.FromStream(data))
             {
-                if (img.Size.Width < 500 || img.Size.Height < 310)
-                    throw new ArgumentException("图片过小。");
+                if (img.Size.Width < 506 || img.Size.Height < 319)
+                    throw new ArgumentException("图片过小。图片尺寸至少大于500*310像素。");
 
                 if (img.RawFormat.Equals(ImageFormat.Jpeg))
                     mimeType = "image/jpeg";
@@ -360,18 +360,18 @@ namespace TalentGo
             }
             if (person.DisplayName != frontResult.Name)
                 return false;
-            if (person.Address != frontResult.Address)
-                return false;
+            //if (person.Address != frontResult.Address)
+            //    return false;
             if (person.Ethnicity != frontResult.Nationality)
                 return false;
             if (person.IDCardNumber != frontResult.IDCardNumber)
                 return false;
-            if (person.Issuer != backResult.Issuer)
-                return false;
-            if (person.IssueDate != backResult.IssueDate)
-                return false;
-            if (person.ExpiresAt != backResult.ExpiresDate)
-                return false;
+            //if (person.Issuer != backResult.Issuer)
+            //    return false;
+            //if (person.IssueDate != backResult.IssueDate)
+            //    return false;
+            //if (person.ExpiresAt != backResult.ExpiresDate)
+            //    return false;
 
             return true;
         }

@@ -247,6 +247,11 @@ namespace TalentGo
         public bool? FileReviewAccepted { get; internal set; }
 
         /// <summary>
+        /// 资料审查消息。
+        /// </summary>
+        public virtual string FileReviewMessage { get; internal set; }
+
+        /// <summary>
         /// 资料审查人。
         /// </summary>
         public string FileReviewedBy { get; internal set; }
@@ -271,6 +276,11 @@ namespace TalentGo
         /// 审核人
         /// </summary>
         public string AuditBy { get; internal set; }
+
+        /// <summary>
+        /// 设置审核标记的时间。
+        /// </summary>
+        public DateTime? WhenAudit { get; internal set; }
 
         /// <summary>
         /// 完成审核时间。

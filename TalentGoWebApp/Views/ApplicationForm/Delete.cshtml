@@ -8,6 +8,7 @@
 <p>确实要删除此报名表吗？报名表信息及关联文件将被永久删除。</p>
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
     <button type="submit" class="btn btn-danger">删除</button>
     @Html.ActionLink("返回", "Detail", new { id = this.ViewContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })
 }

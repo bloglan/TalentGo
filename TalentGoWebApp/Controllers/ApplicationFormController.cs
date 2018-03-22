@@ -71,6 +71,7 @@ namespace TalentGoWebApp.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Enroll(int id, ApplicationFormEditViewModel model)
         {
             var user = this.CurrentUser();
@@ -108,10 +109,19 @@ namespace TalentGoWebApp.Controllers
                 Accomplishments = model.Accomplishments,
             };
 
-            await this.manager.EnrollAsync(form);
-
-            //转到传送文件。
-            return RedirectToAction("Files", new { id = form.Id });
+            try
+            {
+                await this.manager.EnrollAsync(form);
+                //转到传送文件。
+                return RedirectToAction("Files", new { id = form.Id });
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View(model);
+                throw;
+            }
+            
         }
 
         public ActionResult Edit(int id)
@@ -146,6 +156,7 @@ namespace TalentGoWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(int id, ApplicationFormEditViewModel model)
         {
             var form = this.GetEditableFormOfLoginUser(id);
@@ -489,6 +500,7 @@ namespace TalentGoWebApp.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(int id, FormCollection collection)
         {
             var form = this.GetEditableFormOfLoginUser(id);

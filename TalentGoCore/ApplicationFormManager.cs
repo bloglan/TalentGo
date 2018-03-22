@@ -93,13 +93,15 @@ namespace TalentGo
         {
             if (form == null)
                 throw new ArgumentNullException(nameof(form));
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("不能更改已提交的报名表资料。");
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
 
             if (!string.IsNullOrEmpty(form.HeadImageFile))
                 throw new InvalidOperationException("Head image file exists.");
 
-            this.EnsureImage(data, out string mimeType);
+            this.EnsureImage(data, new Size(207, 290), true, out string mimeType);
 
             var file = new File(Guid.NewGuid().ToString(), mimeType);
             data.Position = 0;
@@ -122,7 +124,8 @@ namespace TalentGo
         {
             if (form == null)
                 throw new ArgumentNullException(nameof(form));
-
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("不能更改已提交的报名表资料。");
             if (string.IsNullOrEmpty(form.HeadImageFile))
                 return;
 
@@ -146,9 +149,11 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(data));
 
             if (form.WhenCommited.HasValue)
-                throw new InvalidOperationException("Cannot upload file to application form that commited.");
+                throw new InvalidOperationException("不能更改已提交的报名表资料。");
+            if (form.AcademicCertFileList.Count >= 10)
+                throw new InvalidOperationException("只能传送最多10份资料。");
 
-            this.EnsureImage(data, out string mimeType);
+            this.EnsureImage(data, new Size(1240, 1754), false, out string mimeType);
 
             var file = new File(Guid.NewGuid().ToString(), mimeType);
             data.Position = 0;
@@ -171,6 +176,8 @@ namespace TalentGo
         {
             if (form == null)
                 throw new ArgumentNullException(nameof(form));
+            if (form.WhenCommited.HasValue)
+                throw new InvalidOperationException("不能更改已提交的报名表资料。");
             if (string.IsNullOrEmpty(fileId))
                 throw new ArgumentException("fileId is null or empty.");
 
@@ -202,9 +209,11 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(data));
 
             if (form.WhenCommited.HasValue)
-                throw new InvalidOperationException("Cannot upload file to application form that commited.");
+                throw new InvalidOperationException("不能更改已提交的报名表资料。");
+            if (form.DegreeCertFileList.Count >= 10)
+                throw new InvalidOperationException("只能传送最多10份资料。");
 
-            this.EnsureImage(data, out string mimeType);
+            this.EnsureImage(data, new Size(1240, 1754), false, out string mimeType);
 
             var file = new File(Guid.NewGuid().ToString(), mimeType);
             data.Position = 0;
@@ -259,9 +268,11 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(data));
 
             if (form.WhenCommited.HasValue)
-                throw new InvalidOperationException("Cannot upload file to application form that commited.");
+                throw new InvalidOperationException("不能更改已提交的报名表资料。");
+            if (form.OtherFileList.Count >= 10)
+                throw new InvalidOperationException("只能传送最多10份资料。");
 
-            this.EnsureImage(data, out string mimeType);
+            this.EnsureImage(data, new Size(1240, 1754), false, out string mimeType);
 
             var file = new File(Guid.NewGuid().ToString(), mimeType);
             data.Position = 0;
@@ -306,7 +317,9 @@ namespace TalentGo
         /// </summary>
         /// <param name="data"></param>
         /// <param name="mimeType"></param>
-        void EnsureImage(Stream data, out string mimeType)
+        /// <param name="restrict"></param>
+        /// <param name="minSize"></param>
+        void EnsureImage(Stream data, Size minSize, bool restrict, out string mimeType)
         {
             using (var image = Image.FromStream(data))
             {
@@ -317,8 +330,18 @@ namespace TalentGo
                 else
                     throw new NotSupportedException("不支持的文件格式。");
 
-                if (image.Size.Width * image.Size.Height < 800 * 800)
-                    throw new ArgumentException("图片过小。");
+                if (restrict)
+                {
+                    if (image.Size.Height < minSize.Height || image.Size.Width < minSize.Width)
+                        throw new ArgumentException("图片过小。");
+                }
+                else
+                {
+                    //检测面积。
+                    if (image.Size.Width * image.Size.Height < minSize.Height * minSize.Width)
+                        throw new ArgumentException("图片过小。");
+                }
+                
             }
         }
 
@@ -358,7 +381,7 @@ namespace TalentGo
             //如果没有FileReview标记，则不允许在超过报名时间提交。
             if (!form.FileReviewAccepted.HasValue && form.Job.Plan.EnrollExpirationDate < DateTime.Now)
             {
-                throw new InvalidOperationException("报名截止时间已过，不能再提交。");
+                throw new InvalidOperationException("报名截止时间已过。");
             }
 
             //检查传送资料是否齐全并满足规则。
@@ -374,10 +397,14 @@ namespace TalentGo
             form.WhenFileReviewed = null;
             form.FileReviewAccepted = null;
             form.FileReviewedBy = null;
+            form.FileReviewMessage = null;
 
             //清除审核标记
             form.AuditFlag = false;
             form.AuditMessage = null;
+            form.AuditBy = null;
+            form.WhenAudit = null;
+            form.WhenAuditComplete = null;
 
             await this.formStore.UpdateAsync(form);
         }
@@ -388,8 +415,9 @@ namespace TalentGo
         /// <param name="form"></param>
         /// <param name="accepted"></param>
         /// <param name="fileReviewedBy"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        public async Task FileReviewAsync(ApplicationForm form, bool accepted, string fileReviewedBy)
+        public async Task FileReviewAsync(ApplicationForm form, bool accepted, string fileReviewedBy, string message = null)
         {
             if (form == null)
                 throw new ArgumentNullException(nameof(form));
@@ -403,6 +431,7 @@ namespace TalentGo
             form.FileReviewAccepted = accepted;
             form.WhenFileReviewed = DateTime.Now;
             form.FileReviewedBy = fileReviewedBy;
+            form.FileReviewMessage = message;
 
             await this.formStore.UpdateAsync(form);
 
@@ -475,6 +504,7 @@ namespace TalentGo
             form.AuditFlag = flag;
             form.AuditMessage = message;
             form.AuditBy = auditBy;
+            form.WhenAudit = DateTime.Now;
 
             await this.formStore.UpdateAsync(form);
         }
@@ -506,36 +536,6 @@ namespace TalentGo
 
             if (this.EmailService != null)
                 await this.EmailService.SendApplicationFormAuditMailAsync(form);
-        }
-
-        /// <summary>
-        /// 声明是否参加考试。
-        /// </summary>
-        /// <param name="form"></param>
-        /// <param name="IsTakeExam"></param>
-        /// <returns></returns>
-		public async Task AnnounceForExamAsync(ApplicationForm form, bool IsTakeExam)
-        {
-            if (form == null)
-                throw new ArgumentNullException(nameof(form));
-
-            //必须是已提交的，通过审核的，尚未声明的，当前在声明有效期内的。
-            if (!form.WhenAuditComplete.HasValue)
-                throw new InvalidOperationException("无效的操作，尚未审核。");
-
-            if (!form.AuditFlag)
-                throw new InvalidOperationException("无效的操作，审核未通过。");
-
-            if (form.WhenAnnounced.HasValue)
-                throw new InvalidOperationException("无效的操作，已进行了声明。不能重复声明。");
-
-            if (form.Job.Plan.AnnounceExpirationDate.Value < DateTime.Now)
-                throw new InvalidOperationException("无效的操作，已过声明截止时间。");
-
-            form.IsTakeExam = IsTakeExam;
-            form.WhenAnnounced = DateTime.Now;
-
-            await this.formStore.UpdateAsync(form);
         }
 
         /// <summary>

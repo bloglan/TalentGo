@@ -80,7 +80,7 @@ Text = "未通过", Value = "false"
         {
             <tr>
                 <td>@Html.ActionLink(item.Id.ToString(), "Detail", new { id = item.Id }, new { target = "_blank" })</td>
-                <td>@Html.ActionLink(item.Person.DisplayName, "Detail", "Person", new { id = item.Id }, new { target = "_blank" })</td>
+                <td>@Html.ActionLink(item.Person.DisplayName, "Detail", "Person", new { id = item.PersonId }, new { target = "_blank" })</td>
                 <td>
                     @(item.Person.Sex == Sex.Male ? "男" : "女")
                     <span title="@item.Person.DateOfBirth.ToShortDateString()">@(item.Person.DateOfBirth.Age())岁</span>
@@ -111,7 +111,6 @@ Text = "未通过", Value = "false"
 else
 {
     <p>没有符合条件的数据</p>
-
 }
 
 @section Scripts

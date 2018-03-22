@@ -52,7 +52,15 @@ namespace TalentGoManagerWebApp.Controllers
                     return HttpNotFound();
             }
             else
-                form = this.applicationFormManager.ApplicationForms.PendingFileReview().OrderBy(a => a.WhenCommited).FirstOrDefault();
+            {
+                var forms = this.applicationFormManager.ApplicationForms.PendingFileReview().OrderBy(a => a.WhenCommited);
+                var pendingCount = forms.Count();
+                if(pendingCount == 0)
+                    return View("NoPendingFileReview");
+                if (pendingCount > 10)
+                    pendingCount = 10;
+                form = forms.Skip(new Random().Next(pendingCount)).FirstOrDefault();
+            }
 
             if (form == null)
                 return View("NoPendingFileReview");
@@ -74,9 +82,9 @@ namespace TalentGoManagerWebApp.Controllers
 
             try
             {
-                await this.applicationFormManager.FileReviewAsync(form, model.Accepted, this.DomainUser().DisplayName);
+                await this.applicationFormManager.FileReviewAsync(form, model.Accepted, this.DomainUser().DisplayName, model.FileReviewMessage);
                 if (model.Next)
-                    return RedirectToAction("FileReview");
+                    return RedirectToAction("FileReview", routeValues: null);
 
                 return View("FileReviewComplete");
             }

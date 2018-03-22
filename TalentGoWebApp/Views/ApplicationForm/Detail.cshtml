@@ -22,18 +22,18 @@
         </tr>
         <tr>
             <td>姓名</td>
-            <td>@Model.Person.DisplayName</td>
+            <td>@Model.Person.DisplayName @Html.Partial("_RealIdState", Model.Person)</td>
             <td>性别</td>
             <td>@(Model.Person.Sex == Sex.Male ? "男" : "女")</td>
             <td rowspan="5">
                 @if (string.IsNullOrEmpty(Model.HeadImageFile))
-                {
-                    <p>没有照片，请到@(Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" }))上传证件照片。</p>
-                }
-                else
-                {
-                    <img src="@Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile })" class="img-responsive" style="max-width:150px; max-height:150px;" />
-                }
+            {
+                <p>没有照片，请到@(Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" }))上传证件照片。</p>
+        }
+        else
+        {
+            <img src="@Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile })" class="img-responsive" style="max-width:150px; max-height:150px;" />
+    }
             </td>
         </tr>
         <tr>
@@ -90,8 +90,8 @@
         <tr>
             <td>职位/类别</td>
             <td>@Model.Job.Name</td>
-            <td>招聘计划</td>
-            <td>@Model.Job.Plan.Title</td>
+            <td>报名专业</td>
+            <td>@Model.SelectedMajor</td>
             <td></td>
         </tr>
         <tr>
@@ -99,23 +99,40 @@
             <td colspan="4">@Model.Accomplishments</td>
         </tr>
         <tr>
+            <th colspan="5">报名表属性</th>
+        </tr>
+        <tr>
+            <td>创建时间：</td>
+            <td>@Model.WhenCreated.ToString()</td>
+            <td>修改时间：</td>
+            <td>@Model.WhenChanged.ToString()</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>提交时间：</td>
+            <td>@(Model.WhenCommited.HasValue ? Model.WhenCommited.Value.ToString() : "N/A")</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
             <th colspan="5">审核信息</th>
         </tr>
         <tr>
-            <td colspan="5">
-                <p>创建时间：@Model.WhenCreated</p>
-                @if (Model.WhenCommited.HasValue)
-                {
-                    <p>提交时间 @Model.WhenCommited.Value</p>
-                }
-                @if (Model.WhenFileReviewed.HasValue)
-                {
-                    <p>资料审查：通过，审查人：，审查时间：@Model.WhenFileReviewed.Value</p>
-                }
-                <p>@Html.Partial("_FileReviewState")</p>
-                <p>@Html.Partial("_AuditState")</p>
-            </td>
+            <td>资料审查：@Html.Partial("_FileReviewState")</td>
+            <td></td>
+            <td>时间：@Model.WhenFileReviewed</td>
+            <td>附加信息：</td>
+            <td>@Model.FileReviewMessage</td>
         </tr>
+        <tr>
+            <td>资格审核：@Html.Partial("_AuditState")</td>
+            <td></td>
+            <td></td>
+            <td>附加信息：</td>
+            <td>@Model.FileReviewMessage</td>
+        </tr>
+        
     </tbody>
 </table>
 <hr />

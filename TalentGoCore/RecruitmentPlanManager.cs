@@ -38,21 +38,10 @@ namespace TalentGo
         /// <returns></returns>
         public async Task CreateAsync(RecruitmentPlan plan)
         {
-            //必须有明确的Publisher
-            //设置WhenCreated为当前时间
-            //设置State为Created
-            //有效期晚于当前日期
-            //报名截止日期晚于当前日期
-            //其他必填字段验证
-            //
-
-            //if (plan.EnrollExpirationDate < DateTime.Now)
-            //	throw new ArgumentException("报名截止日期早于当前时间。");
-
-            //if (plan.EnrollExpirationDate > plan.ExpirationDate)
-            //	throw new ArgumentException("报名的截止日期晚于招聘计划设定的有效期。");
-
-            //plan.State = RecruitmentPlanState.Created.ToString();
+            if (plan == null)
+            {
+                throw new ArgumentNullException(nameof(plan));
+            }
 
             await this.store.CreateAsync(plan);
         }
@@ -64,6 +53,10 @@ namespace TalentGo
         /// <returns></returns>
         public async Task UpdateAsync(RecruitmentPlan plan)
         {
+            if (plan == null)
+            {
+                throw new ArgumentNullException(nameof(plan));
+            }
             //只有State处于Created的计划可以被修改。
             //可修改的字段包括Title, Recruitment, IsPublic, ExpirationDate, EnrollExpirationDate
             //
@@ -81,6 +74,11 @@ namespace TalentGo
         /// <returns></returns>
         public async Task DeleteAsync(RecruitmentPlan plan)
         {
+            if (plan == null)
+            {
+                throw new ArgumentNullException(nameof(plan));
+            }
+
             var toRemove = await this.FindByIdAsync(plan.Id);
             if (plan.WhenPublished.HasValue)
                 throw new InvalidOperationException("已发布的招聘计划无法删除。");

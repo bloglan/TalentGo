@@ -36,8 +36,9 @@ namespace TalentGoWebApp.Controllers
         public ActionResult Index()
         {
             var person = this.CurrentUser();
-            if (!person.RealIdValid.HasValue || !person.RealIdValid.Value)
-                return View("RealIdRequired");
+            //如果要求用户必须通过实名认证，才能浏览报名信息，则取消注释下列代码。
+            //if (!person.RealIdValid.HasValue || !person.RealIdValid.Value)
+            //    return View("RealIdRequired");
 
             return View(this.recruitmentManager.RecruitmentPlans.Enrollable());
         }
