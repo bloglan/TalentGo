@@ -1,5 +1,9 @@
 ﻿
 <h2>您好，@Html.CurrentUser().DisplayName</h2>
 
-<p>@Html.ActionLink("进入报名", "Index", "Recruitment", null, new { @class = "btn btn-default" })</p>
-<a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default">注销</a>
+@if (Html.CurrentUser().ApplicationForms.Any())
+{
+    <p>@Html.ActionLink("我的报名表", "Index", "ApplicationForm")</p>
+}
+<p>@Html.ActionLink("浏览职位/类别", "Index", "Recruitment")</p>
+<p><a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default">注销</a></p>

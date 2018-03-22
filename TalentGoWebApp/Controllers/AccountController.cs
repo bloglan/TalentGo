@@ -274,11 +274,22 @@ namespace TalentGoWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
+            //处理用户在末尾添加了“族”字。
+            if (model.Ethnicity.EndsWith("族"))
+                model.Ethnicity.Remove(model.Ethnicity.Length - 1);
+            if (string.IsNullOrWhiteSpace(model.Ethnicity))
+            {
+                this.ModelState.AddModelError(nameof(model.Ethnicity), "必须填写民族名称。民族名称末尾不用添加“族”字。");
+                return View(model);
+            }
+
+            model.Issuer = model.Issuer.Trim().Replace(" ", string.Empty);
+            model.Address = model.Address.Trim().Replace(" ", string.Empty);
+
             var user = this.CurrentUser();
             try
             {
-                await this.personManager.UpdateRealId(user, model.Surname, model.GivenName, model.Ethnicity, model.Address, model.Issuer, model.IssueDate.Value, model.ExpiresAt);
-
+                await this.personManager.UpdateRealIdAsync(user, model.Surname, model.GivenName, model.Ethnicity, model.Address, model.Issuer, model.IssueDate.Value, model.ExpiresAt);
             }
             catch (Exception ex)
             {

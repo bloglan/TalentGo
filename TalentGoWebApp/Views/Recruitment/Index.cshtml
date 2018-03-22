@@ -52,13 +52,15 @@
                 <col class="col-md-1" />
                 <col class="col-md-1" />
                 <col class="col-md-1" />
-                <col class="col-md-5" />
+                <col class="col-md-1" />
+                <col class="col-md-4" />
                 <col class="col-md-2" />
                 <col class="col-md-1" />
             </colgroup>
             <thead>
                 <tr>
                     <th>职位</th>
+                    <th>招聘人数</th>
                     <th>学历要求</th>
                     <th>学位要求</th>
                     <th>专业要求</th>
@@ -71,6 +73,7 @@
                 {
                     <tr>
                         <td>@job.Name</td>
+                        <td>@job.ExpectRecruitCount</td>
                         <td>@job.EducationBackgroundRequirement</td>
                         <td>@job.DegreeRequirement</td>
                         <td>@job.MajorRequirement</td>

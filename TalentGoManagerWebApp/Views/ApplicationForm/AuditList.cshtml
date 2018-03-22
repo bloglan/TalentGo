@@ -40,7 +40,7 @@ Text = "未通过", Value = "false"
         </div>
         @Html.Hidden("order", this.Request["order"])
         <div class="form-group">
-            <input type="submit" value="确定" class="btn btn-primary" /> @Html.ActionLink("导出Excel", "ExportAuditList", null, new { @class = "btn btn-default" })
+            <input type="submit" value="确定" class="btn btn-primary" /> @Html.ActionLink("导出Excel", "Export", this.ViewContext.RouteData.Values, null)
         </div>
     </div>
     @Html.Hidden("page", this.Request["page"])

@@ -194,34 +194,55 @@ namespace TalentGoManagerWebApp.Controllers
             return View(forms.Skip(pageIndex * 30).Take(30));
         }
 
-        public async Task<ActionResult> ExportAuditList(int id, ApplicationFormListViewModel model)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">planid</param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> Export(int? plan, string q, bool? audit, string order)
         {
-            var recruitmentPlan = await this.recruitmentPlanManager.FindByIdAsync(id);
-            if (recruitmentPlan == null)
-                return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到报名计划。", this.Url.Action("Index", "RecruitmentPlan"), 3));
+            var forms = this.applicationFormManager.ApplicationForms.Auditable();
+            if (plan.HasValue)
+                forms = forms.OfPlan(plan.Value);
 
-            if (model == null)
+            if (!string.IsNullOrEmpty(q))
             {
-                model = new ApplicationFormListViewModel()
-                {
-                    PageIndex = 0
-                };
+                if (int.TryParse(q, out int intKey))
+                    forms = forms.Where(f => f.Id == intKey);
+                else
+                    forms = forms.Where(f => f.Person.DisplayName.StartsWith(q)
+                    || f.Person.IDCardNumber.StartsWith(q)
+                    || f.Person.Mobile.StartsWith(q)
+                    || f.School.StartsWith(q)
+                    || f.Major.StartsWith(q)
+                    || f.SelectedMajor.StartsWith(q)
+                    || f.Tags.Contains(q));
+            }
+            if (audit.HasValue)
+            {
+                forms = forms.Where(f => f.AuditFlag == audit.Value);
             }
 
-            //TODO:导出审核列表，根据查询条件过滤和排序未实现。
-            model.EnrollmentList = this.applicationFormManager.ApplicationForms;
-            model.AllCount = this.applicationFormManager.ApplicationForms.Count();
+            var count = forms.Count();
+            this.ViewBag.AllCount = count;
+
+            if (!string.IsNullOrEmpty(order))
+                forms = forms.OrderBy(order);
+            else
+                forms = forms.OrderByDescending(f => f.WhenFileReviewed);
+            
 
             MemoryStream ms = new MemoryStream();
 
             StreamWriter sw = new StreamWriter(ms, Encoding.Unicode);
 
             //书写标题
-            sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t应聘职位\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核通过\t审核消息\t声明日期\t是否参加考试\t证件照ID\t身份证正面\t身份证背面\t准考证号");
+            sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t应聘职位\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核通过\t审核消息");
 
-            foreach (ApplicationForm data in model.EnrollmentList)
+            foreach (ApplicationForm data in forms)
             {
-                sw.Write(recruitmentPlan.Title + "\t");
+                sw.Write(data.Job.Plan.Title + "\t");
                 sw.Write(data.Person.DisplayName + "\t");
                 sw.Write(data.Person.Sex + "\t");
                 sw.Write(data.Person.DateOfBirth.ToShortDateString() + "\t");
@@ -243,24 +264,13 @@ namespace TalentGoManagerWebApp.Controllers
                 sw.Write((data.WhenChanged.HasValue ? data.WhenChanged.Value.ToString() : "N/A") + "\t");
                 sw.Write((data.WhenCommited.HasValue ? data.WhenCommited.Value.ToString() : "N/A") + "\t");
                 sw.Write((data.AuditFlag ? "是" : "否") + "\t");
-                sw.Write((string.IsNullOrEmpty(data.AuditMessage) ? "" : data.AuditMessage) + "\t");
-                sw.Write((data.WhenAnnounced.HasValue ? data.WhenAnnounced.Value.ToString() : "N/A") + "\t");
-                sw.Write((data.IsTakeExam.HasValue ? (data.IsTakeExam.Value ? "是" : "否") : "N/A") + "\t");
-
-                //证件照、身份证等数据
-                sw.Write("\t");
-                sw.Write("\t");
-                sw.Write("\t");
-
-                //准考证号
-                sw.Write("0\r\n");
-
+                sw.Write((string.IsNullOrEmpty(data.AuditMessage) ? "" : data.AuditMessage) + "\r\n");
             }
 
             sw.Flush();
             ms.Position = 0;
 
-            return File(ms, "text/csv", "审核列表.csv");
+            return File(ms, "text/csv", "报名表.csv");
 
 
             //return File(new byte[0], "text/csv");

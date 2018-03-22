@@ -20,7 +20,7 @@ namespace TalentGo.Tests
             
             await manager.CreateAsync(user);
 
-            await manager.UpdateRealId(user, "张", "三", "汉", "地址", "Issuer", new DateTime(2008, 2, 21), new DateTime(2018, 2, 21));
+            await manager.UpdateRealIdAsync(user, "张", "三", "汉", "地址", "Issuer", new DateTime(2008, 2, 21), new DateTime(2018, 2, 21));
 
             var po = new PrivateObject(user);
             po.SetProperty(nameof(user.IDCardFrontFile), "12345");

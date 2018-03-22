@@ -102,7 +102,7 @@ namespace TalentGo
         /// <param name="issueDate"></param>
         /// <param name="expiresAt"></param>
         /// <returns></returns>
-        public async Task UpdateRealId(Person person, string surname, string givenName, string ethnicity, string address, string issuer, DateTime issueDate, DateTime? expiresAt)
+        public async Task UpdateRealIdAsync(Person person, string surname, string givenName, string ethnicity, string address, string issuer, DateTime issueDate, DateTime? expiresAt)
         {
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
