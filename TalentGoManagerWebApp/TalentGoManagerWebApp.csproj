@@ -724,6 +724,8 @@
     <Content Include="Views\Shared\_FileReviewState.cshtml" />
     <Content Include="Views\ApplicationForm\ReturnBack.cshtml" />
     <Content Include="Views\ApplicationForm\ReturnBackSuccess.cshtml" />
+    <Content Include="Views\Person\Delete.cshtml" />
+    <Content Include="Views\Person\DeleteSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -447,12 +447,14 @@ namespace TalentGo
             if (person == null)
                 throw new ArgumentNullException(nameof(person));
 
+            //删除身份证正面文件。
             if (!string.IsNullOrEmpty(person.IDCardFrontFile))
             {
                 var file = await this.FileStore.FindByIdAsync(person.IDCardFrontFile);
                 if (file != null)
                     await this.FileStore.DeleteAsync(file);
             }
+            //删除身份证背面文件。
             if (!string.IsNullOrEmpty(person.IDCardBackFile))
             {
                 var file = await this.FileStore.FindByIdAsync(person.IDCardBackFile);

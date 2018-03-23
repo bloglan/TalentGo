@@ -220,5 +220,44 @@ namespace TalentGoManagerWebApp.Controllers
             //return new List<Enrollment>().AsEnumerable();
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            var person = await this.manager.FindByIdAsync(id);
+            if (person == null)
+                return HttpNotFound();
+
+            return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="collection"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<ActionResult> Delete(Guid id, FormCollection collection)
+        {
+            var person = await this.manager.FindByIdAsync(id);
+            if (person == null)
+                return HttpNotFound();
+
+            try
+            {
+                await this.manager.DeleteAsync(person);
+                return View("DeleteSuccess");
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View();
+            }
+        }
     }
 }

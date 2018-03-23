@@ -40,10 +40,11 @@
 <h2>学历证明文件</h2>
 <ul>
     <li>本年毕业尚未取得毕业证的，上传《就业推荐表》</li>
-    <li>次年毕业的，上传《毕业证》</li>
+    <li>上一年毕业的，必须上传《毕业证》</li>
     <li>留学生须提供《国外学历证明》</li>
 </ul>
-<p>仅支持JPG和PNG图片。推荐使用扫描仪按不小于150dpi分辨率扫描。图像面积不小于1240*1754像素（以A4纸竖放计算），文件大小不超过1MB。资料份数不超过10份。</p>
+<p>上传《就业推荐表》或《国外学历证明》时，页面应包含学校、就读专业、学生基本信息、学校审核签章等，信息传送不完整的，可能无法通过资料审查。</p>
+<p>仅支持JPG和PNG图片。推荐使用扫描仪按不小于150dpi分辨率扫描。图像面积不小于1240*1754像素（以A4纸竖放计算），文件大小不超过1MB。资料不超过10页。</p>
 @using (Html.BeginForm("UploadAcademicCertFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "academiccert" }))
 {
     <p>
@@ -94,7 +95,8 @@
 
 <hr />
 <h2>其他资料</h2>
-<p>仅支持JPG和PNG图片。其他您认为有必要提供的资料，如技能证书、奖状等。文件大小不超过1MB。资料份数不超过10份。</p>
+<p>其他您认为有必要提供的资料，例如CET证书、资格证书、荣誉证书等。</p>
+<p>仅支持JPG和PNG图片。其他您认为有必要提供的资料，如技能证书、奖状等。文件大小不超过1MB。资料不超过10页。</p>
 @using (Html.BeginForm("UploadOtherFile", "ApplicationForm", new { id = Model.Id }, FormMethod.Post, new { @class = "fileupload", enctype = "multipart/form-data", data_category = "other" }))
 {
     <p>

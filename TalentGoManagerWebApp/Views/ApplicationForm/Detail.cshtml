@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <td>姓名</td>
-            <td>@Model.Person.DisplayName @Html.Partial("_RealIdState", Model.Person)</td>
+            <td>@Html.ActionLink(Model.Person.DisplayName, "Detail", "Person", new { id = Model.PersonId }, new { target = "_blank" }) @Html.Partial("_RealIdState", Model.Person)</td>
             <td>性别</td>
             <td>@(Model.Person.Sex == Sex.Male ? "男" : "女")</td>
             <td rowspan="5">

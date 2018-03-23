@@ -231,7 +231,7 @@ namespace TalentGoManagerWebApp.Controllers
                 forms = forms.OrderBy(order);
             else
                 forms = forms.OrderByDescending(f => f.WhenFileReviewed);
-            
+
 
             MemoryStream ms = new MemoryStream();
 
@@ -244,7 +244,7 @@ namespace TalentGoManagerWebApp.Controllers
             {
                 sw.Write(data.Job.Plan.Title + "\t");
                 sw.Write(data.Person.DisplayName + "\t");
-                sw.Write(data.Person.Sex + "\t");
+                sw.Write((data.Person.Sex == Sex.Male ? "男" : "女") + "\t");
                 sw.Write(data.Person.DateOfBirth.ToShortDateString() + "\t");
                 sw.Write(data.Person.Ethnicity + "\t");
                 sw.Write(data.NativePlace + "\t");

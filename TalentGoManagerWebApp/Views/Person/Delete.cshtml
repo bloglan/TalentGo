@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "删除用户";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+@using (Html.BeginForm())
+{
+    <p>删除用户将删除与此用户的所有关联资料，包括他提交的报名表，上传的各类文件资料。确实要删除吗？</p>
+    <p>@Html.ValidationSummary()</p>
+    <p>
+        <button type="submit" class="btn btn-danger">删除用户</button>
+        @Html.ActionLink("取消", "Detail", new { id = this.Request["id"] }, new { @class = "btn btn-default" })
+    </p>
+}

@@ -68,7 +68,6 @@
     <Compile Include="ExaminationPlan.cs" />
     <Compile Include="ExaminationPlanManager.cs" />
     <Compile Include="ExaminationRoom.cs" />
-    <Compile Include="ExaminationRoomManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileIdList.cs" />
@@ -77,7 +76,6 @@
     <Compile Include="IDCardFrontOCRResult.cs" />
     <Compile Include="IDCardRecognizeException.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
-    <Compile Include="IExaminationRoomStore.cs" />
     <Compile Include="IFileStore.cs" />
     <Compile Include="IIDCardOCRService.cs" />
     <Compile Include="IJobStore.cs" />
