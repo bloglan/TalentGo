@@ -16,6 +16,7 @@ namespace TalentGo
         {
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
+            this.Candidates = new HashSet<Candidate>();
         }
 
         /// <summary>
@@ -66,5 +67,9 @@ namespace TalentGo
         /// </summary>
         public virtual ICollection<ExaminationSubject> Subjects { get; protected set; }
         
+        /// <summary>
+        /// 考试候选人。
+        /// </summary>
+        public virtual ICollection<Candidate> Candidates { get; protected set; }
     }
 }

@@ -32,13 +32,13 @@ namespace TalentGo
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static IQueryable<Examinee> AttendanceConfirmed(this IQueryable<Examinee> source)
+        public static IQueryable<Candidate> AttendanceConfirmed(this IQueryable<Candidate> source)
         {
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
             }
-            return source.Where(e => e.AttendanceConfirmed.Value);
+            return source.Where(e => e.Attendance.Value);
         }
     }
 }

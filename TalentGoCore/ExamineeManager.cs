@@ -45,27 +45,6 @@ namespace TalentGo
             await this.Store.CreateAsync(examinee);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="examinee"></param>
-        /// <param name="Attended"></param>
-        /// <returns></returns>
-        public virtual async Task ConfirmAttendanceAsync(Examinee examinee, bool Attended)
-        {
-            if (examinee == null)
-            {
-                throw new ArgumentNullException(nameof(examinee));
-            }
-
-            if (examinee.Subject.Plan.AttendanceConfirmationExpiresAt < DateTime.Now)
-                throw new InvalidOperationException("截止日期之后不再受理声明");
-
-            examinee.AttendanceConfirmed = Attended;
-            examinee.WhenAttendanceConfirmed = DateTime.Now;
-
-            await this.Store.UpdateAsync(examinee);
-        }
 
         /// <summary>
         /// 

@@ -65,6 +65,7 @@
     <Compile Include="Backend\SMSMessage.cs" />
     <Compile Include="Backend\SMSMessageBag.cs" />
     <Compile Include="Backend\SMSServiceBase.cs" />
+    <Compile Include="Candidate.cs" />
     <Compile Include="ExaminationPlan.cs" />
     <Compile Include="ExaminationPlanManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
