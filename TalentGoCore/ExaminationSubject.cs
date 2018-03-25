@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TalentGo
@@ -9,41 +10,38 @@ namespace TalentGo
     /// </summary>
     public class ExaminationSubject
     {
-        internal ExaminationSubject()
-        {
-            UsedExaminationRooms = new HashSet<ExaminationRoom>();
-        }
-
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="plan"></param>
-        public ExaminationSubject(ExaminationPlan plan)
-            : this()
+        public ExaminationSubject()
         {
-            ExaminationPlan = plan;
-            ExaminationPlanId = plan.Id;
         }
+
         /// <summary>
         /// 考试科目标识符。
         /// </summary>
-        public int Id { get; set; }
+        [Key]
+        [Column(Order = 0)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; protected set; }
 
         /// <summary>
         /// 关联考试计划。
         /// </summary>
-        public int ExaminationPlanId { get; protected set; }
+        [Key]
+        [Column(Order = 1)]
+        public int PlanId { get; protected set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [ForeignKey(nameof(ExaminationPlanId))]
-        public virtual ExaminationPlan ExaminationPlan { get; protected set; }
+        [ForeignKey(nameof(PlanId))]
+        public virtual ExaminationPlan Plan { get; protected set; }
 
         /// <summary>
         /// 考试科目。
         /// </summary>
-        public string SubjectName { get; set; }
+        public string Subject { get; set; }
 
         /// <summary>
         /// 考试开始时间。
@@ -56,8 +54,9 @@ namespace TalentGo
         public DateTime EndTime { get; set; }
 
         /// <summary>
-        /// 使用的考场。
+        /// 考试地点。
         /// </summary>
-        public virtual ICollection<ExaminationRoom> UsedExaminationRooms { get; set; }
+        public virtual string Address { get; set; }
+
     }
 }

@@ -200,7 +200,7 @@ namespace TalentGoManagerWebApp.Controllers
         /// <param name="id">planid</param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task<ActionResult> Export(int? plan, string q, bool? audit, string order)
+        public ActionResult Export(int? plan, string q, bool? audit, string order)
         {
             var forms = this.applicationFormManager.ApplicationForms.Auditable();
             if (plan.HasValue)

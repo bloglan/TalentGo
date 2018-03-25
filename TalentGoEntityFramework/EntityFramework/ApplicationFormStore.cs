@@ -12,7 +12,6 @@ namespace TalentGo.EntityFramework
     {
         DbContext dbContext;
         DbSet<ApplicationForm> set;
-        DbSet<EnrollmentArchive> archiveSet;
 
         /// <summary>
         /// 
@@ -22,7 +21,6 @@ namespace TalentGo.EntityFramework
         {
             this.dbContext = DbContext;
             this.set = this.dbContext.Set<ApplicationForm>();
-            this.archiveSet = this.dbContext.Set<EnrollmentArchive>();
         }
 
         /// <summary>

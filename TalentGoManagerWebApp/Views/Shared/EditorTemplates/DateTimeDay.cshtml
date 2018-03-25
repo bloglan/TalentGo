@@ -1,0 +1,19 @@
+﻿@model DateTime
+
+@Html.TextBox("", Model.ToString("yyyy-MM-dd"), ViewData["htmlAttributes"])
+
+@using (Html.BeginScriptContext())
+{
+	Html.AddScriptFile("~/bundles/bootstrapDatetimePicker");
+	Html.AddScriptBlock(
+		@<script>
+			$(function () {
+				$("#@Html.NameForModel()").datetimepicker({
+					format: "yyyy-mm-dd",
+					minView: "month",
+					language: "zh-CN"
+				})
+			});
+		</script>
+		);
+}

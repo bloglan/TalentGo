@@ -85,7 +85,7 @@ namespace TalentGo.Extension
 		/// </summary>
 		/// <param name="date"></param>
 		/// <returns></returns>
-		public static int Age(this DateTime date)
+		public static int AsAge(this DateTime date)
 		{
 			DateTime now = DateTime.Now;
 			if (date > now)

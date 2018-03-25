@@ -1,0 +1,14 @@
+﻿@model SubjectEditViewModel
+@{
+    ViewBag.Title = "EditSubject";
+}
+
+<h2>EditSubject</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+    @Html.Partial("_SubjectEditor")
+    <button type="submit" class="btn btn-primary">Change</button>
+    @Html.ActionLink("Cancel", "Detail", new { id = this.Request["planId"] }, new { @class = "btn btn-default" })
+}

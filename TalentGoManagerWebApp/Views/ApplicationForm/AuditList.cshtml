@@ -83,7 +83,7 @@ Text = "未通过", Value = "false"
                 <td>@Html.ActionLink(item.Person.DisplayName, "Detail", new { id = item.Id }, new { target = "_blank" })</td>
                 <td>
                     @(item.Person.Sex == Sex.Male ? "男" : "女")
-                    <span title="@item.Person.DateOfBirth.ToShortDateString()">@(item.Person.DateOfBirth.Age())岁</span>
+                    <span title="@item.Person.DateOfBirth.ToShortDateString()">@(item.Person.DateOfBirth.AsAge())岁</span>
                 </td>
                 <td>@item.School</td>
                 <td>@item.Major</td>

@@ -9,7 +9,7 @@ namespace TalentGo
     /// <summary>
     /// An interface to support read/write examination plan data from database.
     /// </summary>
-    public interface IExaminationPlanStore : IDisposable
+    public interface IExaminationPlanStore
     {
         /// <summary>
         /// 

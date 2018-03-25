@@ -1,0 +1,72 @@
+﻿@model ExaminationPlan
+@{
+    ViewBag.Title = "考试计划详情";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>
+    @if (!Model.WhenPublished.HasValue)
+    {
+        @Html.ActionLink("Publish", "Publish", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("删除", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+    }
+</p>
+
+<h2>基本信息</h2>
+<p>Title: @Model.Title</p>
+<p>AttendanceConfirmationExpiresAt: @Model.AttendanceConfirmationExpiresAt.ToString("MM-dd HH:mm")</p>
+<p>@(Model.WhenPublished.HasValue?Model.WhenPublished.Value.ToString():"Not Published")</p>
+<p>WhenCreated: @Model.WhenCreated</p>
+<p>WhenChange: @Model.WhenChanged</p>
+
+<h2>科目</h2>
+@Html.ActionLink("Add Subject", "AddSubject", new { planId = Model.Id }, new { @class = "btn btn-default" })
+<table class="table">
+    <thead>
+        <tr>
+            <th>Subject</th>
+            <th>Address</th>
+            <th>StartTime</th>
+            <th>EndTime</th>
+            <th>Operations</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Subjects)
+        {
+            <tr>
+                <td>@item.Subject</td>
+                <td>@item.Address</td>
+                <td>@item.StartTime.ToString("MM-dd HH:mm")</td>
+                <td>@item.EndTime.ToString("MM-dd HH:mm")</td>
+                <td>
+                    @Html.ActionLink("Edit", "EditSubject", new { id = item.Id, planId = Model.Id })
+                    <a href="#" class="subject-remove" data-planid="@Model.Id" data-subjectid="@item.Id">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            $("a.subject-remove").click(function () {
+                if (confirm("Delete subject?")) {
+                    var row = $(this);
+                    $.post("@Url.Action("RemoveSubject")", { planId: row.data("planid"), id: row.data("subjectid") }, function (data, status, xhr) {
+                        if (data != true)
+                            alert(data);
+                        else
+                            row.parents("tr").remove();
+                    });
+                }
+            });
+        });
+
+    </script>
+    }
