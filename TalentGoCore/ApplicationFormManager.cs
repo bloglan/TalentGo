@@ -99,7 +99,7 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(data));
 
             if (!string.IsNullOrEmpty(form.HeadImageFile))
-                throw new InvalidOperationException("Head image file exists.");
+                throw new InvalidOperationException("文件已存在。");
 
             this.EnsureImage(data, new Size(207, 290), true, out string mimeType);
 

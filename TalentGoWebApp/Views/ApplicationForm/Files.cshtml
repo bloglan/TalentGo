@@ -175,7 +175,7 @@
                         $(this).find("span.fileinput-button").children("span").text("上传");
 
                         if (data.result.result != 0) {
-                            alert("传送错误。" + data.result.Message);
+                            alert("传送错误。" + data.result.message);
                             return;
                         }
                         $("#fileItem").tmpl(data.result).appendTo($(this).find("div.row"));

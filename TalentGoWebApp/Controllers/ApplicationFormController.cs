@@ -212,7 +212,7 @@ namespace TalentGoWebApp.Controllers
         {
             var form = this.GetEditableFormOfLoginUser(id);
             if (form == null)
-                return Json(new FileUploadResultModel { Result = 404, Message = "Cannot found application form." });
+                return Json(new FileUploadResultModel { Result = 404, Message = "找不到报名表。" });
 
             if (Request.Files.Count != 1) throw new HttpRequestValidationException("Attempt to upload chunked file containing more than one fragment per request");
             var file = this.Request.Files[0];
@@ -225,7 +225,7 @@ namespace TalentGoWebApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return Json(new FileUploadResultModel { Result = 500, Message = "File Exists." + ex.Message });
+                    return Json(new FileUploadResultModel { Result = 500, Message = "资料已存在。" + ex.Message });
                     throw;
                 }
             }
@@ -259,7 +259,7 @@ namespace TalentGoWebApp.Controllers
         {
             var form = this.GetEditableFormOfLoginUser(id);
             if (form == null)
-                return Json(new { result = -1, message = "Application form not found." }, "text/plain");
+                return Json(new { result = -1, message = "找不到报名表。" }, "text/plain");
 
             try
             {
@@ -284,7 +284,7 @@ namespace TalentGoWebApp.Controllers
         {
             var form = this.GetEditableFormOfLoginUser(id);
             if (form == null)
-                return Json(new { result = -1, message = "Application form not found." }, "text/plain");
+                return Json(new { result = -1, message = "找不到报名表。" }, "text/plain");
 
             try
             {
@@ -307,7 +307,7 @@ namespace TalentGoWebApp.Controllers
         {
             var form = this.GetEditableFormOfLoginUser(id);
             if (form == null)
-                return Json(new { result = -1, message = "Application form not found." }, "text/plain");
+                return Json(new { result = -1, message = "找不到报名表。" }, "text/plain");
 
             try
             {
@@ -331,7 +331,7 @@ namespace TalentGoWebApp.Controllers
         {
             var form = this.GetEditableFormOfLoginUser(id);
             if (form == null)
-                return Json(new { result = -1, message = "Application form not found." }, "text/plain");
+                return Json(new { result = -1, message = "找不到报名表。" }, "text/plain");
 
             try
             {
@@ -378,7 +378,7 @@ namespace TalentGoWebApp.Controllers
         {
             var form = this.GetEditableFormOfLoginUser(id);
             if (form == null)
-                return Json(new { result = -1, message = "Application form not found." }, "text/plain");
+                return Json(new { result = -1, message = "找不到报名表。" }, "text/plain");
 
             try
             {
