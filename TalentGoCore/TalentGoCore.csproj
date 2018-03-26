@@ -65,10 +65,13 @@
     <Compile Include="Backend\SMSMessage.cs" />
     <Compile Include="Backend\SMSMessageBag.cs" />
     <Compile Include="Backend\SMSServiceBase.cs" />
+    <Compile Include="Candidate.cs" />
     <Compile Include="ExaminationPlan.cs" />
     <Compile Include="ExaminationPlanManager.cs" />
-    <Compile Include="ExaminationRoom.cs" />
     <Compile Include="ExaminationSubject.cs" />
+    <Compile Include="Examinee.cs" />
+    <Compile Include="ExamineeExtensions.cs" />
+    <Compile Include="ExamineeManager.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileIdList.cs" />
     <Compile Include="FileReviewException.cs" />
@@ -76,6 +79,7 @@
     <Compile Include="IDCardFrontOCRResult.cs" />
     <Compile Include="IDCardRecognizeException.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
+    <Compile Include="IExamineeStore.cs" />
     <Compile Include="IFileStore.cs" />
     <Compile Include="IIDCardOCRService.cs" />
     <Compile Include="IJobStore.cs" />
@@ -88,24 +92,18 @@
     <Compile Include="Notification.cs" />
     <Compile Include="PeopleExtensions.cs" />
     <Compile Include="Person.cs" />
-    <Compile Include="Degree.cs" />
-    <Compile Include="EducationBackground.cs" />
     <Compile Include="IApplicationFormStore.cs" />
     <Compile Include="IRecruitmentPlanStore.cs" />
     <Compile Include="PersonManager.cs" />
-    <Compile Include="EnrollmentArchive.cs" />
     <Compile Include="ApplicationForm.cs" />
     <Compile Include="RecruitmentPlan.cs" />
     <Compile Include="RecruitmentPlanExtensions.cs" />
     <Compile Include="RegisterationDelegate.cs" />
     <Compile Include="Linq\OrderedExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="CommitEnrollmentException.cs" />
     <Compile Include="ApplicationFormManager.cs" />
     <Compile Include="RecruitmentPlanManager.cs" />
     <Compile Include="ChineseIDCardNumber.cs" />
-    <Compile Include="AnnounceFilterType.cs" />
-    <Compile Include="AuditFilterType.cs" />
     <Compile Include="Sex.cs" />
   </ItemGroup>
   <ItemGroup>

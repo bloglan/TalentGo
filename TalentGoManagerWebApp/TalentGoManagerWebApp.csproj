@@ -183,15 +183,17 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ExaminationController.cs" />
     <Compile Include="Controllers\NoticeController.cs" />
     <Compile Include="Controllers\ApplicationFormController.cs" />
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RecruitmentPlanController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Models\SubjectEditViewModel.cs" />
     <Compile Include="Models\CommitAuditViewModel.cs" />
     <Compile Include="Models\EnrollmentDetailViewModel.cs" />
-    <Compile Include="Models\ApplicationFormListViewModel.cs" />
     <Compile Include="Models\EnrollmentStatisticsViewModel.cs" />
+    <Compile Include="Models\ExaminationPlanEditViewModel.cs" />
     <Compile Include="Models\JobEditViewModel.cs" />
     <Compile Include="Models\NoticeEditViewModel.cs" />
     <Compile Include="Models\PeopleSummaryViewModel.cs" />
@@ -726,6 +728,19 @@
     <Content Include="Views\ApplicationForm\ReturnBackSuccess.cshtml" />
     <Content Include="Views\Person\Delete.cshtml" />
     <Content Include="Views\Person\DeleteSuccess.cshtml" />
+    <Content Include="Views\Examination\Index.cshtml" />
+    <Content Include="Views\Examination\_ExaminationPlanList.cshtml" />
+    <Content Include="Views\Examination\_ExaminationPlanEditor.cshtml" />
+    <Content Include="Views\Examination\Create.cshtml" />
+    <Content Include="Views\Examination\Edit.cshtml" />
+    <Content Include="Views\Examination\Detail.cshtml" />
+    <Content Include="Views\Examination\AddSubject.cshtml" />
+    <Content Include="Views\Examination\RemoveSubject.cshtml" />
+    <Content Include="Views\Examination\Publish.cshtml" />
+    <Content Include="Views\Examination\EditSubject.cshtml" />
+    <Content Include="Views\Examination\_SubjectEditor.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTimeDay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
