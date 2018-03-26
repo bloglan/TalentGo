@@ -11,9 +11,9 @@ namespace TalentGoManagerWebApp.Controllers
 {
     public class ExaminationController : Controller
     {
-        ExaminationPlanManager manager;
+        ExaminationManager manager;
 
-        public ExaminationController(ExaminationPlanManager manager)
+        public ExaminationController(ExaminationManager manager)
         {
             this.manager = manager;
         }
@@ -27,7 +27,7 @@ namespace TalentGoManagerWebApp.Controllers
         [ChildActionOnly]
         public ActionResult ExaminationPlans()
         {
-            var plans = this.manager.Plans;
+            var plans = this.manager.Exams;
             return PartialView("_ExaminationPlanList", plans);
         }
 
@@ -43,7 +43,7 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            var plan = new ExaminationPlan(model.Title, model.AttendanceConfirmationExpiresAt);
+            var plan = new Examination(model.Title, model.AttendanceConfirmationExpiresAt);
             try
             {
                 await this.manager.CreateAsync(plan);
@@ -118,7 +118,7 @@ namespace TalentGoManagerWebApp.Controllers
 
             try
             {
-                await this.manager.Publish(plan);
+                await this.manager.PublishAsync(plan);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -152,7 +152,6 @@ namespace TalentGoManagerWebApp.Controllers
                 Subject = model.Subject,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
-                Address = model.Address,
             };
 
             plan.Subjects.Add(subject);
@@ -182,7 +181,6 @@ namespace TalentGoManagerWebApp.Controllers
                 Subject = subject.Subject,
                 StartTime = subject.StartTime,
                 EndTime = subject.EndTime,
-                Address = subject.Address,
             };
 
             return View(model);
@@ -205,7 +203,6 @@ namespace TalentGoManagerWebApp.Controllers
             subject.Subject = model.Subject;
             subject.StartTime = model.StartTime;
             subject.EndTime = model.EndTime;
-            subject.Address = model.Address;
 
             try
             {

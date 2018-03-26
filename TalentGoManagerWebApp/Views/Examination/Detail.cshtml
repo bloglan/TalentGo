@@ -1,4 +1,4 @@
-﻿@model ExaminationPlan
+﻿@model Examination
 @{
     ViewBag.Title = "考试计划详情";
 }
@@ -27,7 +27,6 @@
     <thead>
         <tr>
             <th>Subject</th>
-            <th>Address</th>
             <th>StartTime</th>
             <th>EndTime</th>
             <th>Operations</th>
@@ -38,7 +37,6 @@
         {
             <tr>
                 <td>@item.Subject</td>
-                <td>@item.Address</td>
                 <td>@item.StartTime.ToString("MM-dd HH:mm")</td>
                 <td>@item.EndTime.ToString("MM-dd HH:mm")</td>
                 <td>

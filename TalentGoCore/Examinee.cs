@@ -25,7 +25,7 @@ namespace TalentGo
         /// </summary>
         [Key]
         [Column(Order = 0)]
-        public virtual int PlanId { get; set; }
+        public virtual int ExamId { get; set; }
 
         /// <summary>
         /// 科目Id
@@ -44,7 +44,7 @@ namespace TalentGo
         /// <summary>
         /// 科目。
         /// </summary>
-        [ForeignKey(nameof(PlanId) + "," + nameof(SubjectId))]
+        [ForeignKey(nameof(ExamId) + "," + nameof(SubjectId))]
         public virtual ExaminationSubject Subject { get; set; }
 
         /// <summary>
@@ -52,16 +52,6 @@ namespace TalentGo
         /// </summary>
         [ForeignKey(nameof(PersonId))]
         public virtual Person Person { get; set; }
-
-        /// <summary>
-        /// 考场
-        /// </summary>
-        public virtual string Room { get; set; }
-
-        /// <summary>
-        /// 座位
-        /// </summary>
-        public virtual string Seat { get; set; }
 
         /// <summary>
         /// 计分。

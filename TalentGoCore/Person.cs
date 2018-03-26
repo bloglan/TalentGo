@@ -21,6 +21,8 @@ namespace TalentGo
             this.WhenChanged = DateTime.Now;
             this.IssueDate = new DateTime(1900, 1, 1);
             this.ApplicationForms = new HashSet<ApplicationForm>();
+            this.Candidates = new HashSet<Candidate>();
+            this.Examinees = new HashSet<Examinee>();
         }
 
         /// <summary>
@@ -149,5 +151,15 @@ namespace TalentGo
         /// 获取与用户关联的报名表。
         /// </summary>
         public virtual ICollection<ApplicationForm> ApplicationForms { get; protected set; }
+
+        /// <summary>
+        /// 与此用户关联的考试候选人。
+        /// </summary>
+        public virtual ICollection<Candidate> Candidates { get; protected set; }
+
+        /// <summary>
+        /// 与此用户关联的考生信息。
+        /// </summary>
+        public virtual ICollection<Examinee> Examinees { get; protected set; }
     }
 }

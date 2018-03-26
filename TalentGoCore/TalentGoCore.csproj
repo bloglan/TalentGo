@@ -66,8 +66,9 @@
     <Compile Include="Backend\SMSMessageBag.cs" />
     <Compile Include="Backend\SMSServiceBase.cs" />
     <Compile Include="Candidate.cs" />
-    <Compile Include="ExaminationPlan.cs" />
-    <Compile Include="ExaminationPlanManager.cs" />
+    <Compile Include="CandidateManager.cs" />
+    <Compile Include="Examination.cs" />
+    <Compile Include="ExaminationManager.cs" />
     <Compile Include="ExaminationSubject.cs" />
     <Compile Include="Examinee.cs" />
     <Compile Include="ExamineeExtensions.cs" />
@@ -75,10 +76,11 @@
     <Compile Include="File.cs" />
     <Compile Include="FileIdList.cs" />
     <Compile Include="FileReviewException.cs" />
+    <Compile Include="ICandidateStore.cs" />
     <Compile Include="IDCardBackOCRResult.cs" />
     <Compile Include="IDCardFrontOCRResult.cs" />
     <Compile Include="IDCardRecognizeException.cs" />
-    <Compile Include="IExaminationPlanStore.cs" />
+    <Compile Include="IExaminationStore.cs" />
     <Compile Include="IExamineeStore.cs" />
     <Compile Include="IFileStore.cs" />
     <Compile Include="IIDCardOCRService.cs" />

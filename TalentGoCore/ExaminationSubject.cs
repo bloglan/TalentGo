@@ -30,13 +30,13 @@ namespace TalentGo
         /// </summary>
         [Key]
         [Column(Order = 1)]
-        public int PlanId { get; protected set; }
+        public int ExamId { get; protected set; }
 
         /// <summary>
         /// 
         /// </summary>
-        [ForeignKey(nameof(PlanId))]
-        public virtual ExaminationPlan Plan { get; protected set; }
+        [ForeignKey(nameof(ExamId))]
+        public virtual Examination Exam { get; protected set; }
 
         /// <summary>
         /// 考试科目。
@@ -52,11 +52,6 @@ namespace TalentGo
         /// 考试结束时间。
         /// </summary>
         public DateTime EndTime { get; set; }
-
-        /// <summary>
-        /// 考试地点。
-        /// </summary>
-        public virtual string Address { get; set; }
 
     }
 }

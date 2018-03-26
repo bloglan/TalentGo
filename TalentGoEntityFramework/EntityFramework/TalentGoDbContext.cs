@@ -48,8 +48,8 @@ namespace TalentGo.EntityFramework
             modelBuilder.Entity<Notice>()
                 .ToTable("Notice");
 
-            modelBuilder.Entity<ExaminationPlan>()
-                .ToTable("ExaminationPlan");
+            modelBuilder.Entity<Examination>()
+                .ToTable("Examination");
 
             modelBuilder.Entity<ExaminationSubject>()
                 .ToTable("ExaminationSubject");
