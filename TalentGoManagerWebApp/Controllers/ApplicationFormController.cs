@@ -238,10 +238,11 @@ namespace TalentGoManagerWebApp.Controllers
             StreamWriter sw = new StreamWriter(ms, Encoding.Unicode);
 
             //书写标题
-            sw.WriteLine("计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t专业\t毕业年份\t应聘职位\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核通过\t审核消息");
+            sw.WriteLine("ID\t计划\t姓名\t性别\t出生日期\t民族\t籍贯\t现居地\t政治面貌\t健康状况\t婚姻状况\t身份证号\t手机号\t毕业学校\t主修专业\t毕业年份\t报名职位\t学历\t学位\t创建日期\t修改日期\t提交日期\t审核通过\t审核消息");
 
             foreach (ApplicationForm data in forms)
             {
+                sw.Write(data.Id + "\t");
                 sw.Write(data.Job.Plan.Title + "\t");
                 sw.Write(data.Person.DisplayName + "\t");
                 sw.Write((data.Person.Sex == Sex.Male ? "男" : "女") + "\t");

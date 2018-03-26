@@ -108,6 +108,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Web\DataExporter.cs" />
     <Compile Include="Web\DomainUser.cs" />
     <Compile Include="Web\DomainUserExtensions.cs" />
     <Compile Include="Web\FormatterExtension.cs" />
