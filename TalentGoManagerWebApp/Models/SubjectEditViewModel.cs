@@ -28,9 +28,5 @@ namespace TalentGoManagerWebApp.Models
         [UIHint("DateTimeMinute")]
         public DateTime EndTime { get; set; }
 
-        [Display(Name = "考试地点")]
-        [Required]
-        [StringLength(50)]
-        public string Address { get; set; }
     }
 }

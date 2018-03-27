@@ -9,39 +9,39 @@ namespace TalentGo
     /// <summary>
     /// An interface to support read/write examination plan data from database.
     /// </summary>
-    public interface IExaminationPlanStore
+    public interface IExaminationStore
     {
         /// <summary>
         /// 
         /// </summary>
-        IQueryable<ExaminationPlan> ExaminationPlans { get; }
+        IQueryable<Examination> Exams { get; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        Task<ExaminationPlan> FindByIdAsync(int Id);
+        Task<Examination> FindByIdAsync(int Id);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="plan"></param>
+        /// <param name="exam"></param>
         /// <returns></returns>
-        Task CreateAsync(ExaminationPlan plan);
+        Task CreateAsync(Examination exam);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="plan"></param>
+        /// <param name="exam"></param>
         /// <returns></returns>
-        Task UpdateAsync(ExaminationPlan plan);
+        Task UpdateAsync(Examination exam);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="plan"></param>
+        /// <param name="exam"></param>
         /// <returns></returns>
-        Task DeleteAsync(ExaminationPlan plan);
+        Task DeleteAsync(Examination exam);
     }
 }

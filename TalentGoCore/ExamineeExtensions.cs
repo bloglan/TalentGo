@@ -24,7 +24,7 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(source));
             }
 
-            return source.Where(e => e.PlanId == planId);
+            return source.Where(e => e.ExamId == planId);
         }
 
         /// <summary>

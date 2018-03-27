@@ -18,9 +18,3 @@
     @Html.DescriptionFor(m => m.EndTime)
     @Html.ValidationMessageFor(m => m.EndTime, "", new { @class = "text-danger" })
 </div>
-<div class="form-group">
-    @Html.LabelFor(m => m.Address, new { @class = "control-label" })
-    @Html.EditorFor(m => m.Address, new { htmlAttributes = new { @class = "form-control" } })
-    @Html.DescriptionFor(m => m.Address)
-    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
-</div>
