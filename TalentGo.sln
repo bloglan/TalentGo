@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{2A0B9839-A619-4C80-B23A-B4258B8B172E}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
+		Documents\TalentGo招聘管理系统管理操作手册.docx = Documents\TalentGo招聘管理系统管理操作手册.docx
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoEntityFramework", "TalentGoEntityFramework\TalentGoEntityFramework.csproj", "{64782707-EA70-42E4-B2E9-CB716C2CE961}"
