@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoCore.Tests", "Talen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalentGoWebServerLib.Tests", "TalentGoWebServerLib.Tests\TalentGoWebServerLib.Tests.csproj", "{9C875DA7-3EBD-4096-84BC-A0A7C02A5B72}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QueuedSMSSenderServiceRunner", "QueuedSMSSenderServiceRunner\QueuedSMSSenderServiceRunner.csproj", "{631604E4-7EAE-4308-B18E-875F2DD06A0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{9C875DA7-3EBD-4096-84BC-A0A7C02A5B72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C875DA7-3EBD-4096-84BC-A0A7C02A5B72}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C875DA7-3EBD-4096-84BC-A0A7C02A5B72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631604E4-7EAE-4308-B18E-875F2DD06A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631604E4-7EAE-4308-B18E-875F2DD06A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631604E4-7EAE-4308-B18E-875F2DD06A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631604E4-7EAE-4308-B18E-875F2DD06A0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,6 +95,7 @@ Global
 		{5FB64C04-3075-44A7-A37B-2F97916F0726} = {4475B889-4A26-46A3-9372-AEE5D98297B6}
 		{FAFBF882-75ED-40FD-BCEE-F4FA0AB63366} = {42D62D3E-AF98-4D2D-889D-95D97731D4A5}
 		{9C875DA7-3EBD-4096-84BC-A0A7C02A5B72} = {CF13C20A-2B81-429D-942F-E07BAD62B9AC}
+		{631604E4-7EAE-4308-B18E-875F2DD06A0C} = {CF13C20A-2B81-429D-942F-E07BAD62B9AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F134B673-5B42-45AD-9AB8-1E4D4527DD50}

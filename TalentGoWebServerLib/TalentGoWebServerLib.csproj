@@ -108,6 +108,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Services\ISMSQueueStore.cs" />
+    <Compile Include="Services\QueuedMessageSenderService.cs" />
+    <Compile Include="Services\QueuedSMSMessage.cs" />
     <Compile Include="Web\DataExporter.cs" />
     <Compile Include="Web\DomainUser.cs" />
     <Compile Include="Web\DomainUserExtensions.cs" />

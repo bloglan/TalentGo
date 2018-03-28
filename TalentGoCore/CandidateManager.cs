@@ -6,22 +6,45 @@ using System.Threading.Tasks;
 
 namespace TalentGo
 {
+    /// <summary>
+    /// 候选人管理器
+    /// </summary>
     public class CandidateManager
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="store"></param>
         public CandidateManager(ICandidateStore store)
         {
             this.Store = store;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected ICandidateStore Store { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IQueryable<Candidate> Candidates => this.Store.Candidates;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="candidate"></param>
+        /// <returns></returns>
         public async Task CreateAsync(Candidate candidate)
         {
             await this.Store.CreateAsync(candidate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="candidate"></param>
+        /// <returns></returns>
         public async Task DeleteAsync(Candidate candidate)
         {
             await this.Store.DeleteAsync(candidate);
@@ -48,6 +71,14 @@ namespace TalentGo
             await this.Store.UpdateAsync(candidate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="candidate"></param>
+        /// <param name="admissionNumber"></param>
+        /// <param name="room"></param>
+        /// <param name="seat"></param>
+        /// <returns></returns>
         public async Task AssignAdmissionTicket(Candidate candidate, string admissionNumber, string room, string seat)
         {
             if (candidate == null)
