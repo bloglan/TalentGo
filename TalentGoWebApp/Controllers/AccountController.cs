@@ -156,6 +156,8 @@ namespace TalentGoWebApp.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            if (!Properties.Settings.Default.AllowUserRegisteration)
+                return View("_OutOfService");
             return View();
         }
 
@@ -166,6 +168,9 @@ namespace TalentGoWebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            if (!Properties.Settings.Default.AllowUserRegisteration)
+                return View("_OutOfService");
+
             if (!ModelState.IsValid)
             {
                 return View(model);
