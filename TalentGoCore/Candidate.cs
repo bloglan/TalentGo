@@ -26,7 +26,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="exam"></param>
         /// <param name="person"></param>
-        public Candidate(Examination exam, Person person)
+        public Candidate(ExaminationPlan exam, Person person)
             : this()
         {
             this.Exam = exam ?? throw new ArgumentNullException(nameof(exam));
@@ -61,7 +61,7 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        public virtual Examination Exam { get; set; }
+        public virtual ExaminationPlan Exam { get; set; }
 
         /// <summary>
         /// 是否参加考试

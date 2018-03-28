@@ -11,9 +11,9 @@ namespace TalentGoManagerWebApp.Controllers
 {
     public class ExaminationController : Controller
     {
-        ExaminationManager manager;
+        ExaminationPlanManager manager;
 
-        public ExaminationController(ExaminationManager manager)
+        public ExaminationController(ExaminationPlanManager manager)
         {
             this.manager = manager;
         }
@@ -43,7 +43,7 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            var plan = new Examination(model.Title, model.AttendanceConfirmationExpiresAt);
+            var plan = new ExaminationPlan(model.Title, model.AttendanceConfirmationExpiresAt);
             try
             {
                 await this.manager.CreateAsync(plan);

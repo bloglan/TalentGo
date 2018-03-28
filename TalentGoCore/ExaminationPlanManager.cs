@@ -9,13 +9,13 @@ namespace TalentGo
     /// <summary>
     /// 
     /// </summary>
-    public class ExaminationManager
+    public class ExaminationPlanManager
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="Store"></param>
-        public ExaminationManager(IExaminationStore Store)
+        public ExaminationPlanManager(IExaminationPlanStore Store)
         {
             this.Store = Store;
         }
@@ -23,19 +23,19 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        protected virtual IExaminationStore Store { get; set; }
+        protected virtual IExaminationPlanStore Store { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public virtual IQueryable<Examination> Exams => this.Store.Exams;
+        public virtual IQueryable<ExaminationPlan> Exams => this.Store.Plans;
 
         /// <summary>
         /// Find plan by id.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Examination> FindByIdAsync(int id)
+        public async Task<ExaminationPlan> FindByIdAsync(int id)
         {
             return await this.Store.FindByIdAsync(id);
         }
@@ -45,7 +45,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="exam"></param>
         /// <returns></returns>
-        public virtual async Task CreateAsync(Examination exam)
+        public virtual async Task CreateAsync(ExaminationPlan exam)
         {
             if (exam == null)
             {
@@ -63,7 +63,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="exam"></param>
         /// <returns></returns>
-        public virtual async Task UpdateAsync(Examination exam)
+        public virtual async Task UpdateAsync(ExaminationPlan exam)
         {
             if (exam == null)
             {
@@ -82,7 +82,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="exam"></param>
         /// <returns></returns>
-        public virtual async Task DeleteAsync(Examination exam)
+        public virtual async Task DeleteAsync(ExaminationPlan exam)
         {
             if (exam == null)
             {
@@ -99,7 +99,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="exam"></param>
         /// <returns></returns>
-        public virtual async Task PublishAsync(Examination exam)
+        public virtual async Task PublishAsync(ExaminationPlan exam)
         {
             if (exam == null)
             {

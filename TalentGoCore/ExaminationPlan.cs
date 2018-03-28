@@ -7,12 +7,12 @@ namespace TalentGo
     /// <summary>
     /// 表示一个考试计划。
     /// </summary>
-    public class Examination
+    public class ExaminationPlan
     {
         /// <summary>
         /// 
         /// </summary>
-        protected Examination()
+        protected ExaminationPlan()
         {
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
@@ -23,7 +23,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="title"></param>
         /// <param name="attendanceConfirmationExpiresAt"></param>
-        public Examination(string title, DateTime attendanceConfirmationExpiresAt)
+        public ExaminationPlan(string title, DateTime attendanceConfirmationExpiresAt)
             : this()
         {
             this.Title = title;

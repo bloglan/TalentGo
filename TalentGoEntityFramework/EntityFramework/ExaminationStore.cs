@@ -10,10 +10,10 @@ namespace TalentGo.EntityFramework
     /// <summary>
     /// 
     /// </summary>
-    public class ExaminationStore : IExaminationStore
+    public class ExaminationStore : IExaminationPlanStore
     {
         DbContext db;
-        DbSet<Examination> set;
+        DbSet<ExaminationPlan> set;
 
         /// <summary>
         /// 
@@ -22,20 +22,20 @@ namespace TalentGo.EntityFramework
         public ExaminationStore(DbContext dbContext)
         {
             this.db = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-            this.set = this.db.Set<Examination>();
+            this.set = this.db.Set<ExaminationPlan>();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public IQueryable<Examination> Exams => this.set;
+        public IQueryable<ExaminationPlan> Plans => this.set;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="exam"></param>
         /// <returns></returns>
-        public async Task CreateAsync(Examination exam)
+        public async Task CreateAsync(ExaminationPlan exam)
         {
             if (exam == null)
             {
@@ -51,7 +51,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="exam"></param>
         /// <returns></returns>
-        public async Task DeleteAsync(Examination exam)
+        public async Task DeleteAsync(ExaminationPlan exam)
         {
             if (exam == null)
             {
@@ -67,7 +67,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public async Task<Examination> FindByIdAsync(int Id)
+        public async Task<ExaminationPlan> FindByIdAsync(int Id)
         {
             return await this.set.FindAsync(Id);
         }
@@ -77,7 +77,7 @@ namespace TalentGo.EntityFramework
         /// </summary>
         /// <param name="exam"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(Examination exam)
+        public async Task UpdateAsync(ExaminationPlan exam)
         {
             if (exam == null)
             {

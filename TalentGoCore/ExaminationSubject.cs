@@ -36,7 +36,7 @@ namespace TalentGo
         /// 
         /// </summary>
         [ForeignKey(nameof(ExamId))]
-        public virtual Examination Exam { get; protected set; }
+        public virtual ExaminationPlan Exam { get; protected set; }
 
         /// <summary>
         /// 考试科目。
