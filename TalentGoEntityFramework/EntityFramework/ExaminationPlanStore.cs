@@ -10,7 +10,7 @@ namespace TalentGo.EntityFramework
     /// <summary>
     /// 
     /// </summary>
-    public class ExaminationStore : IExaminationPlanStore
+    public class ExaminationPlanStore : IExaminationPlanStore
     {
         DbContext db;
         DbSet<ExaminationPlan> set;
@@ -19,7 +19,7 @@ namespace TalentGo.EntityFramework
         /// 
         /// </summary>
         /// <param name="dbContext"></param>
-        public ExaminationStore(DbContext dbContext)
+        public ExaminationPlanStore(DbContext dbContext)
         {
             this.db = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             this.set = this.db.Set<ExaminationPlan>();
@@ -33,32 +33,32 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="exam"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task CreateAsync(ExaminationPlan exam)
+        public async Task CreateAsync(ExaminationPlan plan)
         {
-            if (exam == null)
+            if (plan == null)
             {
-                throw new ArgumentNullException(nameof(exam));
+                throw new ArgumentNullException(nameof(plan));
             }
 
-            this.set.Add(exam);
+            this.set.Add(plan);
             await this.db.SaveChangesAsync();
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="exam"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task DeleteAsync(ExaminationPlan exam)
+        public async Task DeleteAsync(ExaminationPlan plan)
         {
-            if (exam == null)
+            if (plan == null)
             {
-                throw new ArgumentNullException(nameof(exam));
+                throw new ArgumentNullException(nameof(plan));
             }
 
-            this.set.Remove(exam);
+            this.set.Remove(plan);
             await this.db.SaveChangesAsync();
         }
 
@@ -75,16 +75,16 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="exam"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(ExaminationPlan exam)
+        public async Task UpdateAsync(ExaminationPlan plan)
         {
-            if (exam == null)
+            if (plan == null)
             {
-                throw new ArgumentNullException(nameof(exam));
+                throw new ArgumentNullException(nameof(plan));
             }
 
-            this.db.Entry(exam).State = EntityState.Modified;
+            this.db.Entry(plan).State = EntityState.Modified;
             await this.db.SaveChangesAsync();
         }
     }

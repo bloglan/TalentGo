@@ -790,6 +790,10 @@
     <Content Include="Views\Shared\_AuditState.cshtml" />
     <Content Include="Views\Shared\_FileReviewState.cshtml" />
     <Content Include="Views\Shared\_OutOfService.cshtml" />
+    <Content Include="Views\Examination\Index.cshtml" />
+    <Content Include="Views\Examination\_CandidateList.cshtml" />
+    <Content Include="Views\Examination\_AttendanceConfirmationState.cshtml" />
+    <Content Include="Views\Examination\_AttendanceConfirmationOperations.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -811,7 +815,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Examination\" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />

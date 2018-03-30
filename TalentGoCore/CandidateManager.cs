@@ -63,7 +63,7 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(candidate));
             }
 
-            if (candidate.Exam.AttendanceConfirmationExpiresAt < DateTime.Now)
+            if (candidate.Plan.AttendanceConfirmationExpiresAt < DateTime.Now)
                 throw new InvalidOperationException("声明截止日期后不能再声明。");
 
             candidate.WhenConfirmed = DateTime.Now;

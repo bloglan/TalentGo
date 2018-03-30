@@ -1,0 +1,6 @@
+﻿@model Candidate
+
+@if(Model.Plan.AttendanceConfirmationExpiresAt > DateTime.Now)
+{
+    @Html.ActionLink("确认是否参加考试", "Announce", new { id = Model.ExamId }, new { @class = "btn btn-primary" })
+}

@@ -37,7 +37,11 @@ namespace QueuedSMSSenderServiceRunner
 
         async Task SendProc()
         {
-
+            while(this.store.Length > 0)
+            {
+                var msg = await this.store.PeekAsync();
+                
+            }
         }
     }
 }

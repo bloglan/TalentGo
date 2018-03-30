@@ -66,6 +66,7 @@
     <Compile Include="Backend\SMSMessageBag.cs" />
     <Compile Include="Backend\SMSServiceBase.cs" />
     <Compile Include="Candidate.cs" />
+    <Compile Include="CandidateExtensions.cs" />
     <Compile Include="CandidateManager.cs" />
     <Compile Include="ExaminationPlan.cs" />
     <Compile Include="ExaminationPlanManager.cs" />
@@ -76,10 +77,12 @@
     <Compile Include="File.cs" />
     <Compile Include="FileIdList.cs" />
     <Compile Include="FileReviewException.cs" />
+    <Compile Include="IApplicationFormNotificationService.cs" />
     <Compile Include="ICandidateStore.cs" />
     <Compile Include="IDCardBackOCRResult.cs" />
     <Compile Include="IDCardFrontOCRResult.cs" />
     <Compile Include="IDCardRecognizeException.cs" />
+    <Compile Include="IExaminationNotificationService.cs" />
     <Compile Include="IExaminationPlanStore.cs" />
     <Compile Include="IExamineeStore.cs" />
     <Compile Include="IFileStore.cs" />
@@ -87,8 +90,7 @@
     <Compile Include="IJobStore.cs" />
     <Compile Include="InvalidNumberException.cs" />
     <Compile Include="IPersonStore.cs" />
-    <Compile Include="ITalentGoEmailService.cs" />
-    <Compile Include="ITalentGoSMSService.cs" />
+    <Compile Include="IPersonNotificationService.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="JobExtensions.cs" />
     <Compile Include="Notification.cs" />

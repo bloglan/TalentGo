@@ -108,9 +108,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Services\IEmailService.cs" />
     <Compile Include="Services\ISMSQueueStore.cs" />
-    <Compile Include="Services\QueuedMessageSenderService.cs" />
-    <Compile Include="Services\QueuedSMSMessage.cs" />
+    <Compile Include="Services\ITemplatedShortMessageService.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Services\TemplatedShortMessage.cs" />
+    <Compile Include="Services\QueuedTemplatedShortMessageService.cs" />
     <Compile Include="Web\DataExporter.cs" />
     <Compile Include="Web\DomainUser.cs" />
     <Compile Include="Web\DomainUserExtensions.cs" />
@@ -210,6 +213,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SMS\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

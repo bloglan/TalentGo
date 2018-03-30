@@ -6,16 +6,47 @@ using System.Threading.Tasks;
 
 namespace TalentGo.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public interface ISMSQueueStore
     {
-        Task<QueuedSMSMessage> DequeueAsync();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task<TemplatedShortMessage> DequeueAsync();
 
-        Task EnqueueAsync(QueuedSMSMessage item);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task<TemplatedShortMessage> PeekAsync();
 
-        Task EnqueueRangeAsync(IEnumerable<QueuedSMSMessage> messages);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        Task EnqueueAsync(TemplatedShortMessage item);
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="messages"></param>
+        /// <returns></returns>
+        Task EnqueueRangeAsync(IEnumerable<TemplatedShortMessage> messages);
+
+        /// <summary>
+        /// 
+        /// </summary>
         int Length { get; }
 
-        Task ClearQueueAsync();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        Task ClearAsync();
+
     }
 }

@@ -44,12 +44,8 @@ namespace TalentGo
         /// <summary>
         /// 获取或设置短信服务。
         /// </summary>
-        public virtual ITalentGoSMSService SMSService { get; set; }
+        public virtual IPersonNotificationService NotificationService { get; set; }
 
-        /// <summary>
-        /// 获取或设置邮件服务。
-        /// </summary>
-        public virtual ITalentGoEmailService EmailService { get; set; }
 
         /// <summary>
         /// Find person by it's id.

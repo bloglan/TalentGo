@@ -34,12 +34,7 @@ namespace TalentGo
         /// <summary>
         /// 获取或设置短信服务。
         /// </summary>
-        public ITalentGoSMSService SMSService { get; set; }
-
-        /// <summary>
-        /// 获取或设置邮件服务。
-        /// </summary>
-        public ITalentGoEmailService EmailService { get; set; }
+        public IApplicationFormNotificationService NotificationService { get; set; }
 
         /// <summary>
         /// 
@@ -438,10 +433,8 @@ namespace TalentGo
 
             await this.formStore.UpdateAsync(form);
 
-            if (this.SMSService != null)
-                await this.SMSService.SendFileReviewMessageAsync(form);
-            if (this.EmailService != null)
-                await this.EmailService.SendFileReviewMailAsync(form);
+            if (this.NotificationService != null)
+                await this.NotificationService.NotifyFileReviewStateAsync(form);
         }
 
         /// <summary>
@@ -537,11 +530,9 @@ namespace TalentGo
             form.WhenAuditComplete = DateTime.Now;
             await this.formStore.UpdateAsync(form);
 
-            if (this.SMSService != null)
-                await this.SMSService.SendApplicationFormAuditMessageAsync(form);
+            if (this.NotificationService != null)
+                await this.NotificationService.NotifyAuditStateAsync(form);
 
-            if (this.EmailService != null)
-                await this.EmailService.SendApplicationFormAuditMailAsync(form);
         }
 
         /// <summary>

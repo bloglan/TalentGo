@@ -27,7 +27,7 @@ namespace TalentGoManagerWebApp.Controllers
         [ChildActionOnly]
         public ActionResult ExaminationPlans()
         {
-            var plans = this.manager.Exams;
+            var plans = this.manager.Plans;
             return PartialView("_ExaminationPlanList", plans);
         }
 
@@ -43,7 +43,7 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            var plan = new ExaminationPlan(model.Title, model.AttendanceConfirmationExpiresAt);
+            var plan = new ExaminationPlan(model.Title, model.Address, model.AttendanceConfirmationExpiresAt);
             try
             {
                 await this.manager.CreateAsync(plan);

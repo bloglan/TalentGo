@@ -1,14 +1,21 @@
 ﻿@model ExaminationPlanEditViewModel
 
 <div class="form-group">
-    @Html.LabelFor(m => m.Title, new { @class="control-label"})
+    @Html.LabelFor(m => m.Title, new { @class = "control-label" })
+    @Html.DescriptionFor(m => m.Title)
     @Html.EditorFor(m => m.Title, new { htmlAttributes = new { @class = "form-control" } })
     @Html.ValidationMessageFor(m => m.Title, "", new { @class = "text-danger" })
-    @Html.DescriptionFor(m => m.Title)
 </div>
 <div class="form-group">
+    @Html.LabelFor(m => m.Address, new { @class = "control-label" })
+    @Html.DescriptionFor(m => m.Address)
+    @Html.EditorFor(m => m.Address, new { htmlAttributes = new { @class = "form-control" } })
+    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+</div>
+
+<div class="form-group">
     @Html.LabelFor(m => m.AttendanceConfirmationExpiresAt, new { @class = "control-label" })
+    @Html.DescriptionFor(m => m.AttendanceConfirmationExpiresAt)
     @Html.EditorFor(m => m.AttendanceConfirmationExpiresAt, new { htmlAttributes = new { @class = "form-control" } })
     @Html.ValidationMessageFor(m => m.AttendanceConfirmationExpiresAt, "", new { @class = "text-danger" })
-    @Html.DescriptionFor(m => m.AttendanceConfirmationExpiresAt)
 </div>

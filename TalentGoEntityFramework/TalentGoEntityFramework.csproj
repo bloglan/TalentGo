@@ -53,7 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityFramework\ExaminationStore.cs" />
+    <Compile Include="EntityFramework\CandidateStore.cs" />
+    <Compile Include="EntityFramework\ExaminationPlanStore.cs" />
     <Compile Include="EntityFramework\NoticeStore.cs" />
     <Compile Include="EntityFramework\ApplicationFormStore.cs" />
     <Compile Include="EntityFramework\FileStore.cs" />

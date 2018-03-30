@@ -16,17 +16,20 @@ namespace TalentGo
         {
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
+            this.Candidates = new HashSet<Candidate>();
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="title"></param>
+        /// <param name="address"></param>
         /// <param name="attendanceConfirmationExpiresAt"></param>
-        public ExaminationPlan(string title, DateTime attendanceConfirmationExpiresAt)
+        public ExaminationPlan(string title, string address, DateTime attendanceConfirmationExpiresAt)
             : this()
         {
             this.Title = title;
+            this.Address = address;
             this.AttendanceConfirmationExpiresAt = attendanceConfirmationExpiresAt;
         }
 
@@ -57,10 +60,6 @@ namespace TalentGo
         public virtual DateTime? WhenPublished { get; internal set; }
 
         /// <summary>
-        /// 执行时间。
-        /// </summary>
-        public virtual DateTime? WhenExecuted { get; internal set; }
-        /// <summary>
         /// 确认参考截止日期。
         /// </summary>
         public virtual DateTime AttendanceConfirmationExpiresAt { get; set; }
@@ -71,8 +70,18 @@ namespace TalentGo
         public virtual string Address { get; set; }
 
         /// <summary>
+        /// 发放准考证时间。
+        /// </summary>
+        public virtual DateTime? WhenAdmissionTicketReleased { get; internal set; }
+
+        /// <summary>
         /// 考试科目列表。
         /// </summary>
         public virtual ICollection<ExaminationSubject> Subjects { get; protected set; }
+
+        /// <summary>
+        /// 与此考试计划关联的候选人。
+        /// </summary>
+        public virtual ICollection<Candidate> Candidates { get; protected set; }
     }
 }

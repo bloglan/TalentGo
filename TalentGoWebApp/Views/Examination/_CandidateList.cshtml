@@ -1,0 +1,46 @@
+﻿@model IQueryable<Candidate>
+
+@foreach (var item in Model)
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="panel-title">@item.Plan.Title</h2>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-7">
+                    <h3>考试信息</h3>
+                    <p>考试地点：@item.Plan.Address</p>
+                    <p>确认参加考试截止时间：@item.Plan.AttendanceConfirmationExpiresAt.ToString("yyyy-MM-dd HH:mm") （@item.Plan.AttendanceConfirmationExpiresAt.SmartShow()）</p>
+                    <p>准考证发放时间：@(item.Plan.WhenAdmissionTicketReleased.HasValue ? item.Plan.WhenAdmissionTicketReleased.Value.ToString("yyyy-MM-dd") : "待定")</p>
+                </div>
+                <div class="col-md-5">
+                    <h3>参试声明</h3>
+                    <p>@Html.Partial("_AttendanceConfirmationState", item)</p>
+                    <p>@Html.Partial("_AttendanceConfirmationOperations", item)</p>
+                </div>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>科目</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subject in item.Plan.Subjects)
+                {
+                    <tr>
+                        <td>@subject.Subject</td>
+                        <td>@subject.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td>@subject.EndTime.ToString("yyyy-MM-dd HH:mm")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}
+

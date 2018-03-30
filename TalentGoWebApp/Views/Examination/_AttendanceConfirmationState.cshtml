@@ -1,0 +1,17 @@
+﻿@model Candidate
+
+@if (Model.Attendance.HasValue)
+{
+    if (Model.Attendance.Value)
+    {
+        <span class="label label-success">确认参加考试</span>
+    }
+    else
+    {
+        <span class="label label-danger">放弃参加考试</span>
+    }
+}
+else
+{
+    <span class="label label-warning">未声明是否参加考试</span>
+}

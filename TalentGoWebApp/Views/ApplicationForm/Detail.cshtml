@@ -138,18 +138,16 @@
             <th colspan="5">审核信息</th>
         </tr>
         <tr>
-            <td>资料审查：@Html.Partial("_FileReviewState")</td>
-            <td></td>
+            <td>资料审查：</td>
+            <td>@Html.Partial("_FileReviewState")</td>
             <td>时间：@Model.WhenFileReviewed</td>
-            <td>附加信息：</td>
-            <td>@Model.FileReviewMessage</td>
+            <td colspan="2">附加信息：<strong>@Model.FileReviewMessage</strong></td>
         </tr>
         <tr>
             <td>资格审核：@Html.Partial("_AuditState")</td>
             <td></td>
             <td></td>
-            <td>附加信息：</td>
-            <td>@(Model.WhenAuditComplete.HasValue ? Model.AuditMessage : "")</td>
+            <td colspan="2">附加信息：@(Model.WhenAuditComplete.HasValue ? Model.AuditMessage : "")</td>
         </tr>
 
     </tbody>

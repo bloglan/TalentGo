@@ -24,14 +24,14 @@ namespace TalentGo
         /// <summary>
         /// 从用户创建考试候选人。
         /// </summary>
-        /// <param name="exam"></param>
+        /// <param name="plan"></param>
         /// <param name="person"></param>
-        public Candidate(ExaminationPlan exam, Person person)
+        public Candidate(ExaminationPlan plan, Person person)
             : this()
         {
-            this.Exam = exam ?? throw new ArgumentNullException(nameof(exam));
-            this.ExamId = exam.Id;
-            if (this.Exam.WhenPublished.HasValue)
+            this.Plan = plan ?? throw new ArgumentNullException(nameof(plan));
+            this.ExamId = plan.Id;
+            if (this.Plan.WhenPublished.HasValue)
                 throw new InvalidOperationException("已发布的考试不能创建候选人。");
             this.Person = person ?? throw new ArgumentNullException(nameof(person));
             this.PersonId = person.Id;
@@ -50,7 +50,7 @@ namespace TalentGo
         /// </summary>
         [Key]
         [Column(Order = 1)]
-        [ForeignKey(nameof(Exam))]
+        [ForeignKey(nameof(Plan))]
         public int ExamId { get; set; }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        public virtual ExaminationPlan Exam { get; set; }
+        public virtual ExaminationPlan Plan { get; set; }
 
         /// <summary>
         /// 是否参加考试
