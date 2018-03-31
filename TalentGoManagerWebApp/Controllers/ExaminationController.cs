@@ -11,11 +11,13 @@ namespace TalentGoManagerWebApp.Controllers
 {
     public class ExaminationController : Controller
     {
-        ExaminationPlanManager manager;
+        ExaminationPlanManager examManager;
+        CandidateManager candidateManager;
 
-        public ExaminationController(ExaminationPlanManager manager)
+        public ExaminationController(ExaminationPlanManager examManager, CandidateManager candidateManager)
         {
-            this.manager = manager;
+            this.examManager = examManager;
+            this.candidateManager = candidateManager;
         }
 
         // GET: Examination
@@ -27,7 +29,7 @@ namespace TalentGoManagerWebApp.Controllers
         [ChildActionOnly]
         public ActionResult ExaminationPlans()
         {
-            var plans = this.manager.Plans;
+            var plans = this.examManager.Plans;
             return PartialView("_ExaminationPlanList", plans);
         }
 
@@ -46,7 +48,7 @@ namespace TalentGoManagerWebApp.Controllers
             var plan = new ExaminationPlan(model.Title, model.Address, model.AttendanceConfirmationExpiresAt);
             try
             {
-                await this.manager.CreateAsync(plan);
+                await this.examManager.CreateAsync(plan);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -58,7 +60,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> Edit(int id)
         {
-            var plan = await this.manager.FindByIdAsync(id);
+            var plan = await this.examManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
 
@@ -77,14 +79,14 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            var plan = await this.manager.FindByIdAsync(id);
+            var plan = await this.examManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
             plan.Title = model.Title;
             plan.AttendanceConfirmationExpiresAt = model.AttendanceConfirmationExpiresAt;
             try
             {
-                await this.manager.UpdateAsync(plan);
+                await this.examManager.UpdateAsync(plan);
                 return RedirectToAction("Detail", new { id });
             }
             catch (Exception ex)
@@ -96,7 +98,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> Publish(int id)
         {
-            var plan = await this.manager.FindByIdAsync(id);
+            var plan = await this.examManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
 
@@ -109,7 +111,7 @@ namespace TalentGoManagerWebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> Publish(int id, FormCollection collection)
         {
-            var plan = await this.manager.FindByIdAsync(id);
+            var plan = await this.examManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
 
@@ -118,7 +120,7 @@ namespace TalentGoManagerWebApp.Controllers
 
             try
             {
-                await this.manager.PublishAsync(plan);
+                await this.examManager.PublishAsync(plan);
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -130,7 +132,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> AddSubject(int planId)
         {
-            var plan = await this.manager.FindByIdAsync(planId);
+            var plan = await this.examManager.FindByIdAsync(planId);
             if (plan == null)
                 return HttpNotFound();
 
@@ -141,7 +143,7 @@ namespace TalentGoManagerWebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> AddSubject(int planId, SubjectEditViewModel model)
         {
-            var plan = await this.manager.FindByIdAsync(planId);
+            var plan = await this.examManager.FindByIdAsync(planId);
             if (plan == null)
                 return HttpNotFound();
 
@@ -157,7 +159,7 @@ namespace TalentGoManagerWebApp.Controllers
             plan.Subjects.Add(subject);
             try
             {
-                await this.manager.UpdateAsync(plan);
+                await this.examManager.UpdateAsync(plan);
                 return RedirectToAction("Detail", new { id = planId });
             }
             catch (Exception ex)
@@ -169,7 +171,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> EditSubject(int id, int planId)
         {
-            var plan = await this.manager.FindByIdAsync(planId);
+            var plan = await this.examManager.FindByIdAsync(planId);
             if (plan == null)
                 return HttpNotFound();
 
@@ -189,7 +191,7 @@ namespace TalentGoManagerWebApp.Controllers
         [HttpPost]
         public async Task<ActionResult> EditSubject(int id, int planId, SubjectEditViewModel model)
         {
-            var plan = await this.manager.FindByIdAsync(planId);
+            var plan = await this.examManager.FindByIdAsync(planId);
             if (plan == null)
                 return HttpNotFound();
 
@@ -206,7 +208,7 @@ namespace TalentGoManagerWebApp.Controllers
 
             try
             {
-                await this.manager.UpdateAsync(plan);
+                await this.examManager.UpdateAsync(plan);
                 return RedirectToAction("Detail", new { id = planId });
             }
             catch (Exception ex)
@@ -219,7 +221,7 @@ namespace TalentGoManagerWebApp.Controllers
         [HttpPost]
         public async Task<JsonResult> RemoveSubject(int planId, int id)
         {
-            var plan = await this.manager.FindByIdAsync(planId);
+            var plan = await this.examManager.FindByIdAsync(planId);
             if (plan == null)
                 return Json("Plan not found");
 
@@ -231,7 +233,7 @@ namespace TalentGoManagerWebApp.Controllers
 
             try
             {
-                await this.manager.UpdateAsync(plan);
+                await this.examManager.UpdateAsync(plan);
                 return Json(true);
             }
             catch (Exception ex)
@@ -243,7 +245,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         public async Task<ActionResult> Detail(int id)
         {
-            var plan = await this.manager.FindByIdAsync(id);
+            var plan = await this.examManager.FindByIdAsync(id);
             if (plan == null)
                 return HttpNotFound();
 

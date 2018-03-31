@@ -23,7 +23,7 @@ namespace TalentGoManagerWebApp.Controllers
         public ActionResult Index()
         {
             //id: Year of recruitment plan.
-            var plans = this.planManager.RecruitmentPlans;
+            var plans = this.planManager.Plans;
             return View(plans);
         }
 
@@ -363,13 +363,7 @@ namespace TalentGoManagerWebApp.Controllers
             //开始提交。
             try
             {
-                plan.AnnounceExpirationDate = model.AnnounceExpirationDate;
-                plan.ExamStartTime = model.ExamStartTime;
-                plan.ExamEndTime = model.ExamEndTime;
-                plan.ExamLocation = model.ExamLocation;
-                //await this.recruitmentManager.CommitAudit(plan, model.AnnounceExpirationDate, model.ExamStartTime, model.ExamEndTime, model.ExamLocation);
-                await this.planManager.CompleteAudit(plan);
-                //return RedirectToAction("Index");
+                await this.planManager.CompleteAuditAsync(plan);
                 return View("OperationResult", new OperationResult(ResultStatus.Success, "该计划已成功结束审核，审核结果将自动通过短信和邮件顺次通知应聘者本人。接下来，应聘者将提交是否参加考试的声明。在声明截止时间过后，您将能获得本次招聘计划参加考试的人员名单及统计信息。", this.Url.Action("Index"), 20));
             }
             catch (Exception ex)

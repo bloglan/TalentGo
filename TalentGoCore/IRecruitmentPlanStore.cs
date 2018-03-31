@@ -7,12 +7,12 @@ namespace TalentGo
     /// <summary>
     /// 
     /// </summary>
-    public interface IRecruitmentPlanStore : IDisposable
+    public interface IRecruitmentPlanStore
     {
         /// <summary>
         /// 
         /// </summary>
-        IQueryable<RecruitmentPlan> RecruitmentPlans { get; }
+        IQueryable<RecruitmentPlan> Plans { get; }
 
         /// <summary>
         /// 

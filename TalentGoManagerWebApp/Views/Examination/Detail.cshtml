@@ -1,35 +1,37 @@
 ﻿@model ExaminationPlan
 @{
-    ViewBag.Title = "考试计划详情";
+    ViewBag.Title = Model.Title;
 }
 
 <div class="page-header">
     <h1>@ViewBag.Title</h1>
 </div>
-<p>
-    @if (!Model.WhenPublished.HasValue)
-    {
-        @Html.ActionLink("Publish", "Publish", new { id = Model.Id }, new { @class = "btn btn-primary" })
-        @Html.ActionLink("删除", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
-    }
-</p>
+@if (!Model.WhenPublished.HasValue)
+{
+    <p>
+        @Html.ActionLink("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("发布考试", "Publish", new { id = Model.Id }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("删除计划", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+    </p>
+}
 
-<h2>基本信息</h2>
-<p>Title: @Model.Title</p>
-<p>AttendanceConfirmationExpiresAt: @Model.AttendanceConfirmationExpiresAt.ToString("MM-dd HH:mm")</p>
-<p>@(Model.WhenPublished.HasValue?Model.WhenPublished.Value.ToString():"Not Published")</p>
-<p>WhenCreated: @Model.WhenCreated</p>
-<p>WhenChange: @Model.WhenChanged</p>
+<p>考场地址：@Model.Address</p>
+<p>发布时间：@(Model.WhenPublished.HasValue ? Model.WhenPublished.Value.ToString() : "未发布")</p>
+<p>声明截止时间: @Model.AttendanceConfirmationExpiresAt.ToString("MM-dd HH:mm") （@Model.AttendanceConfirmationExpiresAt.SmartShow()）</p>
 
+<hr />
 <h2>科目</h2>
-@Html.ActionLink("Add Subject", "AddSubject", new { planId = Model.Id }, new { @class = "btn btn-default" })
-<table class="table">
+@if (!Model.WhenPublished.HasValue)
+{
+    <p>@Html.ActionLink("添加科目", "AddSubject", new { planId = Model.Id }, new { @class = "btn btn-default" })</p>
+}
+<table class="table table-responsive">
     <thead>
         <tr>
-            <th>Subject</th>
-            <th>StartTime</th>
-            <th>EndTime</th>
-            <th>Operations</th>
+            <th>科目</th>
+            <th>考试开始时间</th>
+            <th>考试结束时间</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -40,13 +42,79 @@
                 <td>@item.StartTime.ToString("MM-dd HH:mm")</td>
                 <td>@item.EndTime.ToString("MM-dd HH:mm")</td>
                 <td>
-                    @Html.ActionLink("Edit", "EditSubject", new { id = item.Id, planId = Model.Id })
-                    <a href="#" class="subject-remove" data-planid="@Model.Id" data-subjectid="@item.Id">Remove</a>
+                    @if (!Model.WhenPublished.HasValue)
+                    {
+                        @Html.ActionLink("编辑", "EditSubject", new { id = item.Id, planId = Model.Id })
+                        <a href="#" class="subject-remove" data-planid="@Model.Id" data-subjectid="@item.Id">删除</a>
+                    }
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<hr />
+<h2>考试候选人</h2>
+@if (!Model.WhenPublished.HasValue)
+{
+    <p>
+        @Html.ActionLink("添加候选人", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("从招聘计划导入...", "Import", new { planid = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("从其他考试导入...", "Import", new { planid = Model.Id }, new { @class = "btn btn-default" })
+    </p>
+}
+else
+{
+    if (Model.AttendanceConfirmationExpiresAt < DateTime.Now)
+    {
+        <p>
+            @Html.ActionLink("编制准考证...", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("发放准考证", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
+        </p>
+    }
+}
+<p>候选人共计@(Model.Candidates.Count)人，其中@(Model.Candidates.Count(c => c.Attendance.HasValue && c.Attendance.Value))人确认参加考试</p>
+<table class="table table-responsive">
+    <colgroup>
+        <col class="col-md-2" />
+        <col class="col-md-2" />
+        <col class="col-md-2" />
+        <col class="col-md-2" />
+        <col class="col-md-2" />
+        <col class="col-md-2" />
+    </colgroup>
+    <thead>
+        <tr>
+            <th>身份证号</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>移动电话</th>
+            <th>参加考试</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Candidates)
+        {
+            <tr>
+                <td>@item.Person.IDCardNumber</td>
+                <td>@item.Person.DisplayName</td>
+                <td>@(item.Person.Sex == Sex.Male ? "男" : "女")</td>
+                <td>@item.Person.Mobile</td>
+                <td>
+                    @(item.Attendance.HasValue ? (item.Attendance.Value ? "是" : "否") : "未确认")
+                </td>
+                <td>
+                    @if (!Model.WhenPublished.HasValue)
+                    {
+                        <a href="#">删除</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 
 @section scripts
 {
@@ -54,7 +122,7 @@
 
         $(function () {
             $("a.subject-remove").click(function () {
-                if (confirm("Delete subject?")) {
+                if (confirm("确认要删除此科目吗？")) {
                     var row = $(this);
                     $.post("@Url.Action("RemoveSubject")", { planId: row.data("planid"), id: row.data("subjectid") }, function (data, status, xhr) {
                         if (data != true)
@@ -67,4 +135,4 @@
         });
 
     </script>
-    }
+}

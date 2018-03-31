@@ -1,0 +1,3 @@
+﻿@model DateTime?
+
+<span title="@(Model.HasValue?Model.Value.ToString("yyyy-MM-dd HH:mm:ss"):"")">@(Model.HasValue ? Model.Value.ToString("M月d日") : "N/A")</span>

@@ -40,7 +40,7 @@ namespace TalentGoWebApp.Controllers
             //if (!person.RealIdValid.HasValue || !person.RealIdValid.Value)
             //    return View("RealIdRequired");
 
-            return View(this.recruitmentManager.RecruitmentPlans.Enrollable());
+            return View(this.recruitmentManager.Plans.Enrollable());
         }
     }
 }

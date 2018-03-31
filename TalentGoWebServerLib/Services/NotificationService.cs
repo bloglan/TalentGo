@@ -10,7 +10,7 @@ namespace TalentGo.Services
     /// <summary>
     /// 通知服务。
     /// </summary>
-    public class NotificationService : IPersonNotificationService, IApplicationFormNotificationService, IExaminationNotificationService
+    public class NotificationService : IPersonNotificationService, IApplicationFormNotificationService, IExaminationNotificationService, IRecruitmentPlanNotificationService
     {
         ITemplatedShortMessageService smsService;
         IEmailService emailService;
@@ -39,9 +39,9 @@ namespace TalentGo.Services
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="form"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        public Task NotifyAuditStateAsync(ApplicationForm form)
+        public Task NotifyAuditCompleteAsync(RecruitmentPlan plan)
         {
             throw new NotImplementedException();
         }

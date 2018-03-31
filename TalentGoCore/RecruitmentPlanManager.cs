@@ -12,7 +12,6 @@ namespace TalentGo
     /// </summary>
     public class RecruitmentPlanManager
     {
-        IRecruitmentPlanStore store;
 
         /// <summary>
         /// 
@@ -20,16 +19,23 @@ namespace TalentGo
         /// <param name="Store"></param>
         public RecruitmentPlanManager(IRecruitmentPlanStore Store)
         {
-            this.store = Store;
+            this.Store = Store;
         }
+
+        /// <summary>
+        /// Gets or sets store
+        /// </summary>
+        protected IRecruitmentPlanStore Store { get; set; }
 
         /// <summary>
         /// 
         /// </summary>
-        public IQueryable<RecruitmentPlan> RecruitmentPlans
-        {
-            get { return this.store.RecruitmentPlans; }
-        }
+        public IQueryable<RecruitmentPlan> Plans => this.Store.Plans;
+
+        /// <summary>
+        /// Gets or sets notification service for recruitment plan management.
+        /// </summary>
+        public IRecruitmentPlanNotificationService NotificationService { get; set; }
 
         /// <summary>
         /// 创建招聘计划。
@@ -43,7 +49,7 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(plan));
             }
 
-            await this.store.CreateAsync(plan);
+            await this.Store.CreateAsync(plan);
         }
 
         /// <summary>
@@ -64,7 +70,7 @@ namespace TalentGo
             if (plan.EnrollExpirationDate < DateTime.Now)
                 throw new ArgumentException("报名截止日期早于当前时间。");
 
-            await this.store.UpdateAsync(plan);
+            await this.Store.UpdateAsync(plan);
         }
 
         /// <summary>
@@ -83,14 +89,14 @@ namespace TalentGo
             if (plan.WhenPublished.HasValue)
                 throw new InvalidOperationException("已发布的招聘计划无法删除。");
 
-            await this.store.DeleteAsync(plan);
+            await this.Store.DeleteAsync(plan);
         }
 
         /// <summary>
         /// 发布招聘计划。招聘计划发布后，将可被所有符合条件的用户看到。
         /// </summary>
         /// <returns></returns>
-        public async Task PublishAsync(RecruitmentPlan plan, DateTime EnrollExpirationDate)
+        public async Task PublishAsync(RecruitmentPlan plan, DateTime enrollExpirationTime)
         {
             if (plan == null)
                 throw new ArgumentNullException(nameof(plan));
@@ -100,14 +106,14 @@ namespace TalentGo
             if (plan.WhenPublished.HasValue)
                 throw new InvalidOperationException("招聘计划已发布");
 
-            if (EnrollExpirationDate <= DateTime.Now)
+            if (enrollExpirationTime <= DateTime.Now)
                 throw new ArgumentException("报名截止时间早于当前时间。");
 
             plan.WhenPublished = DateTime.Now;
             //所指定的截止日期当日全天都算作有效。
-            plan.EnrollExpirationDate = EnrollExpirationDate;
+            plan.EnrollExpirationDate = enrollExpirationTime;
 
-            await this.store.UpdateAsync(plan);
+            await this.Store.UpdateAsync(plan);
         }
 
         /// <summary>
@@ -117,7 +123,7 @@ namespace TalentGo
         /// <returns></returns>
         public async Task<RecruitmentPlan> FindByIdAsync(int id)
         {
-            return await this.store.FindByIdAsync(id);
+            return await this.Store.FindByIdAsync(id);
         }
 
         /// <summary>
@@ -125,7 +131,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task CompleteAudit(RecruitmentPlan plan)
+        public async Task CompleteAuditAsync(RecruitmentPlan plan)
         {
             if (plan == null)
                 throw new ArgumentNullException(nameof(plan));
@@ -136,42 +142,36 @@ namespace TalentGo
             if (plan.WhenAuditCommited.HasValue)
                 return;
 
-            var forms = new HashSet<ApplicationForm>();
-            foreach (var job in plan.Jobs)
-            {
-                forms.UnionWith(job.ApplicationForms);
-            }
-
-
-
             using (TransactionScope transScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
             {
-                foreach (ApplicationForm data in forms)
+                foreach (var job in plan.Jobs)
                 {
-                    //若没有提交，或提交日期晚于报名截止日期的，直接设定为不通过。
-                    if (!data.WhenCommited.HasValue || data.WhenCommited > plan.EnrollExpirationDate)
+                    foreach (var form in job.ApplicationForms)
                     {
-                        data.AuditFlag = false;
-                        data.AuditMessage = "未在指定的报名截止时间内提交";
+                        if (form.FileReviewAccepted.HasValue && !form.FileReviewAccepted.Value)
+                        {
+                            form.AuditFlag = false;
+                            form.AuditMessage = "资料审查未通过";
+                            form.WhenAudit = DateTime.Now;
+                            form.AuditBy = "自动资格审核程序";
+                        }
+
+                        //设置审核完成时间，以指示审核已完成。
+                        form.WhenAuditComplete = DateTime.Now;
                     }
                 }
-
 
                 //每项提交完成后，修改currentPlan的标记，表示已提交审核。
                 plan.CompleteAudit();
 
-                //设定考试时间和地点
-                //currentplan.ExamStartTime = ExamStartTime;
-                //currentplan.ExamEndTime = ExamEndTime;
-                //currentplan.ExamLocation = ExamLocation;
-
-                await this.store.UpdateAsync(plan);
+                await this.Store.UpdateAsync(plan);
 
                 transScope.Complete();
             }
 
             //开始每项提交并发送短信。
-
+            if (this.NotificationService != null)
+                await this.NotificationService.NotifyAuditCompleteAsync(plan);
         }
     }
 }

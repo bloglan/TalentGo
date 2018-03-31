@@ -3,26 +3,26 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>计划编号</th>
-            <th>标题</th>
+            <th>考试</th>
             <th>发布时间</th>
-            <th>声明截止时间</th>
-            <th>操作</th>
+            <th>确认截止时间</th>
+            <th>准考证发放时间</th>
+            <th>科目</th>
+            <th>候选人</th>
         </tr>
     </thead>
     <tbody>
-        @if(Model.Any())
+        @if (Model.Any())
         {
-            foreach(var item in Model)
+            foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Title</td>
-                    <td>@(item.WhenPublished.HasValue?item.WhenPublished.Value.ToString():"未发布")</td>
-                    <td>@item.AttendanceConfirmationExpiresAt</td>
-                    <td>
-                        @Html.ActionLink("Detail", "Detail", new { id = item.Id })
-                    </td>
+                    <td>@Html.ActionLink(item.Title, "Detail", new { id = item.Id }, new { target = "_blank" })</td>
+                    <td>@Html.DisplayFor(m => item.WhenPublished)</td>
+                    <td>@item.AttendanceConfirmationExpiresAt.ToString("M月d日 HH:mm")</td>
+                    <td>@Html.DisplayFor(m => item.WhenAdmissionTicketReleased)</td>
+                    <td>@item.Subjects.Count</td>
+                    <td>@item.Candidates.Count</td>
                 </tr>
             }
         }

@@ -9,14 +9,13 @@ namespace TalentGo
     /// <summary>
     /// 
     /// </summary>
-    public interface IApplicationFormNotificationService
+    public interface IRecruitmentPlanNotificationService
     {
         /// <summary>
-        /// 发送资料审查消息。
-        /// </summary>
-        /// <param name="form"></param>
         /// 
+        /// </summary>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        Task NotifyFileReviewStateAsync(ApplicationForm form);
+        Task NotifyAuditCompleteAsync(RecruitmentPlan plan);
     }
 }

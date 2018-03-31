@@ -91,6 +91,7 @@
     <Compile Include="InvalidNumberException.cs" />
     <Compile Include="IPersonStore.cs" />
     <Compile Include="IPersonNotificationService.cs" />
+    <Compile Include="IRecruitmentPlanNotificationService.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="JobExtensions.cs" />
     <Compile Include="Notification.cs" />

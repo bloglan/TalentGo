@@ -43,11 +43,6 @@ namespace TalentGo
 
 
         /// <summary>
-        /// 发布人。
-        /// </summary>
-        public string Publisher { get; set; }
-
-        /// <summary>
         /// 设置报名截止时间。
         /// </summary>
         public DateTime EnrollExpirationDate { get; set; }
@@ -58,29 +53,9 @@ namespace TalentGo
         public DateTime? WhenAuditCommited { get; protected set; }
 
         /// <summary>
-        /// 设置声明考试的截止时间。
-        /// </summary>
-        public DateTime? AnnounceExpirationDate { get; set; }
-
-        /// <summary>
         /// 获取发布时间。
         /// </summary>
         public DateTime? WhenPublished { get; set; }
-
-        /// <summary>
-        /// 设置考试开始时间。
-        /// </summary>
-        public DateTime? ExamStartTime { get; set; }
-
-        /// <summary>
-        /// 设置考试结束时间。
-        /// </summary>
-        public DateTime? ExamEndTime { get; set; }
-
-        /// <summary>
-        /// 设置考试地点。
-        /// </summary>
-        public string ExamLocation { get; set; }
 
 
         internal void CompleteAudit()
