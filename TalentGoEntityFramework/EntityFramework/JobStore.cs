@@ -29,5 +29,15 @@ namespace TalentGo.EntityFramework
         /// Get queryable collection of jobs.
         /// </summary>
         public IQueryable<Job> Jobs => this.set;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<Job> FindByIdAsync(int id)
+        {
+            return await this.set.FindAsync(id);
+        }
     }
 }

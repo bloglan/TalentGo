@@ -59,8 +59,9 @@
 {
     <p>
         @Html.ActionLink("添加候选人", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
-        @Html.ActionLink("从招聘计划导入...", "Import", new { planid = Model.Id }, new { @class = "btn btn-default" })
-        @Html.ActionLink("从其他考试导入...", "Import", new { planid = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("从招聘计划导入...", "ImportFromRecruitmentPlan", new { planid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
+        @Html.ActionLink("从职位导入...", "ImportFromJob", new { planid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
+        @Html.ActionLink("从其他考试导入...", "ImportExaminationPlan", new { planid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
     </p>
 }
 else

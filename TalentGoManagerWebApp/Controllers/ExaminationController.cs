@@ -13,11 +13,15 @@ namespace TalentGoManagerWebApp.Controllers
     {
         ExaminationPlanManager examManager;
         CandidateManager candidateManager;
+        IRecruitmentPlanStore recruitmentPlanStore;
+        IJobStore jobStore;
 
-        public ExaminationController(ExaminationPlanManager examManager, CandidateManager candidateManager)
+        public ExaminationController(ExaminationPlanManager examManager, CandidateManager candidateManager, IRecruitmentPlanStore recruitmentPlanStore, IJobStore jobStore)
         {
             this.examManager = examManager;
             this.candidateManager = candidateManager;
+            this.recruitmentPlanStore = recruitmentPlanStore;
+            this.jobStore = jobStore;
         }
 
         // GET: Examination
@@ -241,6 +245,60 @@ namespace TalentGoManagerWebApp.Controllers
                 return Json(ex.Message);
             }
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id">ExaminationPlan Id</param>
+        /// <returns></returns>
+        public async Task<ActionResult> ImportFromRecruitmentPlan(int id)
+        {
+            var examPlan = await this.examManager.FindByIdAsync(id);
+            if (examPlan == null)
+                return HttpNotFound();
+
+            this.ViewData["RecruitmentPlanList"] = this.GetRecruitmentPlanList();
+            var model = new ImportFromRecruitmentPlanEditModel();
+            return View(model);
+
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ImportFromRecruitmentPlan(int id, ImportFromRecruitmentPlanEditModel model)
+        {
+            this.ViewData["RecruitmentPlanList"] = this.GetRecruitmentPlanList();
+
+            if (!this.ModelState.IsValid)
+                return View(model);
+
+            var examPlan = await this.examManager.FindByIdAsync(id);
+            var recruitmentPlan = await this.recruitmentPlanStore.FindByIdAsync(model.SelectedRecruitmentPlanId);
+            await this.candidateManager.ImportFromRecruitmentPlanAsync(examPlan, recruitmentPlan);
+            return View("_OperationSuccess");
+        }
+
+        IEnumerable<SelectListItem> GetRecruitmentPlanList()
+        {
+            foreach(var plan in this.recruitmentPlanStore.Plans.Where(r => r.WhenAuditCommited.HasValue))
+            {
+                yield return new SelectListItem {
+                    Value = plan.Id.ToString(),
+                    Text = plan.Title
+                };
+            }
+        }
+
+        IEnumerable<SelectListItem> GetJobList()
+        {
+            foreach(var job in this.jobStore.Jobs.Where(j => j.Plan.WhenAuditCommited.HasValue))
+            {
+                yield return new SelectListItem
+                {
+                    Value = job.Id.ToString(),
+                    Text = job.Name + "|" + job.Plan.Title,
+                };
+            }
         }
 
         public async Task<ActionResult> Detail(int id)

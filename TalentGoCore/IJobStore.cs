@@ -15,5 +15,12 @@ namespace TalentGo
         /// Jobs
         /// </summary>
         IQueryable<Job> Jobs { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<Job> FindByIdAsync(int id);
     }
 }

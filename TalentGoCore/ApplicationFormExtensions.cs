@@ -27,6 +27,21 @@ namespace TalentGo
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<ApplicationForm> Commited(this IEnumerable<ApplicationForm> source)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return source.Where(a => a.WhenCommited.HasValue);
+        }
+
+        /// <summary>
         /// Get Pending file review application form collection.
         /// </summary>
         /// <param name="source"></param>
@@ -62,6 +77,21 @@ namespace TalentGo
         /// <param name="source"></param>
         /// <returns></returns>
         public static IQueryable<ApplicationForm> Approved(this IQueryable<ApplicationForm> source)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            return source.Commited().Where(a => a.WhenAuditComplete.HasValue && a.AuditFlag);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IEnumerable<ApplicationForm> Approved(this IEnumerable<ApplicationForm> source)
         {
             if (source == null)
             {
