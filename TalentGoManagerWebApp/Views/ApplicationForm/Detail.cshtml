@@ -182,11 +182,6 @@
     }
 </div>
 
-@if (!Model.WhenCommited.HasValue)
-{
-    @Html.ActionLink("修改报名表", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" })
-    @Html.ActionLink("管理资料", "Files", new { id = Model.Id }, new { @class = "btn btn-default" })
-    @Html.ActionLink("提交报名表", "Commit", new { id = Model.Id }, new { @class = "btn btn-primary" })
-    @Html.ActionLink("删除报名表", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
-}
-@Html.ActionLink("返回", "Index", null, new { @class = "btn btn-default" })
+@Html.Partial("_DetailAuditPart")
+
+<a href="#" onclick="window.close();" class="btn btn-default">关闭</a>

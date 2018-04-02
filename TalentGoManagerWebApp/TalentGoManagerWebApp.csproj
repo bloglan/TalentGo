@@ -748,6 +748,7 @@
     <Content Include="Views\Examination\ImportFromJob.cshtml" />
     <Content Include="Views\Examination\ImportFromExaminationPlan.cshtml" />
     <Content Include="Views\Shared\_OperationSuccess.cshtml" />
+    <Content Include="Views\ApplicationForm\_DetailAuditPart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

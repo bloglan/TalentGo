@@ -1,0 +1,36 @@
+﻿@model ApplicationForm
+
+@if (Model.FileReviewAccepted.HasValue && Model.FileReviewAccepted.Value && !Model.WhenAuditComplete.HasValue)
+{
+    <h2>审核操作</h2>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" class="form-audit" data-formid="@Model.Id" @(Model.AuditFlag ? "checked=\"checked\"" : string.Empty ) />通过
+        </label>
+    </div>
+}
+
+@using (Html.BeginScriptContext())
+{
+    Html.AddScriptBlock(
+@<script>
+
+    $(function () {
+        $("input[type=checkbox].form-audit").click(function () {
+            $.post("@Url.Action("SetAuditFlag")", { formId: $(this).data("formid"), audit: $(this).prop("checked") }, function (data, status, xhr) {
+                if (data != true) {
+                    alert(data);
+                    if ($(this).prop("checked"))
+                        $(this).prop("checked", false);
+                    else
+                        $(this).prop("checked", true);
+                    return;
+                }
+            });
+
+        });
+    });
+
+</script>);
+
+}

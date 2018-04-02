@@ -26,3 +26,12 @@ textarea {
 div.article p {
     text-indent: 2em;
 }
+
+
+table.text-overflow a, span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*display: block;*/
+    /*max-width: 100%;*/
+}

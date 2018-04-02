@@ -3,7 +3,9 @@
     <div class="panel-body">
         <p>资格审核时，您可以为报名表填写审核标记。只有完成资格审核后，审核结果才会通知报名者。</p>
         <p>@ViewBag.PendingAuditCount 份报名表等待审核。</p>
-        @Html.ActionLink("待审核报名表", "AuditList", null, new { @class = "btn btn-default", target="_blank" })
-        @Html.ActionLink("完成资格审核", "CompleteAudit", null, new { @class = "btn btn-default" })
+        <p>
+            @Html.ActionLink("审核报名表...", "AuditList", null, new { @class = "btn btn-default", target = "_blank" })
+        </p>
+        <p>当所有报名表审核完成后，请转到招聘计划，点击完成审核，以便将审核结果通知求职者。</p>
     </div>
 </div>
