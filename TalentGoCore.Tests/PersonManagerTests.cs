@@ -16,7 +16,7 @@ namespace TalentGo.Tests
         public async Task CommitForRealIdValidationAsyncTest()
         {
             var manager = new PersonManager(new StubPersonStore(), new StubFileStore());
-            var user = new TestUser("530302198501150314", "Surname", "GivenName", "Mobile", "Email");
+            var user = new StubPerson();
             
             await manager.CreateAsync(user);
 

@@ -55,12 +55,7 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            RecruitmentPlan plan = new RecruitmentPlan()
-            {
-                Title = model.Title,
-                Recruitment = model.Recruitment,
-                EnrollExpirationDate = model.ExpirationDate,
-            };
+            RecruitmentPlan plan = new RecruitmentPlan(model.Title, model.Recruitment, model.ExpirationDate);
 
             await this.planManager.CreateAsync(plan);
             return RedirectToAction("Detail", new { id = plan.Id });

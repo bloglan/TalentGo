@@ -28,16 +28,11 @@ namespace TalentGo.Tests
                 };
                 var jobPo = new PrivateObject(job);
 
-                var plan = new RecruitmentPlan
-                {
-                    Title = "Plan",
-                    Recruitment = "Recruitment",
-                    EnrollExpirationDate = new DateTime(2018, 3, 15, 17, 00, 00),
-                };
+                var plan = new RecruitmentPlan("Title", "Recruitment", new DateTime(2018, 3, 15, 17, 00, 00));
                 jobPo.SetProperty(nameof(job.Plan), plan);
 
                 var manager = new ApplicationFormManager(new StubApplicationFormStore(), new StubFileStore());
-                var form = new ApplicationForm(job, new TestUser("530302198501150314", "Surname", "GivenName", "Mobile", "Email"));
+                var form = new ApplicationForm(job, new StubPerson());
                 var formPo = new PrivateObject(form);
                 formPo.SetProperty(nameof(form.HeadImageFile), "HeadImageFile");
                 formPo.SetProperty(nameof(form.AcademicCertFiles), "Files");
@@ -65,22 +60,18 @@ namespace TalentGo.Tests
             };
             var jobPo = new PrivateObject(job);
 
-            var plan = new RecruitmentPlan
-            {
-                Title = "Plan",
-                Recruitment = "Recruitment",
-                EnrollExpirationDate = new DateTime(2018, 3, 15, 17, 00, 00),
-            };
+            var plan = new RecruitmentPlan("Title", "Recruitment", new DateTime(2018, 3, 15, 17, 00, 00));
+
             jobPo.SetProperty(nameof(job.Plan), plan);
             var manager = new ApplicationFormManager(new StubApplicationFormStore(), new StubFileStore());
 
             //准备报名表
-            var form = new ApplicationForm(job, new TestUser("530302198501150314", "Surname", "GivenName", "Mobile", "Email"));
+            var form = new ApplicationForm(job, new StubPerson());
             var formPo = new PrivateObject(form);
             formPo.SetProperty(nameof(form.HeadImageFile), "HeadImageFile");
             formPo.SetProperty(nameof(form.AcademicCertFiles), "Files");
 
-            var form1 = new ApplicationForm(job, new TestUser("530302198501150314", "Surname", "GivenName", "Mobile", "Email"));
+            var form1 = new ApplicationForm(job, new StubPerson());
             var form1Po = new PrivateObject(form1);
             form1Po.SetProperty(nameof(form1.HeadImageFile), "HeadImageFile");
             form1Po.SetProperty(nameof(form1.AcademicCertFiles), "Files");

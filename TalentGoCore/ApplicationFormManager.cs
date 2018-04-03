@@ -373,6 +373,9 @@ namespace TalentGo
             if (form.WhenCommited.HasValue)
                 return;
 
+            if (form.Job.Plan.WhenAuditCommited.HasValue)
+                throw new InvalidOperationException("关联的招聘计划已完成资格审核，不再接受提交任何报名表。");
+
             //如果没有FileReview标记，则不允许在超过报名时间提交。
             if (!form.FileReviewAccepted.HasValue && form.Job.Plan.EnrollExpirationDate < DateTime.Now)
             {
@@ -507,33 +510,6 @@ namespace TalentGo
 
             await this.formStore.UpdateAsync(form);
         }
-
-        /// <summary>
-        /// 完成审核。
-        /// </summary>
-        /// <param name="form"></param>
-        /// <returns></returns>
-        //public async Task CompleteAuditAsync(ApplicationForm form)
-        //{
-        //    if (form == null)
-        //        throw new ArgumentNullException();
-
-        //    if (form.WhenAuditComplete.HasValue)
-        //        return;
-
-        //    if (!form.WhenFileReviewed.HasValue)
-        //        throw new InvalidOperationException("资料审查前不能完成资格审核");
-
-        //    if (form.FileReviewAccepted.HasValue && !form.FileReviewAccepted.Value)
-        //        form.AuditFlag = false; //前置条件 资料审查未通过，直接拒绝审核。
-
-        //    form.WhenAuditComplete = DateTime.Now;
-        //    await this.formStore.UpdateAsync(form);
-
-        //    if (this.NotificationService != null)
-        //        await this.NotificationService.NotifyAuditStateAsync(form);
-
-        //}
 
         /// <summary>
         /// 更新报名表。

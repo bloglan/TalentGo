@@ -15,10 +15,10 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// Default ctor.
         /// </summary>
-        /// <param name="DbContext"></param>
-        public RecruitmentPlanStore(DbContext DbContext)
+        /// <param name="dbContext"></param>
+        public RecruitmentPlanStore(DbContext dbContext)
         {
-            this.db = DbContext;
+            this.db = dbContext;
             this.set = this.db.Set<RecruitmentPlan>();
         }
 
@@ -30,36 +30,36 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// Create new recruitment plan in databse.
         /// </summary>
-        /// <param name="Plan"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task CreateAsync(RecruitmentPlan Plan)
+        public async Task CreateAsync(RecruitmentPlan plan)
         {
-            if (Plan == null)
+            if (plan == null)
             {
-                throw new System.ArgumentNullException(nameof(Plan));
+                throw new System.ArgumentNullException(nameof(plan));
             }
 
-            this.set.Add(Plan);
+            this.set.Add(plan);
             await this.db.SaveChangesAsync();
         }
 
         /// <summary>
         /// Update recruitment plan
         /// </summary>
-        /// <param name="Plan"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(RecruitmentPlan Plan)
+        public async Task UpdateAsync(RecruitmentPlan plan)
         {
-            if (Plan == null)
+            if (plan == null)
             {
-                throw new System.ArgumentNullException(nameof(Plan));
+                throw new System.ArgumentNullException(nameof(plan));
             }
 
-            RecruitmentPlan old = await this.FindByIdAsync(Plan.Id);
+            RecruitmentPlan old = await this.FindByIdAsync(plan.Id);
             if (old != null)
             {
                 var entry = this.db.Entry<RecruitmentPlan>(old);
-                entry.CurrentValues.SetValues(Plan);
+                entry.CurrentValues.SetValues(plan);
                 entry.Property(p => p.WhenCreated).IsModified = false;
 
                 await this.db.SaveChangesAsync();
@@ -70,16 +70,16 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// Delete recruitment plan from db.
         /// </summary>
-        /// <param name="Plan"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        public async Task DeleteAsync(RecruitmentPlan Plan)
+        public async Task DeleteAsync(RecruitmentPlan plan)
         {
-            if (Plan == null)
+            if (plan == null)
             {
-                throw new System.ArgumentNullException(nameof(Plan));
+                throw new System.ArgumentNullException(nameof(plan));
             }
 
-            var current = await this.FindByIdAsync(Plan.Id);
+            var current = await this.FindByIdAsync(plan.Id);
             if (current != null)
             {
                 this.set.Remove(current);
@@ -92,11 +92,11 @@ namespace TalentGo.EntityFramework
         /// Find one recruitment plan by its id.
         /// If not exist, return null.
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<RecruitmentPlan> FindByIdAsync(int Id)
+        public async Task<RecruitmentPlan> FindByIdAsync(int id)
         {
-            return await this.set.FindAsync(Id);
+            return await this.set.FindAsync(id);
         }
 
 

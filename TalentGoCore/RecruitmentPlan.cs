@@ -13,11 +13,30 @@ namespace TalentGo
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public RecruitmentPlan()
+        protected RecruitmentPlan()
         {
             this.Jobs = new HashSet<Job>();
             this.Notifications = new HashSet<Notification>();
             this.WhenCreated = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Initialize recruitment with title, recruitment and enroll expiration time.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="recruitment"></param>
+        /// <param name="enrollExpirationTime"></param>
+        public RecruitmentPlan(string title, string recruitment, DateTime enrollExpirationTime)
+            : this()
+        {
+            if (string.IsNullOrEmpty(title))
+                throw new ArgumentException("Title is null or empty");
+            if (string.IsNullOrEmpty(recruitment))
+                throw new ArgumentException("Recruitment is null or empty.");
+
+            this.Title = title;
+            this.Recruitment = recruitment;
+            this.EnrollExpirationDate = enrollExpirationTime;
         }
 
         /// <summary>
