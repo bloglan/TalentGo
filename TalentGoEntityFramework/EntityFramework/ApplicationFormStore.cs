@@ -30,7 +30,7 @@ namespace TalentGo.EntityFramework
         {
             get
             {
-                return this.set;
+                return this.set.Include("Person");
             }
         }
 

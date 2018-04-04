@@ -151,7 +151,7 @@
     @foreach (var file in academicCertFileArray)
     {
         <div class="col-md-2 img-thumbnail">
-            <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
+            <a href="@Url.Action("Index", "File", new { id = file })" target="_blank"><img src="@Url.Action("Thumbnail", "File", new { id = file })" class="img-responsive" /></a>
         </div>
     }
 </div>
@@ -164,7 +164,7 @@
     @foreach (var file in degreeCertFileArray)
     {
         <div class="col-md-2 img-thumbnail">
-            <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
+            <a href="@Url.Action("Index", "File", new { id = file })" target="_blank"><img src="@Url.Action("Thumbnail", "File", new { id = file })" class="img-responsive" /></a>
         </div>
     }
 </div>
@@ -177,7 +177,7 @@
     @foreach (var file in otherFileArray)
     {
         <div class="col-md-2 img-thumbnail">
-            <img src="@Url.Action("Thumbnail","File", new { id = file })" class="img-responsive" />
+            <a href="@Url.Action("Index", "File", new { id = file })" target="_blank"><img src="@Url.Action("Thumbnail", "File", new { id = file })" class="img-responsive" /></a>
         </div>
     }
 </div>

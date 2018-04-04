@@ -14,13 +14,11 @@ namespace TalentGo
     /// </summary>
 	public class ApplicationForm
     {
-        DataContractJsonSerializer serializer;
         /// <summary>
         /// Default ctor.
         /// </summary>
 		protected ApplicationForm()
         {
-            this.serializer = new DataContractJsonSerializer(typeof(List<string>));
             this.WhenCreated = DateTime.Now;
             this.WhenChanged = DateTime.Now;
             this.ChangeLog = string.Empty;
@@ -30,7 +28,7 @@ namespace TalentGo
         }
 
         /// <summary>
-        /// 
+        /// 根据指定工作和用户初始化报名表。
         /// </summary>
         /// <param name="job"></param>
         /// <param name="person"></param>
@@ -44,7 +42,7 @@ namespace TalentGo
         }
 
         /// <summary>
-        /// 
+        /// 报名表Id.
         /// </summary>
         [Key]
         public int Id { get; protected set; }

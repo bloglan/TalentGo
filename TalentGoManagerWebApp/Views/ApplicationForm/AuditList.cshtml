@@ -54,6 +54,8 @@ Text = "未通过", Value = "false"
             <col style="width: 4%" />
             <col style="width: 4%" />
             <col style="width: 4%" />
+            <col style="width: 4%" />
+            <col style="width: 8%" />
             <col style="width: 8%" />
             <col style="width: 8%" />
             <col style="width: 8%" />
@@ -68,8 +70,10 @@ Text = "未通过", Value = "false"
             <tr>
                 <th><a href="#" class="column-title" data-col="Id">#</a></th>
                 <th><a href="#" class="column-title" data-col="Person.DisplayName">姓名</a></th>
-                <th><a href="#" class="column-title" data-col="Person.Sex">性别</a> </th>
+                <th>实名</th>
+                <th><a href="#" class="column-title" data-col="Person.Sex">性别</a></th>
                 <th><a href="#" class="column-title" data-col="Person.DateOfBirth">年龄</a></th>
+                <th><a href="#" class="column-title" data-col="Mobile">移动电话</a></th>
                 <th><a href="#" class="column-title" data-col="EducationalBackground">学历</a></th>
                 <th><a href="#" class="column-title" data-col="Degree">学位</a></th>
                 <th><a href="#" class="column-title" data-col="School">毕业院校</a></th>
@@ -82,24 +86,26 @@ Text = "未通过", Value = "false"
         </thead>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@Html.ActionLink(item.Id.ToString(), "Detail", new { id = item.Id }, new { target = "_blank" })</td>
-                <td>@Html.ActionLink(item.Person.DisplayName, "Detail", new { id = item.Id }, new { target = "_blank" })</td>
-                <td>@(item.Person.Sex == Sex.Male ? "男" : "女")</td>
-                <td><span title="@item.Person.DateOfBirth.ToShortDateString()">@(item.Person.DateOfBirth.AsAge())岁</span></td>
-                <td><span>@item.EducationalBackground</span></td>
-                <td><span>@item.Degree</span></td>
-                <td><span>@item.School</span></td>
-                <td><span>@item.Major</span></td>
-                <td><span>@item.SelectedMajor</span></td>
-                <td><span>@item.Job.Name</span></td>
-                <td><input class="form-tags" type="text" value="@item.Tags" data-formid="@item.Id" /></td>
-                <td>
-                    <label class="text-nowrap">
-                        <input type="checkbox" class="form-audit" data-formid="@item.Id" @(item.AuditFlag ? "checked=\"checked\"" : string.Empty ) />通过
-                    </label>
-                </td>
-            </tr>
+        <tr>
+            <td>@Html.ActionLink(item.Id.ToString(), "Detail", new { id = item.Id }, new { target = "_blank" })</td>
+            <td>@Html.ActionLink(item.Person.DisplayName, "Detail", new { id = item.Id }, new { target = "_blank" })</td>
+            <td>@Html.Partial("_RealIdState", item.Person)</td>
+            <td>@(item.Person.Sex == Sex.Male ? "男" : "女")</td>
+            <td><span title="@item.Person.DateOfBirth.ToShortDateString()">@(item.Person.DateOfBirth.AsAge())岁</span></td>
+            <td><span>@item.Person.Mobile</span></td>
+            <td><span>@item.EducationalBackground</span></td>
+            <td><span>@item.Degree</span></td>
+            <td><span>@item.School</span></td>
+            <td><span>@item.Major</span></td>
+            <td><span>@item.SelectedMajor</span></td>
+            <td><span>@item.Job.Name</span></td>
+            <td><input class="form-tags" type="text" value="@item.Tags" data-formid="@item.Id" /></td>
+            <td>
+                <label class="text-nowrap">
+                    <input type="checkbox" class="form-audit" data-formid="@item.Id" @(item.AuditFlag ? "checked=\"checked\"" : string.Empty ) />通过
+                </label>
+            </td>
+        </tr>
         }
 
     </table>
