@@ -17,29 +17,29 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        Task<RecruitmentPlan> FindByIdAsync(int Id);
+        Task<RecruitmentPlan> FindByIdAsync(int id);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Plan"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        Task CreateAsync(RecruitmentPlan Plan);
+        Task CreateAsync(RecruitmentPlan plan);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Plan"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        Task UpdateAsync(RecruitmentPlan Plan);
+        Task UpdateAsync(RecruitmentPlan plan);
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="Plan"></param>
+        /// <param name="plan"></param>
         /// <returns></returns>
-        Task DeleteAsync(RecruitmentPlan Plan);
+        Task DeleteAsync(RecruitmentPlan plan);
     }
 }
