@@ -1,0 +1,16 @@
+﻿
+@{
+	ViewBag.Title = "完成资格审核";
+}
+
+<div class="page-header">
+	<h1>@ViewBag.Title</h1>
+</div>
+<p>该操作将固化资格审核标记，并向每个求职者公布资格审核结果。因此该操作不可逆。该操作完成后，也将不再接受任何报名表的提交和退回操作。尚未</p>
+<p>完成资格审核后，报名工作即告一段落。您可以在考试版块编制考试计划，将这些资格审查通过的人员导入为考试候选人，为他们办理参试确认并编制准考证。</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+    <button type="submit" class="btn btn-primary" onclick="return confirm('该操作将向每一个求职者公布资格审核结果，因此这一操作是不可逆的，请再次确认是否执行该操作？');">完成资格审核</button>
+}

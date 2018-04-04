@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using TalentGo;
 using TalentGo.EntityFramework;
+using TalentGo.Services;
 using TalentGo.Web;
 
 namespace TalentGoManagerWebApp
@@ -23,6 +24,11 @@ namespace TalentGoManagerWebApp
 
             //Register TalentGoWebServerLib
             builder.RegisterAssemblyTypes(typeof(WebUser).Assembly);
+            builder.RegisterType<NotificationService>().AsImplementedInterfaces();
+            builder.RegisterType<EaseIMTemplatedShortMessageService>().AsImplementedInterfaces();
+            builder.RegisterType<NoneOperationEmailService>().AsImplementedInterfaces();
+            builder.RegisterType<MemorySMSQueueStore>().AsImplementedInterfaces();
+            builder.RegisterType<RecruitmentPlanManager>().PropertiesAutowired();
         }
     }
 }

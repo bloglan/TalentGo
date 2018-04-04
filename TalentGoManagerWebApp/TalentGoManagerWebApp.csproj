@@ -191,7 +191,6 @@
     <Compile Include="Controllers\PersonController.cs" />
     <Compile Include="Models\ImportFromRecruitmentPlanEditModel.cs" />
     <Compile Include="Models\SubjectEditViewModel.cs" />
-    <Compile Include="Models\CommitAuditViewModel.cs" />
     <Compile Include="Models\EnrollmentDetailViewModel.cs" />
     <Compile Include="Models\EnrollmentStatisticsViewModel.cs" />
     <Compile Include="Models\ExaminationPlanEditViewModel.cs" />
@@ -615,7 +614,7 @@
     <Content Include="Views\ApplicationForm\AuditList.cshtml" />
     <Content Include="Views\ApplicationForm\SmartStatistics.cshtml" />
     <Content Include="Views\ApplicationForm\Statistics.cshtml" />
-    <Content Include="Views\RecruitmentPlan\CommitAudit.cshtml" />
+    <Content Include="Views\RecruitmentPlan\CompleteAudit.cshtml" />
     <Content Include="Views\RecruitmentPlan\Create.cshtml" />
     <Content Include="Views\RecruitmentPlan\Detail.cshtml" />
     <Content Include="Views\RecruitmentPlan\Edit.cshtml" />

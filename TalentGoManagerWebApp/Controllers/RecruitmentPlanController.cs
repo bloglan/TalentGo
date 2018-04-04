@@ -32,12 +32,13 @@ namespace TalentGoManagerWebApp.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<ActionResult> Detail(int? id)
+        public async Task<ActionResult> Detail(int id)
         {
-            if (!id.HasValue)
+            var plan = await this.planManager.FindByIdAsync(id);
+            if (plan == null)
                 return HttpNotFound();
 
-            return View(await this.planManager.FindByIdAsync(id.Value));
+            return View(plan);
         }
 
         public ActionResult Create()
@@ -297,80 +298,37 @@ namespace TalentGoManagerWebApp.Controllers
             }
         }
 
-        public async Task<ActionResult> CommitAudit(int id)
+        public async Task<ActionResult> CompleteAudit(int id)
         {
             var plan = await this.planManager.FindByIdAsync(id);
             if (plan == null)
             {
-                return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到计划。", this.Url.Action("Index"), 3));
+                return HttpNotFound();
             }
-            // bool isPass = plan.EnrollExpirationDate < DateTime.Now ? true : false;
-            if (!(plan.EnrollExpirationDate < DateTime.Now))
-            {
-                return View();
-            }
-            DateTime examSampleTime = DateTime.Now.AddDays(15); //15天后考试
-            CommitAuditViewModel model = new CommitAuditViewModel()
-            {
-                Plan = plan,
-                AnnounceExpirationDate = DateTime.Now.AddDays(7),
-                ExamStartTime = new DateTime(examSampleTime.Year, examSampleTime.Month, examSampleTime.Day, 9, 0, 0),
-                ExamEndTime = new DateTime(examSampleTime.Year, examSampleTime.Month, examSampleTime.Day, 11, 0, 0),
-                ExamLocation = "云南省烟草公司曲靖市公司"
-            };
 
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public async Task<ActionResult> CommitAudit(int id, CommitAuditViewModel model)
+        public async Task<ActionResult> CompleteAudit(int id, FormCollection collection)
         {
+            if (!this.ModelState.IsValid)
+                return View(collection);
             var plan = await this.planManager.FindByIdAsync(id);
             if (plan == null)
-            {
-                return View("OperationResult", new OperationResult(ResultStatus.Failure, "找不到计划。", this.Url.Action("Index"), 3));
-            }
-            model.Plan = plan;
-            if (!this.ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            //验证合规性。
-            List<string> Errors = new List<string>();
-            //考试结束时间应大于考试开始时间，
-            if (model.ExamEndTime <= model.ExamStartTime)
-                Errors.Add("考试结束时间不能早于开始时间。");
-            if (model.ExamStartTime <= model.AnnounceExpirationDate.AddDays(1))
-                Errors.Add("考试开始时间不能早于声明参加考试截止时间的次日");
-            if (model.AnnounceExpirationDate <= DateTime.Now.AddDays(1))
-                Errors.Add("声明参加考试截止日期至少需要1天以上。");
-
-            if (Errors.Count != 0)
-            {
-                foreach (string err in Errors)
-                {
-                    this.ModelState.AddModelError("", err);
-                }
-                return View(model);
-            }
+                return HttpNotFound();
 
             //开始提交。
             try
             {
                 await this.planManager.CompleteAuditAsync(plan);
-                return View("OperationResult", new OperationResult(ResultStatus.Success, "该计划已成功结束审核，审核结果将自动通过短信和邮件顺次通知应聘者本人。接下来，应聘者将提交是否参加考试的声明。在声明截止时间过后，您将能获得本次招聘计划参加考试的人员名单及统计信息。", this.Url.Action("Index"), 20));
+                return View("_OperationSuccess");
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError("", ex.Message);
-                return View(model);
+                return View(collection);
             }
         }
-
-        #region ChildActions
-
-
-        #endregion
     }
 }

@@ -36,15 +36,29 @@ namespace TalentGo.Services
             throw new NotImplementedException();
         }
 
+        const string completeAuditMessageTemplateId = "3872644";
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public Task NotifyAuditCompleteAsync(RecruitmentPlan plan)
+        public async Task NotifyAuditCompleteAsync(RecruitmentPlan plan)
         {
-            throw new NotImplementedException();
+            if (plan == null)
+            {
+                throw new ArgumentNullException(nameof(plan));
+            }
+
+            foreach (var job in plan.Jobs)
+            {
+                foreach(var form in job.ApplicationForms)
+                {
+                    await this.smsService.SendAsync(new string[] { form.Person.Mobile }, completeAuditMessageTemplateId, form.Person.DisplayName, form.Job.Plan.Title, (form.AuditFlag ? "已通过" : "未通过"));
+                }
+            }
         }
+
 
         /// <summary>
         /// 

@@ -111,9 +111,11 @@
     <Compile Include="Services\IEmailService.cs" />
     <Compile Include="Services\ISMSQueueStore.cs" />
     <Compile Include="Services\ITemplatedShortMessageService.cs" />
+    <Compile Include="Services\MemorySMSQueueStore.cs" />
+    <Compile Include="Services\NoneOperationEmailService.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TemplatedShortMessage.cs" />
-    <Compile Include="Services\QueuedTemplatedShortMessageService.cs" />
+    <Compile Include="Services\EaseIMTemplatedShortMessageService.cs" />
     <Compile Include="Web\DataExporter.cs" />
     <Compile Include="Web\DomainUser.cs" />
     <Compile Include="Web\DomainUserExtensions.cs" />

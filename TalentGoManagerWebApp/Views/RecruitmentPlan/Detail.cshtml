@@ -28,6 +28,10 @@
 {
     <p>@Html.ActionLink("编辑", "Edit", new { id = Model.Id }, new { @class = "btn btn-default" }) @Html.ActionLink("发布此计划", "Publish", new { id = Model.Id }, new { @class = "btn btn-primary" })</p>
 }
+@if (Model.EnrollExpirationDate < DateTime.Now && !Model.WhenAuditCommited.HasValue)
+{
+    <p>@Html.ActionLink("完成资格审核", "CompleteAudit", new { id = Model.Id }, new { @class = "btn btn-primary", target = "_blank" })</p>
+}
 <h2>职位/类别</h2>
 @if (!Model.WhenPublished.HasValue)
 {
