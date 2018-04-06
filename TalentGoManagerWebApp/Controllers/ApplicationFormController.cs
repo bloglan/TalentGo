@@ -128,9 +128,9 @@ namespace TalentGoManagerWebApp.Controllers
             IQueryable<ApplicationForm> forms;
 
             if (int.TryParse(q, out int intQ))
-                forms = this.applicationFormManager.ApplicationForms.Commited().Where(f => f.Id == intQ);
+                forms = this.applicationFormManager.ApplicationForms.Where(f => f.Id == intQ);
             else
-                forms = this.applicationFormManager.ApplicationForms.Commited().Where(f => f.Person.DisplayName.StartsWith(q));
+                forms = this.applicationFormManager.ApplicationForms.Where(f => f.Person.DisplayName.StartsWith(q));
 
             if (forms.Count() == 1)
             {
@@ -143,7 +143,7 @@ namespace TalentGoManagerWebApp.Controllers
         public async Task<ActionResult> Detail(int id)
         {
             var form = await this.applicationFormManager.FindByIdAsync(id);
-            if (form == null || !form.WhenCommited.HasValue)
+            if (form == null)
                 return HttpNotFound();
 
             return View(form);
