@@ -314,10 +314,9 @@ namespace TalentGoManagerWebApp.Controllers
                 return Json("找不到报名表");
             }
 
-            form.Tags = string.IsNullOrEmpty(tags) ? null : tags;
             try
             {
-                await this.applicationFormManager.UpdateAsync(form);
+                await this.applicationFormManager.SetTagsAsync(form, string.IsNullOrEmpty(tags) ? null : tags);
                 return Json(true);
             }
             catch (Exception ex)

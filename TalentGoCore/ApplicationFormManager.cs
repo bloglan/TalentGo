@@ -515,14 +515,15 @@ namespace TalentGo
         /// 更新报名表。
         /// </summary>
         /// <param name="form"></param>
+        /// <param name="tags"></param>
         /// <returns></returns>
-        public async Task UpdateAsync(ApplicationForm form)
+        public async Task SetTagsAsync(ApplicationForm form, string tags)
         {
             if (form == null)
             {
                 throw new ArgumentNullException(nameof(form));
             }
-
+            form.Tags = tags;
             await this.formStore.UpdateAsync(form);
         }
     }

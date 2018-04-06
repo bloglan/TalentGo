@@ -293,7 +293,7 @@ namespace TalentGo
         /// <summary>
         /// 标记
         /// </summary>
-        public string Tags { get; set; }
+        public string Tags { get; internal set; }
 
         /// <summary>
         /// When user announced take exam. if value of null, means not announced yet.
