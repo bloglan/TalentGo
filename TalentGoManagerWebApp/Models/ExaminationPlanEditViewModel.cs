@@ -10,7 +10,6 @@ namespace TalentGoManagerWebApp.Models
     {
         public ExaminationPlanEditViewModel()
         {
-            this.AttendanceConfirmationExpiresAt = DateTime.Now.AddDays(7);
         }
 
         [Required]
@@ -23,8 +22,8 @@ namespace TalentGoManagerWebApp.Models
         [Display(Name = "考场地址", Description = "考场所在详细地址，如xx省xx市xx街道xx号等，该信息将标准在准考证里")]
         public string Address { get; set; }
 
-        [Display(Name = "声明参加考试的截止日期")]
+        [Display(Name = "声明参加考试的截止日期", Description = "如果不要求考试候选人确认是否参加考试，请将此项留空。")]
         [UIHint("DateTimeMinute")]
-        public DateTime AttendanceConfirmationExpiresAt { get; set; }
+        public DateTime? AttendanceConfirmationExpiresAt { get; set; }
     }
 }

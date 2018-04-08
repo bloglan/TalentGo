@@ -57,7 +57,7 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(plan));
             }
 
-            if (plan.AttendanceConfirmationExpiresAt < DateTime.Now)
+            if (plan.AttendanceConfirmationExpiresAt.HasValue && plan.AttendanceConfirmationExpiresAt.Value < DateTime.Now)
                 throw new ArgumentException("确认参加考试的截止时间早于当前时间。");
 
             await this.Store.CreateAsync(plan);
@@ -111,17 +111,35 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(plan));
             }
 
-            if (plan.AttendanceConfirmationExpiresAt < DateTime.Now)
+            if (!plan.Candidates.Any())
+                throw new InvalidOperationException("没有任何考试候选人。");
+
+            if (plan.AttendanceConfirmationExpiresAt.HasValue)
+            {
+                if (plan.AttendanceConfirmationExpiresAt < DateTime.Now)
                 throw new ArgumentException("确认参加考试的截止时间早于当前时间。");
+            }
+            else
+            {
+                //没有设定确认时间，则默认所有考试候选人都参加考试。
+                foreach(var candidate in plan.Candidates)
+                {
+                    candidate.Attendance = true;
+                }
+            }
 
             plan.WhenPublished = DateTime.Now;
 
             await this.Store.UpdateAsync(plan);
 
             //调用通知服务。
-            if (this.NotificationService != null)
+            //如果没有设定确认截止时间，那么发布时不进行通知。
+            if(plan.AttendanceConfirmationExpiresAt.HasValue)
             {
-                await this.NotificationService.NotifyPlanPublishedAsync(plan);
+                if (this.NotificationService != null)
+                {
+                    await this.NotificationService.NotifyPlanPublishedAsync(plan);
+                }
             }
         }
 

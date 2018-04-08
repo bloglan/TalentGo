@@ -24,13 +24,11 @@ namespace TalentGo
         /// </summary>
         /// <param name="title"></param>
         /// <param name="address"></param>
-        /// <param name="attendanceConfirmationExpiresAt"></param>
-        public ExaminationPlan(string title, string address, DateTime attendanceConfirmationExpiresAt)
+        public ExaminationPlan(string title, string address)
             : this()
         {
             this.Title = title;
             this.Address = address;
-            this.AttendanceConfirmationExpiresAt = attendanceConfirmationExpiresAt;
         }
 
 
@@ -62,7 +60,7 @@ namespace TalentGo
         /// <summary>
         /// 确认参考截止日期。
         /// </summary>
-        public virtual DateTime AttendanceConfirmationExpiresAt { get; set; }
+        public virtual DateTime? AttendanceConfirmationExpiresAt { get; set; }
 
         /// <summary>
         /// 考试地点。

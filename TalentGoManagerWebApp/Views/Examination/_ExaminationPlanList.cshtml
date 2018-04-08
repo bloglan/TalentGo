@@ -19,7 +19,7 @@
                 <tr>
                     <td>@Html.ActionLink(item.Title, "Detail", new { id = item.Id }, new { target = "_blank" })</td>
                     <td>@Html.DisplayFor(m => item.WhenPublished)</td>
-                    <td>@item.AttendanceConfirmationExpiresAt.ToString("M月d日 HH:mm")</td>
+                    <td>@(item.AttendanceConfirmationExpiresAt.HasValue ? item.AttendanceConfirmationExpiresAt.Value.ToString("M月d日 HH:mm") : "N/A")</td>
                     <td>@Html.DisplayFor(m => item.WhenAdmissionTicketReleased)</td>
                     <td>@item.Subjects.Count</td>
                     <td>@item.Candidates.Count</td>

@@ -11,7 +11,10 @@
                 <div class="col-md-7">
                     <h3>考试信息</h3>
                     <p>考试地点：@item.Plan.Address</p>
-                    <p>确认参加考试截止时间：@item.Plan.AttendanceConfirmationExpiresAt.ToString("yyyy-MM-dd HH:mm") （@item.Plan.AttendanceConfirmationExpiresAt.SmartShow()）</p>
+                    @if (item.Plan.AttendanceConfirmationExpiresAt.HasValue)
+                    {
+                        <p>确认参加考试截止时间：@item.Plan.AttendanceConfirmationExpiresAt.Value.ToString("yyyy-MM-dd HH:mm") （@item.Plan.AttendanceConfirmationExpiresAt.Value.SmartShow()）</p>
+                    }
                     <p>准考证发放时间：@(item.Plan.WhenAdmissionTicketReleased.HasValue ? item.Plan.WhenAdmissionTicketReleased.Value.ToString("yyyy-MM-dd") : "待定")</p>
                 </div>
                 <div class="col-md-5">

@@ -17,7 +17,11 @@
 
 <p>考场地址：@Model.Address</p>
 <p>发布时间：@(Model.WhenPublished.HasValue ? Model.WhenPublished.Value.ToString() : "未发布")</p>
-<p>声明截止时间: @Model.AttendanceConfirmationExpiresAt.ToString("MM-dd HH:mm") （@Model.AttendanceConfirmationExpiresAt.SmartShow()）</p>
+@if(Model.AttendanceConfirmationExpiresAt.HasValue)
+{
+<p>声明截止时间: @Model.AttendanceConfirmationExpiresAt.Value.ToString("MM-dd HH:mm") （@Model.AttendanceConfirmationExpiresAt.Value.SmartShow()）</p>
+
+}
 
 <hr />
 <h2>科目</h2>

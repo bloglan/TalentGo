@@ -49,7 +49,10 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            var plan = new ExaminationPlan(model.Title, model.Address, model.AttendanceConfirmationExpiresAt);
+            var plan = new ExaminationPlan(model.Title, model.Address)
+            {
+                AttendanceConfirmationExpiresAt = model.AttendanceConfirmationExpiresAt,
+            };
             try
             {
                 await this.examManager.CreateAsync(plan);
@@ -71,6 +74,7 @@ namespace TalentGoManagerWebApp.Controllers
             var model = new ExaminationPlanEditViewModel()
             {
                 Title = plan.Title,
+                Address = plan.Address,
                 AttendanceConfirmationExpiresAt = plan.AttendanceConfirmationExpiresAt,
             };
 
@@ -87,6 +91,7 @@ namespace TalentGoManagerWebApp.Controllers
             if (plan == null)
                 return HttpNotFound();
             plan.Title = model.Title;
+            plan.Address = model.Address;
             plan.AttendanceConfirmationExpiresAt = model.AttendanceConfirmationExpiresAt;
             try
             {
