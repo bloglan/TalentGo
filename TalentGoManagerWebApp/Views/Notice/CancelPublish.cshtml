@@ -7,8 +7,7 @@
 </div>
 @using (Html.BeginForm())
 {
-
-    <p>Are you sure you want cance publis this notice?</p>
-    <button type="submit" class="btn btn-primary">Cancel Publish</button>
-    @Html.ActionLink("Cance", "Detail", new { id = this.Request["id"] })
+    <p>撤销发布后，求职者将无法在招聘网站上看到此条公告。确实要这样做吗？</p>
+    <button type="submit" class="btn btn-danger">撤销发布</button>
+    @Html.ActionLink("取消", "Detail", new { id = this.Request["id"] }, new { @class = "btn btn-default" })
 }

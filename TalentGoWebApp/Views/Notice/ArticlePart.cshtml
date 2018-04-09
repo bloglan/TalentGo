@@ -3,6 +3,6 @@
 <ul class="list-unstyled">
     @foreach (var art in Model)
     {
-        <li>@Html.ActionLink(art.Title, "Detail", "Notice", new { id = art.Id }, null)</li>
+        <li>@Html.ActionLink(art.Title, "Detail", "Notice", new { id = art.Id }, new { target = "_blank" })</li>
     }
 </ul>
