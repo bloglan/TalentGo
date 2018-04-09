@@ -68,6 +68,11 @@ namespace TalentGo
         public virtual string Address { get; set; }
 
         /// <summary>
+        /// 考试须知。
+        /// </summary>
+        public virtual string Notes { get; set; }
+
+        /// <summary>
         /// 发放准考证时间。
         /// </summary>
         public virtual DateTime? WhenAdmissionTicketReleased { get; internal set; }

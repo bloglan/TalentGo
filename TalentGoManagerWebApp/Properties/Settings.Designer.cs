@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TalentGoWebApp.Properties {
+namespace TalentGoManagerWebApp.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -25,10 +25,10 @@ namespace TalentGoWebApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AllowUserRegisteration {
+        [global::System.Configuration.DefaultSettingValueAttribute("曲靖烟草招聘管理中心")]
+        public string SystemTitle {
             get {
-                return ((bool)(this["AllowUserRegisteration"]));
+                return ((string)(this["SystemTitle"]));
             }
         }
         
@@ -38,15 +38,6 @@ namespace TalentGoWebApp.Properties {
         public string OrganizationName {
             get {
                 return ((string)(this["OrganizationName"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("曲靖烟草招聘")]
-        public string SystemTitle {
-            get {
-                return ((string)(this["SystemTitle"]));
             }
         }
     }

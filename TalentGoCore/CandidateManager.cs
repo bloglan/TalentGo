@@ -33,6 +33,17 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="personId"></param>
+        /// <param name="examId"></param>
+        /// <returns></returns>
+        public async Task<Candidate> FindByIdAsync(Guid personId, int examId)
+        {
+            return await this.Store.FindByIdAsync(personId, examId);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="candidate"></param>
         /// <returns></returns>
         public async Task CreateAsync(Candidate candidate)
@@ -78,31 +89,48 @@ namespace TalentGo
         /// 
         /// </summary>
         /// <param name="candidate"></param>
-        /// <param name="admissionNumber"></param>
-        /// <param name="room"></param>
-        /// <param name="seat"></param>
+        /// <param name="ticketNumber"></param>
         /// <returns></returns>
-        public async Task AssignAdmissionTicket(Candidate candidate, string admissionNumber, string room, string seat)
+        public async Task SetTicketNumberAsync(Candidate candidate, string ticketNumber)
         {
             if (candidate == null)
             {
                 throw new ArgumentNullException(nameof(candidate));
             }
-            if (string.IsNullOrEmpty(admissionNumber))
-                throw new ArgumentNullException(nameof(admissionNumber));
+
             var examId = candidate.ExamId;
-            if (this.Candidates.Any(c => c.ExamId == examId && c.AdmissionNumber == admissionNumber))
-                throw new ArgumentException("准考证重复。");
-            if (this.Candidates.Any(c => c.ExamId == examId && c.Room == room && c.Seat == seat))
-                throw new ArgumentException("考场座位重复。");
-
-            candidate.AdmissionNumber = admissionNumber;
-            candidate.Room = room;
-            candidate.Seat = seat;
-
+            if (!string.IsNullOrEmpty(ticketNumber))
+            {
+                if (this.Candidates.Any(c => c.ExamId == examId && c.AdmissionNumber == ticketNumber))
+                    throw new InvalidOperationException("准考证号出现重复。");
+            }
+            candidate.AdmissionNumber = string.IsNullOrEmpty(ticketNumber) ? null : ticketNumber;
             await this.Store.UpdateAsync(candidate);
         }
 
-        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="candidate"></param>
+        /// <param name="room"></param>
+        /// <param name="seat"></param>
+        /// <returns></returns>
+        public async Task SetRoomSeatAsync(Candidate candidate, string room, string seat)
+        {
+            if (candidate == null)
+                throw new ArgumentNullException(nameof(candidate));
+
+            var examId = candidate.ExamId;
+            if (!string.IsNullOrEmpty(room) && !string.IsNullOrEmpty(seat))
+            {
+                if (this.Candidates.Any(c => c.ExamId == examId && c.Room == room && c.Seat == seat))
+                    throw new InvalidOperationException("考场和座位出现重复。");
+
+            }
+
+            candidate.Room = string.IsNullOrEmpty(room) ? null : room;
+            candidate.Seat = string.IsNullOrEmpty(seat) ? null : seat;
+            await this.Store.UpdateAsync(candidate);
+        }
     }
 }

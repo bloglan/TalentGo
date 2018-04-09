@@ -63,18 +63,18 @@
 {
     <p>
         @Html.ActionLink("添加候选人", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
-        @Html.ActionLink("从招聘计划导入...", "ImportFromRecruitmentPlan", new { planid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
-        @Html.ActionLink("从职位导入...", "ImportFromJob", new { planid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
-        @Html.ActionLink("从其他考试导入...", "ImportExaminationPlan", new { planid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
+        @Html.ActionLink("从招聘计划导入...", "ImportFromRecruitmentPlan", new { examid = Model.Id }, new { @class = "btn btn-default" })
+        @Html.ActionLink("从职位导入...", "ImportFromJob", new { examid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
+        @Html.ActionLink("从其他考试导入...", "ImportExaminationPlan", new { examid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
     </p>
 }
 else
 {
-    if (Model.AttendanceConfirmationExpiresAt < DateTime.Now)
+    if (!Model.AttendanceConfirmationExpiresAt.HasValue || Model.AttendanceConfirmationExpiresAt.Value < DateTime.Now)
     {
         <p>
-            @Html.ActionLink("编制准考证...", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
-            @Html.ActionLink("发放准考证", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("编制准考证...", "EditAdmissionTickets", new { id = Model.Id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("发放准考证", "ReleaseAdmissionTickets", new { id = Model.Id }, new { @class = "btn btn-default" })
         </p>
     }
 }

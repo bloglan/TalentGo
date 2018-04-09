@@ -64,6 +64,20 @@ namespace TalentGoManagerWebApp
             return result;
         }
 
+        public static ViewResult FeatureNotImplemented(this Controller controller)
+        {
+            var result = new ViewResult()
+            {
+                ViewName = FeatureNotImplementedView,
+                MasterName = null,
+                ViewData = controller.ViewData,
+                TempData = controller.TempData,
+                ViewEngineCollection = controller.ViewEngineCollection,
+            };
+            return result;
+        }
+
+        const string FeatureNotImplementedView = "~/Views/Shared/NotImplemented.cshtml";
         public static readonly string OKView = "~/Views/Shared/OK.cshtml";
     }
 }

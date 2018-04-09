@@ -27,18 +27,5 @@ namespace TalentGo
             return source.Where(e => e.ExamId == planId);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IQueryable<Candidate> AttendanceConfirmed(this IQueryable<Candidate> source)
-        {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            return source.Where(e => e.Attendance.Value);
-        }
     }
 }

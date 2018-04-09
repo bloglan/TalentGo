@@ -26,7 +26,8 @@ namespace TalentGo
         /// </summary>
         /// <param name="plan"></param>
         /// <param name="person"></param>
-        public Candidate(ExaminationPlan plan, Person person)
+        /// <param name="applyFor"></param>
+        public Candidate(ExaminationPlan plan, Person person, string applyFor = null)
             : this()
         {
             this.Plan = plan ?? throw new ArgumentNullException(nameof(plan));
@@ -35,6 +36,7 @@ namespace TalentGo
                 throw new InvalidOperationException("已发布的考试不能创建候选人。");
             this.Person = person ?? throw new ArgumentNullException(nameof(person));
             this.PersonId = person.Id;
+            this.ApplyFor = applyFor;
         }
 
         /// <summary>
@@ -64,6 +66,11 @@ namespace TalentGo
         public virtual ExaminationPlan Plan { get; set; }
 
         /// <summary>
+        /// 申请职位。
+        /// </summary>
+        public virtual string ApplyFor { get; set; }
+
+        /// <summary>
         /// 是否参加考试
         /// </summary>
         public bool? Attendance { get; internal set; }
@@ -76,16 +83,16 @@ namespace TalentGo
         /// <summary>
         /// 准考证号。
         /// </summary>
-        public virtual string AdmissionNumber { get; set; }
+        public virtual string AdmissionNumber { get; internal set; }
 
         /// <summary>
         /// 考场号
         /// </summary>
-        public virtual string Room { get; set; }
+        public virtual string Room { get; internal set; }
 
         /// <summary>
         /// 座位号。
         /// </summary>
-        public virtual string Seat { get; set; }
+        public virtual string Seat { get; internal set; }
     }
 }

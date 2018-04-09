@@ -56,7 +56,7 @@ namespace TalentGoManagerWebApp.Controllers
             try
             {
                 await this.examManager.CreateAsync(plan);
-                return RedirectToAction("Index");
+                return RedirectToAction("Detail", new { id = plan.Id });
             }
             catch (Exception ex)
             {
@@ -102,6 +102,31 @@ namespace TalentGoManagerWebApp.Controllers
             {
                 this.ModelState.AddModelError("", ex.Message);
                 return View(model);
+            }
+        }
+
+        public ActionResult Delete(int id)
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public async Task<ActionResult> Delete(int id, FormCollection collection)
+        {
+            var plan = await this.examManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
+
+            try
+            {
+                await this.examManager.DeleteAsync(plan);
+                return View("_OperationSuccess");
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View();
             }
         }
 
@@ -159,7 +184,8 @@ namespace TalentGoManagerWebApp.Controllers
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            var subject = new ExaminationSubject() {
+            var subject = new ExaminationSubject()
+            {
                 Subject = model.Subject,
                 StartTime = model.StartTime,
                 EndTime = model.EndTime,
@@ -188,7 +214,8 @@ namespace TalentGoManagerWebApp.Controllers
             if (subject == null)
                 return HttpNotFound();
 
-            var model = new SubjectEditViewModel {
+            var model = new SubjectEditViewModel
+            {
                 Subject = subject.Subject,
                 StartTime = subject.StartTime,
                 EndTime = subject.EndTime,
@@ -255,11 +282,11 @@ namespace TalentGoManagerWebApp.Controllers
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id">ExaminationPlan Id</param>
+        /// <param name="examid">ExaminationPlan Id</param>
         /// <returns></returns>
-        public async Task<ActionResult> ImportFromRecruitmentPlan(int id)
+        public async Task<ActionResult> ImportFromRecruitmentPlan(int examid)
         {
-            var examPlan = await this.examManager.FindByIdAsync(id);
+            var examPlan = await this.examManager.FindByIdAsync(examid);
             if (examPlan == null)
                 return HttpNotFound();
 
@@ -270,24 +297,35 @@ namespace TalentGoManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> ImportFromRecruitmentPlan(int id, ImportFromRecruitmentPlanEditModel model)
+        public async Task<ActionResult> ImportFromRecruitmentPlan(int examid, ImportFromRecruitmentPlanEditModel model)
         {
             this.ViewData["RecruitmentPlanList"] = this.GetRecruitmentPlanList();
 
             if (!this.ModelState.IsValid)
                 return View(model);
 
-            var examPlan = await this.examManager.FindByIdAsync(id);
+            var examPlan = await this.examManager.FindByIdAsync(examid);
             var recruitmentPlan = await this.recruitmentPlanStore.FindByIdAsync(model.SelectedRecruitmentPlanId);
             await this.candidateManager.ImportFromRecruitmentPlanAsync(examPlan, recruitmentPlan);
             return View("_OperationSuccess");
         }
 
+        public ActionResult ImportFromJob(int examid)
+        {
+            return this.FeatureNotImplemented();
+        }
+
+        public ActionResult ImportFromExaminationPlan(int examid)
+        {
+            return this.FeatureNotImplemented();
+        }
+
         IEnumerable<SelectListItem> GetRecruitmentPlanList()
         {
-            foreach(var plan in this.recruitmentPlanStore.Plans.Where(r => r.WhenAuditCommited.HasValue))
+            foreach (var plan in this.recruitmentPlanStore.Plans.Where(r => r.WhenAuditCommited.HasValue))
             {
-                yield return new SelectListItem {
+                yield return new SelectListItem
+                {
                     Value = plan.Id.ToString(),
                     Text = plan.Title
                 };
@@ -296,7 +334,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         IEnumerable<SelectListItem> GetJobList()
         {
-            foreach(var job in this.jobStore.Jobs.Where(j => j.Plan.WhenAuditCommited.HasValue))
+            foreach (var job in this.jobStore.Jobs.Where(j => j.Plan.WhenAuditCommited.HasValue))
             {
                 yield return new SelectListItem
                 {
@@ -313,6 +351,64 @@ namespace TalentGoManagerWebApp.Controllers
                 return HttpNotFound();
 
             return View(plan);
+        }
+
+        public ActionResult EditAdmissionTickets(int id)
+        {
+            var candidates = this.candidateManager.Candidates.AttendanceConfirmed().Where(c => c.ExamId == id);
+            return View(candidates);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateTicketNumber(Guid personid, int examid, string data)
+        {
+            var candidate = await this.candidateManager.FindByIdAsync(personid, examid);
+            try
+            {
+                await this.candidateManager.SetTicketNumberAsync(candidate, data);
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> UpdateRoom(Guid personid, int examid, string data)
+        {
+            var candidate = await this.candidateManager.FindByIdAsync(personid, examid);
+            var room = candidate.Room;
+            var seat = candidate.Seat;
+            room = string.IsNullOrEmpty(data) ? null : data;
+
+            try
+            {
+                await this.candidateManager.SetRoomSeatAsync(candidate, room, seat);
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
+        }
+        [HttpPost]
+        public async Task<JsonResult> UpdateSeat(Guid personid, int examid, string data)
+        {
+            var candidate = await this.candidateManager.FindByIdAsync(personid, examid);
+            var room = candidate.Room;
+            var seat = candidate.Seat;
+            seat = string.IsNullOrEmpty(data) ? null : data;
+
+            try
+            {
+                await this.candidateManager.SetRoomSeatAsync(candidate, room, seat);
+                return Json(true);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
         }
     }
 }

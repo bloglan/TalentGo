@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <title>@ViewBag.Title - 曲靖烟草招聘</title>
+    <title>@ViewBag.Title - @(TalentGoWebApp.Properties.Settings.Default.SystemTitle)</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content/jqueryuicss")
     @Styles.Render("~/Content/bootstrapDatetimePicker")
@@ -23,7 +23,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href="@Url.Action("Index", "Home")" class="navbar-brand">
-                    曲靖烟草招聘
+                    @TalentGoWebApp.Properties.Settings.Default.SystemTitle
                 </a>
             </div>
             <div class="navbar-collapse collapse">
@@ -42,8 +42,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - 云南省烟草公司曲靖市公司</p>
-            <p>警告：本站点含有烟草内容，谢绝十八岁以下人士进入！</p>
+            <p>&copy; @DateTime.Now.Year - @TalentGoWebApp.Properties.Settings.Default.OrganizationName</p>
             <ul class="list-inline">
                 <li>@Html.ActionLink("支持", "Support", "Help")</li>
                 <li>@Html.ActionLink("常见问题解答", "FAQ", "Help")</li>

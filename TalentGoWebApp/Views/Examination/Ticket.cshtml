@@ -1,0 +1,53 @@
+﻿@model Candidate
+@{
+    ViewBag.Title = "准考证";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+
+<p>@TalentGoWebApp.Properties.Settings.Default.OrganizationName</p>
+<p>@Model.Plan.Title</p>
+<p>TicketNumber: @Model.AdmissionNumber</p>
+<p>Name: @Model.Person.DisplayName</p>
+<p>Sex: @Model.Person.Sex</p>
+<p>IDCardNumber: @Model.Person.IDCardNumber</p>
+<p>HeadImage:</p>
+<p>Address: @Model.Plan.Address</p>
+<p>Room: @Model.Room</p>
+<p>Seat: @Model.Seat</p>
+
+<h2>Subjects</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Start</th>
+            <th>End</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Plan.Subjects)
+        {
+            <tr>
+                <td>@item.Subject</td>
+                <td>@item.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@item.EndTime.ToString("HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Notes</h2>
+<div class="article">
+    @Html.Raw(Model.Plan.Notes)
+</div>
+
+<table class="table">
+    <tbody>
+        <tr>
+            <td></td>
+        </tr>
+    </tbody>
+</table>

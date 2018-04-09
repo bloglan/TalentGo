@@ -19,10 +19,10 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="examId"></param>
         /// <param name="personId"></param>
+        /// <param name="examId"></param>
         /// <returns></returns>
-        Task<Candidate> FindByIdAsync(int examId, Guid personId);
+        Task<Candidate> FindByIdAsync(Guid personId, int examId);
 
         /// <summary>
         /// 

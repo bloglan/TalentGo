@@ -64,10 +64,10 @@ namespace TalentGo.EntityFramework
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="examId"></param>
         /// <param name="personId"></param>
+        /// <param name="examId"></param>
         /// <returns></returns>
-        public async Task<Candidate> FindByIdAsync(int examId, Guid personId) => await this.set.FindAsync(examId, personId);
+        public async Task<Candidate> FindByIdAsync(Guid personId, int examId) => await this.set.FindAsync(personId, examId);
 
         /// <summary>
         /// 

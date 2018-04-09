@@ -5,5 +5,11 @@
     <Setting Name="AllowUserRegisteration" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="OrganizationName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">云南省烟草公司曲靖市公司</Value>
+    </Setting>
+    <Setting Name="SystemTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">曲靖烟草招聘</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

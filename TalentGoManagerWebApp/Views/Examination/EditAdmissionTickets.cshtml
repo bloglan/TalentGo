@@ -1,0 +1,58 @@
+﻿@model IQueryable<Candidate>
+@{
+    ViewBag.Title = "Edit Admission Tickets";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>Type ticket number, room, seat infomration into text box below, then leave the foucs, the value will be update automaticilly. if ticket number duplicated, system should prompt you and forbid the value.</p>
+<table class="table table-condensed">
+    <thead>
+        <tr>
+            <th>IDCard</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>DateofBirth</th>
+            <th>TicketNumber</th>
+            <th>Room</th>
+            <th>Seat</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Person.IDCardNumber</td>
+                <td>@item.Person.DisplayName</td>
+                <td>@(item.Person.Sex == Sex.Male ? "Male" : "Female")</td>
+                <td>@item.Person.DateOfBirth.ToString("yyyy-MM-dd")</td>
+                <td><input type="text" data-url="@Url.Action("UpdateTicketNumber")" data-personid="@item.PersonId" data-examid="@item.ExamId" value="@item.AdmissionNumber" /></td>
+                <td><input type="text" data-url="@Url.Action("UpdateRoom")" data-personid="@item.PersonId" data-examid="@item.ExamId" value="@item.Room" /></td>
+                <td><input type="text" data-url="@Url.Action("UpdateSeat")" data-personid="@item.PersonId" data-examid="@item.ExamId" value="@item.Seat" /></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            $("input[type=text]").change(function () {
+                var ctl = $(this);
+                $.post($(this).data("url"), { personid: $(this).data("personid"), examid: $(this).data("examid"), data: $(this).val() }, function (data, status, xhr) {
+                    if (data != true) {
+                        alert(data);
+                        ctl.val("");
+                        ctl.focus();
+                    }
+                });
+
+            });
+        });
+
+    </script>
+
+}
