@@ -3,12 +3,11 @@
 }
 
 <div class="page-header">
-    <h1>发布</h1>
+    <h1>@ViewBag.Title</h1>
 </div>
 @using (Html.BeginForm())
 {
-
-    <p>Publish?</p>
-    <button type="submit" class="btn btn-primary">Publish</button>
-    @Html.ActionLink("Cance", "Detail", new { id = this.Request["id"] })
+    <p>公告被发布后，就可以被浏览网站的人员看到。</p>
+    <button type="submit" class="btn btn-primary">发布</button>
+    @Html.ActionLink("取消", "Index", null, new { @class = "btn btn-default" })
 }

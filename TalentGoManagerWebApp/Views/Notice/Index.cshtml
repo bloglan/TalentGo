@@ -30,13 +30,20 @@
                     @Html.DisplayFor(modelItem => item.WhenCreated)
                 </td>
                 <td>
-                    @(item.WhenPublished.HasValue?"已发布":"")
+                    @(item.WhenPublished.HasValue ? "已发布" : "")
                 </td>
                 <td>
-                    @Html.ActionLink("编辑", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("删除", "Delete", new { id = item.Id })
+                    @if (!item.WhenPublished.HasValue)
+                    {
+                        <span>
+                            @Html.ActionLink("发布", "Publish", new { id = item.Id }) |
+                            @Html.ActionLink("编辑", "Edit", new { id = item.Id }) |
+                            @Html.ActionLink("删除", "Delete", new { id = item.Id })
+                        </span>
+                    }
                 </td>
             </tr>
         }
+
     </tbody>
 </table>
