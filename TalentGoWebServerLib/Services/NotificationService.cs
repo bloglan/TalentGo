@@ -26,14 +26,24 @@ namespace TalentGo.Services
             this.emailService = emailService;
         }
 
+        const string ticketReleasedMessageTemplateId = "3892587";
+
         /// <summary>
         /// 通知准考证发放。
         /// </summary>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public Task NotifyAdmissionTicketReleasedAsync(ExaminationPlan plan)
+        public async Task NotifyAdmissionTicketReleasedAsync(ExaminationPlan plan)
         {
-            throw new NotImplementedException();
+            if (plan == null)
+            {
+                throw new ArgumentNullException(nameof(plan));
+            }
+
+            foreach(var candidate in plan.Candidates.Where(c => c.Attendance.HasValue && c.Attendance.Value == true))
+            {
+                await this.smsService.SendAsync(new string[]{ candidate.Person.Mobile }, ticketReleasedMessageTemplateId, candidate.Person.DisplayName);
+            }
         }
 
         const string completeAuditMessageTemplateId = "3872644";
@@ -70,14 +80,24 @@ namespace TalentGo.Services
             throw new NotImplementedException();
         }
 
+        const string examinationPlanPublisedMessageTemplateId = "4102617";
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="plan"></param>
         /// <returns></returns>
-        public Task NotifyPlanPublishedAsync(ExaminationPlan plan)
+        public async Task NotifyPlanPublishedAsync(ExaminationPlan plan)
         {
-            throw new NotImplementedException();
+            if (plan == null)
+            {
+                throw new ArgumentNullException(nameof(plan));
+            }
+
+            foreach (var candidate in plan.Candidates)
+            {
+                await this.smsService.SendAsync(new string[] { candidate.Person.Mobile }, examinationPlanPublisedMessageTemplateId, candidate.Person.DisplayName, "近期", candidate.Plan.Address);
+            }
         }
 
         /// <summary>
