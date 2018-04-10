@@ -1,0 +1,28 @@
+﻿@model AttendanceConfirmModel
+@{
+    ViewBag.Title = "确认是否参加考试";
+}
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+@using (Html.BeginForm())
+{
+    <p>您即将声明是否参加考试。请认真阅读考试安排所载明的时间和地点，根据您自身实际情况，确认是否参加考试。</p>
+    <p>请注意，如果您声明不参加考试，那么意味着你放弃之后的全部招聘流程。请谨慎选择。</p>
+
+    <p>@Html.ValidationSummary()</p>
+    <div>
+        <div class="radio">
+            <label>
+                @Html.RadioButton(nameof(Model.Attend), Model.Attend) 我确认参加考试
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                @Html.RadioButton(nameof(Model.Attend), !Model.Attend) 我确认不参加考试
+            </label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary" onclick="return confirm('请再次核对您的声明是否符合，然后单击确定提交。')">提交声明</button>
+}

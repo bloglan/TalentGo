@@ -1,0 +1,68 @@
+﻿@model IQueryable<Candidate>
+
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">@item.Plan.Title</h3>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>科目</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var subject in item.Plan.Subjects)
+                    {
+                        <tr>
+                            <td>@subject.Subject</td>
+                            <td>@subject.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@subject.EndTime.ToString("HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="panel-body">
+                <p>考试地点：@item.Plan.Address</p>
+                @if (item.Plan.AttendanceConfirmationExpiresAt.HasValue)
+                {
+                    if (item.Attendance.HasValue)
+                    {
+                        if (item.Attendance.Value)
+                        {
+                            <p class="alert alert-success">已确认参加考试。</p>
+                        }
+                        else
+                        {
+                            <p class="alert alert-danger">已确认放弃考试。</p>
+                        }
+                    }
+                    else
+                    {
+                        if (item.Plan.AttendanceConfirmationExpiresAt.Value > DateTime.Now)
+                        {
+                            <p>@Html.ActionLink("确认参加考试", "AttendanceConfirm", "Examination", new { id = item.ExamId }, new { @class = "btn btn-primary", target = "_blank" })</p>
+                        }
+                        else
+                        {
+                            <p class="alert alert-danger">您未在截止时间前确认是否参加考试，视为放弃考试。</p>
+                        }
+                    }
+                }
+            </div>
+            <div class="panel-footer">
+                发布时间：@item.Plan.WhenPublished.Value.ToString("yyyy-MM-dd")
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>没有可用的考试安排。</p>
+}

@@ -34,7 +34,7 @@ namespace TalentGoManagerWebApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("云南省烟草公司曲靖市公司")]
+        [global::System.Configuration.DefaultSettingValueAttribute("曲靖市烟草专卖局（公司）")]
         public string OrganizationName {
             get {
                 return ((string)(this["OrganizationName"]));

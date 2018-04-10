@@ -760,6 +760,7 @@
     <Content Include="Views\Examination\Delete.cshtml" />
     <Content Include="Views\Shared\NotImplemented.cshtml" />
     <Content Include="Views\Examination\EditAdmissionTickets.cshtml" />
+    <Content Include="Views\Examination\ReleaseAdmissionTickets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

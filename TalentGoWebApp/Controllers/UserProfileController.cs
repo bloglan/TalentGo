@@ -12,8 +12,8 @@ using System;
 
 namespace TalentGoWebApp.Controllers
 {
-	[Authorize]
-	public class UserProfileController : Controller
+    [Authorize]
+    public class UserProfileController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -34,9 +34,9 @@ namespace TalentGoWebApp.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -57,7 +57,7 @@ namespace TalentGoWebApp.Controllers
         public ActionResult Index()
         {
             var userId = Guid.Parse(User.Identity.GetUserId());
-			var usr = this.UserManager.FindById(userId);
+            var usr = this.UserManager.FindById(userId);
             return View(usr);
         }
 
@@ -66,7 +66,12 @@ namespace TalentGoWebApp.Controllers
             return View();
         }
 
-        public ActionResult AdmissionTicket()
+        public ActionResult Exam()
+        {
+            return View();
+        }
+
+        public ActionResult AdmissionTickets()
         {
             return View();
         }

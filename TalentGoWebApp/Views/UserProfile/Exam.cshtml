@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "考试安排";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+@Html.Action("UserExaminations", "Examination")
+
+<p class="well">准考证会在考试安排公布，并确认是否参加考试（如果需要）后发放。要打印准考证，请导航到<a href="@Url.Action("AdmissionTickets")">准考证</a>。</p>

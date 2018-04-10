@@ -17,9 +17,9 @@
 
 <p>考场地址：@Model.Address</p>
 <p>发布时间：@(Model.WhenPublished.HasValue ? Model.WhenPublished.Value.ToString() : "未发布")</p>
-@if(Model.AttendanceConfirmationExpiresAt.HasValue)
+@if (Model.AttendanceConfirmationExpiresAt.HasValue)
 {
-<p>声明截止时间: @Model.AttendanceConfirmationExpiresAt.Value.ToString("MM-dd HH:mm") （@Model.AttendanceConfirmationExpiresAt.Value.SmartShow()）</p>
+    <p>声明截止时间: @Model.AttendanceConfirmationExpiresAt.Value.ToString("MM-dd HH:mm") （@Model.AttendanceConfirmationExpiresAt.Value.SmartShow()）</p>
 
 }
 
@@ -58,68 +58,109 @@
 </table>
 
 <hr />
-<h2>考试候选人</h2>
-@if (!Model.WhenPublished.HasValue)
+@if (!Model.WhenAdmissionTicketReleased.HasValue)
 {
-    <p>
-        @Html.ActionLink("添加候选人", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
-        @Html.ActionLink("从招聘计划导入...", "ImportFromRecruitmentPlan", new { examid = Model.Id }, new { @class = "btn btn-default" })
-        @Html.ActionLink("从职位导入...", "ImportFromJob", new { examid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
-        @Html.ActionLink("从其他考试导入...", "ImportExaminationPlan", new { examid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
-    </p>
-}
-else
-{
-    if (!Model.AttendanceConfirmationExpiresAt.HasValue || Model.AttendanceConfirmationExpiresAt.Value < DateTime.Now)
+    <h2>考试候选人</h2>
+    if (!Model.WhenPublished.HasValue)
     {
         <p>
-            @Html.ActionLink("编制准考证...", "EditAdmissionTickets", new { id = Model.Id }, new { @class = "btn btn-default" })
-            @Html.ActionLink("发放准考证", "ReleaseAdmissionTickets", new { id = Model.Id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("添加候选人", "Candidate", new { planid = Model.Id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("从招聘计划导入...", "ImportFromRecruitmentPlan", new { examid = Model.Id }, new { @class = "btn btn-default" })
+            @Html.ActionLink("从职位导入...", "ImportFromJob", new { examid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
+            @Html.ActionLink("从其他考试导入...", "ImportExaminationPlan", new { examid = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
         </p>
     }
-}
-<p>候选人共计@(Model.Candidates.Count)人，其中@(Model.Candidates.Count(c => c.Attendance.HasValue && c.Attendance.Value))人确认参加考试</p>
-<table class="table table-responsive">
-    <colgroup>
-        <col class="col-md-2" />
-        <col class="col-md-2" />
-        <col class="col-md-2" />
-        <col class="col-md-2" />
-        <col class="col-md-2" />
-        <col class="col-md-2" />
-    </colgroup>
-    <thead>
-        <tr>
-            <th>身份证号</th>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>移动电话</th>
-            <th>参加考试</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Candidates)
+    else
+    {
+        if (!Model.AttendanceConfirmationExpiresAt.HasValue || Model.AttendanceConfirmationExpiresAt.Value < DateTime.Now)
         {
-            <tr>
-                <td>@item.Person.IDCardNumber</td>
-                <td>@item.Person.DisplayName</td>
-                <td>@(item.Person.Sex == Sex.Male ? "男" : "女")</td>
-                <td>@item.Person.Mobile</td>
-                <td>
-                    @(item.Attendance.HasValue ? (item.Attendance.Value ? "是" : "否") : "未确认")
-                </td>
-                <td>
-                    @if (!Model.WhenPublished.HasValue)
-                    {
-                        <a href="#">删除</a>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <p>
+                @Html.ActionLink("编制准考证...", "EditAdmissionTickets", new { id = Model.Id }, new { @class = "btn btn-default", target = "_blank" })
+                @Html.ActionLink("发放准考证", "ReleaseAdmissionTickets", new { id = Model.Id }, new { @class = "btn btn-default" })
+            </p>
 
+        }
+    }
+    <p>候选人共计@(Model.Candidates.Count)人，其中@(Model.Candidates.Count(c => c.Attendance.HasValue && c.Attendance.Value))人确认参加考试</p>
+    <table class="table table-responsive">
+        <colgroup>
+            <col class="col-md-2" />
+            <col class="col-md-2" />
+            <col class="col-md-2" />
+            <col class="col-md-2" />
+            <col class="col-md-2" />
+            <col class="col-md-2" />
+        </colgroup>
+        <thead>
+            <tr>
+                <th>身份证号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>移动电话</th>
+                <th>参加考试</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Candidates)
+            {
+                <tr>
+                    <td>@item.Person.IDCardNumber</td>
+                    <td>@item.Person.DisplayName</td>
+                    <td>@(item.Person.Sex == Sex.Male ? "男" : "女")</td>
+                    <td>@item.Person.Mobile</td>
+                    <td>
+                        @(item.Attendance.HasValue ? (item.Attendance.Value ? "是" : "否") : "未确认")
+                    </td>
+                    <td>
+                        @if (!Model.WhenPublished.HasValue)
+                        {
+                            <a href="#">删除</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (Model.WhenAdmissionTicketReleased.HasValue)
+{
+    <h2>考生</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>准考证号</th>
+                <th>身份证号</th>
+                <th>姓名</th>
+                <th>性别</th>
+                <th>移动电话</th>
+                <th>考场</th>
+                <th>座位</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Candidates.Where(c => c.Attendance.HasValue && c.Attendance.Value == true))
+            {
+                <tr>
+                    <td>@item.AdmissionNumber</td>
+                    <td>@item.Person.IDCardNumber</td>
+                    <td>@item.Person.DisplayName</td>
+                    <td>@(item.Person.Sex == Sex.Male ? "Male" : "Female")</td>
+                    <td>@item.Person.Mobile</td>
+                    <td>@item.Room</td>
+                    <td>@item.Seat</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+<h2>考试须知</h2>
+<div class="article">
+    @Html.Raw(Model.Notes)
+</div>
 
 @section scripts
 {

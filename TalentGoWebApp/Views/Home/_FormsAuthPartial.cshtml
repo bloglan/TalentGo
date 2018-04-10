@@ -1,9 +1,4 @@
 ﻿
 <h2>您好，@Html.CurrentUser().DisplayName</h2>
-
-@if (Html.CurrentUser().ApplicationForms.Any())
-{
-    <p>@Html.ActionLink("我的报名表", "Index", "ApplicationForm")</p>
-}
-<p>@Html.ActionLink("浏览职位/类别", "Index", "Recruitment")</p>
-<p><a href="javascript:document.getElementById('logoutForm').submit()" class="btn btn-default">注销</a></p>
+<p>要查看报名表、审核进度，查看考试和打印准考证，请访问用户中心。</p>
+<p>@Html.ActionLink("进入用户中心", "Index", "UserProfile", null, new { @class = "btn btn-primary" })</p>

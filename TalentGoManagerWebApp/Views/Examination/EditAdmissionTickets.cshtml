@@ -1,22 +1,22 @@
 ﻿@model IQueryable<Candidate>
 @{
-    ViewBag.Title = "Edit Admission Tickets";
+    ViewBag.Title = "编制准考证";
 }
 
 <div class="page-header">
     <h1>@ViewBag.Title</h1>
 </div>
-<p>Type ticket number, room, seat infomration into text box below, then leave the foucs, the value will be update automaticilly. if ticket number duplicated, system should prompt you and forbid the value.</p>
+<p>键入准考证号、考场号和座位号。注意，准考证号不能重复，考场号和座位号的组合不能重复。全部编制完成后，点击关闭即可。</p>
+<p>该列表按照用户的身份证号码进行排序。</p>
 <table class="table table-condensed">
     <thead>
         <tr>
-            <th>IDCard</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>DateofBirth</th>
-            <th>TicketNumber</th>
-            <th>Room</th>
-            <th>Seat</th>
+            <th>身份证号</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>准考证号</th>
+            <th>考场</th>
+            <th>座位</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +26,6 @@
                 <td>@item.Person.IDCardNumber</td>
                 <td>@item.Person.DisplayName</td>
                 <td>@(item.Person.Sex == Sex.Male ? "Male" : "Female")</td>
-                <td>@item.Person.DateOfBirth.ToString("yyyy-MM-dd")</td>
                 <td><input type="text" data-url="@Url.Action("UpdateTicketNumber")" data-personid="@item.PersonId" data-examid="@item.ExamId" value="@item.AdmissionNumber" /></td>
                 <td><input type="text" data-url="@Url.Action("UpdateRoom")" data-personid="@item.PersonId" data-examid="@item.ExamId" value="@item.Room" /></td>
                 <td><input type="text" data-url="@Url.Action("UpdateSeat")" data-personid="@item.PersonId" data-examid="@item.ExamId" value="@item.Seat" /></td>
@@ -34,6 +33,8 @@
         }
     </tbody>
 </table>
+
+<a href="#" onclick="window.close();" class="btn btn-default">关闭</a>
 
 @section scripts
 {

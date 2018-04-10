@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace TalentGoManagerWebApp.Models
 {
@@ -25,5 +26,11 @@ namespace TalentGoManagerWebApp.Models
         [Display(Name = "声明参加考试的截止日期", Description = "如果不要求考试候选人确认是否参加考试，请将此项留空。")]
         [UIHint("DateTimeMinute")]
         public DateTime? AttendanceConfirmationExpiresAt { get; set; }
+
+        [Display(Name = "考试须知", Description = "参加考试的须知")]
+        [Required]
+        [UIHint("CKEditor")]
+        [AllowHtml]
+        public string Notes { get; set; }
     }
 }

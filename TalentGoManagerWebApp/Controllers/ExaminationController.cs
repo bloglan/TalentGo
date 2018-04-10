@@ -52,6 +52,7 @@ namespace TalentGoManagerWebApp.Controllers
             var plan = new ExaminationPlan(model.Title, model.Address)
             {
                 AttendanceConfirmationExpiresAt = model.AttendanceConfirmationExpiresAt,
+                Notes = model.Notes,
             };
             try
             {
@@ -76,6 +77,7 @@ namespace TalentGoManagerWebApp.Controllers
                 Title = plan.Title,
                 Address = plan.Address,
                 AttendanceConfirmationExpiresAt = plan.AttendanceConfirmationExpiresAt,
+                Notes = plan.Notes,
             };
 
             return View(model);
@@ -93,6 +95,7 @@ namespace TalentGoManagerWebApp.Controllers
             plan.Title = model.Title;
             plan.Address = model.Address;
             plan.AttendanceConfirmationExpiresAt = model.AttendanceConfirmationExpiresAt;
+            plan.Notes = model.Notes;
             try
             {
                 await this.examManager.UpdateAsync(plan);
@@ -155,7 +158,7 @@ namespace TalentGoManagerWebApp.Controllers
             try
             {
                 await this.examManager.PublishAsync(plan);
-                return RedirectToAction("Index");
+                return RedirectToAction("Detail", new { id });
             }
             catch (Exception ex)
             {
@@ -307,7 +310,7 @@ namespace TalentGoManagerWebApp.Controllers
             var examPlan = await this.examManager.FindByIdAsync(examid);
             var recruitmentPlan = await this.recruitmentPlanStore.FindByIdAsync(model.SelectedRecruitmentPlanId);
             await this.candidateManager.ImportFromRecruitmentPlanAsync(examPlan, recruitmentPlan);
-            return View("_OperationSuccess");
+            return RedirectToAction("Detail", new { id = examid });
         }
 
         public ActionResult ImportFromJob(int examid)
@@ -355,7 +358,7 @@ namespace TalentGoManagerWebApp.Controllers
 
         public ActionResult EditAdmissionTickets(int id)
         {
-            var candidates = this.candidateManager.Candidates.AttendanceConfirmed().Where(c => c.ExamId == id);
+            var candidates = this.candidateManager.Candidates.AttendanceConfirmed().Where(c => c.ExamId == id).OrderBy(c => c.Person.IDCardNumber);
             return View(candidates);
         }
 
@@ -408,6 +411,30 @@ namespace TalentGoManagerWebApp.Controllers
             catch (Exception ex)
             {
                 return Json(ex.Message);
+            }
+        }
+
+        public ActionResult ReleaseAdmissionTickets(int id)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ReleaseAdmissionTickets(int id, FormCollection collection)
+        {
+            var plan = await this.examManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
+
+            try
+            {
+                await this.examManager.ReleaseAdmissionTicket(plan);
+                return RedirectToAction("Detail", new { id });
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return View();
             }
         }
     }

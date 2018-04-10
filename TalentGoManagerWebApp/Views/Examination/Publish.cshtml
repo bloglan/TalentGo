@@ -1,14 +1,15 @@
 ﻿
 @{
-    ViewBag.Title = "Publish";
+    ViewBag.Title = "发布考试计划";
 }
 
-<h2>Publish</h2>
-
-<p>Are you sure you want publish this plan?</p>
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>考试计划发布后，相关考试候选人即可看到考试相关信息。是否发布？</p>
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary()
-    <button type="submit" class="btn btn-primary">Publish</button>
-    @Html.ActionLink("Cancel", "Detail", new { id = this.Request["id"] }, new { @class = "btn btn-default" })
+    <button type="submit" class="btn btn-primary">发布</button>
+    @Html.ActionLink("取消", "Detail", new { id = this.ViewContext.RouteData.Values["id"] }, new { @class = "btn btn-default" })
 }

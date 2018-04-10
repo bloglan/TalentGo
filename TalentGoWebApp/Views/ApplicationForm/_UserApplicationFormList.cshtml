@@ -1,0 +1,28 @@
+﻿@model IQueryable<ApplicationForm>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>编号</th>
+            <th>职位/类别</th>
+            <th>招聘计划</th>
+            <th>状态</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if(Model.Any())
+        {
+            foreach(var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Job.Name</td>
+                    <td>@item.Job.Plan.Title</td>
+                    <td>@Html.Partial("_ApplicationStatus", item)</td>
+                    <td>@Html.ActionLink("详细", "Detail", "ApplicationForm", new { id = item.Id }, new { target = "_blank" })</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

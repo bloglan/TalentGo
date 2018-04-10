@@ -1,0 +1,8 @@
+﻿@model IQueryable<Candidate>
+@{
+    ViewBag.Title = "准考证";
+}
+
+<h2>准考证</h2>
+<hr />
+@Html.Action("AdmissionTicketList", "Examination")

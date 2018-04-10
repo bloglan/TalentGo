@@ -31,6 +31,14 @@ namespace TalentGoWebApp.Controllers
             return View(this.manager.ApplicationForms.Where(p => p.PersonId == person.Id));
         }
 
+        [ChildActionOnly]
+        public ActionResult UserApplicationForms()
+        {
+            var userId = this.CurrentUser().Id;
+            var forms = this.manager.ApplicationForms.Where(a => a.PersonId == userId);
+            return PartialView("_UserApplicationFormList", forms);
+        }
+
         /// <summary>
         /// 报名（填写和编辑报名表）
         /// </summary>

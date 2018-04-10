@@ -34,7 +34,7 @@ namespace TalentGoWebApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("云南省烟草公司曲靖市公司")]
+        [global::System.Configuration.DefaultSettingValueAttribute("曲靖市烟草专卖局（公司）")]
         public string OrganizationName {
             get {
                 return ((string)(this["OrganizationName"]));
@@ -47,6 +47,24 @@ namespace TalentGoWebApp.Properties {
         public string SystemTitle {
             get {
                 return ((string)(this["SystemTitle"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("云南省曲靖市麒麟区官坡巷51号")]
+        public string OrganizationAddress {
+            get {
+                return ((string)(this["OrganizationAddress"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("655000")]
+        public string PostalCode {
+            get {
+                return ((string)(this["PostalCode"]));
             }
         }
     }

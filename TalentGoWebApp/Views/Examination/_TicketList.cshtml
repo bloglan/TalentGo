@@ -1,0 +1,44 @@
+﻿@model IQueryable<Candidate>
+
+@if (Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h2 class="panel-title">@item.Plan.Title</h2>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>科目</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var subject in item.Plan.Subjects)
+                    {
+                        <tr>
+                            <td>@subject.Subject</td>
+                            <td>@subject.StartTime.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@subject.EndTime.ToString("HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="panel-body">
+                <p>考场地址：@item.Plan.Address</p>
+                <p>准考证号: @item.AdmissionNumber</p>
+                <p>考场号: @item.Room</p>
+                <p>座位号: @item.Seat</p>
+                <p class="text-right">@Html.ActionLink("打印准考证", "Ticket", "Examination", new { id = item.ExamId }, new { @class = "btn btn-default", target = "_blank" })</p>
+            </div>
+        </div>
+    }
+
+}
+else
+{
+    <p>没有可用的准考证。</p>
+}

@@ -138,6 +138,9 @@
     <Reference Include="Microsoft.Owin.Security.Twitter, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.Twitter.4.0.0\lib\net451\Microsoft.Owin.Security.Twitter.dll</HintPath>
     </Reference>
+    <Reference Include="Neodynamic.Web.MVC.Barcode, Version=10.0.2000.0, Culture=neutral, PublicKeyToken=c6b33c3093a0d4cd, processorArchitecture=MSIL">
+      <HintPath>..\packages\Neodynamic.Web.MVC.Barcode.10.0.2018.328\lib\Neodynamic.Web.MVC.Barcode.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -239,6 +242,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\AttendanceConfirmModel.cs" />
     <Compile Include="Models\ReadIdEditViewModel.cs" />
     <Compile Include="Models\ApplicationFormEditViewModel.cs" />
     <Compile Include="Models\FileUploadResultModel.cs" />
@@ -749,7 +753,6 @@
     <Content Include="Views\Shared\EditorTemplates\DateTimeDay.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\DateTimeMinute.cshtml" />
     <Content Include="Views\Notice\ArticleListGroup.cshtml" />
-    <Content Include="Views\Shared\_LayoutBlank.cshtml" />
     <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
     <Content Include="Views\Help\Support.cshtml" />
     <Content Include="Views\Help\FAQ.cshtml" />
@@ -783,7 +786,7 @@
     <Content Include="Views\Shared\_RealIdOperation.cshtml" />
     <Content Include="Views\Shared\RealIdRequired.cshtml" />
     <Content Include="Views\UserProfile\ApplicationForm.cshtml" />
-    <Content Include="Views\UserProfile\AdmissionTicket.cshtml" />
+    <Content Include="Views\UserProfile\AdmissionTickets.cshtml" />
     <Content Include="Views\UserProfile\ChangeEmail.cshtml" />
     <Content Include="Views\UserProfile\ChangePhoneNumber.cshtml" />
     <Content Include="Views\Shared\_AuditState.cshtml" />
@@ -794,6 +797,13 @@
     <Content Include="Views\Examination\_AttendanceConfirmationState.cshtml" />
     <Content Include="Views\Examination\_AttendanceConfirmationOperations.cshtml" />
     <Content Include="Views\Examination\Ticket.cshtml" />
+    <Content Include="Views\Examination\_TicketList.cshtml" />
+    <Content Include="Views\Shared\_BlankLayout.cshtml" />
+    <Content Include="Views\ApplicationForm\_UserApplicationFormList.cshtml" />
+    <Content Include="Views\UserProfile\Exam.cshtml" />
+    <Content Include="Views\Examination\_UserExaminationList.cshtml" />
+    <Content Include="Views\Examination\AttendanceConfirm.cshtml" />
+    <Content Include="Views\Shared\_OperationSuccess.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

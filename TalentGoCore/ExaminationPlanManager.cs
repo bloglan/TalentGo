@@ -75,7 +75,7 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(plan));
             }
             if (plan.WhenPublished.HasValue)
-                throw new InvalidOperationException("Can not update plan if published.");
+                throw new InvalidOperationException("已发布的计划不能删除。");
 
             plan.WhenChanged = DateTime.Now;
 
@@ -94,7 +94,7 @@ namespace TalentGo
                 throw new ArgumentNullException(nameof(plan));
             }
             if (plan.WhenPublished.HasValue)
-                throw new InvalidOperationException("Cannot delete plan if published.");
+                throw new InvalidOperationException("已发布的计划不能删除。");
 
             await this.Store.DeleteAsync(plan);
         }
@@ -110,6 +110,9 @@ namespace TalentGo
             {
                 throw new ArgumentNullException(nameof(plan));
             }
+
+            if (!plan.Subjects.Any())
+                throw new InvalidOperationException("该考试计划没有任何考试科目。");
 
             if (!plan.Candidates.Any())
                 throw new InvalidOperationException("没有任何考试候选人。");
@@ -154,7 +157,7 @@ namespace TalentGo
             {
                 throw new ArgumentNullException(nameof(plan));
             }
-            if (plan.Candidates.Any(c => c.Attendance.Value && string.IsNullOrEmpty(c.AdmissionNumber)))
+            if (plan.Candidates.Any(c => c.Attendance.HasValue && c.Attendance.Value == true && string.IsNullOrEmpty(c.AdmissionNumber)))
                 throw new InvalidOperationException("尚未对已确认参加考试的人员编制准考证。");
 
             plan.WhenAdmissionTicketReleased = DateTime.Now;
