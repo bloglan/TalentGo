@@ -29,6 +29,7 @@ namespace TalentGoManagerWebApp
             builder.RegisterType<NoneOperationEmailService>().AsImplementedInterfaces();
             builder.RegisterType<MemorySMSQueueStore>().AsImplementedInterfaces();
             builder.RegisterType<RecruitmentPlanManager>().PropertiesAutowired();
+            builder.RegisterType<ExaminationPlanManager>().PropertiesAutowired();
         }
     }
 }

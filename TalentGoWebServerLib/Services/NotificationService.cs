@@ -96,7 +96,7 @@ namespace TalentGo.Services
 
             foreach (var candidate in plan.Candidates)
             {
-                await this.smsService.SendAsync(new string[] { candidate.Person.Mobile }, examinationPlanPublisedMessageTemplateId, candidate.Person.DisplayName, "近期", candidate.Plan.Address);
+                await this.smsService.SendAsync(new string[] { candidate.Person.Mobile }, examinationPlanPublisedMessageTemplateId, candidate.Person.DisplayName);
             }
         }
 
