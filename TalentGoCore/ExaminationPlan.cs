@@ -12,6 +12,7 @@ namespace TalentGo
         /// <summary>
         /// 
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         protected ExaminationPlan()
         {
             this.WhenCreated = DateTime.Now;
@@ -24,6 +25,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="title"></param>
         /// <param name="address"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ExaminationPlan(string title, string address)
             : this()
         {

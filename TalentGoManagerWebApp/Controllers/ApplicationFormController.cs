@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using TalentGo;
-using TalentGo.Models;
 using TalentGo.Web;
 using System;
 using TalentGoManagerWebApp.Models;

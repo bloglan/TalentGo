@@ -15,6 +15,7 @@ namespace TalentGo
         /// 
         /// </summary>
         /// <param name="store"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ExamineeManager(IExamineeStore store)
         {
             this.Store = store;

@@ -35,7 +35,7 @@ namespace TalentGo.Web
                 catch (Exception ex)
                 {
 					//出错
-					throw ex;
+					throw;
                     //Console.WriteLine("邮件发送失败："+ex.ToString());
                 }
             }

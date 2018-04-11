@@ -9,6 +9,7 @@ namespace TalentGoCore.Tests
 {
     class StubPerson : Person
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public StubPerson()
             : base()
         {

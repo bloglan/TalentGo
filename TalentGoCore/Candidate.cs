@@ -27,6 +27,7 @@ namespace TalentGo
         /// <param name="plan"></param>
         /// <param name="person"></param>
         /// <param name="applyFor"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Candidate(ExaminationPlan plan, Person person, string applyFor = null)
             : this()
         {

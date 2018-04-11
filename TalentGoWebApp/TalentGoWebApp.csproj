@@ -744,7 +744,6 @@
     <Content Include="Views\ApplicationForm\Enroll.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\Sex.cshtml" />
-    <Content Include="Views\Shared\OperationResult.cshtml" />
     <Content Include="Views\Notice\ArticlePart.cshtml" />
     <Content Include="Views\Notice\Detail.cshtml" />
     <Content Include="Views\Notice\Index.cshtml" />

@@ -31,6 +31,7 @@ namespace TalentGo.Web
         /// <param name="givenName"></param>
         /// <param name="mobile"></param>
         /// <param name="email"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public WebUser(string idCardNumber, string surname, string givenName, string mobile, string email)
             : this()
         {
