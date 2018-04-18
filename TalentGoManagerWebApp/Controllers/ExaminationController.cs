@@ -313,9 +313,29 @@ namespace TalentGoManagerWebApp.Controllers
             return RedirectToAction("Detail", new { id = examid });
         }
 
-        public ActionResult ImportFromJob(int examid)
+        public async Task<ActionResult> ImportFromJob(int examid)
         {
-            return this.FeatureNotImplemented();
+            var examPlan = await this.examManager.FindByIdAsync(examid);
+            if (examPlan == null)
+                return HttpNotFound();
+
+            this.ViewData["JobList"] = this.GetSelectableJobList();
+            var model = new ImportFromJobEditModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ImportFromJob(int examid, ImportFromJobEditModel model)
+        {
+            this.ViewData["JobList"] = this.GetSelectableJobList();
+
+            if (!this.ModelState.IsValid)
+                return View(model);
+
+            var examPlan = await this.examManager.FindByIdAsync(examid);
+            var job = await this.jobStore.FindByIdAsync(model.SelectedJobId);
+            await this.candidateManager.ImportFromJobAsync(examPlan, job);
+            return RedirectToAction("Detail", new { id = examid });
         }
 
         public ActionResult ImportFromExaminationPlan(int examid)
@@ -333,6 +353,17 @@ namespace TalentGoManagerWebApp.Controllers
                     Text = plan.Title
                 };
             }
+        }
+
+        IEnumerable<SelectListItem> GetSelectableJobList()
+        {
+            return from i in this.jobStore.Jobs
+                   where i.Plan.WhenAuditCommited.HasValue
+                   select new SelectListItem()
+                   {
+                       Value = i.Id.ToString(),
+                       Text = i.Name + "|" + i.Plan.Title,
+                   };
         }
 
         IEnumerable<SelectListItem> GetJobList()

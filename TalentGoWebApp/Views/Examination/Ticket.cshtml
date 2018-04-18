@@ -5,22 +5,36 @@
 }
 
 <p class="hidden-print text-right"><a href="#" onclick="window.print();" class="btn btn-primary">打印</a></p>
-
 <div class="page-header">
-    <h1>@(TalentGoWebApp.Properties.Settings.Default.OrganizationName)@(Model.Plan.Title)准考证</h1>
+    <h1><small>@(TalentGoWebApp.Properties.Settings.Default.OrganizationName)@(Model.Plan.Title)准考证</small></h1>
 </div>
-<p>
-    准考证号：@Model.AdmissionNumber @Html.Raw(BarcodeHtmlHelper.EmbedBarcodeImage("S=" + Symbology.Code128.ToString() + "&C=" + Model.AdmissionNumber, "准考证号", "", ""))
-</p>
-<p>姓名：@Model.Person.DisplayName 性别：@(Model.Person.Sex == Sex.Male ? "男" : "女") 身份证号：@Model.Person.IDCardNumber</p>
-<p>申请职位/类别：@Model.ApplyFor</p>
-<p>考场地址：@Model.Plan.Address 考场：@Model.Room 座位：@Model.Seat</p>
-
-<h2>考试科目</h2>
-<table class="table table-condensed">
+<p class="text-right">@Model.Plan.WhenAdmissionTicketReleased.Value.ToString("yyyy年MM月dd日")</p>
+<p class="text-right">@Html.Raw(BarcodeHtmlHelper.EmbedBarcodeImage("S=" + Symbology.Code128.ToString() + "&C=" + Model.AdmissionNumber, "准考证号", "", ""))</p>
+<table class="table table-bordered table-condensed">
+    <colgroup>
+        <col class="col-md-6" />
+        <col class="col-md-6" />
+    </colgroup>
+    <tbody>
+        <tr>
+            <td width="50%">
+                <p>准考证号：@Model.AdmissionNumber </p>
+                <p>身份证号：@Model.Person.IDCardNumber</p>
+                <p>姓名：@Model.Person.DisplayName 性别：@(Model.Person.Sex == Sex.Male ? "男" : "女")</p>
+                <p>申请职位/类别：@Model.ApplyFor</p>
+            </td>
+            <td width="50%">
+                <p>考场地址：@Model.Plan.Address </p>
+                <p>考场号：@Model.Room</p>
+                <p>座位号：@Model.Seat</p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<table class="table table-bordered table-condensed">
     <thead>
         <tr>
-            <th>名称</th>
+            <th>科目</th>
             <th>开始时间</th>
             <th>结束时间</th>
         </tr>
@@ -37,7 +51,7 @@
     </tbody>
 </table>
 
-<h2>考试须知</h2>
-<div class="article">
+<h2><small>考试须知</small></h2>
+<div class="article small">
     @Html.Raw(Model.Plan.Notes)
 </div>

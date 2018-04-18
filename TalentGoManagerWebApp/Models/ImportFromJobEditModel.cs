@@ -6,9 +6,9 @@ using System.Web;
 
 namespace TalentGoManagerWebApp.Models
 {
-    public class ImportFromRecruitmentPlanEditModel
+    public class ImportFromJobEditModel
     {
-        [Display(Name = "招聘计划")]
-        public int SelectedRecruitmentPlanId { get; set; }
+        [Display(Name = "职位/类别")]
+        public int SelectedJobId { get; set; }
     }
 }

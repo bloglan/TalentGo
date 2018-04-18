@@ -189,6 +189,7 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\RecruitmentPlanController.cs" />
     <Compile Include="Controllers\PersonController.cs" />
+    <Compile Include="Models\ImportFromJobEditModel.cs" />
     <Compile Include="Models\ImportFromRecruitmentPlanEditModel.cs" />
     <Compile Include="Models\SubjectEditViewModel.cs" />
     <Compile Include="Models\EnrollmentDetailViewModel.cs" />
