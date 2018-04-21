@@ -21,7 +21,7 @@ namespace TalentGoManagerWebApp.Controllers
             thumbnailPreset = new JpegThumbnailPreset(80)
             {
                 ThumbnailSize = new System.Drawing.Size(200, 200),
-                ThumbnailResizeMode = ResizeMode.Fit,
+                ThumbnailResizeMode = ResizeMode.FitCut,
                 BackgroundColor = System.Drawing.Color.White,
             };
         }
