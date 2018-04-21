@@ -95,5 +95,10 @@ namespace TalentGo
         /// 座位号。
         /// </summary>
         public virtual string Seat { get; internal set; }
+
+        /// <summary>
+        /// 证件照。
+        /// </summary>
+        public virtual string HeadImageFile { get; set; }
     }
 }

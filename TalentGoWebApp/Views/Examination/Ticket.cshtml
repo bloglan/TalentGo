@@ -5,29 +5,26 @@
 }
 
 <p class="hidden-print text-right"><a href="#" onclick="window.print();" class="btn btn-primary">打印</a></p>
-<div class="page-header">
-    <h1><small>@(TalentGoWebApp.Properties.Settings.Default.OrganizationName)@(Model.Plan.Title)准考证</small></h1>
-</div>
-<p class="text-right">@Model.Plan.WhenAdmissionTicketReleased.Value.ToString("yyyy年MM月dd日")</p>
-<p class="text-right">@Html.Raw(BarcodeHtmlHelper.EmbedBarcodeImage("S=" + Symbology.Code128.ToString() + "&C=" + Model.AdmissionNumber, "准考证号", "", ""))</p>
+<h1 class="text-center"><small>@(TalentGoWebApp.Properties.Settings.Default.OrganizationName)@(Model.Plan.Title)准考证</small></h1>
 <table class="table table-bordered table-condensed">
-    <colgroup>
-        <col class="col-md-6" />
-        <col class="col-md-6" />
-    </colgroup>
     <tbody>
         <tr>
-            <td width="50%">
-                <p>准考证号：@Model.AdmissionNumber </p>
-                <p>身份证号：@Model.Person.IDCardNumber</p>
-                <p>姓名：@Model.Person.DisplayName 性别：@(Model.Person.Sex == Sex.Male ? "男" : "女")</p>
-                <p>申请职位/类别：@Model.ApplyFor</p>
+            <td width="87%">
+                <p><strong>准考证号：</strong>@Model.AdmissionNumber </p>
+                <p><strong>身份证号：</strong>@Model.Person.IDCardNumber</p>
+                <p><strong>姓名：</strong>@Model.Person.DisplayName <strong>性别：</strong>@(Model.Person.Sex == Sex.Male ? "男" : "女")</p>
+                <p><strong>申请职位/类别：</strong>@Model.ApplyFor</p>
             </td>
-            <td width="50%">
-                <p>考场地址：@Model.Plan.Address </p>
-                <p>考场号：@Model.Room</p>
-                <p>座位号：@Model.Seat</p>
+            <td>
+                <img src="@Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile })" class="img-responsive" style="height: 3.5cm;" />
             </td>
+        </tr>
+        <tr>
+            <td>
+                <p><strong>考场地址：</strong>@Model.Plan.Address </p>
+                <p><strong>考场号：</strong>@Model.Room <strong>座位号：</strong>@Model.Seat</p>
+            </td>
+            <td>@Html.Raw(BarcodeHtmlHelper.EmbedBarcodeImage("S=" + Symbology.Code128.ToString() + "&C=" + Model.AdmissionNumber, "准考证号", "center-block img-responsive", ""))</td>
         </tr>
     </tbody>
 </table>
@@ -55,3 +52,15 @@
 <div class="article small">
     @Html.Raw(Model.Plan.Notes)
 </div>
+<p class="text-right">@TalentGoWebApp.Properties.Settings.Default.OrganizationName  @Model.Plan.WhenAdmissionTicketReleased.Value.ToString("yyyy年MM月dd日")</p>
+
+@section scripts
+{
+    
+    <script>
+        $(function () {
+            window.print();
+        });
+    </script>
+    
+    }
