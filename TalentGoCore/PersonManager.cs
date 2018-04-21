@@ -106,7 +106,6 @@ namespace TalentGo
             if (person.WhenRealIdCommited.HasValue)
                 throw new InvalidOperationException("已提交身份验证后不能修改身份信息。");
 
-            //TODO：填充字段
             person.Surname = surname;
             person.GivenName = givenName;
             person.Ethnicity = ethnicity;

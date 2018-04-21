@@ -69,6 +69,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.DirectoryServices.AccountManagement" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
@@ -116,6 +117,10 @@
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\TemplatedShortMessage.cs" />
     <Compile Include="Services\EaseIMTemplatedShortMessageService.cs" />
+    <Compile Include="Utilities\JpegThumbnailPreset.cs" />
+    <Compile Include="Utilities\ResizeMode.cs" />
+    <Compile Include="Utilities\ThumbnailPreset.cs" />
+    <Compile Include="Utilities\ThumbnailProcessor.cs" />
     <Compile Include="Web\DataExporter.cs" />
     <Compile Include="Web\DomainUser.cs" />
     <Compile Include="Web\DomainUserExtensions.cs" />
