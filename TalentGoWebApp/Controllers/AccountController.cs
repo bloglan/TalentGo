@@ -500,9 +500,17 @@ namespace TalentGoWebApp.Controllers
                 return RedirectToAction("ResetPasswordViaMobile", "Account", new { code = token });
             }
 
-            //创建验证码并发送
+            //发送验证码
             //await this.phoneNumberValidationService.SendValidationCodeAsync(model.Mobile);
-
+            using (var client = new TalentGo.ValidationCodeSvc.VerificationCodeClient())
+            {
+                try
+                {
+                    var result = await client.SendAsync(model.Mobile);
+                }
+                catch
+                { }
+            }
             return RedirectToAction("ResetPasswordViaMobile", "Account", new { code = token });
 
 
@@ -542,6 +550,22 @@ namespace TalentGoWebApp.Controllers
                 return View("ResetPasswordConfirmation");
             }
             DateTime now = DateTime.Now;
+
+            using (var client = new TalentGo.ValidationCodeSvc.VerificationCodeClient())
+            {
+                try
+                {
+                    var validationResult = await client.VerifyAsync(model.Mobile, model.ValidateCode);
+                    if (!validationResult)
+                        return RedirectToAction("ResetPasswordConfirmation", "Account");
+
+                }
+                catch
+                {
+                    return RedirectToAction("ResetPasswordConfirmation", "Account");
+
+                }
+            }
             //if (!await this.phoneNumberValidationService.ValidateAsync(model.Mobile, model.ValidateCode))
             //    return View("ResetPasswordConfirmation");
 
