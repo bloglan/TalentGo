@@ -387,6 +387,17 @@ namespace TalentGoManagerWebApp.Controllers
             return View(plan);
         }
 
+        public async Task<ActionResult> PrintExaminationPlan(int id)
+        {
+            var plan = await this.examManager.FindByIdAsync(id);
+            if (plan == null)
+                return HttpNotFound();
+            if (!plan.WhenAdmissionTicketReleased.HasValue)
+                return HttpNotFound();
+
+            return View(plan);
+        }
+
         public ActionResult EditAdmissionTickets(int id)
         {
             var candidates = this.candidateManager.Candidates.AttendanceConfirmed().Where(c => c.ExamId == id).OrderBy(c => c.Person.IDCardNumber);
