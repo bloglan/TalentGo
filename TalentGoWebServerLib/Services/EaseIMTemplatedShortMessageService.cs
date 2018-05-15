@@ -86,6 +86,7 @@ namespace TalentGo.Services
                 sb.Append("templateid=" + item.TemplateId);
                 sb.Append("&mobiles=" + JsonConvert.SerializeObject(item.To));
                 sb.Append("&params=" + JsonConvert.SerializeObject(item.Args));
+                Trace.TraceInformation("HTTP Body:{0}", sb.ToString());
 
                 using (var writer = new StreamWriter(request.GetRequestStream()))
                 {
