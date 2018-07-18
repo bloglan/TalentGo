@@ -41,7 +41,7 @@ namespace MessageSender
                     Console.WriteLine("已提交！");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
                 throw;

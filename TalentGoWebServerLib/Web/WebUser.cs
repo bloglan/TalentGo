@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Changingsoft.Business;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -38,7 +39,7 @@ namespace TalentGo.Web
             var cardnumber = ChineseIDCardNumber.Parse(idCardNumber);
             this.UserName = cardnumber.ToString();
             this.IDCardNumber = cardnumber.ToString();
-            this.Sex = cardnumber.IsMale ? Sex.Male : Sex.Female;
+            this.Sex = cardnumber.Sex;
             this.DateOfBirth = cardnumber.DateOfBirth;
             this.Surname = surname;
             this.GivenName = givenName;

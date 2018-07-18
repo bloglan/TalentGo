@@ -15,7 +15,7 @@ namespace TalentGoCore.Tests
         {
             this.Id = Guid.NewGuid();
             this.IDCardNumber = "IDCardNumber";
-            this.Sex = Sex.Male;
+            this.Sex = Changingsoft.Business.Sex.Male;
             this.DateOfBirth = new DateTime(2000, 1, 1);
             this.Surname = "Surname";
             this.GivenName = "GivenName";
