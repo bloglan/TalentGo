@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using Changingsoft.Business;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,13 +32,14 @@ namespace TalentGo.Web
         /// <param name="givenName"></param>
         /// <param name="mobile"></param>
         /// <param name="email"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public WebUser(string idCardNumber, string surname, string givenName, string mobile, string email)
             : this()
         {
             var cardnumber = ChineseIDCardNumber.Parse(idCardNumber);
             this.UserName = cardnumber.ToString();
             this.IDCardNumber = cardnumber.ToString();
-            this.Sex = cardnumber.IsMale ? Sex.Male : Sex.Female;
+            this.Sex = cardnumber.Sex;
             this.DateOfBirth = cardnumber.DateOfBirth;
             this.Surname = surname;
             this.GivenName = givenName;

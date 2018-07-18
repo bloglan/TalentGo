@@ -13,6 +13,7 @@ namespace TalentGo
         /// <summary>
         /// Default Constructor.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         protected RecruitmentPlan()
         {
             this.Jobs = new HashSet<Job>();

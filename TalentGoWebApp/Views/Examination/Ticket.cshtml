@@ -5,22 +5,33 @@
 }
 
 <p class="hidden-print text-right"><a href="#" onclick="window.print();" class="btn btn-primary">打印</a></p>
-
-<div class="page-header">
-    <h1>@(TalentGoWebApp.Properties.Settings.Default.OrganizationName)@(Model.Plan.Title)准考证</h1>
-</div>
-<p>
-    准考证号：@Model.AdmissionNumber @Html.Raw(BarcodeHtmlHelper.EmbedBarcodeImage("S=" + Symbology.Code128.ToString() + "&C=" + Model.AdmissionNumber, "准考证号", "", ""))
-</p>
-<p>姓名：@Model.Person.DisplayName 性别：@(Model.Person.Sex == Sex.Male ? "男" : "女") 身份证号：@Model.Person.IDCardNumber</p>
-<p>申请职位/类别：@Model.ApplyFor</p>
-<p>考场地址：@Model.Plan.Address 考场：@Model.Room 座位：@Model.Seat</p>
-
-<h2>考试科目</h2>
-<table class="table table-condensed">
+<h1 class="text-center"><small>@(TalentGoWebApp.Properties.Settings.Default.OrganizationName)@(Model.Plan.Title)准考证</small></h1>
+<table class="table table-bordered table-condensed">
+    <tbody>
+        <tr>
+            <td width="87%">
+                <p><strong>准考证号：</strong>@Model.AdmissionNumber </p>
+                <p><strong>身份证号：</strong>@Model.Person.IDCardNumber</p>
+                <p><strong>姓名：</strong>@Model.Person.DisplayName <strong>性别：</strong>@(Model.Person.Sex == Sex.Male ? "男" : "女")</p>
+                <p><strong>申请职位/类别：</strong>@Model.ApplyFor</p>
+            </td>
+            <td>
+                <img src="@Url.Action("Thumbnail", "File", new { id = Model.HeadImageFile })" class="img-responsive center-block" style="height: 3.5cm;" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p><strong>考场地址：</strong>@Model.Plan.Address </p>
+                <p><strong>考场号：</strong>@Model.Room <strong>座位号：</strong>@Model.Seat</p>
+            </td>
+            <td>@Html.Raw(BarcodeHtmlHelper.EmbedBarcodeImage("S=" + Symbology.Code128.ToString() + "&C=" + Model.AdmissionNumber, "准考证号", "center-block img-responsive", ""))</td>
+        </tr>
+    </tbody>
+</table>
+<table class="table table-bordered table-condensed">
     <thead>
         <tr>
-            <th>名称</th>
+            <th>科目</th>
             <th>开始时间</th>
             <th>结束时间</th>
         </tr>
@@ -37,7 +48,19 @@
     </tbody>
 </table>
 
-<h2>考试须知</h2>
-<div class="article">
+<h2><small>考试须知</small></h2>
+<div class="article small">
     @Html.Raw(Model.Plan.Notes)
 </div>
+<p class="text-right">@TalentGoWebApp.Properties.Settings.Default.OrganizationName  @Model.Plan.WhenAdmissionTicketReleased.Value.ToString("yyyy年MM月dd日")</p>
+
+@section scripts
+{
+    
+    <script>
+        $(function () {
+            window.print();
+        });
+    </script>
+    
+    }

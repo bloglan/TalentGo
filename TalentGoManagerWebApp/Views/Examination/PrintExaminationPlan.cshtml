@@ -1,0 +1,97 @@
+﻿@model ExaminationPlan
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<p class="text-right hidden-print"><a href="#" onclick="window.print();" class="btn btn-primary btn-sm">打印</a></p>
+
+<div class="page-header">
+    <h1>@ViewBag.Title</h1>
+</div>
+<p>考场地址：@Model.Address</p>
+<p>发布时间：@(Model.WhenPublished.HasValue ? Model.WhenPublished.Value.ToString() : "未发布")</p>
+@if (Model.AttendanceConfirmationExpiresAt.HasValue)
+{
+    <p>声明截止时间: @Model.AttendanceConfirmationExpiresAt.Value.ToString("MM-dd HH:mm") （@Model.AttendanceConfirmationExpiresAt.Value.SmartShow()）</p>
+
+}
+
+<hr />
+<h2>科目</h2>
+<table class="table table-responsive">
+    <thead>
+        <tr>
+            <th>科目</th>
+            <th>考试开始时间</th>
+            <th>考试结束时间</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Subjects)
+        {
+            <tr>
+                <td>@item.Subject</td>
+                <td>@item.StartTime.ToString("MM-dd HH:mm")</td>
+                <td>@item.EndTime.ToString("MM-dd HH:mm")</td>
+                <td>
+                    @if (!Model.WhenPublished.HasValue)
+                    {
+                        @Html.ActionLink("编辑", "EditSubject", new { id = item.Id, planId = Model.Id })
+                        <a href="#" class="subject-remove" data-planid="@Model.Id" data-subjectid="@item.Id">删除</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+@if (Model.WhenAdmissionTicketReleased.HasValue)
+{
+    <h2>参试人名单</h2>
+    <p>以准考证号排序</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>照片</th>
+                <th>参试人信息</th>
+                <th>考试信息</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Candidates.Where(c => c.Attendance.HasValue && c.Attendance.Value == true).OrderBy(c => c.AdmissionNumber))
+            {
+                <tr>
+                    <td>
+                        <img src="@Url.Action("Thumbnail", "File", new { id = item.HeadImageFile })" class="img-responsive" style="height: 3.5cm;" />
+                    </td>
+                    <td>
+                        <p>身份证号：@item.Person.IDCardNumber</p>
+                        <p>姓名：@item.Person.DisplayName</p>
+                        <p>性别：@(item.Person.Sex == Sex.Male ? "男" : "女")</p>
+                        <p>民族：@item.Person.Ethnicity</p>
+                    </td>
+                    <td>
+                        <p>准考证号：@item.AdmissionNumber</p>
+                        <p>考场号：@item.Room</p>
+                        <p>座位号：@item.Seat</p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@section scripts
+{
+
+    <script>
+        $(function () {
+            window.print();
+        });
+    </script>
+
+}

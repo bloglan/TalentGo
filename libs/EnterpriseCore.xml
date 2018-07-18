@@ -1,0 +1,324 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EnterpriseCore</name>
+    </assembly>
+    <members>
+        <member name="T:Changingsoft.Business.ChineseIDCardNumber">
+            <summary>
+            表示一个中华人民共和国居民身份证号。
+            </summary>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.#ctor(System.Int32,System.Int32,System.DateTime,System.Int32)">
+            <summary>
+            使用指定的版本、区划代码、生日和序列号创建一个身份证号码。
+            </summary>
+            <param name="Version"></param>
+            <param name="RegionCode"></param>
+            <param name="DateOfBirth"></param>
+            <param name="Sequence"></param>
+        </member>
+        <member name="P:Changingsoft.Business.ChineseIDCardNumber.Version">
+            <summary>
+            获取或设置该身份证号码的版本。
+            </summary>
+        </member>
+        <member name="P:Changingsoft.Business.ChineseIDCardNumber.RegionCode">
+            <summary>
+            获取或设置行政区划编码。
+            </summary>
+        </member>
+        <member name="P:Changingsoft.Business.ChineseIDCardNumber.DateOfBirth">
+            <summary>
+            获取或设置出生日期。
+            </summary>
+        </member>
+        <member name="P:Changingsoft.Business.ChineseIDCardNumber.Sequence">
+            <summary>
+            获取或设置序列号。
+            </summary>
+        </member>
+        <member name="P:Changingsoft.Business.ChineseIDCardNumber.Sex">
+            <summary>
+            获取一个值，指示性别。
+            </summary>
+        </member>
+        <member name="P:Changingsoft.Business.ChineseIDCardNumber.NumberString">
+            <summary>
+            获取一个值，表示身份证号码。
+            </summary>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.ToString">
+            <summary>
+            已重写，输入身份证号码。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.GetHashCode">
+            <summary>
+            已重写。获取用于哈希表的对象哈希。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.ToString(System.Int32)">
+            <summary>
+            使用指定的版本号获取对应格式的身份证号码。
+            </summary>
+            <param name="Version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.op_Equality(Changingsoft.Business.ChineseIDCardNumber,Changingsoft.Business.ChineseIDCardNumber)">
+            <summary>
+            已重载。比较两个身份证号码是相等性。
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.op_Inequality(Changingsoft.Business.ChineseIDCardNumber,Changingsoft.Business.ChineseIDCardNumber)">
+            <summary>
+            已重载。比较两个身份证号码的不等性。
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.Equals(System.Object)">
+            <summary>
+            已重载，比较两个身份证号码的相等性。该方法的行为与相等运算符重载的行为一致。
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.Parse(System.String)">
+            <summary>
+            将输入的字符串匹配为身份证号码。
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.TryParse(System.String,Changingsoft.Business.ChineseIDCardNumber@)">
+            <summary>
+            尝试将输入的字符串匹配为一个身份证号码。
+            </summary>
+            <param name="s">输入的字符串。</param>
+            <param name="number">若匹配正确，则输出改身份证号码结构。否则为默认值。</param>
+            <returns>若匹配成功，返回true，否则为false.</returns>
+        </member>
+        <member name="M:Changingsoft.Business.ChineseIDCardNumber.IsChineseIDCardNumber(System.String)">
+            <summary>
+            确定一个字符串是否为身份证号码。
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Changingsoft.Business.ChineseIDCardNumberVersion">
+            <summary>
+            身份证号码的版本。
+            </summary>
+        </member>
+        <member name="F:Changingsoft.Business.ChineseIDCardNumberVersion.V1">
+            <summary>
+            表示第一代身份证号码。
+            </summary>
+        </member>
+        <member name="F:Changingsoft.Business.ChineseIDCardNumberVersion.V2">
+            <summary>
+            表示第二代身份证号码。
+            </summary>
+        </member>
+        <member name="T:Changingsoft.Business.OrganizationCode">
+            <summary>
+            表示组织机构代码证。
+            </summary>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.#ctor(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="Code"></param>
+        </member>
+        <member name="P:Changingsoft.Business.OrganizationCode.Code">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Changingsoft.Business.OrganizationCode.CheckCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.ToString(System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="AsMachineFormat"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.GetHashCode">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.Equals(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.op_Equality(Changingsoft.Business.OrganizationCode,Changingsoft.Business.OrganizationCode)">
+            <summary>
+            已重载。
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.op_Inequality(Changingsoft.Business.OrganizationCode,Changingsoft.Business.OrganizationCode)">
+            <summary>
+            已重载。
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.Parse(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.TryParse(System.String,Changingsoft.Business.OrganizationCode@)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <param name="result"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.OrganizationCode.IsOrganizationCode(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Changingsoft.Business.Sex">
+            <summary>
+            表示生理性别。
+            </summary>
+        </member>
+        <member name="F:Changingsoft.Business.Sex.Male">
+            <summary>
+            男
+            </summary>
+        </member>
+        <member name="F:Changingsoft.Business.Sex.Female">
+            <summary>
+            女
+            </summary>
+        </member>
+        <member name="F:Changingsoft.Business.Sex.Other">
+            <summary>
+            其他
+            </summary>
+        </member>
+        <member name="T:Changingsoft.Business.USCI">
+            <summary>
+            表示一个统一社会信用代码。
+            </summary>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.#ctor(System.String)">
+            <summary>
+            使用指定的代码值初始化统一社会信用代码。
+            </summary>
+            <param name="code"></param>
+        </member>
+        <member name="P:Changingsoft.Business.USCI.Code">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Changingsoft.Business.USCI.CheckCode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.ToString">
+            <summary>
+            已重写，输出统一社会信用代码的字符串形式。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.GetHashCode">
+            <summary>
+            已重写，输出统一社会信用代码的哈希。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.Equals(System.Object)">
+            <summary>
+            已重写。
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.op_Equality(Changingsoft.Business.USCI,Changingsoft.Business.USCI)">
+            <summary>
+            已重载。
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.op_Inequality(Changingsoft.Business.USCI,Changingsoft.Business.USCI)">
+            <summary>
+            已重载。
+            </summary>
+            <param name="a"></param>
+            <param name="b"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Changingsoft.Business.USCI.charset">
+            <summary>
+            Charset with order from index 0 to 30,
+            </summary>
+        </member>
+        <member name="F:Changingsoft.Business.USCI.weight">
+            <summary>
+            Readonly weight for corresponding position.
+            </summary>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.Parse(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.TryParse(System.String,Changingsoft.Business.USCI@)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <param name="usci"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Changingsoft.Business.USCI.IsUSCI(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

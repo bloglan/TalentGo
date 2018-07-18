@@ -32,6 +32,7 @@ namespace TalentGo
         /// </summary>
         /// <param name="job"></param>
         /// <param name="person"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ApplicationForm(Job job, Person person)
             : this()
         {

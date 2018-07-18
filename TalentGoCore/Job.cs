@@ -16,6 +16,7 @@ namespace TalentGo
         /// <summary>
         /// Default ctor.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Job()
         {
             this.ApplicationForms = new HashSet<ApplicationForm>();

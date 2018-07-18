@@ -37,7 +37,7 @@ namespace TalentGo.EntityFramework
         /// <returns></returns>
         public async Task<Job> FindByIdAsync(int id)
         {
-            return await this.set.FindAsync(id);
+            return await this.set.FirstOrDefaultAsync(j => j.Id == id);
         }
     }
 }

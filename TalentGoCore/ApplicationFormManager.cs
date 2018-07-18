@@ -24,7 +24,8 @@ namespace TalentGo
         /// </summary>
         /// <param name="applicationFormStore"></param>
         /// <param name="fileStore"></param>
-		public ApplicationFormManager(IApplicationFormStore applicationFormStore, IFileStore fileStore)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ApplicationFormManager(IApplicationFormStore applicationFormStore, IFileStore fileStore)
         {
             this.formStore = applicationFormStore;
             this.fileStore = fileStore;

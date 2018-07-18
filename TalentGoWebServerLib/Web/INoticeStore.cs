@@ -7,7 +7,7 @@ namespace TalentGo.Web
     /// <summary>
     /// Defined interface for store Article.
     /// </summary>
-    public interface INoticeStore : IDisposable
+    public interface INoticeStore
     {
         /// <summary>
         /// Get a qeuryable collection for all articles.

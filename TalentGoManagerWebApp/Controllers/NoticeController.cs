@@ -127,7 +127,6 @@ namespace TalentGoManagerWebApp.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
                 var notice = await this.manager.FindByIdAsync(id);
                 if (notice != null)
                     await this.manager.DeleteAsync(notice);

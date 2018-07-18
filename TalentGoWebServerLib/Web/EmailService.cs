@@ -32,10 +32,10 @@ namespace TalentGo.Web
                 {
                     smtpClient.Send(mail);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 					//出错
-					throw ex;
+					throw;
                     //Console.WriteLine("邮件发送失败："+ex.ToString());
                 }
             }

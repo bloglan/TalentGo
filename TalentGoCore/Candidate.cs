@@ -27,6 +27,7 @@ namespace TalentGo
         /// <param name="plan"></param>
         /// <param name="person"></param>
         /// <param name="applyFor"></param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Candidate(ExaminationPlan plan, Person person, string applyFor = null)
             : this()
         {
@@ -94,5 +95,10 @@ namespace TalentGo
         /// 座位号。
         /// </summary>
         public virtual string Seat { get; internal set; }
+
+        /// <summary>
+        /// 证件照。
+        /// </summary>
+        public virtual string HeadImageFile { get; set; }
     }
 }

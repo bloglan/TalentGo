@@ -91,7 +91,11 @@ namespace TalentGo
 
             foreach(var form in job.ApplicationForms.Approved())
             {
-                await manager.CreateAsync(new Candidate(examPlan, form.Person, form.Job.Name));
+                var candidate = new Candidate(examPlan, form.Person, form.Job.Name)
+                {
+                    HeadImageFile = form.HeadImageFile
+                };
+                await manager.CreateAsync(candidate);
             }
         }
 
@@ -125,7 +129,11 @@ namespace TalentGo
 
             foreach(var candidate in source.Candidates.Where(predicate))
             {
-                await manager.CreateAsync(new Candidate(target, candidate.Person, candidate.ApplyFor));
+                var newCandidate = new Candidate(target, candidate.Person, candidate.ApplyFor)
+                {
+                    HeadImageFile = candidate.HeadImageFile
+                };
+                await manager.CreateAsync(newCandidate);
             }
         }
     }

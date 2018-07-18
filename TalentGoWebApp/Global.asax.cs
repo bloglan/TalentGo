@@ -23,7 +23,10 @@ namespace TalentGoWebApp
             //Application_Start() in global.asax. For example,
             ScriptContext.ScriptPathResolver = System.Web.Optimization.Scripts.Render;
 
-
-		}
-	}
+            //Yunnan Tobacco Company Qujing Branch-Ultimate Edition-OEM Developer License
+            Neodynamic.Web.MVC.Barcode.BarcodeProfessional.LicenseOwner = "Yunnan Tobacco Company Qujing Branch-Ultimate Edition-OEM Developer License";
+            //PJ46WTT72LFZR6SQC9UERR9WAKQGJNTN37ZNAT2PK89PR88DLTMA
+            Neodynamic.Web.MVC.Barcode.BarcodeProfessional.LicenseKey = "PJ46WTT72LFZR6SQC9UERR9WAKQGJNTN37ZNAT2PK89PR88DLTMA";
+        }
+    }
 }

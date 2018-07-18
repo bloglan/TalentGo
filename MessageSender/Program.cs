@@ -4,12 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QueuedSMSSenderServiceRunner
+namespace MessageSender
 {
     class Program
     {
         static void Main(string[] args)
         {
+            Sender sender = new Sender();
+            
+            Task.Run(() => sender.SendAsync());
+
+            
+            Console.ReadKey();
         }
     }
 }
